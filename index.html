@@ -115,9 +115,13 @@
         .help-text {
             font-size: 0.8rem;
             color: #64748b;
-            margin-top: 4px;
+            margin-top: 6px;
             display: block;
             line-height: 1.4;
+            background-color: #f8fafc;
+            padding: 8px;
+            border-left: 3px solid var(--primary);
+            border-radius: 0 4px 4px 0;
         }
 
         /* Worksheet Table */
@@ -208,16 +212,14 @@
                 </select>
             </div>
 
-            <!-- Occupancy Selector (For Non-BGR Policies) -->
+            <!-- Occupancy Selector (Loaded from Excel Data) -->
             <div class="form-group id-commercial hidden" id="occupancyContainer">
                 <label for="occupancy">Occupancy / Risk Selection</label>
                 <select id="occupancy">
-                    <option value="">-- CHOOSE FROM LIST --</option>
-                    <option value="office">Commercial Office (Mock Rate: 0.08%)</option>
-                    <option value="shop">Retail Shop (Mock Rate: 0.12%)</option>
-                    <option value="factory">Manufacturing Factory (Mock Rate: 0.25%)</option>
-                    <option value="warehouse">Warehouse / Storage (Mock Rate: 0.20%)</option>
+                    <option value="">-- CHOOSE OCCUPANCY FROM LIST --</option>
+                    <!-- Options injected via Javascript from Excel list -->
                 </select>
+                <span class="help-text id-commercial hidden" id="rateDisplayHelp">Basic rate applies dynamically based on policy selected.</span>
             </div>
 
             <!-- Floater Loading Trigger (Hidden for BGR) -->
@@ -225,7 +227,7 @@
                 <label for="floaterToggle">Floater Policy Option</label>
                 <select id="floaterToggle">
                     <option value="no">No (Single Location Policy)</option>
-                    <option value="yes">Yes, Apply Floater Loading (Mock Rate: +10%)</option>
+                    <option value="yes">Yes, Apply Floater Loading (+10%)</option>
                 </select>
                 <span class="help-text">Applicable when covers float across multiple locations.</span>
             </div>
@@ -234,8 +236,12 @@
                 <label for="construction">Construction Type</label>
                 <select id="construction">
                     <option value="pucca">Pucca (RCC / First Class Construction)</option>
-                    <option value="kutcha">Kutcha (Building(s) having walls and/or roofs of wooden planks/thatched leaves and/or grass/hay of any kind/bamboo/plastic cloth/asphalt cloth/canvas/tarpaulin)</option>
+                    <option value="kutcha">Kutcha (See definition below)</option>
                 </select>
+                <!-- Cleanly wrapped help text replacing the long dropdown option -->
+                <span id="kutchaHelpText" class="help-text hidden">
+                    <strong>Kutcha Definition:</strong> Building(s) having walls and/or roofs of wooden planks / thatched leaves and/or grass / hay of any kind / bamboo / plastic cloth / asphalt cloth / canvas / tarpaulin.
+                </span>
             </div>
 
             <!-- Dynamic Terrorism Settings for Commercial -->
@@ -254,7 +260,7 @@
                 <thead>
                     <tr>
                         <th>Line Item Description</th>
-                        <th>Rate Type / %</th>
+                        <th>Rate / Loading</th>
                         <th class="text-right">Premium (₹)</th>
                     </tr>
                 </thead>
@@ -264,12 +270,13 @@
                         <td id="rate-basic">0.00</td>
                         <td id="prem-basic" class="text-right">0.00</td>
                     </tr>
-                    <!-- Floater Loading Row (Positioned right below basic premium, hidden for BGR) -->
+                    <!-- Floater Loading Row -->
                     <tr id="row-floater" class="hidden">
                         <td>FLOATER LOADING</td>
                         <td id="rate-floater">0.00%</td>
                         <td id="prem-floater" class="text-right">0.00</td>
                     </tr>
+                    <!-- Kutcha Loading Row -->
                     <tr id="row-kutcha" class="hidden">
                         <td>LOADING FOR KUTCHA CONSTRUCTION</td>
                         <td id="rate-kutcha">0.00%</td>
@@ -294,12 +301,12 @@
                     <!-- NATCAT Rows (BLUS/SFSP Only) -->
                     <tr class="row-natcat hidden">
                         <td>ADD EARTHQUAKE (BLUS, SFSP)</td>
-                        <td id="rate-eq">0.00%</td>
+                        <td id="rate-eq">0.00</td>
                         <td id="prem-eq" class="text-right">0.00</td>
                     </tr>
                     <tr class="row-natcat hidden">
                         <td>ADD STFI (BLUS, SFSP)</td>
-                        <td id="rate-stfi">0.00%</td>
+                        <td id="rate-stfi">0.00</td>
                         <td id="prem-stfi" class="text-right">0.00</td>
                     </tr>
                     <tr class="subtotal-row row-natcat hidden">
@@ -321,7 +328,7 @@
                     <!-- Terrorism Adjustments (For commercial, text adapts) -->
                     <tr id="row-terrorism-line">
                         <td id="label-terrorism">TERRORISM</td>
-                        <td id="rate-terrorism">0.00%</td>
+                        <td id="rate-terrorism">0.00</td>
                         <td id="prem-terrorism" class="text-right">0.00</td>
                     </tr>
                     <tr class="subtotal-row">
@@ -347,7 +354,22 @@
 </div>
 
 <script>
+    // Embedded Data Matrix generated directly from your uploaded Excel List
+    // Format: ["Description", BSUS Rate, BLUS Rate, SFSP Rate]
+    const ratesData = [["Places of worship",0.14,0.12,0.12],["Libraries",0.21,0.21,0.21],["Museums",0.25,0.23,0.23],["Schools/Colleges",0.22,0.2,0.2],["Hospitals including X-ray and other diagnostic clinics",0.28,0.23,0.23],["Office premises / Meeting rooms",0.3,0.25,0.25],["Auditoriums / Planetarium",0.27,0.28,0.28],["Mess Houses / Clubs",0.22,0.21,0.21],["Marriage Halls",0.2,0.18,0.18],["Showrooms and display centers where goods are kept for display and no sales are carried out",0.34,0.28,0.28],["Educational and research institutes / Training centers",0.28,0.24,0.24],["Stand-alone diagnostic centers / Clinics",0.32,0.25,0.25],["Veterinary hospitals / Clinics",0.22,0.2,0.2],["Clubs - excluding residential facilities",0.3,0.25,0.25],["Clubs - including residential facilities",0.35,0.28,0.28],["Amusement parks",0.4,0.3,0.3],["Dharmashalas / orphanages / old age homes",0.18,0.15,0.15],["Hostels",0.25,0.2,0.2],["Night-shelters",0.25,0.2,0.2],["Lodge / inns",0.3,0.25,0.25],["Prisons",0.4,0.3,0.3],["Kalyan Mantapas / Chathirams",0.22,0.2,0.2],["Shops dealing in A, B & C Class of goods",0.42,0.38,0.38],["Shops dealing in hazardous goods",0.75,0.65,0.65],["Shops / Show rooms / display centers involved in storage and sales - general goods",0.35,0.3,0.3],["Dhabas / Eateries / Road-side restaurants",0.5,0.4,0.4],["Restaurants / Hotels / Cafes / Bakeries",0.45,0.35,0.35],["Pavement storages / roadside storages",1.0,0.85,0.85],["Sheds",0.35,0.3,0.3],["Open storages (excluding pavement / roadside)",0.6,0.5,0.5],["Petrol pumps",0.65,0.55,0.55],["Gas Stations (LPG/CNG)",0.8,0.65,0.65],["A, B & C Class of goods / Cold storage premises",0.5,0.4,0.4],["Coir, Coir products, Combustible goods, Cotton, Cotton waste, Hay",1.2,1.0,1.0],["Hazardous Goods, Jute, Match factory, Plastics",1.2,1.0,1.0],["Scrap yard",1.5,1.25,1.25],["Timber / Wood",1.0,0.85,0.85],["Beedi / cigar / cigarette factories",0.8,0.65,0.65],["Biscuit and/or other bakery products",0.8,0.65,0.65],["Breweries",0.65,0.55,0.55],["Brush (including tooth brush)",0.9,0.75,0.75],["Camphor",1.2,1.0,1.0],["Candle",1.2,1.0,1.0],["Card board / paper box",1.2,1.0,1.0],["Celluloid goods",1.5,1.25,1.25],["Coir factory",1.5,1.25,1.25],["Confectionery",0.75,0.6,0.6],["Corrugated paper / board",1.2,1.0,1.0],["Cotton ginning and pressing",1.5,1.25,1.25],["Cotton spinning and weaving",1.2,1.0,1.0],["Distilleries",1.2,1.0,1.0],["Flour mills",0.8,0.65,0.65],["Furs",0.8,0.65,0.65],["Gas manufacturing (LPG / CNG / industrial gases)",1.5,1.25,1.25],["Ice factory",0.4,0.35,0.35],["Jute mills",1.5,1.25,1.25],["Leather goods",0.75,0.6,0.6],["Match factories",2.0,1.6,1.6],["Oil mills",1.2,1.0,1.0],["Paints / varnishes",1.5,1.25,1.25],["Paper mills",1.2,1.0,1.0],["Plastics",1.2,1.0,1.0],["Plywood / hardboard",1.2,1.0,1.0],["Printing presses",0.75,0.6,0.6],["Rice mills",0.7,0.55,0.55],["Rubber goods",1.2,1.0,1.0],["Saw mills",1.5,1.25,1.25],["Silk factories",0.75,0.6,0.6],["Soap factories",0.75,0.6,0.6],["Sugar factories",0.65,0.55,0.55],["Tea factories",0.65,0.55,0.55],["Timber yards",1.2,1.0,1.0],["Tyre factories",1.2,1.0,1.0],["Woolen mills",1.0,0.85,0.85],["Aluminum / brass / copper rolling",0.65,0.55,0.55],["Automobile manufacturing",0.7,0.6,0.6],["Cement factories",0.6,0.5,0.5],["Chemical factories (Non-hazardous)",0.9,0.75,0.75],["Chemical factories (Hazardous)",1.5,1.25,1.25],["Computer / Electronic goods",0.6,0.5,0.5],["Engineering workshops",0.65,0.55,0.55],["Fertilizer factories",0.9,0.75,0.75],["Glass factories",0.65,0.55,0.55],["Iron and steel plants",0.8,0.65,0.65],["Metal fabrication",0.65,0.55,0.55],["Pharmaceuticals",0.8,0.65,0.65],["Power plants",0.8,0.65,0.65],["Textile processing",1.0,0.85,0.85],["General manufacturing (not elsewhere classified)",0.8,0.65,0.65],["Battery manufacturing",0.9,0.75,0.75],["Cable manufacturing",0.8,0.65,0.65],["Ceramic factories",0.7,0.6,0.6],["Cosmetics manufacturing",0.8,0.65,0.65],["Dairy processing",0.6,0.5,0.5],["Food processing (other than specified)",0.7,0.55,0.55],["Garment manufacturing",0.7,0.55,0.55],["Goldsmiths / Silversmiths",0.5,0.4,0.4],["Handloom / Powerloom",0.7,0.55,0.55],["Incense / Agarbatti",1.2,1.0,1.0],["Mineral water / Bottling",0.5,0.4,0.4],["Musical instruments",0.6,0.5,0.5],["Packaging industry",0.9,0.75,0.75],["Photographic materials",0.8,0.65,0.65],["Poultry / Hatchery (building and contents only)",0.6,0.5,0.5],["Salt works",0.5,0.4,0.4],["Spices processing",0.7,0.55,0.55],["Sports goods",0.7,0.55,0.55],["Stationery manufacturing",0.7,0.55,0.55],["Surgical instruments",0.6,0.5,0.5],["Toys manufacturing",0.8,0.65,0.65],["Umbrella manufacturing",0.7,0.55,0.55],["Watch / Clock manufacturing",0.6,0.5,0.5]];
+
     let selectedPolicyType = 'BGR';
+
+    // 1. Populate the dropdown with data from Excel
+    function populateOccupancies() {
+        const select = document.getElementById('occupancy');
+        ratesData.forEach((item, index) => {
+            let opt = document.createElement('option');
+            opt.value = index;
+            opt.innerHTML = item[0];
+            select.appendChild(opt);
+        });
+    }
 
     function selectPolicy(type) {
         selectedPolicyType = type;
@@ -367,52 +389,50 @@
         const rowTerrorismLine = document.getElementById('row-terrorism-line');
 
         if (selectedPolicyType === 'BGR') {
-            // Rule 3: BGR-specific configurations
             bgrRateContainer.classList.remove('hidden');
             commercialElements.forEach(el => el.classList.add('hidden'));
             natcatRows.forEach(row => row.classList.add('hidden'));
-            rowTerrorismLine.classList.add('hidden'); // Hidden because it's built into BGR basic rates
+            rowTerrorismLine.classList.add('hidden'); 
         } else {
-            // Commercial Policies configurations
             bgrRateContainer.classList.add('hidden');
             commercialElements.forEach(el => el.classList.remove('hidden'));
             rowTerrorismLine.classList.remove('hidden');
 
-            // Toggle NATCAT view for BLUS and SFSP
             if (selectedPolicyType === 'BLUS' || selectedPolicyType === 'SFSP') {
                 natcatRows.forEach(row => row.classList.remove('hidden'));
                 document.getElementById('label-terrorism').innerText = "ADD TERRORISM (BLUS, SFSP)";
                 terrorismToggle.innerHTML = `
-                    <option value="add">Add Terrorism Cover (Mock: 0.02%)</option>
+                    <option value="add">Add Terrorism Cover (Mock 0.20 per mille)</option>
                     <option value="none">Exclude Terrorism Cover</option>
                 `;
             } else if (selectedPolicyType === 'BSUS') {
-                // BSUS specifics
                 natcatRows.forEach(row => row.classList.add('hidden'));
                 document.getElementById('label-terrorism').innerText = "REMOVE TERRORISM (BSUS FLEXI)";
                 terrorismToggle.innerHTML = `
                     <option value="keep">Keep Built-in Terrorism</option>
-                    <option value="remove">Remove Terrorism (Discount Mock: -0.01%)</option>
+                    <option value="remove">Remove Terrorism (Discount -0.05 per mille)</option>
                 `;
             }
         }
         
-        // Refresh visibility changes on construction & floater table rows
         evaluateRowVisibility();
         runCalculation();
     }
 
     function evaluateRowVisibility() {
-        // Kutcha Row check
         const constType = document.getElementById('construction').value;
         const rowKutcha = document.getElementById('row-kutcha');
+        const kutchaHelp = document.getElementById('kutchaHelpText');
+        
+        // Kutcha Box Handling
         if (constType === 'kutcha') {
             rowKutcha.classList.remove('hidden');
+            kutchaHelp.classList.remove('hidden');
         } else {
             rowKutcha.classList.add('hidden');
+            kutchaHelp.classList.add('hidden');
         }
 
-        // Rule 2: Floater Loading visibility rule (Hide for BGR, follow select for others)
         const rowFloater = document.getElementById('row-floater');
         const floaterVal = document.getElementById('floaterToggle').value;
         if (selectedPolicyType !== 'BGR' && floaterVal === 'yes') {
@@ -433,65 +453,70 @@
     function runCalculation() {
         const si = parseFloat(document.getElementById('sumInsured').value) || 0;
         let basicPrem = 0;
-        let basicRateText = "0.00%";
+        let basicRateText = "0.00";
 
-        // 1. Calculate Basic Premium
         if (selectedPolicyType === 'BGR') {
-            // Rule 3: Per mille calculations (Rate per 1,000 Sum Insured)
             const perMilleRate = parseFloat(document.getElementById('bgrRateOption').value);
             basicPrem = (si / 1000) * perMilleRate;
-            basicRateText = perMilleRate + " per mille";
+            basicRateText = perMilleRate.toFixed(2) + " per mille";
         } else {
-            // Commercial placeholder rate assignment
-            const occ = document.getElementById('occupancy').value;
-            let commRate = 0.001; // default fallback 0.1%
-            if (occ === 'office') commRate = 0.0008;
-            if (occ === 'shop') commRate = 0.0012;
-            if (occ === 'factory') commRate = 0.0025;
-            if (occ === 'warehouse') commRate = 0.0020;
-            
-            basicPrem = si * commRate;
-            basicRateText = (commRate * 100).toFixed(4) + "%";
+            // Commercial - Pull directly from JSON Matrix based on column rules
+            const occIndex = document.getElementById('occupancy').value;
+            if (occIndex !== "") {
+                const record = ratesData[occIndex];
+                let commRatePerMille = 0;
+                
+                // Route to correct column logic
+                if (selectedPolicyType === 'BSUS') commRatePerMille = record[1];
+                if (selectedPolicyType === 'BLUS') commRatePerMille = record[2];
+                if (selectedPolicyType === 'SFSP') commRatePerMille = record[3];
+                
+                document.getElementById('rateDisplayHelp').innerText = `Matched Rate for ${selectedPolicyType}: ${commRatePerMille} per mille.`;
+
+                // Calculate Premium (Sum Insured / 1000 * Per Mille Rate)
+                basicPrem = (si / 1000) * commRatePerMille;
+                basicRateText = commRatePerMille.toFixed(3) + " per mille";
+            } else {
+                document.getElementById('rateDisplayHelp').innerText = "Please select an occupancy to apply basic rate.";
+            }
         }
 
         document.getElementById('rate-basic').innerText = basicRateText;
         document.getElementById('prem-basic').innerText = basicPrem.toFixed(2);
 
-        // 2. Rule 2: Floater Loading (Calculated right below basic premium, if applicable)
+        // Floater Loading
         let floaterPrem = 0;
         if (selectedPolicyType !== 'BGR' && document.getElementById('floaterToggle').value === 'yes') {
-            const floaterRate = 0.10; // Mock 10% loading on basic premium
+            const floaterRate = 0.10; // 10%
             floaterPrem = basicPrem * floaterRate;
             document.getElementById('rate-floater').innerText = (floaterRate * 100).toFixed(2) + "%";
             document.getElementById('prem-floater').innerText = floaterPrem.toFixed(2);
         }
 
-        // 3. Kutcha Loading Calculation
+        // Kutcha Loading
         let kutchaPrem = 0;
         if (document.getElementById('construction').value === 'kutcha') {
-            const kutchaRate = 0.15; // Mock 15% loading on basic premium
+            const kutchaRate = 0.15; // Placeholder 15% loading
             kutchaPrem = basicPrem * kutchaRate;
             document.getElementById('rate-kutcha').innerText = (kutchaRate * 100).toFixed(2) + "%";
             document.getElementById('prem-kutcha').innerText = kutchaPrem.toFixed(2);
         }
 
-        // Calculate Total A
         let totalA = basicPrem + floaterPrem + kutchaPrem;
         document.getElementById('total-a').innerText = totalA.toFixed(2);
 
-        // Calculate Total B (Assuming 0 discount for placeholder)
-        let totalB = totalA;
+        let totalB = totalA; // Passing through as no discounts are mocked yet
         document.getElementById('total-b').innerText = totalB.toFixed(2);
 
-        // 4. NATCAT Calculations (Mock values for BLUS / SFSP)
+        // NATCAT Mock (Adjust per tariff later)
         let totalC = 0;
         let totalD = totalB;
         if (selectedPolicyType === 'BLUS' || selectedPolicyType === 'SFSP') {
-            let eqPrem = si * 0.0002; // Mock EQ Rate
-            let stfiPrem = si * 0.0003; // Mock STFI Rate
-            document.getElementById('rate-eq').innerText = "0.0200%";
+            let eqPrem = (si / 1000) * 0.20; 
+            let stfiPrem = (si / 1000) * 0.30; 
+            document.getElementById('rate-eq').innerText = "0.20 per mille";
             document.getElementById('prem-eq').innerText = eqPrem.toFixed(2);
-            document.getElementById('rate-stfi').innerText = "0.0300%";
+            document.getElementById('rate-stfi').innerText = "0.30 per mille";
             document.getElementById('prem-stfi').innerText = stfiPrem.toFixed(2);
             
             totalC = eqPrem + stfiPrem;
@@ -500,23 +525,22 @@
             totalD = totalB + totalC;
         }
 
-        // 5. Terrorism Calculations for Commercial Policies
+        // Terrorism Mock Calculations
         let terrorismPrem = 0;
         if (selectedPolicyType !== 'BGR') {
             const tToggle = document.getElementById('terrorismToggle').value;
             if (selectedPolicyType === 'BSUS' && tToggle === 'remove') {
-                terrorismPrem = -(si * 0.0001); // Discount drop
-                document.getElementById('rate-terrorism').innerText = "-0.0100%";
+                terrorismPrem = -((si / 1000) * 0.05); // Refund
+                document.getElementById('rate-terrorism').innerText = "-0.05 per mille";
             } else if ((selectedPolicyType === 'BLUS' || selectedPolicyType === 'SFSP') && tToggle === 'add') {
-                terrorismPrem = si * 0.0002; // Addition
-                document.getElementById('rate-terrorism').innerText = "0.0200%";
+                terrorismPrem = (si / 1000) * 0.20; // Charge
+                document.getElementById('rate-terrorism').innerText = "0.20 per mille";
             } else {
-                document.getElementById('rate-terrorism').innerText = "0.0000%";
+                document.getElementById('rate-terrorism').innerText = "0.00";
             }
             document.getElementById('prem-terrorism').innerText = terrorismPrem.toFixed(2);
         }
 
-        // Calculate Final Totals
         let totalE = totalD + terrorismPrem;
         document.getElementById('total-e').innerText = totalE.toFixed(2);
 
@@ -527,7 +551,8 @@
         document.getElementById('total-payable').innerText = totalPayable.toFixed(2);
     }
 
-    // Execute first setup run
+    // Boot up sequence
+    populateOccupancies();
     adjustLayoutRules();
 </script>
 
