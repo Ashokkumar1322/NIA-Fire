@@ -573,7 +573,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Brought Total Sum Insured row into the table context layout -->
+                    <!-- Total Sum Insured row directly inside the core table context framework -->
                     <tr style="background-color: #f8fafc; border-bottom: 2px solid var(--border);">
                         <td style="font-weight: bold; color: var(--primary);">TOTAL SUM INSURED</td>
                         <td>-</td>
@@ -996,7 +996,10 @@ const combinedRates = [
                 let div = document.createElement('div');
                 div.className = 'autocomplete-item';
                 div.innerHTML = `<strong>[Sec ${item.sec} | Code ${item.code}]</strong> ${item.desc}`;
-                div.addEventListener('click', () => {
+                
+                // Using mousedown instead of click to fire reliably before any blur or outside event listeners trigger
+                div.addEventListener('mousedown', (e) => {
+                    e.preventDefault(); // prevent losing focus
                     selectOccupancy(index);
                 });
                 listContainer.appendChild(div);
@@ -1233,8 +1236,7 @@ const combinedRates = [
             }
         }
 
-        // Keep table summary row updated with live total Sum Insured
-        document.getElementById('row-summary-si').innerText = si.toFixed(2);
+        document.getElementById('row-summary-si').innerText = si.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         document.getElementById('rate-basic').innerText = basicRateText;
         document.getElementById('prem-basic').innerText = basicPrem.toFixed(2);
 
@@ -1357,7 +1359,6 @@ const combinedRates = [
         document.body.removeChild(link);
     }
 
-    // Direct automated background PDF generation, completely bypassing standard browser printer windows
     function exportToPDF() {
         const element = document.getElementById('premiumWorkingPanel');
         const opt = {
@@ -1370,7 +1371,6 @@ const combinedRates = [
         html2pdf().set(opt).from(element).save();
     }
 
-    // Safe Click Outside handler mapping
     document.addEventListener('click', function(e) {
         if (!e.target.closest('.search-container')) {
             document.getElementById('autocompleteResultsList').classList.add('hidden');
