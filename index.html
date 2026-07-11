@@ -344,20 +344,6 @@
         .btn-pdf:hover {
             background-color: #c2410c;
         }
-
-        .summary-si-box {
-            font-size: 1.1rem; 
-            font-weight: bold; 
-            color: var(--primary); 
-            margin-bottom: 18px; 
-            padding: 12px 14px; 
-            background-color: var(--distinct-bg); 
-            border-radius: 6px; 
-            border-left: 4px solid var(--primary);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
     </style>
 </head>
 <body>
@@ -561,13 +547,6 @@
                     <option value="25">25% Discount</option>
                     <option value="50">50% Discount</option>
                 </select>
-                <!-- Reference matrix text shown in monospace small font below label -->
-                <div style="font-size: 0.78rem; color: #64748b; margin-top: 6px; font-family: monospace; line-height: 1.4; background-color: #f8fafc; padding: 6px; border: 1px dashed var(--border); border-radius: 4px; display: inline-block;">
-                    100/50, 100/50<br>
-                    100/25, 100/0<br>
-                    100/15, 50/0<br>
-                    100/0,  0/0
-                </div>
             </div>
 
             <!-- Side Head 10 -->
@@ -585,13 +564,6 @@
         <!-- RIGHT: PREMIUM WORKING WORKSHEET LOGS -->
         <div id="premiumWorkingPanel" class="panel">
             <h2>Premium Working</h2>
-            
-            <!-- Positioned the Summary Sum Insured box dynamically above table headers -->
-            <div class="summary-si-box">
-                <span>TOTAL SUM INSURED</span>
-                <span>₹ <span id="summary-si-val">0.00</span></span>
-            </div>
-
             <table id="premiumTable">
                 <thead>
                     <tr>
@@ -601,6 +573,12 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <!-- Total Sum Insured row directly inside the core table context framework -->
+                    <tr style="background-color: #f8fafc; border-bottom: 2px solid var(--border);">
+                        <td style="font-weight: bold; color: var(--primary);">TOTAL SUM INSURED</td>
+                        <td>-</td>
+                        <td id="row-summary-si" class="text-right" style="font-weight: bold; color: var(--primary);">0.00</td>
+                    </tr>
                     <tr>
                         <td>BASIC PREMIUM</td>
                         <td id="rate-basic">0.00</td>
