@@ -100,7 +100,6 @@
             position: relative;
         }
 
-        /* Distinct side heading blocks with clear numbers and background tinting */
         .form-group.distinct-label label,
         .distinct-label-heading {
             display: block;
@@ -304,6 +303,74 @@
         .text-right {
             text-align: right;
         }
+
+        .btn-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 10px 15px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: background-color 0.2s ease;
+        }
+
+        .btn-excel {
+            background-color: #16a34a;
+            color: white;
+        }
+
+        .btn-excel:hover {
+            background-color: #15803d;
+        }
+
+        .btn-pdf {
+            background-color: #ea580c;
+            color: white;
+        }
+
+        .btn-pdf:hover {
+            background-color: #c2410c;
+        }
+
+        @media print {
+            body {
+                background-color: white;
+                color: black;
+                padding: 0;
+            }
+            .policy-grid, .panel:nth-child(1), .btn-container, h2 {
+                display: none !important;
+            }
+            .workspace {
+                grid-template-columns: 1fr !important;
+            }
+            .panel {
+                border: none !important;
+                box-shadow: none !important;
+                padding: 0 !important;
+            }
+            th {
+                background-color: #e2e8f0 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .final-row {
+                background-color: #bae6fd !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
     </style>
 </head>
 <body>
@@ -313,7 +380,6 @@
         <h1 style="font-size: 2.2rem; color: #0f172a; border-bottom: 2px solid var(--primary); padding-bottom: 10px;">NIA Fire Insc Premium Calc</h1>
     </header>
 
-    <!-- STEP 1: CHOOSE YOUR POLICY TYPE -->
     <h2>CHOOSE YOUR POLICY TYPE</h2>
     <div class="policy-grid">
         <div class="policy-card active" onclick="selectPolicy('BGR', this)">
@@ -334,14 +400,10 @@
         </div>
     </div>
 
-    <!-- MAIN CALCULATOR WORKSPACE -->
     <div class="workspace">
-        
-        <!-- LEFT: INPUT PARAMETERS -->
         <div class="panel">
             <h2>Risk & Value Details</h2>
             
-            <!-- Breakup of Sum Insured -->
             <label class="distinct-label-heading">Asset Value Breakup (₹)</label>
             <div class="si-breakup-grid">
                 <div class="form-group-si">
@@ -378,13 +440,11 @@
                 </div>
             </div>
 
-            <!-- Distinct Side Head 1 -->
             <div class="form-group distinct-label">
                 <label for="sumInsured">1. Total Sum Insured (₹) <span style="font-size:0.75rem; color:#64748b; font-weight:normal;">(Auto-Calculated)</span></label>
                 <input type="number" id="sumInsured" readonly style="background-color: #f1f5f9; font-weight: bold; color: #0f172a;" value="10000000">
             </div>
 
-            <!-- BGR Rate Options Dropdown (Visible ONLY for BGR) -->
             <div class="form-group" id="bgrRateContainer">
                 <label for="bgrRateOption">BGR Basic Rate Option</label>
                 <select id="bgrRateOption">
@@ -393,7 +453,6 @@
                 </select>
             </div>
 
-            <!-- Distinct Side Head 2 -->
             <div class="form-group id-commercial distinct-label hidden" id="manualRateOptionContainer">
                 <label for="enterRateManuallyToggle">2. Enter Rate Manually?</label>
                 <select id="enterRateManuallyToggle">
@@ -407,7 +466,6 @@
                 <input type="number" id="manualRateValue" placeholder="e.g. 0.75" step="0.001" value="">
             </div>
 
-            <!-- Distinct Side Head 3 -->
             <div class="form-group id-commercial distinct-label hidden" id="occupancyContainer">
                 <label for="occupancySearch">3. Occupancy / Risk Selection (Search by Code or Keyword)</label>
                 <div class="search-container">
@@ -417,7 +475,6 @@
                 
                 <input type="hidden" id="selectedOccupancyIndex" value="">
 
-                <!-- Metadata Display Box -->
                 <div id="metaBox" class="meta-container hidden">
                     <div class="meta-item">
                         <span class="meta-label">Section</span>
@@ -438,16 +495,14 @@
                 </div>
             </div>
 
-            <!-- Distinct Side Head 4 -->
             <div class="form-group id-commercial distinct-label hidden" id="floaterContainer">
                 <label for="floaterToggle">4. Floater Policy Option</label>
                 <select id="floaterToggle">
                     <option value="no">No (Single Location Policy)</option>
-                    <option value="yes">Yes, Apply Floater Loading (+10% on Stock-Floating S.I. only)</option>
+                    <option value="yes">Yes, Apply Floater Loading (+10% on Stock - Floating S.I.)</option>
                 </select>
             </div>
 
-            <!-- Distinct Side Head 5 -->
             <div class="form-group distinct-label">
                 <label for="construction">5. Construction Type</label>
                 <select id="construction">
@@ -459,13 +514,11 @@
                 </span>
             </div>
 
-            <!-- Distinct Side Head 6 -->
             <div class="form-group distinct-label" id="basicDiscountContainer">
                 <label for="basicDiscountValue">6. Discount (-) or Loading (+) on Basic Premium (%)</label>
                 <input type="number" id="basicDiscountValue" placeholder="e.g. -10 for 10% discount, +5 for loading" value="0" step="0.01">
             </div>
 
-            <!-- Distinct Side Head 7 -->
             <div id="eqCoverContainer" class="form-group id-commercial distinct-label hidden">
                 <label for="eqZone">7. Earthquake (EQ) Cover Zone</label>
                 <select id="eqZone">
@@ -484,8 +537,7 @@
                 <span id="eqAutoNotice" class="help-text hidden" style="background-color: #f0fdf4; border-color: var(--success); color: #166534;"></span>
             </div>
 
-            <!-- Distinct Side Head 8 -->
-            <div id="stfiCoverContainer" class="form-group id-commercial distinct-label hidden">
+            <div id="stfiCoverContainer" class="form-group id-commercial hidden distinct-label">
                 <label for="stfiToggle">8. STFI Cover Option</label>
                 <select id="stfiToggle">
                     <option value="0">Exclude STFI Cover</option>
@@ -498,8 +550,7 @@
                 <span id="stfiAutoNotice" class="help-text hidden" style="background-color: #f0fdf4; border-color: var(--success); color: #166534;"></span>
             </div>
 
-            <!-- Distinct Side Head 9 -->
-            <div id="natcatDiscountContainer" class="form-group id-commercial distinct-label hidden">
+            <div id="natcatDiscountContainer" class="form-group id-commercial hidden distinct-label">
                 <label for="natcatDiscountToggle">9. Discount on NATCAT Premium (%)</label>
                 <select id="natcatDiscountToggle">
                     <option value="0" selected>0% (No Discount)</option>
@@ -509,8 +560,7 @@
                 </select>
             </div>
 
-            <!-- Distinct Side Head 10 -->
-            <div id="terrorismContainer" class="form-group id-commercial distinct-label hidden">
+            <div id="terrorismContainer" class="form-group id-commercial hidden distinct-label">
                 <label for="terrorismToggle">10. Terrorism Cover Options</label>
                 <select id="terrorismToggle">
                     <option value="0">Exclude Terrorism Cover</option>
@@ -521,10 +571,9 @@
             </div>
         </div>
 
-        <!-- RIGHT: PREMIUM WORKING WORKSHEET LOGS -->
         <div class="panel">
             <h2>Premium Working</h2>
-            <table>
+            <table id="premiumTable">
                 <thead>
                     <tr>
                         <th>Line Item Description</th>
@@ -564,7 +613,6 @@
                         <td id="total-b" class="text-right">0.00</td>
                     </tr>
                     
-                    <!-- NATCAT Rows -->
                     <tr class="row-natcat hidden">
                         <td>ADD EARTHQUAKE COVER</td>
                         <td id="rate-eq">0.00</td>
@@ -613,13 +661,22 @@
                     </tr>
                 </tbody>
             </table>
-        </div>
 
+            <div class="btn-container">
+                <button class="btn btn-excel" onclick="exportToExcel()">
+                    <svg style="width:16px;height:16px" fill="currentColor" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+                    Download as Excel
+                </button>
+                <button class="btn btn-pdf" onclick="exportToPDF()">
+                    <svg style="width:16px;height:16px" fill="currentColor" viewBox="0 0 24 24"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></svg>
+                    Download as PDF
+                </button>
+            </div>
+        </div>
     </div>
 </div>
 
 <script>
-    // 100% VERBATIM EXTRACTION DIRECTLY FROM EXCEL SPREADSHEET (ALL 295 CERTIFIED ROWS)
     const combinedRates = [
       {"sec": "III", "code": "1002", "cat": "1.0", "ho": "", "dec": "", "desc": "Places of worship", "bsus": 0.14, "blus": 0.12, "sfsp": 0.12},
       {"sec": "III", "code": "1003", "cat": "1.0", "ho": "", "dec": "", "desc": "Libraries", "bsus": 0.21, "blus": 0.21, "sfsp": 0.21},
@@ -907,7 +964,7 @@
       {"sec": "VI", "code": "4012", "cat": "2.0", "ho": "", "dec": "", "desc": "Storage of Non-hazardous goods subject to warranty that hazardous goods of Category I,II, III, Coir waste, Coir fibre and Caddies are not stored therein. (Materials stored in Open)", "bsus": 1.94, "blus": 2.26, "sfsp": 2.26},
       {"sec": "VI", "code": "4013", "cat": "2.0", "ho": "", "dec": "", "desc": "Storage of Category I hazardous Goods subject to warranty that goods listed in Category II, III, Coir waste, Coir fibre and Caddies are not stored therein. (Materials stored in Open)", "bsus": 2.16, "blus": 2.51, "sfsp": 2.51},
       {"sec": "VI", "code": "4014", "cat": "4.0", "ho": "", "dec": "", "desc": "Storage of hazardous Goods listed in Category II subject to warranty that goods listed in Category III, Coir waste, Coir fibre and Caddies are not stored therein. (Materials stored in Open)", "bsus": 5.33, "blus": 4.61, "sfsp": 4.61},
-      {"sec": "VI", "code": "4015", "cat": "4.0", "ho": "", "dec": "yes", "desc": "Storage of hazardous Goods listed in Category III (Standalone Coal storage-Declined Risk) (subject to warranty that Coir waste, Coir fibre and, Caddies are not stored therein. (Materials stored in Open)", "bsus": 5.0, "blus": 5.58, "sfsp": 5.58},
+      {"sec": "VI", "code": "4015", "cat": "4.0", "ho": "yes", "dec": "yes", "desc": "Storage of hazardous Goods listed in Category III (Standalone Coal storage-Declined Risk) (subject to warranty that Coir waste, Coir fibre and, Caddies are not stored therein. (Materials stored in Open)", "bsus": 5.0, "blus": 5.58, "sfsp": 5.58},
       {"sec": "VI", "code": "4016", "cat": "4.0", "ho": "", "dec": "", "desc": "Transporters godowns and godowns of C & F agents (Materials stored in Open)", "bsus": 0.8, "blus": 0.92, "sfsp": 0.92},
       {"sec": "VI", "code": "4017", "cat": "4.0", "ho": "", "dec": "", "desc": "Storage of Coir Waste, Coir Fibre, Caddies (Materials stored in Open)", "bsus": 11.86, "blus": 9.88, "sfsp": 9.88},
       {"sec": "VI", "code": "4018", "cat": "3.0", "ho": "", "dec": "", "desc": "Bus Terminus", "bsus": 3.12, "blus": 3.67, "sfsp": 3.67},
@@ -975,44 +1032,10 @@
         runCalculation();
     }
 
-    document.getElementById('occupancySearch').addEventListener('input', function() {
-        handleAutocompleteSearch(this.value);
-    });
-
-    document.addEventListener('click', function(e) {
-        if (e.target.id !== 'occupancySearch') {
-            document.getElementById('autocompleteResultsList').classList.add('hidden');
-        }
-    });
-
-    document.getElementById('enterRateManuallyToggle').addEventListener('change', function() {
-        const isManual = this.value === 'yes';
-        const manualInputContainer = document.getElementById('manualRateInputContainer');
-        
-        if (isManual) {
-            manualInputContainer.classList.remove('hidden');
-            document.getElementById('manualRateValue').disabled = false;
-            
-            document.getElementById('occupancySearch').disabled = true;
-            document.getElementById('occupancySearch').value = "";
-            document.getElementById('selectedOccupancyIndex').value = "";
-            document.getElementById('metaBox').classList.add('hidden');
-            
-            document.getElementById('stfiAutoNotice').classList.add('hidden');
-            document.getElementById('eqAutoNotice').classList.add('hidden');
-            document.getElementById('terrorismAutoNotice').classList.add('hidden');
-        } else {
-            manualInputContainer.classList.add('hidden');
-            document.getElementById('manualRateValue').disabled = true;
-            document.getElementById('occupancySearch').disabled = false;
-        }
-        runCalculation();
-    });
-
-    function selectPolicy(type, element) {
+    function selectPolicy(type, cardElement) {
         selectedPolicyType = type;
         document.querySelectorAll('.policy-card').forEach(card => card.classList.remove('active'));
-        element.classList.add('active');
+        cardElement.classList.add('active');
         adjustLayoutRules();
     }
 
@@ -1156,20 +1179,6 @@
         runCalculation();
     }
 
-    document.querySelectorAll('.si-input').forEach(input => {
-        input.addEventListener('input', calculateAggregateSumInsured);
-    });
-
-    document.getElementById('construction').addEventListener('change', () => { evaluateRowVisibility(); runCalculation(); });
-    document.getElementById('floaterToggle').addEventListener('change', () => { evaluateRowVisibility(); runCalculation(); });
-    document.getElementById('bgrRateOption').addEventListener('change', runCalculation);
-    document.getElementById('manualRateValue').addEventListener('input', runCalculation);
-    document.getElementById('basicDiscountValue').addEventListener('input', runCalculation);
-    document.getElementById('eqZone').addEventListener('change', runCalculation);
-    document.getElementById('stfiToggle').addEventListener('change', runCalculation);
-    document.getElementById('natcatDiscountToggle').addEventListener('change', runCalculation);
-    document.getElementById('terrorismToggle').addEventListener('change', runCalculation);
-
     function updateMetadata() {
         const occIndex = document.getElementById('selectedOccupancyIndex').value;
         const metaBox = document.getElementById('metaBox');
@@ -1230,7 +1239,6 @@
         document.getElementById('rate-basic').innerText = basicRateText;
         document.getElementById('prem-basic').innerText = basicPrem.toFixed(2);
 
-        // Floater Loading: Computed 10% strictly onto the "Stock - Floating" asset segment allocation
         let floaterPrem = 0;
         if (selectedPolicyType !== 'BGR' && document.getElementById('floaterToggle').value === 'yes') {
             let activeRate = 0;
@@ -1322,6 +1330,49 @@
         let totalPayable = totalE + gst;
         document.getElementById('total-payable').innerText = totalPayable.toFixed(2);
     }
+
+    function exportToExcel() {
+        const table = document.getElementById('premiumTable');
+        let csvContent = "data:text/csv;charset=utf-8,";
+        csvContent += "Line Item Description,Rate / Basis,Premium (INR)\n";
+        
+        const rows = table.querySelectorAll('tbody tr');
+        rows.forEach(row => {
+            if (!row.classList.contains('hidden')) {
+                const cols = row.querySelectorAll('td');
+                const lineDesc = cols[0].innerText;
+                const rateBasis = cols[1].innerText.replace(/,/g, '');
+                const premiumVal = cols[2].innerText.replace(/,/g, '');
+                csvContent += `"${lineDesc}","${rateBasis}","${premiumVal}"\n`;
+            }
+        });
+        
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", `Premium_Working_${selectedPolicyType}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    function exportToPDF() {
+        window.print();
+    }
+
+    document.querySelectorAll('.si-input').forEach(input => {
+        input.addEventListener('input', calculateAggregateSumInsured);
+    });
+
+    document.getElementById('construction').addEventListener('change', () => { evaluateRowVisibility(); runCalculation(); });
+    document.getElementById('floaterToggle').addEventListener('change', () => { evaluateRowVisibility(); runCalculation(); });
+    document.getElementById('bgrRateOption').addEventListener('change', runCalculation);
+    document.getElementById('manualRateValue').addEventListener('input', runCalculation);
+    document.getElementById('basicDiscountValue').addEventListener('input', runCalculation);
+    document.getElementById('eqZone').addEventListener('change', runCalculation);
+    document.getElementById('stfiToggle').addEventListener('change', runCalculation);
+    document.getElementById('natcatDiscountToggle').addEventListener('change', runCalculation);
+    document.getElementById('terrorismToggle').addEventListener('change', runCalculation);
 
     adjustLayoutRules();
     calculateAggregateSumInsured();
