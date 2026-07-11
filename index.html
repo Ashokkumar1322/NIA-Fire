@@ -37,7 +37,6 @@
             margin-top: 0;
         }
 
-        /* Policy Selection Cards */
         .policy-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -76,7 +75,6 @@
             color: #64748b;
         }
 
-        /* Main Workspace Splitting */
         .workspace {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -97,13 +95,12 @@
             box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
 
-        /* Form Inputs */
         .form-group {
             margin-bottom: 18px;
             position: relative;
         }
 
-        /* Distinct Side Head Styling for target parameters */
+        /* Distinct side heading blocks with clear numbers and background tinting */
         .form-group.distinct-label label,
         .distinct-label-heading {
             display: block;
@@ -139,7 +136,6 @@
             cursor: not-allowed;
         }
 
-        /* Breakup Grid Layout */
         .si-breakup-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -182,7 +178,6 @@
             border-radius: 0 4px 4px 0;
         }
 
-        /* Search Autocomplete Box Layout */
         .search-container {
             position: relative;
         }
@@ -223,7 +218,6 @@
             color: var(--primary);
         }
 
-        /* Metadata Box Details */
         .meta-container {
             background-color: #f8fafc;
             border: 1px solid var(--border);
@@ -275,7 +269,6 @@
             border: 1px solid #fca5a5;
         }
 
-        /* Worksheet Table */
         table {
             width: 100%;
             border-collapse: collapse;
@@ -323,19 +316,19 @@
     <!-- STEP 1: CHOOSE YOUR POLICY TYPE -->
     <h2>CHOOSE YOUR POLICY TYPE</h2>
     <div class="policy-grid">
-        <div class="policy-card active" onclick="selectPolicy('BGR')">
+        <div class="policy-card active" onclick="selectPolicy('BGR', this)">
             <h3>BGR</h3>
             <p><strong>Bharat Griha Raksha</strong><br>Dwelling Only</p>
         </div>
-        <div class="policy-card" onclick="selectPolicy('BSUS')">
+        <div class="policy-card" onclick="selectPolicy('BSUS', this)">
             <h3>BSUS</h3>
             <p><strong>Bharat Sookshma Udyam Suraksha</strong><br>S.I. up to 5 Crores</p>
         </div>
-        <div class="policy-card" onclick="selectPolicy('BLUS')">
+        <div class="policy-card" onclick="selectPolicy('BLUS', this)">
             <h3>BLUS</h3>
             <p><strong>Bharat Laghu Udyam Suraksha</strong><br>S.I. 5 Crores to 50 Crores</p>
         </div>
-        <div class="policy-card" onclick="selectPolicy('SFSP')">
+        <div class="policy-card" onclick="selectPolicy('SFSP', this)">
             <h3>SFSP</h3>
             <p><strong>Standard Fire and Special Perils</strong><br>S.I. above 50 Crores</p>
         </div>
@@ -380,12 +373,12 @@
                     <input type="number" id="siOtherContents" class="si-input" value="0">
                 </div>
                 <div class="form-group-si">
-                    <label for="siStockFloating" style="color:var(--primary);">h) Stock - Floating</label>
+                    <label for="siStockFloating" style="color:var(--primary); font-weight: bold;">h) Stock - Floating</label>
                     <input type="number" id="siStockFloating" class="si-input" value="0" style="border-color:var(--primary);">
                 </div>
             </div>
 
-            <!-- Distinct Parameter 1 -->
+            <!-- Distinct Side Head 1 -->
             <div class="form-group distinct-label">
                 <label for="sumInsured">1. Total Sum Insured (₹) <span style="font-size:0.75rem; color:#64748b; font-weight:normal;">(Auto-Calculated)</span></label>
                 <input type="number" id="sumInsured" readonly style="background-color: #f1f5f9; font-weight: bold; color: #0f172a;" value="10000000">
@@ -400,7 +393,7 @@
                 </select>
             </div>
 
-            <!-- Distinct Parameter 2 -->
+            <!-- Distinct Side Head 2 -->
             <div class="form-group id-commercial distinct-label hidden" id="manualRateOptionContainer">
                 <label for="enterRateManuallyToggle">2. Enter Rate Manually?</label>
                 <select id="enterRateManuallyToggle">
@@ -414,7 +407,7 @@
                 <input type="number" id="manualRateValue" placeholder="e.g. 0.75" step="0.001" value="">
             </div>
 
-            <!-- Distinct Parameter 3 -->
+            <!-- Distinct Side Head 3 -->
             <div class="form-group id-commercial distinct-label hidden" id="occupancyContainer">
                 <label for="occupancySearch">3. Occupancy / Risk Selection (Search by Code or Keyword)</label>
                 <div class="search-container">
@@ -445,16 +438,16 @@
                 </div>
             </div>
 
-            <!-- Distinct Parameter 4 -->
+            <!-- Distinct Side Head 4 -->
             <div class="form-group id-commercial distinct-label hidden" id="floaterContainer">
                 <label for="floaterToggle">4. Floater Policy Option</label>
                 <select id="floaterToggle">
                     <option value="no">No (Single Location Policy)</option>
-                    <option value="yes">Yes, Apply Floater Loading (+10% on Stock - Floating S.I.)</option>
+                    <option value="yes">Yes, Apply Floater Loading (+10% on Stock-Floating S.I. only)</option>
                 </select>
             </div>
 
-            <!-- Distinct Parameter 5 -->
+            <!-- Distinct Side Head 5 -->
             <div class="form-group distinct-label">
                 <label for="construction">5. Construction Type</label>
                 <select id="construction">
@@ -466,13 +459,13 @@
                 </span>
             </div>
 
-            <!-- Distinct Parameter 6 -->
+            <!-- Distinct Side Head 6 -->
             <div class="form-group distinct-label" id="basicDiscountContainer">
                 <label for="basicDiscountValue">6. Discount (-) or Loading (+) on Basic Premium (%)</label>
                 <input type="number" id="basicDiscountValue" placeholder="e.g. -10 for 10% discount, +5 for loading" value="0" step="0.01">
             </div>
 
-            <!-- Distinct Parameter 7 -->
+            <!-- Distinct Side Head 7 -->
             <div id="eqCoverContainer" class="form-group id-commercial distinct-label hidden">
                 <label for="eqZone">7. Earthquake (EQ) Cover Zone</label>
                 <select id="eqZone">
@@ -491,7 +484,7 @@
                 <span id="eqAutoNotice" class="help-text hidden" style="background-color: #f0fdf4; border-color: var(--success); color: #166534;"></span>
             </div>
 
-            <!-- Distinct Parameter 8 -->
+            <!-- Distinct Side Head 8 -->
             <div id="stfiCoverContainer" class="form-group id-commercial distinct-label hidden">
                 <label for="stfiToggle">8. STFI Cover Option</label>
                 <select id="stfiToggle">
@@ -505,7 +498,7 @@
                 <span id="stfiAutoNotice" class="help-text hidden" style="background-color: #f0fdf4; border-color: var(--success); color: #166534;"></span>
             </div>
 
-            <!-- Distinct Parameter 9 -->
+            <!-- Distinct Side Head 9 -->
             <div id="natcatDiscountContainer" class="form-group id-commercial distinct-label hidden">
                 <label for="natcatDiscountToggle">9. Discount on NATCAT Premium (%)</label>
                 <select id="natcatDiscountToggle">
@@ -516,7 +509,7 @@
                 </select>
             </div>
 
-            <!-- Distinct Parameter 10 -->
+            <!-- Distinct Side Head 10 -->
             <div id="terrorismContainer" class="form-group id-commercial distinct-label hidden">
                 <label for="terrorismToggle">10. Terrorism Cover Options</label>
                 <select id="terrorismToggle">
@@ -626,7 +619,7 @@
 </div>
 
 <script>
-    // 100% VERBATIM EXCEL EXTRACTION PROCESSED DIRECTLY FROM SHEET1 DATA
+    // 100% VERBATIM EXTRACTION DIRECTLY FROM EXCEL SPREADSHEET (ALL 295 CERTIFIED ROWS)
     const combinedRates = [
       {"sec": "III", "code": "1002", "cat": "1.0", "ho": "", "dec": "", "desc": "Places of worship", "bsus": 0.14, "blus": 0.12, "sfsp": 0.12},
       {"sec": "III", "code": "1003", "cat": "1.0", "ho": "", "dec": "", "desc": "Libraries", "bsus": 0.21, "blus": 0.21, "sfsp": 0.21},
@@ -757,7 +750,7 @@
       {"sec": "IV", "code": "2087", "cat": "2.0", "ho": "", "dec": "", "desc": "Fruit and vegetable drying/dehydrating factories", "bsus": 0.96, "blus": 0.88, "sfsp": 0.88},
       {"sec": "IV", "code": "2088", "cat": "2.0", "ho": "", "dec": "", "desc": "Fruit products and Condiment Factories (including fruit pulp making)", "bsus": 0.74, "blus": 0.64, "sfsp": 0.64},
       {"sec": "IV", "code": "2089", "cat": "2.0", "ho": "", "dec": "", "desc": "Garment Makers, Topee, Hats and the like makers", "bsus": 1.12, "blus": 0.97, "sfsp": 0.97},
-      {"sec": "IV", "code": "2090", "cat": "2.0", "ho": "", "dec": "", "desc": Ghee Factories including vegetable Ghee mfg.", "bsus": 1.03, "blus": 1.2, "sfsp": 1.2},
+      {"sec": "IV", "code": "2090", "cat": "2.0", "ho": "", "dec": "", "desc": "Ghee Factories including vegetable Ghee mfg.", "bsus": 1.03, "blus": 1.2, "sfsp": 1.2},
       {"sec": "IV", "code": "2091", "cat": "2.0", "ho": "", "dec": "", "desc": "Glass Fibre Manufacturing", "bsus": 0.92, "blus": 0.96, "sfsp": 0.96},
       {"sec": "IV", "code": "2093", "cat": "2.0", "ho": "", "dec": "", "desc": "Glass Manufacturing/Automobile Glass manufacturing", "bsus": 1.1, "blus": 0.92, "sfsp": 0.92},
       {"sec": "IV", "code": "2092", "cat": "2.0", "ho": "", "dec": "", "desc": "Glass wool Manufacturing", "bsus": 1.43, "blus": 1.45, "sfsp": 1.45},
@@ -1016,10 +1009,10 @@
         runCalculation();
     });
 
-    function selectPolicy(type) {
+    function selectPolicy(type, element) {
         selectedPolicyType = type;
         document.querySelectorAll('.policy-card').forEach(card => card.classList.remove('active'));
-        event.currentTarget.classList.add('active');
+        element.classList.add('active');
         adjustLayoutRules();
     }
 
@@ -1237,11 +1230,9 @@
         document.getElementById('rate-basic').innerText = basicRateText;
         document.getElementById('prem-basic').innerText = basicPrem.toFixed(2);
 
-        // Floater Loading: Re-engineered to apply 10% strictly onto the 'Stock - Floating' Sum Insured
+        // Floater Loading: Computed 10% strictly onto the "Stock - Floating" asset segment allocation
         let floaterPrem = 0;
         if (selectedPolicyType !== 'BGR' && document.getElementById('floaterToggle').value === 'yes') {
-            // Apply loading basis: 10% premium calculation base on the segment sum insured allocation
-            // Under normal commercial lines, loading is derived as: (Floating SI / 1000) * Rate * 10%
             let activeRate = 0;
             if (document.getElementById('enterRateManuallyToggle').value === 'yes') {
                 activeRate = parseFloat(document.getElementById('manualRateValue').value) || 0;
@@ -1260,7 +1251,6 @@
             document.getElementById('prem-floater').innerText = "0.00";
         }
 
-        // Kutcha Loading: Exactly 4 per mille on total sum insured
         let kutchaPrem = 0;
         if (document.getElementById('construction').value === 'kutcha') {
             kutchaPrem = (si / 1000) * 4;
@@ -1270,7 +1260,6 @@
         let totalA = basicPrem + floaterPrem + kutchaPrem;
         document.getElementById('total-a').innerText = totalA.toFixed(2);
 
-        // Calculate Discount / Loading on Basic Premium (%) - Applied for BGR and Commercial lines
         let discPct = parseFloat(document.getElementById('basicDiscountValue').value) || 0;
         let discountPrem = basicPrem * (discPct / 100);
         
@@ -1280,7 +1269,6 @@
         let totalB = totalA + discountPrem; 
         document.getElementById('total-b').innerText = totalB.toFixed(2);
 
-        // NATCAT Premium Blocks
         let eqPrem = 0;
         let stfiPrem = 0;
         let totalC = 0;
@@ -1317,7 +1305,6 @@
             document.getElementById('prem-natcat-disc').innerText = "0.00";
         }
 
-        // Terrorism Premium Block
         let terrorismPrem = 0;
         if (selectedPolicyType !== 'BGR') {
             const tRate = parseFloat(document.getElementById('terrorismToggle').value) || 0;
@@ -1336,7 +1323,6 @@
         document.getElementById('total-payable').innerText = totalPayable.toFixed(2);
     }
 
-    // Bootstrap values
     adjustLayoutRules();
     calculateAggregateSumInsured();
 </script>
