@@ -23,7 +23,7 @@
         }
 
         .container {
-            max-width: 1100px;
+            max-width: 1200px;
             margin: 0 auto;
         }
 
@@ -77,7 +77,7 @@
             gap: 30px;
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 992px) {
             .workspace {
                 grid-template-columns: 1fr;
             }
@@ -93,22 +93,31 @@
 
         /* Form Inputs */
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 18px;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 6px;
             font-weight: 600;
             font-size: 0.9rem;
         }
 
         .form-group input, .form-group select {
             width: 100%;
-            padding: 8px 12px;
+            padding: 10px 12px;
             border: 1px solid var(--border);
             border-radius: 6px;
             box-sizing: border-box;
+            font-size: 0.9rem;
+        }
+
+        .help-text {
+            font-size: 0.8rem;
+            color: #64748b;
+            margin-top: 4px;
+            display: block;
+            line-height: 1.4;
         }
 
         /* Worksheet Table */
@@ -119,7 +128,7 @@
         }
 
         th, td {
-            padding: 10px;
+            padding: 12px 10px;
             text-align: left;
             border-bottom: 1px solid var(--border);
         }
@@ -154,7 +163,7 @@
 <div class="container">
     <header>
         <h1>Fire Insurance Premium Calculator</h1>
-        <p>Select a policy type to begin configuring the risk parameters.</p>
+        <p>Select a policy type to begin configuration.</p>
     </header>
 
     <!-- STEP 1: CHOOSE YOUR POLICY TYPE -->
@@ -166,15 +175,15 @@
         </div>
         <div class="policy-card" onclick="selectPolicy('BSUS')">
             <h3>BSUS</h3>
-            <p><strong>Bharat Sookshma Udyam Suraksha</strong><br>S.I. per location up to 5 Crores</p>
+            <p><strong>Bharat Sookshma Udyam Suraksha</strong><br>S.I. up to 5 Crores</p>
         </div>
         <div class="policy-card" onclick="selectPolicy('BLUS')">
             <h3>BLUS</h3>
-            <p><strong>Bharat Laghu Udyam Suraksha</strong><br>S.I. Above 5 Crores up to 50 Crores</p>
+            <p><strong>Bharat Laghu Udyam Suraksha</strong><br>S.I. 5 Crores to 50 Crores</p>
         </div>
         <div class="policy-card" onclick="selectPolicy('SFSP')">
             <h3>SFSP</h3>
-            <p><strong>Standard Fire and Special Perils</strong><br>S.I. per location above 50 Crores</p>
+            <p><strong>Standard Fire and Special Perils</strong><br>S.I. above 50 Crores</p>
         </div>
     </div>
 
@@ -186,35 +195,54 @@
             <h2>Risk & Value Details</h2>
             
             <div class="form-group">
+                <label for="sumInsured">Total Sum Insured (₹)</label>
+                <input type="number" id="sumInsured" placeholder="Enter total asset value" value="10000000">
+            </div>
+
+            <!-- BGR Rate Options Dropdown (Visible ONLY for BGR) -->
+            <div class="form-group" id="bgrRateContainer">
+                <label for="bgrRateOption">BGR Basic Rate Option</label>
+                <select id="bgrRateOption">
+                    <option value="0.06">Without terrorism @ 0.06 per mille (Incl of EQ, STFI)</option>
+                    <option value="0.11" selected>With terrorism @ 0.11 per mille (Incl of EQ, STFI)</option>
+                </select>
+            </div>
+
+            <!-- Occupancy Selector (For Non-BGR Policies) -->
+            <div class="form-group id-commercial hidden" id="occupancyContainer">
                 <label for="occupancy">Occupancy / Risk Selection</label>
                 <select id="occupancy">
                     <option value="">-- CHOOSE FROM LIST --</option>
-                    <option value="residential">Residential Dwelling</option>
-                    <option value="office">Commercial Office</option>
-                    <option value="shop">Retail Shop</option>
-                    <option value="factory">Manufacturing Factory</option>
-                    <option value="warehouse">Warehouse / Storage</option>
+                    <option value="office">Commercial Office (Mock Rate: 0.08%)</option>
+                    <option value="shop">Retail Shop (Mock Rate: 0.12%)</option>
+                    <option value="factory">Manufacturing Factory (Mock Rate: 0.25%)</option>
+                    <option value="warehouse">Warehouse / Storage (Mock Rate: 0.20%)</option>
                 </select>
             </div>
 
-            <div class="form-group">
-                <label for="sumInsured">Total Sum Insured (₹)</label>
-                <input type="number" id="sumInsured" placeholder="Enter total asset value" value="1000000">
+            <!-- Floater Loading Trigger (Hidden for BGR) -->
+            <div class="form-group id-commercial hidden" id="floaterContainer">
+                <label for="floaterToggle">Floater Policy Option</label>
+                <select id="floaterToggle">
+                    <option value="no">No (Single Location Policy)</option>
+                    <option value="yes">Yes, Apply Floater Loading (Mock Rate: +10%)</option>
+                </select>
+                <span class="help-text">Applicable when covers float across multiple locations.</span>
             </div>
 
             <div class="form-group">
-                <label>Construction Type</label>
+                <label for="construction">Construction Type</label>
                 <select id="construction">
                     <option value="pucca">Pucca (RCC / First Class Construction)</option>
-                    <option value="kutcha">Kutcha (Timber, Thatch, Temporary)</option>
+                    <option value="kutcha">Kutcha (Building(s) having walls and/or roofs of wooden planks/thatched leaves and/or grass/hay of any kind/bamboo/plastic cloth/asphalt cloth/canvas/tarpaulin)</option>
                 </select>
             </div>
 
-            <!-- Dynamic Toggles based on Policy -->
-            <div id="terrorismContainer" class="form-group hidden">
-                <label>Terrorism Cover Options</label>
+            <!-- Dynamic Terrorism Settings for Commercial -->
+            <div id="terrorismContainer" class="form-group id-commercial hidden">
+                <label for="terrorismToggle">Terrorism Cover Options</label>
                 <select id="terrorismToggle">
-                    <!-- Options will change dynamically based on JS -->
+                    <!-- Loaded dynamically via JS -->
                 </select>
             </div>
         </div>
@@ -226,7 +254,7 @@
                 <thead>
                     <tr>
                         <th>Line Item Description</th>
-                        <th>Rate (%)</th>
+                        <th>Rate Type / %</th>
                         <th class="text-right">Premium (₹)</th>
                     </tr>
                 </thead>
@@ -236,9 +264,15 @@
                         <td id="rate-basic">0.00</td>
                         <td id="prem-basic" class="text-right">0.00</td>
                     </tr>
+                    <!-- Floater Loading Row (Positioned right below basic premium, hidden for BGR) -->
+                    <tr id="row-floater" class="hidden">
+                        <td>FLOATER LOADING</td>
+                        <td id="rate-floater">0.00%</td>
+                        <td id="prem-floater" class="text-right">0.00</td>
+                    </tr>
                     <tr id="row-kutcha" class="hidden">
                         <td>LOADING FOR KUTCHA CONSTRUCTION</td>
-                        <td id="rate-kutcha">0.00</td>
+                        <td id="rate-kutcha">0.00%</td>
                         <td id="prem-kutcha" class="text-right">0.00</td>
                     </tr>
                     <tr class="subtotal-row">
@@ -248,7 +282,7 @@
                     </tr>
                     <tr>
                         <td>DISCOUNT / LOADING ON BASIC PREMIUM</td>
-                        <td id="rate-discount">0.00</td>
+                        <td id="rate-discount">0.00%</td>
                         <td id="prem-discount" class="text-right">0.00</td>
                     </tr>
                     <tr class="subtotal-row">
@@ -257,15 +291,15 @@
                         <td id="total-b" class="text-right">0.00</td>
                     </tr>
                     
-                    <!-- NATCAT Row Group (Hidden for BGR/BSUS by default) -->
+                    <!-- NATCAT Rows (BLUS/SFSP Only) -->
                     <tr class="row-natcat hidden">
                         <td>ADD EARTHQUAKE (BLUS, SFSP)</td>
-                        <td id="rate-eq">0.00</td>
+                        <td id="rate-eq">0.00%</td>
                         <td id="prem-eq" class="text-right">0.00</td>
                     </tr>
                     <tr class="row-natcat hidden">
                         <td>ADD STFI (BLUS, SFSP)</td>
-                        <td id="rate-stfi">0.00</td>
+                        <td id="rate-stfi">0.00%</td>
                         <td id="prem-stfi" class="text-right">0.00</td>
                     </tr>
                     <tr class="subtotal-row row-natcat hidden">
@@ -275,7 +309,7 @@
                     </tr>
                     <tr class="row-natcat hidden">
                         <td>DISCOUNT ON NATCAT</td>
-                        <td id="rate-natcat-disc">0.00</td>
+                        <td id="rate-natcat-disc">0.00%</td>
                         <td id="prem-natcat-disc" class="text-right">0.00</td>
                     </tr>
                     <tr class="subtotal-row row-natcat hidden">
@@ -284,10 +318,10 @@
                         <td id="total-d" class="text-right">0.00</td>
                     </tr>
                     
-                    <!-- Terrorism Adjustments -->
-                    <tr>
-                        <td id="label-terrorism">TERRORISM ADJUSTMENT</td>
-                        <td id="rate-terrorism">0.00</td>
+                    <!-- Terrorism Adjustments (For commercial, text adapts) -->
+                    <tr id="row-terrorism-line">
+                        <td id="label-terrorism">TERRORISM</td>
+                        <td id="rate-terrorism">0.00%</td>
                         <td id="prem-terrorism" class="text-right">0.00</td>
                     </tr>
                     <tr class="subtotal-row">
@@ -318,87 +352,182 @@
     function selectPolicy(type) {
         selectedPolicyType = type;
         
-        // Update active UI card style
         document.querySelectorAll('.policy-card').forEach(card => card.classList.remove('active'));
         event.currentTarget.classList.add('active');
         
-        // Dynamic visibility execution
         adjustLayoutRules();
     }
 
     function adjustLayoutRules() {
+        const commercialElements = document.querySelectorAll('.id-commercial');
+        const bgrRateContainer = document.getElementById('bgrRateContainer');
         const natcatRows = document.querySelectorAll('.row-natcat');
         const terrorismContainer = document.getElementById('terrorismContainer');
         const terrorismToggle = document.getElementById('terrorismToggle');
+        const rowTerrorismLine = document.getElementById('row-terrorism-line');
 
-        // Rule set for NATCAT visibility (BLUS & SFSP only)
-        if (selectedPolicyType === 'BLUS' || selectedPolicyType === 'SFSP') {
-            natcatRows.forEach(row => row.classList.remove('hidden'));
-            
-            // Setup Terrorism Options for BLUS / SFSP
-            terrorismContainer.classList.remove('hidden');
-            document.getElementById('label-terrorism').innerText = "ADD TERRORISM (BLUS, SFSP)";
-            terrorismToggle.innerHTML = `
-                <option value="add">Add Terrorism Cover</option>
-                <option value="none">Exclude Terrorism Cover</option>
-            `;
-        } else {
+        if (selectedPolicyType === 'BGR') {
+            // Rule 3: BGR-specific configurations
+            bgrRateContainer.classList.remove('hidden');
+            commercialElements.forEach(el => el.classList.add('hidden'));
             natcatRows.forEach(row => row.classList.add('hidden'));
-            
-            if (selectedPolicyType === 'BSUS') {
-                terrorismContainer.classList.remove('hidden');
+            rowTerrorismLine.classList.add('hidden'); // Hidden because it's built into BGR basic rates
+        } else {
+            // Commercial Policies configurations
+            bgrRateContainer.classList.add('hidden');
+            commercialElements.forEach(el => el.classList.remove('hidden'));
+            rowTerrorismLine.classList.remove('hidden');
+
+            // Toggle NATCAT view for BLUS and SFSP
+            if (selectedPolicyType === 'BLUS' || selectedPolicyType === 'SFSP') {
+                natcatRows.forEach(row => row.classList.remove('hidden'));
+                document.getElementById('label-terrorism').innerText = "ADD TERRORISM (BLUS, SFSP)";
+                terrorismToggle.innerHTML = `
+                    <option value="add">Add Terrorism Cover (Mock: 0.02%)</option>
+                    <option value="none">Exclude Terrorism Cover</option>
+                `;
+            } else if (selectedPolicyType === 'BSUS') {
+                // BSUS specifics
+                natcatRows.forEach(row => row.classList.add('hidden'));
                 document.getElementById('label-terrorism').innerText = "REMOVE TERRORISM (BSUS FLEXI)";
                 terrorismToggle.innerHTML = `
                     <option value="keep">Keep Built-in Terrorism</option>
-                    <option value="remove">Remove Terrorism (Discount)</option>
+                    <option value="remove">Remove Terrorism (Discount Mock: -0.01%)</option>
                 `;
-            } else {
-                // BGR hides terrorism settings completely
-                terrorismContainer.classList.add('hidden');
-                document.getElementById('label-terrorism').innerText = "TERRORISM (Auto-bundled)";
             }
         }
         
-        // Trigger dummy calculation update
-        runMockCalculation();
+        // Refresh visibility changes on construction & floater table rows
+        evaluateRowVisibility();
+        runCalculation();
     }
 
-    // Event listener tracking for form updates
-    document.getElementById('construction').addEventListener('change', function() {
-        const kutchaRow = document.getElementById('row-kutcha');
-        if(this.value === 'kutcha') {
-            kutchaRow.classList.remove('hidden');
+    function evaluateRowVisibility() {
+        // Kutcha Row check
+        const constType = document.getElementById('construction').value;
+        const rowKutcha = document.getElementById('row-kutcha');
+        if (constType === 'kutcha') {
+            rowKutcha.classList.remove('hidden');
         } else {
-            kutchaRow.classList.add('hidden');
+            rowKutcha.classList.add('hidden');
         }
-        runMockCalculation();
-    });
 
-    document.getElementById('sumInsured').addEventListener('input', runMockCalculation);
-    document.getElementById('occupancy').addEventListener('change', runMockCalculation);
-    if(document.getElementById('terrorismToggle')) {
-        document.getElementById('terrorismToggle').addEventListener('change', runMockCalculation);
+        // Rule 2: Floater Loading visibility rule (Hide for BGR, follow select for others)
+        const rowFloater = document.getElementById('row-floater');
+        const floaterVal = document.getElementById('floaterToggle').value;
+        if (selectedPolicyType !== 'BGR' && floaterVal === 'yes') {
+            rowFloater.classList.remove('hidden');
+        } else {
+            rowFloater.classList.add('hidden');
+        }
     }
 
-    function runMockCalculation() {
-        // Placeholder values until rates sheet is provided
+    // Event Wire-up
+    document.getElementById('construction').addEventListener('change', () => { evaluateRowVisibility(); runCalculation(); });
+    document.getElementById('floaterToggle').addEventListener('change', () => { evaluateRowVisibility(); runCalculation(); });
+    document.getElementById('sumInsured').addEventListener('input', runCalculation);
+    document.getElementById('bgrRateOption').addEventListener('change', runCalculation);
+    document.getElementById('occupancy').addEventListener('change', runCalculation);
+    document.getElementById('terrorismToggle').addEventListener('change', runCalculation);
+
+    function runCalculation() {
         const si = parseFloat(document.getElementById('sumInsured').value) || 0;
-        
-        let basicRate = 0.001; // Mock 0.1% base rate
-        let basicPrem = si * basicRate;
-        
-        document.getElementById('rate-basic').innerText = (basicRate * 100).toFixed(3) + "%";
+        let basicPrem = 0;
+        let basicRateText = "0.00%";
+
+        // 1. Calculate Basic Premium
+        if (selectedPolicyType === 'BGR') {
+            // Rule 3: Per mille calculations (Rate per 1,000 Sum Insured)
+            const perMilleRate = parseFloat(document.getElementById('bgrRateOption').value);
+            basicPrem = (si / 1000) * perMilleRate;
+            basicRateText = perMilleRate + " per mille";
+        } else {
+            // Commercial placeholder rate assignment
+            const occ = document.getElementById('occupancy').value;
+            let commRate = 0.001; // default fallback 0.1%
+            if (occ === 'office') commRate = 0.0008;
+            if (occ === 'shop') commRate = 0.0012;
+            if (occ === 'factory') commRate = 0.0025;
+            if (occ === 'warehouse') commRate = 0.0020;
+            
+            basicPrem = si * commRate;
+            basicRateText = (commRate * 100).toFixed(4) + "%";
+        }
+
+        document.getElementById('rate-basic').innerText = basicRateText;
         document.getElementById('prem-basic').innerText = basicPrem.toFixed(2);
-        document.getElementById('total-a').innerText = basicPrem.toFixed(2);
-        document.getElementById('total-b').innerText = basicPrem.toFixed(2);
-        document.getElementById('total-e').innerText = basicPrem.toFixed(2);
-        
-        let gst = basicPrem * 0.18;
+
+        // 2. Rule 2: Floater Loading (Calculated right below basic premium, if applicable)
+        let floaterPrem = 0;
+        if (selectedPolicyType !== 'BGR' && document.getElementById('floaterToggle').value === 'yes') {
+            const floaterRate = 0.10; // Mock 10% loading on basic premium
+            floaterPrem = basicPrem * floaterRate;
+            document.getElementById('rate-floater').innerText = (floaterRate * 100).toFixed(2) + "%";
+            document.getElementById('prem-floater').innerText = floaterPrem.toFixed(2);
+        }
+
+        // 3. Kutcha Loading Calculation
+        let kutchaPrem = 0;
+        if (document.getElementById('construction').value === 'kutcha') {
+            const kutchaRate = 0.15; // Mock 15% loading on basic premium
+            kutchaPrem = basicPrem * kutchaRate;
+            document.getElementById('rate-kutcha').innerText = (kutchaRate * 100).toFixed(2) + "%";
+            document.getElementById('prem-kutcha').innerText = kutchaPrem.toFixed(2);
+        }
+
+        // Calculate Total A
+        let totalA = basicPrem + floaterPrem + kutchaPrem;
+        document.getElementById('total-a').innerText = totalA.toFixed(2);
+
+        // Calculate Total B (Assuming 0 discount for placeholder)
+        let totalB = totalA;
+        document.getElementById('total-b').innerText = totalB.toFixed(2);
+
+        // 4. NATCAT Calculations (Mock values for BLUS / SFSP)
+        let totalC = 0;
+        let totalD = totalB;
+        if (selectedPolicyType === 'BLUS' || selectedPolicyType === 'SFSP') {
+            let eqPrem = si * 0.0002; // Mock EQ Rate
+            let stfiPrem = si * 0.0003; // Mock STFI Rate
+            document.getElementById('rate-eq').innerText = "0.0200%";
+            document.getElementById('prem-eq').innerText = eqPrem.toFixed(2);
+            document.getElementById('rate-stfi').innerText = "0.0300%";
+            document.getElementById('prem-stfi').innerText = stfiPrem.toFixed(2);
+            
+            totalC = eqPrem + stfiPrem;
+            document.getElementById('total-c').innerText = totalC.toFixed(2);
+            document.getElementById('total-d').innerText = (totalB + totalC).toFixed(2);
+            totalD = totalB + totalC;
+        }
+
+        // 5. Terrorism Calculations for Commercial Policies
+        let terrorismPrem = 0;
+        if (selectedPolicyType !== 'BGR') {
+            const tToggle = document.getElementById('terrorismToggle').value;
+            if (selectedPolicyType === 'BSUS' && tToggle === 'remove') {
+                terrorismPrem = -(si * 0.0001); // Discount drop
+                document.getElementById('rate-terrorism').innerText = "-0.0100%";
+            } else if ((selectedPolicyType === 'BLUS' || selectedPolicyType === 'SFSP') && tToggle === 'add') {
+                terrorismPrem = si * 0.0002; // Addition
+                document.getElementById('rate-terrorism').innerText = "0.0200%";
+            } else {
+                document.getElementById('rate-terrorism').innerText = "0.0000%";
+            }
+            document.getElementById('prem-terrorism').innerText = terrorismPrem.toFixed(2);
+        }
+
+        // Calculate Final Totals
+        let totalE = totalD + terrorismPrem;
+        document.getElementById('total-e').innerText = totalE.toFixed(2);
+
+        let gst = totalE * 0.18;
         document.getElementById('prem-gst').innerText = gst.toFixed(2);
-        document.getElementById('total-payable').innerText = (basicPrem + gst).toFixed(2);
+
+        let totalPayable = totalE + gst;
+        document.getElementById('total-payable').innerText = totalPayable.toFixed(2);
     }
 
-    // Initial run
+    // Execute first setup run
     adjustLayoutRules();
 </script>
 
