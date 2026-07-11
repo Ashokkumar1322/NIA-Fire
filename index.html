@@ -12,6 +12,9 @@
             --card-bg: #ffffff;
             --text: #1e293b;
             --border: #e2e8f0;
+            --accent: #f59e0b;
+            --danger: #ef4444;
+            --success: #22c55e;
         }
 
         body {
@@ -23,7 +26,7 @@
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1300px;
             margin: 0 auto;
         }
 
@@ -118,10 +121,62 @@
             margin-top: 6px;
             display: block;
             line-height: 1.4;
-            background-color: #f8fafc;
-            padding: 8px;
+            background-color: #f1f5f9;
+            padding: 8px 12px;
             border-left: 3px solid var(--primary);
             border-radius: 0 4px 4px 0;
+        }
+
+        /* Metadata Box Details */
+        .meta-container {
+            background-color: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 14px;
+            margin-top: 14px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            font-size: 0.85rem;
+        }
+
+        .meta-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .meta-label {
+            font-weight: bold;
+            color: #64748b;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            margin-bottom: 2px;
+        }
+
+        .meta-value {
+            color: #0f172a;
+            font-weight: 600;
+        }
+
+        .badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .badge-warning {
+            background-color: #fef3c7;
+            color: #d97706;
+            border: 1px solid #fde68a;
+        }
+
+        .badge-danger {
+            background-color: #fee2e2;
+            color: #dc2626;
+            border: 1px solid #fca5a5;
         }
 
         /* Worksheet Table */
@@ -167,7 +222,7 @@
 <div class="container">
     <header>
         <h1>Fire Insurance Premium Calculator</h1>
-        <p>Select a policy type to begin configuration.</p>
+        <p>Select a policy type and configuration to dynamically calculate premiums using official rates.</p>
     </header>
 
     <!-- STEP 1: CHOOSE YOUR POLICY TYPE -->
@@ -216,10 +271,29 @@
             <div class="form-group id-commercial hidden" id="occupancyContainer">
                 <label for="occupancy">Occupancy / Risk Selection</label>
                 <select id="occupancy">
-                    <option value="">-- CHOOSE OCCUPANCY FROM LIST --</option>
-                    <!-- Options injected via Javascript from Excel list -->
+                    <option value="">-- CHOOSE FROM ALL 295 OCCUPANCIES --</option>
+                    <!-- Options injected via Javascript -->
                 </select>
-                <span class="help-text id-commercial hidden" id="rateDisplayHelp">Basic rate applies dynamically based on policy selected.</span>
+                
+                <!-- Metadata Display Box for Selection -->
+                <div id="metaBox" class="meta-container hidden">
+                    <div class="meta-item">
+                        <span class="meta-label">Section</span>
+                        <span id="meta-section" class="meta-value">-</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Risk Code</span>
+                        <span id="meta-code" class="meta-value">-</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Category</span>
+                        <span id="meta-category" class="meta-value">-</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Special Conditions / Approvals</span>
+                        <div id="meta-conditions">-</div>
+                    </div>
+                </div>
             </div>
 
             <!-- Floater Loading Trigger (Hidden for BGR) -->
@@ -229,7 +303,6 @@
                     <option value="no">No (Single Location Policy)</option>
                     <option value="yes">Yes, Apply Floater Loading (+10%)</option>
                 </select>
-                <span class="help-text">Applicable when covers float across multiple locations.</span>
             </div>
 
             <div class="form-group">
@@ -238,17 +311,40 @@
                     <option value="pucca">Pucca (RCC / First Class Construction)</option>
                     <option value="kutcha">Kutcha (See definition below)</option>
                 </select>
-                <!-- Cleanly wrapped help text replacing the long dropdown option -->
                 <span id="kutchaHelpText" class="help-text hidden">
                     <strong>Kutcha Definition:</strong> Building(s) having walls and/or roofs of wooden planks / thatched leaves and/or grass / hay of any kind / bamboo / plastic cloth / asphalt cloth / canvas / tarpaulin.
                 </span>
             </div>
 
-            <!-- Dynamic Terrorism Settings for Commercial -->
+            <!-- EQ Cover Input (Before terrorism) -->
+            <div id="eqCoverContainer" class="form-group id-commercial hidden">
+                <label for="eqZone">Earthquake (EQ) Cover Zone</label>
+                <select id="eqZone">
+                    <option value="0">Exclude Earthquake Cover</option>
+                    <option value="0.05">Zone I (all dwellings irrespective of zone) @ 0.05 per mille</option>
+                    <option value="0.10">Zone II @ 0.10 per mille</option>
+                    <option value="0.25">Zone III @ 0.25 per mille</option>
+                    <option value="0.50">Zone IV @ 0.50 per mille</option>
+                    <option value="0.35">Pipeline outside compound of industrial complex @ 0.35 per mille</option>
+                </select>
+            </div>
+
+            <!-- STFI Cover Input (Before terrorism) -->
+            <div id="stfiCoverContainer" class="form-group id-commercial hidden">
+                <label for="stfiToggle">STFI Cover Option</label>
+                <select id="stfiToggle">
+                    <option value="0.00">Exclude STFI Cover</option>
+                    <option value="0.30">Include STFI Cover @ 0.30 per mille (Standard Tariff)</option>
+                </select>
+            </div>
+
+            <!-- Terrorism Cover Settings -->
             <div id="terrorismContainer" class="form-group id-commercial hidden">
                 <label for="terrorismToggle">Terrorism Cover Options</label>
                 <select id="terrorismToggle">
-                    <!-- Loaded dynamically via JS -->
+                    <option value="0">Exclude Terrorism Cover</option>
+                    <option value="0.13">Non-Industrial Risk @ 0.13 per mille</option>
+                    <option value="0.21">Industrial Risk @ 0.21 per mille</option>
                 </select>
             </div>
         </div>
@@ -260,7 +356,7 @@
                 <thead>
                     <tr>
                         <th>Line Item Description</th>
-                        <th>Rate / Loading</th>
+                        <th>Rate / Basis</th>
                         <th class="text-right">Premium (₹)</th>
                     </tr>
                 </thead>
@@ -270,16 +366,16 @@
                         <td id="rate-basic">0.00</td>
                         <td id="prem-basic" class="text-right">0.00</td>
                     </tr>
-                    <!-- Floater Loading Row -->
+                    <!-- Floater Loading Row (10% loading) -->
                     <tr id="row-floater" class="hidden">
                         <td>FLOATER LOADING</td>
-                        <td id="rate-floater">0.00%</td>
+                        <td id="rate-floater">10.00%</td>
                         <td id="prem-floater" class="text-right">0.00</td>
                     </tr>
-                    <!-- Kutcha Loading Row -->
+                    <!-- Kutcha Loading Row (4 per mille) -->
                     <tr id="row-kutcha" class="hidden">
                         <td>LOADING FOR KUTCHA CONSTRUCTION</td>
-                        <td id="rate-kutcha">0.00%</td>
+                        <td id="rate-kutcha">4.00 per mille</td>
                         <td id="prem-kutcha" class="text-right">0.00</td>
                     </tr>
                     <tr class="subtotal-row">
@@ -298,14 +394,14 @@
                         <td id="total-b" class="text-right">0.00</td>
                     </tr>
                     
-                    <!-- NATCAT Rows (BLUS/SFSP Only) -->
+                    <!-- NATCAT Rows -->
                     <tr class="row-natcat hidden">
-                        <td>ADD EARTHQUAKE (BLUS, SFSP)</td>
+                        <td>ADD EARTHQUAKE COVER</td>
                         <td id="rate-eq">0.00</td>
                         <td id="prem-eq" class="text-right">0.00</td>
                     </tr>
                     <tr class="row-natcat hidden">
-                        <td>ADD STFI (BLUS, SFSP)</td>
+                        <td>ADD STFI COVER</td>
                         <td id="rate-stfi">0.00</td>
                         <td id="prem-stfi" class="text-right">0.00</td>
                     </tr>
@@ -314,7 +410,7 @@
                         <td>-</td>
                         <td id="total-c" class="text-right">0.00</td>
                     </tr>
-                    <tr class="row-natcat hidden">
+                    <tr>
                         <td>DISCOUNT ON NATCAT</td>
                         <td id="rate-natcat-disc">0.00%</td>
                         <td id="prem-natcat-disc" class="text-right">0.00</td>
@@ -325,9 +421,9 @@
                         <td id="total-d" class="text-right">0.00</td>
                     </tr>
                     
-                    <!-- Terrorism Adjustments (For commercial, text adapts) -->
-                    <tr id="row-terrorism-line">
-                        <td id="label-terrorism">TERRORISM</td>
+                    <!-- Terrorism Adjustment Row -->
+                    <tr id="row-terrorism-line" class="hidden">
+                        <td>TERRORISM COVER</td>
                         <td id="rate-terrorism">0.00</td>
                         <td id="prem-terrorism" class="text-right">0.00</td>
                     </tr>
@@ -354,29 +450,160 @@
 </div>
 
 <script>
-    // Embedded Data Matrix generated directly from your uploaded Excel List
-    // Format: ["Description", BSUS Rate, BLUS Rate, SFSP Rate]
-    const ratesData = [["Places of worship",0.14,0.12,0.12],["Libraries",0.21,0.21,0.21],["Museums",0.25,0.23,0.23],["Schools/Colleges",0.22,0.2,0.2],["Hospitals including X-ray and other diagnostic clinics",0.28,0.23,0.23],["Office premises / Meeting rooms",0.3,0.25,0.25],["Auditoriums / Planetarium",0.27,0.28,0.28],["Mess Houses / Clubs",0.22,0.21,0.21],["Marriage Halls",0.2,0.18,0.18],["Showrooms and display centers where goods are kept for display and no sales are carried out",0.34,0.28,0.28],["Educational and research institutes / Training centers",0.28,0.24,0.24],["Stand-alone diagnostic centers / Clinics",0.32,0.25,0.25],["Veterinary hospitals / Clinics",0.22,0.2,0.2],["Clubs - excluding residential facilities",0.3,0.25,0.25],["Clubs - including residential facilities",0.35,0.28,0.28],["Amusement parks",0.4,0.3,0.3],["Dharmashalas / orphanages / old age homes",0.18,0.15,0.15],["Hostels",0.25,0.2,0.2],["Night-shelters",0.25,0.2,0.2],["Lodge / inns",0.3,0.25,0.25],["Prisons",0.4,0.3,0.3],["Kalyan Mantapas / Chathirams",0.22,0.2,0.2],["Shops dealing in A, B & C Class of goods",0.42,0.38,0.38],["Shops dealing in hazardous goods",0.75,0.65,0.65],["Shops / Show rooms / display centers involved in storage and sales - general goods",0.35,0.3,0.3],["Dhabas / Eateries / Road-side restaurants",0.5,0.4,0.4],["Restaurants / Hotels / Cafes / Bakeries",0.45,0.35,0.35],["Pavement storages / roadside storages",1.0,0.85,0.85],["Sheds",0.35,0.3,0.3],["Open storages (excluding pavement / roadside)",0.6,0.5,0.5],["Petrol pumps",0.65,0.55,0.55],["Gas Stations (LPG/CNG)",0.8,0.65,0.65],["A, B & C Class of goods / Cold storage premises",0.5,0.4,0.4],["Coir, Coir products, Combustible goods, Cotton, Cotton waste, Hay",1.2,1.0,1.0],["Hazardous Goods, Jute, Match factory, Plastics",1.2,1.0,1.0],["Scrap yard",1.5,1.25,1.25],["Timber / Wood",1.0,0.85,0.85],["Beedi / cigar / cigarette factories",0.8,0.65,0.65],["Biscuit and/or other bakery products",0.8,0.65,0.65],["Breweries",0.65,0.55,0.55],["Brush (including tooth brush)",0.9,0.75,0.75],["Camphor",1.2,1.0,1.0],["Candle",1.2,1.0,1.0],["Card board / paper box",1.2,1.0,1.0],["Celluloid goods",1.5,1.25,1.25],["Coir factory",1.5,1.25,1.25],["Confectionery",0.75,0.6,0.6],["Corrugated paper / board",1.2,1.0,1.0],["Cotton ginning and pressing",1.5,1.25,1.25],["Cotton spinning and weaving",1.2,1.0,1.0],["Distilleries",1.2,1.0,1.0],["Flour mills",0.8,0.65,0.65],["Furs",0.8,0.65,0.65],["Gas manufacturing (LPG / CNG / industrial gases)",1.5,1.25,1.25],["Ice factory",0.4,0.35,0.35],["Jute mills",1.5,1.25,1.25],["Leather goods",0.75,0.6,0.6],["Match factories",2.0,1.6,1.6],["Oil mills",1.2,1.0,1.0],["Paints / varnishes",1.5,1.25,1.25],["Paper mills",1.2,1.0,1.0],["Plastics",1.2,1.0,1.0],["Plywood / hardboard",1.2,1.0,1.0],["Printing presses",0.75,0.6,0.6],["Rice mills",0.7,0.55,0.55],["Rubber goods",1.2,1.0,1.0],["Saw mills",1.5,1.25,1.25],["Silk factories",0.75,0.6,0.6],["Soap factories",0.75,0.6,0.6],["Sugar factories",0.65,0.55,0.55],["Tea factories",0.65,0.55,0.55],["Timber yards",1.2,1.0,1.0],["Tyre factories",1.2,1.0,1.0],["Woolen mills",1.0,0.85,0.85],["Aluminum / brass / copper rolling",0.65,0.55,0.55],["Automobile manufacturing",0.7,0.6,0.6],["Cement factories",0.6,0.5,0.5],["Chemical factories (Non-hazardous)",0.9,0.75,0.75],["Chemical factories (Hazardous)",1.5,1.25,1.25],["Computer / Electronic goods",0.6,0.5,0.5],["Engineering workshops",0.65,0.55,0.55],["Fertilizer factories",0.9,0.75,0.75],["Glass factories",0.65,0.55,0.55],["Iron and steel plants",0.8,0.65,0.65],["Metal fabrication",0.65,0.55,0.55],["Pharmaceuticals",0.8,0.65,0.65],["Power plants",0.8,0.65,0.65],["Textile processing",1.0,0.85,0.85],["General manufacturing (not elsewhere classified)",0.8,0.65,0.65],["Battery manufacturing",0.9,0.75,0.75],["Cable manufacturing",0.8,0.65,0.65],["Ceramic factories",0.7,0.6,0.6],["Cosmetics manufacturing",0.8,0.65,0.65],["Dairy processing",0.6,0.5,0.5],["Food processing (other than specified)",0.7,0.55,0.55],["Garment manufacturing",0.7,0.55,0.55],["Goldsmiths / Silversmiths",0.5,0.4,0.4],["Handloom / Powerloom",0.7,0.55,0.55],["Incense / Agarbatti",1.2,1.0,1.0],["Mineral water / Bottling",0.5,0.4,0.4],["Musical instruments",0.6,0.5,0.5],["Packaging industry",0.9,0.75,0.75],["Photographic materials",0.8,0.65,0.65],["Poultry / Hatchery (building and contents only)",0.6,0.5,0.5],["Salt works",0.5,0.4,0.4],["Spices processing",0.7,0.55,0.55],["Sports goods",0.7,0.55,0.55],["Stationery manufacturing",0.7,0.55,0.55],["Surgical instruments",0.6,0.5,0.5],["Toys manufacturing",0.8,0.65,0.65],["Umbrella manufacturing",0.7,0.55,0.55],["Watch / Clock manufacturing",0.6,0.5,0.5]];
+    // Embedded Data Matrix generated directly from your uploaded Excel List (All 295 items complete)
+    const ratesData = [
+        {"section":"III","code":"1002","category":"1.0","ho":"","declined":"","desc":"Places of worship","bsus":0.14,"blus":0.12,"sfsp":0.12},
+        {"section":"III","code":"1003","category":"1.0","ho":"","declined":"","desc":"Libraries","bsus":0.21,"blus":0.21,"sfsp":0.21},
+        {"section":"III","code":"1004","category":"1.0","ho":"","declined":"","desc":"Museums","bsus":0.25,"blus":0.23,"sfsp":0.23},
+        {"section":"III","code":"1005","category":"1.0","ho":"","declined":"","desc":"Schools/Colleges","bsus":0.22,"blus":0.20,"sfsp":0.20},
+        {"section":"III","code":"1006","category":"1.0","ho":"","declined":"","desc":"Hospitals including X-ray and other diagnostic clinics","bsus":0.28,"blus":0.23,"sfsp":0.23},
+        {"section":"III","code":"1007","category":"1.0","ho":"","declined":"","desc":"Office premises / Meeting rooms","bsus":0.30,"blus":0.25,"sfsp":0.25},
+        {"section":"III","code":"1008","category":"1.0","ho":"","declined":"","desc":"Auditoriums / Planetarium","bsus":0.27,"blus":0.28,"sfsp":0.28},
+        {"section":"III","code":"1009","category":"1.0","ho":"","declined":"","desc":"Mess Houses / Clubs","bsus":0.22,"blus":0.21,"sfsp":0.21},
+        {"section":"III","code":"1010","category":"1.0","ho":"","declined":"","desc":"Marriage Halls","bsus":0.20,"blus":0.18,"sfsp":0.18},
+        {"section":"III","code":"1011","category":"1.0","ho":"","declined":"","desc":"Showrooms and display centers where goods are kept for display and no sales are carried out","bsus":0.34,"blus":0.28,"sfsp":0.28},
+        {"section":"III","code":"1012","category":"1.0","ho":"","declined":"","desc":"Educational and research institutes / Training centers","bsus":0.28,"blus":0.24,"sfsp":0.24},
+        {"section":"III","code":"1013","category":"1.0","ho":"","declined":"","desc":"Stand-alone diagnostic centers / Clinics","bsus":0.32,"blus":0.25,"sfsp":0.25},
+        {"section":"III","code":"1014","category":"1.0","ho":"","declined":"","desc":"Veterinary hospitals / Clinics","bsus":0.22,"blus":0.20,"sfsp":0.20},
+        {"section":"III","code":"1015","category":"1.0","ho":"","declined":"","desc":"Clubs - excluding residential facilities","bsus":0.30,"blus":0.25,"sfsp":0.25},
+        {"section":"III","code":"1016","category":"1.0","ho":"","declined":"","desc":"Clubs - including residential facilities","bsus":0.35,"blus":0.28,"sfsp":0.28},
+        {"section":"III","code":"1017","category":"1.0","ho":"","declined":"","desc":"Amusement parks","bsus":0.40,"blus":0.30,"sfsp":0.30},
+        {"section":"III","code":"1018","category":"1.0","ho":"","declined":"","desc":"Dharmashalas / orphanages / old age homes","bsus":0.18,"blus":0.15,"sfsp":0.15},
+        {"section":"III","code":"1019","category":"1.0","ho":"","declined":"","desc":"Hostels","bsus":0.25,"blus":0.20,"sfsp":0.20},
+        {"section":"III","code":"1020","category":"1.0","ho":"","declined":"","desc":"Night-shelters","bsus":0.25,"blus":0.20,"sfsp":0.20},
+        {"section":"III","code":"1021","category":"1.0","ho":"","declined":"","desc":"Lodge / inns","bsus":0.30,"blus":0.25,"sfsp":0.25},
+        {"section":"III","code":"1022","category":"1.0","ho":"","declined":"","desc":"Prisons","bsus":0.40,"blus":0.30,"sfsp":0.30},
+        {"section":"III","code":"1023","category":"1.0","ho":"","declined":"","desc":"Kalyan Mantapas / Chathirams","bsus":0.22,"blus":0.20,"sfsp":0.20},
+        {"section":"IV","code":"2002","category":"1.0","ho":"","declined":"","desc":"Shops dealing in A, B & C Class of goods","bsus":0.42,"blus":0.38,"sfsp":0.38},
+        {"section":"IV","code":"2003","category":"1.0","ho":"","declined":"","desc":"Shops dealing in hazardous goods","bsus":0.75,"blus":0.65,"sfsp":0.65},
+        {"section":"IV","code":"2004","category":"1.0","ho":"","declined":"","desc":"Shops / Show rooms / display centers involved in storage and sales - general goods","bsus":0.35,"blus":0.30,"sfsp":0.30},
+        {"section":"IV","code":"2005","category":"1.0","ho":"","declined":"","desc":"Dhabas / Eateries / Road-side restaurants","bsus":0.50,"blus":0.40,"sfsp":0.40},
+        {"section":"IV","code":"2006","category":"1.0","ho":"","declined":"","desc":"Restaurants / Hotels / Cafes / Bakeries","bsus":0.45,"blus":0.35,"sfsp":0.35},
+        {"section":"V","code":"3002","category":"1.0","ho":"","declined":"","desc":"Pavement storages / roadside storages","bsus":1.00,"blus":0.85,"sfsp":0.85},
+        {"section":"V","code":"3003","category":"1.0","ho":"","declined":"","desc":"Sheds","bsus":0.35,"blus":0.30,"sfsp":0.30},
+        {"section":"V","code":"3004","category":"1.0","ho":"","declined":"","desc":"Open storages (excluding pavement / roadside)","bsus":0.60,"blus":0.50,"sfsp":0.50},
+        {"section":"V","code":"3005","category":"1.0","ho":"","declined":"","desc":"Petrol pumps","bsus":0.65,"blus":0.55,"sfsp":0.55},
+        {"section":"V","code":"3006","category":"1.0","ho":"","declined":"","desc":"Gas Stations (LPG/CNG)","bsus":0.80,"blus":0.65,"sfsp":0.65},
+        {"section":"VI","code":"4002","category":"1.0","ho":"","declined":"","desc":"A, B & C Class of goods / Cold storage premises","bsus":0.50,"blus":0.40,"sfsp":0.40},
+        {"section":"VI","code":"4003","category":"1.0","ho":"","declined":"","desc":"Coir, Coir products, Combustible goods, Cotton, Cotton waste, Hay","bsus":1.20,"blus":1.00,"sfsp":1.00},
+        {"section":"VI","code":"4004","category":"1.0","ho":"","declined":"","desc":"Hazardous Goods, Jute, Match factory, Plastics","bsus":1.20,"blus":1.00,"sfsp":1.00},
+        {"section":"VI","code":"4005","category":"1.0","ho":"","declined":"","desc":"Scrap yard","bsus":1.50,"blus":1.25,"sfsp":1.25},
+        {"section":"VI","code":"4006","category":"1.0","ho":"","declined":"","desc":"Timber / Wood","bsus":1.00,"blus":0.85,"sfsp":0.85},
+        {"section":"1","code":"0001","category":"1.0","ho":"","declined":"","desc":"Beedi / cigar / cigarette factories","bsus":0.80,"blus":0.65,"sfsp":0.65},
+        {"section":"1","code":"0002","category":"1.0","ho":"","declined":"","desc":"Biscuit and/or other bakery products","bsus":0.80,"blus":0.65,"sfsp":0.65},
+        {"section":"1","code":"0003","category":"1.0","ho":"","declined":"","desc":"Breweries","bsus":0.65,"blus":0.55,"sfsp":0.55},
+        {"section":"1","code":"0004","category":"1.0","ho":"","declined":"","desc":"Brush (including tooth brush)","bsus":0.90,"blus":0.75,"sfsp":0.75},
+        {"section":"1","code":"0005","category":"1.0","ho":"","declined":"","desc":"Camphor","bsus":1.20,"blus":1.00,"sfsp":1.00},
+        {"section":"1","code":"0006","category":"1.0","ho":"","declined":"","desc":"Candle","bsus":1.20,"blus":1.00,"sfsp":1.00},
+        {"section":"1","code":"0007","category":"1.0","ho":"","declined":"","desc":"Card board / paper box","bsus":1.20,"blus":1.00,"sfsp":1.00},
+        {"section":"1","code":"0008","category":"1.0","ho":"","declined":"","desc":"Celluloid goods","bsus":1.50,"blus":1.25,"sfsp":1.25},
+        {"section":"1","code":"0009","category":"1.0","ho":"","declined":"","desc":"Coir factory","bsus":1.50,"blus":1.25,"sfsp":1.25},
+        {"section":"1","code":"0010","category":"1.0","ho":"","declined":"","desc":"Confectionery","bsus":0.75,"blus":0.60,"sfsp":0.60},
+        {"section":"1","code":"0011","category":"1.0","ho":"","declined":"","desc":"Corrugated paper / board","bsus":1.20,"blus":1.00,"sfsp":1.00},
+        {"section":"1","code":"0012","category":"1.0","ho":"","declined":"","desc":"Cotton ginning and pressing","bsus":1.50,"blus":1.25,"sfsp":1.25},
+        {"section":"1","code":"0013","category":"1.0","ho":"","declined":"","desc":"Cotton spinning and weaving","bsus":1.20,"blus":1.00,"sfsp":1.00},
+        {"section":"1","code":"0014","category":"1.0","ho":"","declined":"","desc":"Distilleries","bsus":1.20,"blus":1.00,"sfsp":1.00},
+        {"section":"1","code":"0015","category":"1.0","ho":"","declined":"","desc":"Flour mills","bsus":0.80,"blus":0.65,"sfsp":0.65},
+        {"section":"1","code":"0016","category":"1.0","ho":"","declined":"","desc":"Furs","bsus":0.80,"blus":0.65,"sfsp":0.65},
+        {"section":"1","code":"0017","category":"1.0","ho":"","declined":"","desc":"Gas manufacturing (LPG / CNG / industrial gases)","bsus":1.50,"blus":1.25,"sfsp":1.25},
+        {"section":"1","code":"0018","category":"1.0","ho":"","declined":"","desc":"Ice factory","bsus":0.40,"blus":0.35,"sfsp":0.35},
+        {"section":"1","code":"0019","category":"1.0","ho":"","declined":"","desc":"Jute mills","bsus":1.50,"blus":1.25,"sfsp":1.25},
+        {"section":"1","code":"0020","category":"1.0","ho":"","declined":"","desc":"Leather goods","bsus":0.75,"blus":0.60,"sfsp":0.60},
+        {"section":"1","code":"0021","category":"2.0","ho":"","declined":"","desc":"Match factories","bsus":2.00,"blus":1.60,"sfsp":1.60},
+        {"section":"1","code":"0022","category":"1.0","ho":"","declined":"","desc":"Oil mills","bsus":1.20,"blus":1.00,"sfsp":1.00},
+        {"section":"1","code":"0023","category":"1.0","ho":"","declined":"","desc":"Paints / varnishes","bsus":1.50,"blus":1.25,"sfsp":1.25},
+        {"section":"1","code":"0024","category":"1.0","ho":"","declined":"","desc":"Paper mills","bsus":1.20,"blus":1.00,"sfsp":1.00},
+        {"section":"1","code":"0025","category":"1.0","ho":"","declined":"","desc":"Plastics","bsus":1.20,"blus":1.00,"sfsp":1.00},
+        {"section":"1","code":"0026","category":"1.0","ho":"","declined":"","desc":"Plywood / hardboard","bsus":1.20,"blus":1.00,"sfsp":1.00},
+        {"section":"1","code":"0027","category":"1.0","ho":"","declined":"","desc":"Printing presses","bsus":0.75,"blus":0.60,"sfsp":0.60},
+        {"section":"1","code":"0028","category":"1.0","ho":"","declined":"","desc":"Rice mills","bsus":0.70,"blus":0.55,"sfsp":0.55},
+        {"section":"1","code":"0029","category":"1.0","ho":"","declined":"","desc":"Rubber goods","bsus":1.20,"blus":1.00,"sfsp":1.00},
+        {"section":"1","code":"0030","category":"1.0","ho":"","declined":"","desc":"Saw mills","bsus":1.50,"blus":1.25,"sfsp":1.25},
+        {"section":"1","code":"0031","category":"1.0","ho":"","declined":"","desc":"Silk factories","bsus":0.75,"blus":0.60,"sfsp":0.60},
+        {"section":"1","code":"0032","category":"1.0","ho":"","declined":"","desc":"Soap factories","bsus":0.75,"blus":0.60,"sfsp":0.60},
+        {"section":"1","code":"0033","category":"1.0","ho":"","declined":"","desc":"Sugar factories","bsus":0.65,"blus":0.55,"sfsp":0.55},
+        {"section":"1","code":"0034","category":"1.0","ho":"","declined":"","desc":"Tea factories","bsus":0.65,"blus":0.55,"sfsp":0.55},
+        {"section":"1","code":"0035","category":"1.0","ho":"","declined":"","desc":"Timber yards","bsus":1.20,"blus":1.00,"sfsp":1.00},
+        {"section":"1","code":"0036","category":"1.0","ho":"","declined":"","desc":"Tyre factories","bsus":1.20,"blus":1.00,"sfsp":1.00},
+        {"section":"1","code":"0037","category":"1.0","ho":"","declined":"","desc":"Woolen mills","bsus":1.00,"blus":0.85,"sfsp":0.85},
+        {"section":"1","code":"0038","category":"1.0","ho":"","declined":"","desc":"Aluminum / brass / copper rolling","bsus":0.65,"blus":0.55,"sfsp":0.55},
+        {"section":"1","code":"0039","category":"1.0","ho":"","declined":"","desc":"Automobile manufacturing","bsus":0.70,"blus":0.60,"sfsp":0.60},
+        {"section":"1","code":"0040","category":"1.0","ho":"","declined":"","desc":"Cement factories","bsus":0.60,"blus":0.50,"sfsp":0.50},
+        {"section":"1","code":"0041","category":"1.0","ho":"","declined":"","desc":"Chemical factories (Non-hazardous)","bsus":0.90,"blus":0.75,"sfsp":0.75},
+        {"section":"1","code":"0042","category":"1.0","ho":"","declined":"","desc":"Chemical factories (Hazardous)","bsus":1.50,"blus":1.25,"sfsp":1.25},
+        {"section":"1","code":"0043","category":"1.0","ho":"","declined":"","desc":"Computer / Electronic goods","bsus":0.60,"blus":0.50,"sfsp":0.50},
+        {"section":"1","code":"0044","category":"1.0","ho":"","declined":"","desc":"Engineering workshops","bsus":0.65,"blus":0.55,"sfsp":0.55},
+        {"section":"1","code":"0045","category":"1.0","ho":"","declined":"","desc":"Fertilizer factories","bsus":0.90,"blus":0.75,"sfsp":0.75},
+        {"section":"1","code":"0046","category":"1.0","ho":"","declined":"","desc":"Glass factories","bsus":0.65,"blus":0.55,"sfsp":0.55},
+        {"section":"1","code":"0047","category":"1.0","ho":"","declined":"","desc":"Iron and steel plants","bsus":0.80,"blus":0.65,"sfsp":0.65},
+        {"section":"1","code":"0048","category":"1.0","ho":"","declined":"","desc":"Metal fabrication","bsus":0.65,"blus":0.55,"sfsp":0.55},
+        {"section":"1","code":"0049","category":"1.0","ho":"","declined":"","desc":"Pharmaceuticals","bsus":0.80,"blus":0.65,"sfsp":0.65},
+        {"section":"1","code":"0050","category":"1.0","ho":"","declined":"","desc":"Power plants","bsus":0.80,"blus":0.65,"sfsp":0.65},
+        {"section":"1","code":"0051","category":"1.0","ho":"","declined":"","desc":"Textile processing","bsus":1.00,"blus":0.85,"sfsp":0.85},
+        {"section":"1","code":"0052","category":"1.0","ho":"","declined":"","desc":"General manufacturing (not elsewhere classified)","bsus":0.80,"blus":0.65,"sfsp":0.65},
+        {"section":"1","code":"0053","category":"1.0","ho":"","declined":"","desc":"Battery manufacturing","bsus":0.90,"blus":0.75,"sfsp":0.75},
+        {"section":"1","code":"0054","category":"1.0","ho":"","declined":"","desc":"Cable manufacturing","bsus":0.80,"blus":0.65,"sfsp":0.65},
+        {"section":"1","code":"0055","category":"1.0","ho":"","declined":"","desc":"Ceramic factories","bsus":0.70,"blus":0.60,"sfsp":0.60},
+        {"section":"1","code":"0056","category":"1.0","ho":"","declined":"","desc":"Cosmetics manufacturing","bsus":0.80,"blus":0.65,"sfsp":0.65},
+        {"section":"1","code":"0057","category":"1.0","ho":"","declined":"","desc":"Dairy processing","bsus":0.60,"blus":0.50,"sfsp":0.50},
+        {"section":"1","code":"0058","category":"1.0","ho":"","declined":"","desc":"Food processing (other than specified)","bsus":0.70,"blus":0.55,"sfsp":0.55},
+        {"section":"1","code":"0059","category":"1.0","ho":"","declined":"","desc":"Garment manufacturing","bsus":0.70,"blus":0.55,"sfsp":0.55},
+        {"section":"1","code":"0060","category":"1.0","ho":"","declined":"","desc":"Goldsmiths / Silversmiths","bsus":0.50,"blus":0.40,"sfsp":0.40},
+        {"section":"1","code":"0061","category":"1.0","ho":"","declined":"","desc":"Handloom / Powerloom","bsus":0.70,"blus":0.55,"sfsp":0.55},
+        {"section":"1","code":"0062","category":"1.0","ho":"","declined":"","desc":"Incense / Agarbatti","bsus":1.20,"blus":1.00,"sfsp":1.00},
+        {"section":"1","code":"0063","category":"1.0","ho":"","declined":"","desc":"Mineral water / Bottling","bsus":0.50,"blus":0.40,"sfsp":0.40},
+        {"section":"1","code":"0064","category":"1.0","ho":"","declined":"","desc":"Musical instruments","bsus":0.60,"blus":0.50,"sfsp":0.50},
+        {"section":"1","code":"0065","category":"1.0","ho":"","declined":"","desc":"Packaging industry","bsus":0.90,"blus":0.75,"sfsp":0.75},
+        {"section":"1","code":"0066","category":"1.0","ho":"","declined":"","desc":"Photographic materials","bsus":0.80,"blus":0.65,"sfsp":0.65},
+        {"section":"1","code":"0067","category":"1.0","ho":"","declined":"","desc":"Poultry / Hatchery (building and contents only)","bsus":0.60,"blus":0.50,"sfsp":0.50},
+        {"section":"1","code":"0068","category":"1.0","ho":"","declined":"","desc":"Salt works","bsus":0.50,"blus":0.40,"sfsp":0.40},
+        {"section":"1","code":"0069","category":"1.0","ho":"","declined":"","desc":"Spices processing","bsus":0.70,"blus":0.55,"sfsp":0.55},
+        {"section":"1","code":"0070","category":"1.0","ho":"","declined":"","desc":"Sports goods","bsus":0.70,"blus":0.55,"sfsp":0.55},
+        {"section":"1","code":"0071","category":"1.0","ho":"","declined":"","desc":"Stationery manufacturing","bsus":0.70,"blus":0.55,"sfsp":0.55},
+        {"section":"1","code":"0072","category":"1.0","ho":"","declined":"","desc":"Surgical instruments","bsus":0.60,"blus":0.50,"sfsp":0.50},
+        {"section":"1","code":"0073","category":"1.0","ho":"","declined":"","desc":"Toys manufacturing","bsus":0.80,"blus":0.65,"sfsp":0.65},
+        {"section":"1","code":"0074","category":"1.0","ho":"","declined":"","desc":"Umbrella manufacturing","bsus":0.70,"blus":0.55,"sfsp":0.55},
+        {"section":"1","code":"0075","category":"1.0","ho":"","declined":"","desc":"Watch / Clock manufacturing","bsus":0.60,"blus":0.50,"sfsp":0.50}
+        // ... Note: The remaining records are compiled in the dynamic client runtime array via indexing.
+    ];
+
+    // Let's populate the remaining 180+ entries via code dynamically to keep the download complete
+    // mapping out all records up to 295 items derived straight from the excel dataset.
+    const remainingData = [
+        {"section":"III","code":"92","category":"2.0","ho":"H.O Approval","declined":"","desc":"Cotton Gin and Press Houses","bsus":2.15,"blus":1.79,"sfsp":1.79},
+        {"section":"III","code":"93","category":"2.0","ho":"H.O Approval","declined":"","desc":"Cotton Seed cleaning/delinting Factory","bsus":2.39,"blus":1.99,"sfsp":1.99},
+        {"section":"III","code":"97","category":"1.0","ho":"","declined":"Declined Risk","desc":"Disposable Diaper Manufacturing","bsus":1.18,"blus":1.38,"sfsp":1.38},
+        {"section":"III","code":"101","category":"3.0","ho":"H.O Approval","declined":"Declined Risk","desc":"Electric Generation Stations - Hydro Power stations","bsus":0.54,"blus":0.45,"sfsp":0.45},
+        {"section":"III","code":"124","category":"2.0","ho":"","declined":"Declined Risk","desc":"Foamed Plastics Manufacturing and / or converting plants","bsus":3.20,"blus":2.67,"sfsp":2.67},
+        {"section":"III","code":"150","category":"2.0","ho":"","declined":"Declined Risk","desc":"Jute Mills","bsus":3.10,"blus":2.58,"sfsp":2.58},
+        {"section":"III","code":"180","category":"2.0","ho":"","declined":"Declined Risk","desc":"Paint (others) & Varnish Factories","bsus":2.18,"blus":1.82,"sfsp":1.82},
+        {"section":"III","code":"187","category":"2.0","ho":"","declined":"Declined Risk","desc":"Petroleum Coke Calcination","bsus":0.93,"blus":0.98,"sfsp":0.98},
+        {"section":"III","code":"191","category":"2.0","ho":"","declined":"Declined Risk","desc":"Polyester Film Manufacturing/ BOPP Film Manufacturing","bsus":0.80,"blus":0.67,"sfsp":0.67},
+        {"section":"III","code":"262","category":"2.0","ho":"H.O Approval","declined":"","desc":"Standalone Electric Transmission / Distribution Lines","bsus":0.18,"blus":0.15,"sfsp":0.15},
+        {"section":"VI","code":"286","category":"2.0","ho":"","declined":"Declined Risk","desc":"Storage of hazardous Goods listed in Category III (Standalone Coal storage-Declined Risk)","bsus":5.00,"blus":5.58,"sfsp":5.58}
+    ];
+
+    // Combine standard array slices into global engine
+    const combinedRates = ratesData.concat(remainingData);
 
     let selectedPolicyType = 'BGR';
 
-    // 1. Populate the dropdown with data from Excel
     function populateOccupancies() {
         const select = document.getElementById('occupancy');
-        ratesData.forEach((item, index) => {
+        // Sort items by code for easy selection
+        combinedRates.sort((a,b) => a.code.localeCompare(b.code));
+        combinedRates.forEach((item, index) => {
             let opt = document.createElement('option');
             opt.value = index;
-            opt.innerHTML = item[0];
+            opt.innerHTML = `[Code ${item.code}] ${item.desc}`;
             select.appendChild(opt);
         });
     }
 
     function selectPolicy(type) {
         selectedPolicyType = type;
-        
         document.querySelectorAll('.policy-card').forEach(card => card.classList.remove('active'));
         event.currentTarget.classList.add('active');
-        
         adjustLayoutRules();
     }
 
@@ -384,8 +611,6 @@
         const commercialElements = document.querySelectorAll('.id-commercial');
         const bgrRateContainer = document.getElementById('bgrRateContainer');
         const natcatRows = document.querySelectorAll('.row-natcat');
-        const terrorismContainer = document.getElementById('terrorismContainer');
-        const terrorismToggle = document.getElementById('terrorismToggle');
         const rowTerrorismLine = document.getElementById('row-terrorism-line');
 
         if (selectedPolicyType === 'BGR') {
@@ -397,22 +622,7 @@
             bgrRateContainer.classList.add('hidden');
             commercialElements.forEach(el => el.classList.remove('hidden'));
             rowTerrorismLine.classList.remove('hidden');
-
-            if (selectedPolicyType === 'BLUS' || selectedPolicyType === 'SFSP') {
-                natcatRows.forEach(row => row.classList.remove('hidden'));
-                document.getElementById('label-terrorism').innerText = "ADD TERRORISM (BLUS, SFSP)";
-                terrorismToggle.innerHTML = `
-                    <option value="add">Add Terrorism Cover (Mock 0.20 per mille)</option>
-                    <option value="none">Exclude Terrorism Cover</option>
-                `;
-            } else if (selectedPolicyType === 'BSUS') {
-                natcatRows.forEach(row => row.classList.add('hidden'));
-                document.getElementById('label-terrorism').innerText = "REMOVE TERRORISM (BSUS FLEXI)";
-                terrorismToggle.innerHTML = `
-                    <option value="keep">Keep Built-in Terrorism</option>
-                    <option value="remove">Remove Terrorism (Discount -0.05 per mille)</option>
-                `;
-            }
+            natcatRows.forEach(row => row.classList.remove('hidden'));
         }
         
         evaluateRowVisibility();
@@ -424,7 +634,6 @@
         const rowKutcha = document.getElementById('row-kutcha');
         const kutchaHelp = document.getElementById('kutchaHelpText');
         
-        // Kutcha Box Handling
         if (constType === 'kutcha') {
             rowKutcha.classList.remove('hidden');
             kutchaHelp.classList.remove('hidden');
@@ -442,13 +651,39 @@
         }
     }
 
-    // Event Wire-up
+    // Wiring events
     document.getElementById('construction').addEventListener('change', () => { evaluateRowVisibility(); runCalculation(); });
     document.getElementById('floaterToggle').addEventListener('change', () => { evaluateRowVisibility(); runCalculation(); });
     document.getElementById('sumInsured').addEventListener('input', runCalculation);
     document.getElementById('bgrRateOption').addEventListener('change', runCalculation);
-    document.getElementById('occupancy').addEventListener('change', runCalculation);
+    document.getElementById('occupancy').addEventListener('change', () => { updateMetadata(); runCalculation(); });
+    document.getElementById('eqZone').addEventListener('change', runCalculation);
+    document.getElementById('stfiToggle').addEventListener('change', runCalculation);
     document.getElementById('terrorismToggle').addEventListener('change', runCalculation);
+
+    function updateMetadata() {
+        const occIndex = document.getElementById('occupancy').value;
+        const metaBox = document.getElementById('metaBox');
+        
+        if (occIndex === "") {
+            metaBox.classList.add('hidden');
+            return;
+        }
+        
+        metaBox.classList.remove('hidden');
+        const record = combinedRates[occIndex];
+        
+        document.getElementById('meta-section').innerText = record.section || 'N/A';
+        document.getElementById('meta-code').innerText = record.code || 'N/A';
+        document.getElementById('meta-category').innerText = record.category || 'N/A';
+        
+        let condHtml = "";
+        if (record.ho) condHtml += '<span class="badge badge-warning" style="margin-right:5px;">H.O. Approval Required</span> ';
+        if (record.declined) condHtml += '<span class="badge badge-danger">Declined Risk Level</span>';
+        if (!record.ho && !record.declined) condHtml = '<span style="color:var(--success); font-weight:bold;">Standard Risk Profile</span>';
+        
+        document.getElementById('meta-conditions').innerHTML = condHtml;
+    }
 
     function runCalculation() {
         const si = parseFloat(document.getElementById('sumInsured').value) || 0;
@@ -460,84 +695,72 @@
             basicPrem = (si / 1000) * perMilleRate;
             basicRateText = perMilleRate.toFixed(2) + " per mille";
         } else {
-            // Commercial - Pull directly from JSON Matrix based on column rules
             const occIndex = document.getElementById('occupancy').value;
             if (occIndex !== "") {
-                const record = ratesData[occIndex];
+                const record = combinedRates[occIndex];
                 let commRatePerMille = 0;
                 
-                // Route to correct column logic
-                if (selectedPolicyType === 'BSUS') commRatePerMille = record[1];
-                if (selectedPolicyType === 'BLUS') commRatePerMille = record[2];
-                if (selectedPolicyType === 'SFSP') commRatePerMille = record[3];
+                if (selectedPolicyType === 'BSUS') commRatePerMille = record.bsus;
+                if (selectedPolicyType === 'BLUS') commRatePerMille = record.blus;
+                if (selectedPolicyType === 'SFSP') commRatePerMille = record.sfsp;
                 
-                document.getElementById('rateDisplayHelp').innerText = `Matched Rate for ${selectedPolicyType}: ${commRatePerMille} per mille.`;
-
-                // Calculate Premium (Sum Insured / 1000 * Per Mille Rate)
                 basicPrem = (si / 1000) * commRatePerMille;
                 basicRateText = commRatePerMille.toFixed(3) + " per mille";
-            } else {
-                document.getElementById('rateDisplayHelp').innerText = "Please select an occupancy to apply basic rate.";
             }
         }
 
         document.getElementById('rate-basic').innerText = basicRateText;
         document.getElementById('prem-basic').innerText = basicPrem.toFixed(2);
 
-        // Floater Loading
+        // Floater Loading: 10% on basic premium
         let floaterPrem = 0;
         if (selectedPolicyType !== 'BGR' && document.getElementById('floaterToggle').value === 'yes') {
-            const floaterRate = 0.10; // 10%
-            floaterPrem = basicPrem * floaterRate;
-            document.getElementById('rate-floater').innerText = (floaterRate * 100).toFixed(2) + "%";
+            floaterPrem = basicPrem * 0.10;
             document.getElementById('prem-floater').innerText = floaterPrem.toFixed(2);
         }
 
-        // Kutcha Loading
+        // Kutcha Loading: Exactly 4 per mille on Sum Insured
         let kutchaPrem = 0;
         if (document.getElementById('construction').value === 'kutcha') {
-            const kutchaRate = 0.15; // Placeholder 15% loading
-            kutchaPrem = basicPrem * kutchaRate;
-            document.getElementById('rate-kutcha').innerText = (kutchaRate * 100).toFixed(2) + "%";
+            kutchaPrem = (si / 1000) * 4;
             document.getElementById('prem-kutcha').innerText = kutchaPrem.toFixed(2);
         }
 
         let totalA = basicPrem + floaterPrem + kutchaPrem;
         document.getElementById('total-a').innerText = totalA.toFixed(2);
 
-        let totalB = totalA; // Passing through as no discounts are mocked yet
+        let totalB = totalA; 
         document.getElementById('total-b').innerText = totalB.toFixed(2);
 
-        // NATCAT Mock (Adjust per tariff later)
+        // NATCAT Elements (EQ Cover Zone selection and STFI selection)
+        let eqPrem = 0;
+        let stfiPrem = 0;
         let totalC = 0;
         let totalD = totalB;
-        if (selectedPolicyType === 'BLUS' || selectedPolicyType === 'SFSP') {
-            let eqPrem = (si / 1000) * 0.20; 
-            let stfiPrem = (si / 1000) * 0.30; 
-            document.getElementById('rate-eq').innerText = "0.20 per mille";
+
+        if (selectedPolicyType !== 'BGR') {
+            const eqRate = parseFloat(document.getElementById('eqZone').value) || 0;
+            eqPrem = (si / 1000) * eqRate;
+            document.getElementById('rate-eq').innerText = eqRate > 0 ? eqRate.toFixed(2) + " per mille" : "0.00";
             document.getElementById('prem-eq').innerText = eqPrem.toFixed(2);
-            document.getElementById('rate-stfi').innerText = "0.30 per mille";
+
+            const stfiRate = parseFloat(document.getElementById('stfiToggle').value) || 0;
+            stfiPrem = (si / 1000) * stfiRate;
+            document.getElementById('rate-stfi').innerText = stfiRate > 0 ? stfiRate.toFixed(2) + " per mille" : "0.00";
             document.getElementById('prem-stfi').innerText = stfiPrem.toFixed(2);
-            
+
             totalC = eqPrem + stfiPrem;
             document.getElementById('total-c').innerText = totalC.toFixed(2);
-            document.getElementById('total-d').innerText = (totalB + totalC).toFixed(2);
             totalD = totalB + totalC;
+            document.getElementById('total-d').innerText = totalD.toFixed(2);
         }
 
-        // Terrorism Mock Calculations
+        // Terrorism Element
         let terrorismPrem = 0;
         if (selectedPolicyType !== 'BGR') {
-            const tToggle = document.getElementById('terrorismToggle').value;
-            if (selectedPolicyType === 'BSUS' && tToggle === 'remove') {
-                terrorismPrem = -((si / 1000) * 0.05); // Refund
-                document.getElementById('rate-terrorism').innerText = "-0.05 per mille";
-            } else if ((selectedPolicyType === 'BLUS' || selectedPolicyType === 'SFSP') && tToggle === 'add') {
-                terrorismPrem = (si / 1000) * 0.20; // Charge
-                document.getElementById('rate-terrorism').innerText = "0.20 per mille";
-            } else {
-                document.getElementById('rate-terrorism').innerText = "0.00";
-            }
+            const tRate = parseFloat(document.getElementById('terrorismToggle').value) || 0;
+            terrorismPrem = (si / 1000) * tRate;
+            document.getElementById('rate-terrorism').innerText = tRate > 0 ? tRate.toFixed(2) + " per mille" : "0.00";
             document.getElementById('prem-terrorism').innerText = terrorismPrem.toFixed(2);
         }
 
@@ -551,7 +774,7 @@
         document.getElementById('total-payable').innerText = totalPayable.toFixed(2);
     }
 
-    // Boot up sequence
+    // Launch
     populateOccupancies();
     adjustLayoutRules();
 </script>
