@@ -517,6 +517,13 @@
             <div class="form-group distinct-label" id="basicDiscountContainer">
                 <label for="basicDiscountValue">6. Discount (-) or Loading (+) on Basic Premium (%)</label>
                 <input type="number" id="basicDiscountValue" placeholder="e.g. -10 for 10% discount, +5 for loading" value="0" step="0.01">
+                <!-- Requirement 3: First reference matrix grid embedded directly below field 6 -->
+                <div style="font-size: 0.78rem; color: #64748b; margin-top: 6px; font-family: monospace; line-height: 1.4; background-color: #f8fafc; padding: 6px; border: 1px dashed var(--border); border-radius: 4px; display: inline-block;">
+                    100/100<br>
+                    100/100<br>
+                    100/50<br>
+                    100/0
+                </div>
             </div>
 
             <!-- Side Head 7 -->
@@ -561,12 +568,12 @@
                     <option value="25">25% Discount</option>
                     <option value="50">50% Discount</option>
                 </select>
-                <!-- Reference matrix text shown in monospace small font below label -->
+                <!-- Requirement 4: Swapped out reference block with second matrix dataset panel -->
                 <div style="font-size: 0.78rem; color: #64748b; margin-top: 6px; font-family: monospace; line-height: 1.4; background-color: #f8fafc; padding: 6px; border: 1px dashed var(--border); border-radius: 4px; display: inline-block;">
-                    100/50, 100/50<br>
-                    100/25, 100/0<br>
-                    100/15, 50/0<br>
-                    100/0,  0/0
+                    50/50<br>
+                    25/0<br>
+                    15/0<br>
+                    0/0
                 </div>
             </div>
 
@@ -586,7 +593,7 @@
         <div id="premiumWorkingPanel" class="panel">
             <h2>Premium Working</h2>
             
-            <!-- Positioned the Summary Sum Insured box dynamically above table headers -->
+            <!-- Requirement 1: Summary box placed cleanly below the heading section wrapper -->
             <div class="summary-si-box">
                 <span>TOTAL SUM INSURED</span>
                 <span>₹ <span id="summary-si-val">0.00</span></span>
@@ -826,7 +833,7 @@ const combinedRates = [
   {"sec": "IV", "code": "2087", "cat": "2.0", "ho": "", "dec": "", "desc": "Fruit and vegetable drying/dehydrating factories", "bsus": 0.96, "blus": 0.88, "sfsp": 0.88},
   {"sec": "IV", "code": "2088", "cat": "2.0", "ho": "", "dec": "", "desc": "Fruit products and Condiment Factories (including fruit pulp making)", "bsus": 0.74, "blus": 0.64, "sfsp": 0.64},
   {"sec": "IV", "code": "2089", "cat": "2.0", "ho": "", "dec": "", "desc": "Garment Makers, Topee, Hats and the like makers", "bsus": 1.12, "blus": 0.97, "sfsp": 0.97},
-  {"sec": "IV", "code": "2090", "cat": "2.0", "ho": "", "dec": "", "desc": "Ghee Factories including vegetable Ghee mfg.", "bsus": 1.03, "blus": 1.2, "sfsp": 1.2},
+  {"sec": "IV", "code": "2090", "cat": "2.0", "ho": "", "dec": "", "desc": Ghee Factories including vegetable Ghee mfg.", "bsus": 1.03, "blus": 1.2, "sfsp": 1.2},
   {"sec": "IV", "code": "2091", "cat": "2.0", "ho": "", "dec": "", "desc": "Glass Fibre Manufacturing", "bsus": 0.92, "blus": 0.96, "sfsp": 0.96},
   {"sec": "IV", "code": "2093", "cat": "2.0", "ho": "", "dec": "", "desc": "Glass Manufacturing/Automobile Glass manufacturing", "bsus": 1.1, "blus": 0.92, "sfsp": 0.92},
   {"sec": "IV", "code": "2092", "cat": "2.0", "ho": "", "dec": "", "desc": "Glass wool Manufacturing", "bsus": 1.43, "blus": 1.45, "sfsp": 1.45},
@@ -923,7 +930,7 @@ const combinedRates = [
   {"sec": "IV", "code": "2183", "cat": "3.0", "ho": "", "dec": "", "desc": "Tanneries", "bsus": 0.53, "blus": 0.52, "sfsp": 0.52},
   {"sec": "IV", "code": "2184", "cat": "3.0", "ho": "", "dec": "", "desc": "Tapioca factories", "bsus": 0.92, "blus": 1.07, "sfsp": 1.07},
   {"sec": "IV", "code": "2185", "cat": "3.0", "ho": "", "dec": "", "desc": "Tarpaulin and canvas proofing factories", "bsus": 2.31, "blus": 2.28, "sfsp": 2.28},
-  {"sec": "IV", "code": "2186", "cat": "2.0", "ho": "", "dec": "", "desc": "Tea blending/packing factories", "bsus": 0.84, "blus": 0.7, "sfsp": 0.7},
+  {"sec": "Tea blending/packing factories", "bsus": 0.84, "blus": 0.7, "sfsp": 0.7},
   {"sec": "IV", "code": "2187", "cat": "2.0", "ho": "", "dec": "", "desc": "Tea Factories", "bsus": 1.07, "blus": 1.12, "sfsp": 1.12},
   {"sec": "IV", "code": "2188", "cat": "1.0", "ho": "", "dec": "", "desc": "Telephone Exchanges", "bsus": 1.64, "blus": 1.93, "sfsp": 1.93},
   {"sec": "IV", "code": "2211", "cat": "2.0", "ho": "", "dec": "", "desc": "Textile Mills - Composite Mills", "bsus": 1.62, "blus": 1.65, "sfsp": 1.65},
@@ -1019,9 +1026,8 @@ const combinedRates = [
                 div.className = 'autocomplete-item';
                 div.innerHTML = `<strong>[Sec ${item.sec} | Code ${item.code}]</strong> ${item.desc}`;
                 
-                // Using mousedown instead of click to fire reliably before any blur or outside event listeners trigger
                 div.addEventListener('mousedown', (e) => {
-                    e.preventDefault(); // prevent losing focus
+                    e.preventDefault(); 
                     selectOccupancy(index);
                 });
                 listContainer.appendChild(div);
@@ -1258,7 +1264,8 @@ const combinedRates = [
             }
         }
 
-        document.getElementById('row-summary-si').innerText = si.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        // Fixed Requirement 1: Summary value sync explicitly bound to summary-si-val target element
+        document.getElementById('summary-si-val').innerText = si.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         document.getElementById('rate-basic').innerText = basicRateText;
         document.getElementById('prem-basic').innerText = basicPrem.toFixed(2);
 
@@ -1356,7 +1363,10 @@ const combinedRates = [
 
     function exportToExcel() {
         const table = document.getElementById('premiumTable');
+        const totalSiVal = parseFloat(document.getElementById('sumInsured').value) || 0;
         let csvContent = "data:text/csv;charset=utf-8,";
+        
+        csvContent += `"TOTAL SUM INSURED (₹)","-","${totalSiVal.toFixed(2)}"\n\n`;
         csvContent += "Line Item Description,Rate / Basis,Premium (INR)\n";
         
         const rows = table.querySelectorAll('tbody tr');
@@ -1381,16 +1391,28 @@ const combinedRates = [
         document.body.removeChild(link);
     }
 
+    // Fixed Requirement 2: Refined document configuration overrides to avoid table clipping inside PDF downloads
     function exportToPDF() {
         const element = document.getElementById('premiumWorkingPanel');
+        const btnContainer = element.querySelector('.btn-container');
+        
+        if (btnContainer) btnContainer.style.display = 'none';
+
         const opt = {
-            margin:       12,
+            margin:       [12, 12, 12, 12],
             filename:     `Premium_Working_Statement_${selectedPolicyType}.pdf`,
             image:        { type: 'jpeg', quality: 0.98 },
-            html2canvas:  { scale: 2, useCORS: true },
-            jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            html2canvas:  { scale: 2, useCORS: true, scrollY: 0, windowWidth: element.scrollWidth + 40 },
+            jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
+            pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
         };
-        html2pdf().set(opt).from(element).save();
+        
+        html2pdf().set(opt).from(element).save().then(() => {
+            if (btnContainer) btnContainer.style.display = 'flex';
+        }).catch((err) => {
+            console.error(err);
+            if (btnContainer) btnContainer.style.display = 'flex';
+        });
     }
 
     document.addEventListener('click', function(e) {
