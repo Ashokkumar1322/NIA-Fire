@@ -504,21 +504,17 @@
                 <label for="basicDiscountValue">6. Discount (-) or Loading (+) on Basic Premium (%)</label>
                 <input type="number" id="basicDiscountValue" placeholder="e.g. -10 for 10% discount, +5 for loading" value="0" step="0.01">
                 
-                <!-- Embedded Grids for Basic Premium -->
+                <!-- Embedded Grids for Basic Premium (Converted Horizontal Layout) -->
                 <div id="blusBasicGrid" class="hidden" style="margin-top: 6px;">
-                    <table style="width: auto; font-size: 0.75rem; border: 1px solid #cbd5e1; border-collapse: collapse; background: #fff; font-family: sans-serif;">
-                        <tr><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">1</td><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">100</td></tr>
-                        <tr><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">2</td><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">100</td></tr>
-                        <tr><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">3</td><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">100</td></tr>
-                        <tr><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">4</td><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">100</td></tr>
+                    <table style="width: 100%; max-width: 260px; font-size: 0.75rem; border: 1px solid #cbd5e1; border-collapse: collapse; background: #fff; text-align: center;">
+                        <tr style="background: #f1f5f9; font-weight: bold;"><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">1</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">2</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">3</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">4</td></tr>
+                        <tr><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">100</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">100</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">100</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">100</td></tr>
                     </table>
                 </div>
                 <div id="sfspBasicGrid" class="hidden" style="margin-top: 6px;">
-                    <table style="width: auto; font-size: 0.75rem; border: 1px solid #cbd5e1; border-collapse: collapse; background: #fff; font-family: sans-serif;">
-                        <tr><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">1</td><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">100</td></tr>
-                        <tr><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">2</td><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">100</td></tr>
-                        <tr><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">3</td><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">50</td></tr>
-                        <tr><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">4</td><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">0</td></tr>
+                    <table style="width: 100%; max-width: 260px; font-size: 0.75rem; border: 1px solid #cbd5e1; border-collapse: collapse; background: #fff; text-align: center;">
+                        <tr style="background: #f1f5f9; font-weight: bold;"><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">1</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">2</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">3</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">4</td></tr>
+                        <tr><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">100</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">100</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">50</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">0</td></tr>
                     </table>
                 </div>
             </div>
@@ -549,7 +545,7 @@
                     <option value="0">Exclude STFI Cover</option>
                     <option value="0.22">SECTION III NON INDUSTRIAL @ 0.22 per mille</option>
                     <option value="0.37" selected>SECTION IV, V, VII @ 0.37 per mille</option>
-                    <option value="0.52">SECTION VI STORAGE NOT IN OPEN @ 0.52 per mille</option>
+                    <option value="0.52">SECTION VI NOT STORED IN OPEN @ 0.52 per mille</option>
                     <option value="2.25">SECTION VI STORED IN OPEN @ 2.25 per mille</option>
                     <option value="0.52_roads">ROADS, BRIDGES, PIPELINES, RAILWAY TRACK, TRANSMISSION & DISTRIBUTION LINES @ 0.52 per mille</option>
                 </select>
@@ -566,21 +562,17 @@
                     <option value="50">50% Discount</option>
                 </select>
                 
-                <!-- Embedded Grids for NATCAT Premium -->
+                <!-- Embedded Grids for NATCAT Premium (Converted Horizontal Layout) -->
                 <div id="blusNatcatGrid" class="hidden" style="margin-top: 6px;">
-                    <table style="width: auto; font-size: 0.75rem; border: 1px solid #cbd5e1; border-collapse: collapse; background: #fff; font-family: sans-serif;">
-                        <tr><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">1</td><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">50</td></tr>
-                        <tr><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">2</td><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">25</td></tr>
-                        <tr><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">3</td><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">15</td></tr>
-                        <tr><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">4</td><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">0</td></tr>
+                    <table style="width: 100%; max-width: 260px; font-size: 0.75rem; border: 1px solid #cbd5e1; border-collapse: collapse; background: #fff; text-align: center;">
+                        <tr style="background: #f1f5f9; font-weight: bold;"><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">1</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">2</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">3</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">4</td></tr>
+                        <tr><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">50</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">25</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">15</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">0</td></tr>
                     </table>
                 </div>
                 <div id="sfspNatcatGrid" class="hidden" style="margin-top: 6px;">
-                    <table style="width: auto; font-size: 0.75rem; border: 1px solid #cbd5e1; border-collapse: collapse; background: #fff; font-family: sans-serif;">
-                        <tr><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">1</td><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">50</td></tr>
-                        <tr><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">2</td><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">0</td></tr>
-                        <tr><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">3</td><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">0</td></tr>
-                        <tr><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">4</td><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">0</td></tr>
+                    <table style="width: 100%; max-width: 260px; font-size: 0.75rem; border: 1px solid #cbd5e1; border-collapse: collapse; background: #fff; text-align: center;">
+                        <tr style="background: #f1f5f9; font-weight: bold;"><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">1</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">2</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">3</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">4</td></tr>
+                        <tr><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">50</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">0</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">0</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">0</td></tr>
                     </table>
                 </div>
             </div>
@@ -598,109 +590,112 @@
         </div>
 
         <!-- RIGHT: PREMIUM WORKING WORKSHEET LOGS -->
-        <div id="premiumWorkingPanel" class="panel">
-            <h2>Premium Working</h2>
-            <!-- Total Sum Insured Layout placed ABOVE the line item description headers row -->
-            <div id="visible-summary-container" style="background-color: #f8fafc; border: 1px solid var(--border); padding: 12px 10px; border-radius: 6px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; font-weight: bold; color: var(--primary);">
-                <span>TOTAL SUM INSURED</span>
-                <span id="visible-summary-si">0.00</span>
+        <div>
+            <div id="premiumWorkingPanel" class="panel">
+                <h2>Premium Working</h2>
+                <!-- Total Sum Insured Layout placed ABOVE the line item description headers row -->
+                <div id="visible-summary-container" style="background-color: #f8fafc; border: 1px solid var(--border); padding: 12px 10px; border-radius: 6px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; font-weight: bold; color: var(--primary);">
+                    <span>TOTAL SUM INSURED</span>
+                    <span id="visible-summary-si">0.00</span>
+                </div>
+                
+                <table id="premiumTable">
+                    <thead>
+                        <tr>
+                            <th>Line Item Description</th>
+                            <th>Rate / Basis</th>
+                            <th class="text-right">Premium (₹)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Kept inside DOM structure for Excel generation, hidden from screen view -->
+                        <tr style="display: none;">
+                            <td style="font-weight: bold; color: var(--primary);">TOTAL SUM INSURED</td>
+                            <td>-</td>
+                            <td id="row-summary-si" class="text-right" style="font-weight: bold; color: var(--primary);">0.00</td>
+                        </tr>
+                        <tr>
+                            <td>BASIC PREMIUM</td>
+                            <td id="rate-basic">0.00</td>
+                            <td id="prem-basic" class="text-right">0.00</td>
+                        </tr>
+                        <tr id="row-floater" class="hidden">
+                            <td>FLOATER LOADING</td>
+                            <td id="rate-floater">10.00% on Stock-Floating S.I.</td>
+                            <td id="prem-floater" class="text-right">0.00</td>
+                        </tr>
+                        <tr id="row-kutcha" class="hidden">
+                            <td>LOADING FOR KUTCHA CONSTRUCTION</td>
+                            <td id="rate-kutcha">4.00 per mille on S.I.</td>
+                            <td id="prem-kutcha" class="text-right">0.00</td>
+                        </tr>
+                        <tr class="subtotal-row">
+                            <td>A TOTAL</td>
+                            <td>-</td>
+                            <td id="total-a" class="text-right">0.00</td>
+                        </tr>
+                        <tr>
+                            <td>DISCOUNT / LOADING ON BASIC PREMIUM</td>
+                            <td id="rate-discount">0.00%</td>
+                            <td id="prem-discount" class="text-right">0.00</td>
+                        </tr>
+                        <tr class="subtotal-row">
+                            <td>B TOTAL</td>
+                            <td>-</td>
+                            <td id="total-b" class="text-right">0.00</td>
+                        </tr>
+                        
+                        <tr class="row-natcat hidden">
+                            <td>ADD EARTHQUAKE COVER</td>
+                            <td id="rate-eq">0.00</td>
+                            <td id="prem-eq" class="text-right">0.00</td>
+                        </tr>
+                        <tr class="row-natcat hidden">
+                            <td>ADD STFI COVER</td>
+                            <td id="rate-stfi">0.00</td>
+                            <td id="prem-stfi" class="text-right">0.00</td>
+                        </tr>
+                        <tr class="subtotal-row row-natcat hidden">
+                            <td>C TOTAL EQ & STFI PREMIUM</td>
+                            <td>-</td>
+                            <td id="total-c" class="text-right">0.00</td>
+                        </tr>
+                        <tr class="row-natcat hidden">
+                            <td>DISCOUNT ON NATCAT</td>
+                            <td id="rate-natcat-disc">0.00%</td>
+                            <td id="prem-natcat-disc" class="text-right">0.00</td>
+                        </tr>
+                        <tr class="subtotal-row row-natcat hidden">
+                            <td>D TOTAL</td>
+                            <td>-</td>
+                            <td id="total-d" class="text-right">0.00</td>
+                        </tr>
+                        
+                        <tr id="row-terrorism-line" class="hidden">
+                            <td>TERRORISM COVER</td>
+                            <td id="rate-terrorism">0.00</td>
+                            <td id="prem-terrorism" class="text-right">0.00</td>
+                        </tr>
+                        <tr class="subtotal-row">
+                            <td>E TOTAL (NET PREMIUM)</td>
+                            <td>-</td>
+                            <td id="total-e" class="text-right">0.00</td>
+                        </tr>
+                        <tr>
+                            <td>GST (18%)</td>
+                            <td>18.00%</td>
+                            <td id="prem-gst" class="text-right">0.00</td>
+                        </tr>
+                        <tr class="final-row">
+                            <td>PREMIUM PAYABLE</td>
+                            <td>-</td>
+                            <td id="total-payable" class="text-right">0.00</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-            
-            <table id="premiumTable">
-                <thead>
-                    <tr>
-                        <th>Line Item Description</th>
-                        <th>Rate / Basis</th>
-                        <th class="text-right">Premium (₹)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Kept inside DOM structure for Excel generation, hidden from screen view -->
-                    <tr style="display: none;">
-                        <td style="font-weight: bold; color: var(--primary);">TOTAL SUM INSURED</td>
-                        <td>-</td>
-                        <td id="row-summary-si" class="text-right" style="font-weight: bold; color: var(--primary);">0.00</td>
-                    </tr>
-                    <tr>
-                        <td>BASIC PREMIUM</td>
-                        <td id="rate-basic">0.00</td>
-                        <td id="prem-basic" class="text-right">0.00</td>
-                    </tr>
-                    <tr id="row-floater" class="hidden">
-                        <td>FLOATER LOADING</td>
-                        <td id="rate-floater">10.00% on Stock-Floating S.I.</td>
-                        <td id="prem-floater" class="text-right">0.00</td>
-                    </tr>
-                    <tr id="row-kutcha" class="hidden">
-                        <td>LOADING FOR KUTCHA CONSTRUCTION</td>
-                        <td id="rate-kutcha">4.00 per mille on S.I.</td>
-                        <td id="prem-kutcha" class="text-right">0.00</td>
-                    </tr>
-                    <tr class="subtotal-row">
-                        <td>A TOTAL</td>
-                        <td>-</td>
-                        <td id="total-a" class="text-right">0.00</td>
-                    </tr>
-                    <tr>
-                        <td>DISCOUNT / LOADING ON BASIC PREMIUM</td>
-                        <td id="rate-discount">0.00%</td>
-                        <td id="prem-discount" class="text-right">0.00</td>
-                    </tr>
-                    <tr class="subtotal-row">
-                        <td>B TOTAL</td>
-                        <td>-</td>
-                        <td id="total-b" class="text-right">0.00</td>
-                    </tr>
-                    
-                    <tr class="row-natcat hidden">
-                        <td>ADD EARTHQUAKE COVER</td>
-                        <td id="rate-eq">0.00</td>
-                        <td id="prem-eq" class="text-right">0.00</td>
-                    </tr>
-                    <tr class="row-natcat hidden">
-                        <td>ADD STFI COVER</td>
-                        <td id="rate-stfi">0.00</td>
-                        <td id="prem-stfi" class="text-right">0.00</td>
-                    </tr>
-                    <tr class="subtotal-row row-natcat hidden">
-                        <td>C TOTAL EQ & STFI PREMIUM</td>
-                        <td>-</td>
-                        <td id="total-c" class="text-right">0.00</td>
-                    </tr>
-                    <tr class="row-natcat hidden">
-                        <td>DISCOUNT ON NATCAT</td>
-                        <td id="rate-natcat-disc">0.00%</td>
-                        <td id="prem-natcat-disc" class="text-right">0.00</td>
-                    </tr>
-                    <tr class="subtotal-row row-natcat hidden">
-                        <td>D TOTAL</td>
-                        <td>-</td>
-                        <td id="total-d" class="text-right">0.00</td>
-                    </tr>
-                    
-                    <tr id="row-terrorism-line" class="hidden">
-                        <td>TERRORISM COVER</td>
-                        <td id="rate-terrorism">0.00</td>
-                        <td id="prem-terrorism" class="text-right">0.00</td>
-                    </tr>
-                    <tr class="subtotal-row">
-                        <td>E TOTAL (NET PREMIUM)</td>
-                        <td>-</td>
-                        <td id="total-e" class="text-right">0.00</td>
-                    </tr>
-                    <tr>
-                        <td>GST (18%)</td>
-                        <td>18.00%</td>
-                        <td id="prem-gst" class="text-right">0.00</td>
-                    </tr>
-                    <tr class="final-row">
-                        <td>PREMIUM PAYABLE</td>
-                        <td>-</td>
-                        <td id="total-payable" class="text-right">0.00</td>
-                    </tr>
-                </tbody>
-            </table>
 
+            <!-- Action buttons structurally placed here outside the print area panel -->
             <div class="btn-container">
                 <button class="btn btn-excel" onclick="exportToExcel()">
                     <svg style="width:16px;height:16px" fill="currentColor" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
@@ -937,7 +932,6 @@ const combinedRates = [
   {"sec": "IV", "code": "2175", "cat": "3.0", "ho": "", "dec": "", "desc": "Spray Painting, Powder coating", "bsus": 1.42, "blus": 1.5, "sfsp": 1.5},
   {"sec": "IV", "code": "2176", "cat": "3.0", "ho": "", "dec": "", "desc": "Stables (excluding animals)", "bsus": 0.69, "blus": 0.77, "sfsp": 0.77},
   {"sec": "IV", "code": "2177", "cat": "2.0", "ho": "", "dec": "", "desc": "Starch Factories", "bsus": 0.71, "blus": 0.75, "sfsp": 0.75},
-  {"sec": "IV", "code": "2178", "cat": "2.0", "ho": "", "dec": "", "desc": "Stone quarries", "bsus": 0.27, "blus": 0.27, "sfsp": 0.27},
   {"sec": "IV", "code": "2180", "cat": "2.0", "ho": "", "dec": "", "desc": "Sugar factories", "bsus": 0.57, "blus": 0.55, "sfsp": 0.55},
   {"sec": "IV", "code": "2181", "cat": "3.0", "ho": "", "dec": "", "desc": "Surgical Cotton Manufacturing", "bsus": 3.07, "blus": 2.56, "sfsp": 2.56},
   {"sec": "IV", "code": "2183", "cat": "3.0", "ho": "", "dec": "", "desc": "Tanneries", "bsus": 0.53, "blus": 0.52, "sfsp": 0.52},
@@ -957,7 +951,6 @@ const combinedRates = [
   {"sec": "IV", "code": "2197", "cat": "3.0", "ho": "", "dec": "", "desc": "Tyre Retreading and Resoling factories", "bsus": 1.75, "blus": 1.6, "sfsp": 1.6},
   {"sec": "IV", "code": "2196", "cat": "3.0", "ho": "", "dec": "", "desc": "Tyres and Tubes Manufacturing", "bsus": 0.83, "blus": 0.92, "sfsp": 0.92},
   {"sec": "IV", "code": "2198", "cat": "2.0", "ho": "", "dec": "", "desc": "Umbrella Assembly factories", "bsus": 0.85, "blus": 0.99, "sfsp": 0.99},
-  {"sec": "IV", "code": "2199", "cat": "3.0", "ho": "", "dec": "", "desc": "Velvet Cloth Manufacturing", "bsus": 1.66, "blus": 1.38, "sfsp": 1.38},
   {"sec": "IV", "code": "2200", "cat": "3.0", "ho": "", "dec": "", "desc": "Vermicelli factories", "bsus": 0.65, "blus": 0.74, "sfsp": 0.74},
   {"sec": "IV", "code": "2202", "cat": "2.0", "ho": "", "dec": "", "desc": "Weaving Mills", "bsus": 1.04, "blus": 0.87, "sfsp": 0.87},
   {"sec": "IV", "code": "2201", "cat": "3.0", "ho": "", "dec": "", "desc": "Weigh Bridges", "bsus": 0.9, "blus": 0.89, "sfsp": 0.89},
@@ -1039,9 +1032,8 @@ const combinedRates = [
                 div.className = 'autocomplete-item';
                 div.innerHTML = `<strong>[Sec ${item.sec} | Code ${item.code}]</strong> ${item.desc}`;
                 
-                // Using mousedown instead of click to fire reliably before any blur or outside event listeners trigger
                 div.addEventListener('mousedown', (e) => {
-                    e.preventDefault(); // prevent losing focus
+                    e.preventDefault(); 
                     selectOccupancy(index);
                 });
                 listContainer.appendChild(div);
@@ -1087,6 +1079,9 @@ const combinedRates = [
         const natcatRows = document.querySelectorAll('.row-natcat');
         const rowTerrorismLine = document.getElementById('row-terrorism-line');
         const manualRateToggle = document.getElementById('enterRateManuallyToggle');
+        
+        const natcatDiscountContainer = document.getElementById('natcatDiscountContainer');
+        const natcatDiscountToggle = document.getElementById('natcatDiscountToggle');
 
         const excludeEqOption = document.querySelector('#eqZone option[value="0"]');
         if (selectedPolicyType === 'BSUS' || selectedPolicyType === 'BLUS') {
@@ -1110,6 +1105,10 @@ const combinedRates = [
             natcatRows.forEach(row => row.classList.add('hidden'));
             rowTerrorismLine.classList.add('hidden');
             document.getElementById('manualRateInputContainer').classList.add('hidden');
+            
+            natcatDiscountToggle.disabled = false;
+            natcatDiscountContainer.style.textDecoration = "none";
+            natcatDiscountContainer.style.opacity = "1";
         } else {
             bgrRateContainer.classList.add('hidden');
             commercialElements.forEach(el => el.classList.remove('hidden'));
@@ -1119,9 +1118,20 @@ const combinedRates = [
             if (manualRateToggle.value === 'yes') {
                 document.getElementById('manualRateInputContainer').classList.remove('hidden');
             }
+            
+            // BSUS Validation Framework Rule Injection
+            if (selectedPolicyType === 'BSUS') {
+                natcatDiscountToggle.disabled = true;
+                natcatDiscountToggle.value = "0";
+                natcatDiscountContainer.style.textDecoration = "line-through";
+                natcatDiscountContainer.style.opacity = "0.6";
+            } else {
+                natcatDiscountToggle.disabled = false;
+                natcatDiscountContainer.style.textDecoration = "none";
+                natcatDiscountContainer.style.opacity = "1";
+            }
         }
         
-        // Handle conditional dynamic routing for specific embedded grids layout structures
         document.getElementById('blusBasicGrid').classList.add('hidden');
         document.getElementById('sfspBasicGrid').classList.add('hidden');
         document.getElementById('blusNatcatGrid').classList.add('hidden');
@@ -1292,7 +1302,6 @@ const combinedRates = [
             }
         }
 
-        // Keep both the hidden tracking element and the new layout component updated dynamically
         const formattedSiText = si.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         document.getElementById('row-summary-si').innerText = formattedSiText;
         if (document.getElementById('visible-summary-si')) {
@@ -1427,7 +1436,6 @@ const combinedRates = [
             margin:       12,
             filename:     `Premium_Working_Statement_${selectedPolicyType}.pdf`,
             image:        { type: 'jpeg', quality: 0.98 },
-            // Setting scroll tracking coordinates to 0 guarantees full non-truncated element rendering regardless of page scroll state
             html2canvas:  { scale: 2, useCORS: true, scrollY: 0, scrollX: 0 },
             jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
             pagebreak:    { mode: ['avoid-all', 'css'] }
