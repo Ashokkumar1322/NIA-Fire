@@ -503,6 +503,15 @@
             <div class="form-group distinct-label" id="basicDiscountContainer">
                 <label for="basicDiscountValue">6. Discount (-) or Loading (+) on Basic Premium (%)</label>
                 <input type="number" id="basicDiscountValue" placeholder="e.g. -10 for 10% discount, +5 for loading" value="0" step="0.01">
+                <!-- Embedded Grid for Basic Premium -->
+                <div id="basicPremiumGrid" class="hidden" style="margin-top: 6px;">
+                    <table style="width: auto; font-size: 0.75rem; border: 1px solid #cbd5e1; border-collapse: collapse; background: #fff; font-family: sans-serif;">
+                        <tr><td style="padding: 2px 6px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">100/100</td></tr>
+                        <tr><td style="padding: 2px 6px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">100/100</td></tr>
+                        <tr><td style="padding: 2px 6px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">100/50</td></tr>
+                        <tr><td style="padding: 2px 6px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">100/0</td></tr>
+                    </table>
+                </div>
             </div>
 
             <!-- Side Head 7 -->
@@ -547,6 +556,15 @@
                     <option value="25">25% Discount</option>
                     <option value="50">50% Discount</option>
                 </select>
+                <!-- Embedded Grid for NATCAT Premium -->
+                <div id="natcatPremiumGrid" class="hidden" style="margin-top: 6px;">
+                    <table style="width: auto; font-size: 0.75rem; border: 1px solid #cbd5e1; border-collapse: collapse; background: #fff; font-family: sans-serif;">
+                        <tr><td style="padding: 2px 6px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">50/50</td></tr>
+                        <tr><td style="padding: 2px 6px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">25/0</td></tr>
+                        <tr><td style="padding: 2px 6px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">15/0</td></tr>
+                        <tr><td style="padding: 2px 6px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">0/0</td></tr>
+                    </table>
+                </div>
             </div>
 
             <!-- Side Head 10 -->
@@ -564,6 +582,12 @@
         <!-- RIGHT: PREMIUM WORKING WORKSHEET LOGS -->
         <div id="premiumWorkingPanel" class="panel">
             <h2>Premium Working</h2>
+            <!-- Total Sum Insured Layout placed ABOVE the line item description headers row -->
+            <div id="visible-summary-container" style="background-color: #f8fafc; border: 1px solid var(--border); padding: 12px 10px; border-radius: 6px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; font-weight: bold; color: var(--primary);">
+                <span>TOTAL SUM INSURED</span>
+                <span id="visible-summary-si">0.00</span>
+            </div>
+            
             <table id="premiumTable">
                 <thead>
                     <tr>
@@ -573,8 +597,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Total Sum Insured row directly inside the core table context framework -->
-                    <tr style="background-color: #f8fafc; border-bottom: 2px solid var(--border);">
+                    <!-- Kept inside DOM structure for Excel generation, hidden from screen view -->
+                    <tr style="display: none;">
                         <td style="font-weight: bold; color: var(--primary);">TOTAL SUM INSURED</td>
                         <td>-</td>
                         <td id="row-summary-si" class="text-right" style="font-weight: bold; color: var(--primary);">0.00</td>
@@ -1079,6 +1103,17 @@ const combinedRates = [
             }
         }
         
+        // Handle conditional visibility for the embedded custom grids (BLUS and SFSP selection only)
+        const basicGrid = document.getElementById('basicPremiumGrid');
+        const natcatGrid = document.getElementById('natcatPremiumGrid');
+        if (selectedPolicyType === 'BLUS' || selectedPolicyType === 'SFSP') {
+            if (basicGrid) basicGrid.classList.remove('hidden');
+            if (natcatGrid) natcatGrid.classList.remove('hidden');
+        } else {
+            if (basicGrid) basicGrid.classList.add('hidden');
+            if (natcatGrid) natcatGrid.classList.add('hidden');
+        }
+        
         evaluateRowVisibility();
         runCalculation();
     }
@@ -1236,7 +1271,13 @@ const combinedRates = [
             }
         }
 
-        document.getElementById('row-summary-si').innerText = si.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        // Keep both the hidden tracking element and the new layout component updated dynamically
+        const formattedSiText = si.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        document.getElementById('row-summary-si').innerText = formattedSiText;
+        if (document.getElementById('visible-summary-si')) {
+            document.getElementById('visible-summary-si').innerText = formattedSiText;
+        }
+        
         document.getElementById('rate-basic').innerText = basicRateText;
         document.getElementById('prem-basic').innerText = basicPrem.toFixed(2);
 
@@ -1365,8 +1406,10 @@ const combinedRates = [
             margin:       12,
             filename:     `Premium_Working_Statement_${selectedPolicyType}.pdf`,
             image:        { type: 'jpeg', quality: 0.98 },
-            html2canvas:  { scale: 2, useCORS: true },
-            jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            // Setting scroll tracking coordinates to 0 guarantees full non-truncated element rendering regardless of page scroll state
+            html2canvas:  { scale: 2, useCORS: true, scrollY: 0, scrollX: 0 },
+            jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
+            pagebreak:    { mode: ['avoid-all', 'css'] }
         };
         html2pdf().set(opt).from(element).save();
     }
