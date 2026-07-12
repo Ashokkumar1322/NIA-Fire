@@ -503,13 +503,22 @@
             <div class="form-group distinct-label" id="basicDiscountContainer">
                 <label for="basicDiscountValue">6. Discount (-) or Loading (+) on Basic Premium (%)</label>
                 <input type="number" id="basicDiscountValue" placeholder="e.g. -10 for 10% discount, +5 for loading" value="0" step="0.01">
-                <!-- Embedded Grid for Basic Premium -->
-                <div id="basicPremiumGrid" class="hidden" style="margin-top: 6px;">
+                
+                <!-- Embedded Grids for Basic Premium -->
+                <div id="blusBasicGrid" class="hidden" style="margin-top: 6px;">
                     <table style="width: auto; font-size: 0.75rem; border: 1px solid #cbd5e1; border-collapse: collapse; background: #fff; font-family: sans-serif;">
-                        <tr><td style="padding: 2px 6px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">100/100</td></tr>
-                        <tr><td style="padding: 2px 6px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">100/100</td></tr>
-                        <tr><td style="padding: 2px 6px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">100/50</td></tr>
-                        <tr><td style="padding: 2px 6px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">100/0</td></tr>
+                        <tr><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">1</td><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">100</td></tr>
+                        <tr><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">2</td><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">100</td></tr>
+                        <tr><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">3</td><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">100</td></tr>
+                        <tr><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">4</td><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">100</td></tr>
+                    </table>
+                </div>
+                <div id="sfspBasicGrid" class="hidden" style="margin-top: 6px;">
+                    <table style="width: auto; font-size: 0.75rem; border: 1px solid #cbd5e1; border-collapse: collapse; background: #fff; font-family: sans-serif;">
+                        <tr><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">1</td><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">100</td></tr>
+                        <tr><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">2</td><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">100</td></tr>
+                        <tr><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">3</td><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">50</td></tr>
+                        <tr><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">4</td><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">0</td></tr>
                     </table>
                 </div>
             </div>
@@ -556,13 +565,22 @@
                     <option value="25">25% Discount</option>
                     <option value="50">50% Discount</option>
                 </select>
-                <!-- Embedded Grid for NATCAT Premium -->
-                <div id="natcatPremiumGrid" class="hidden" style="margin-top: 6px;">
+                
+                <!-- Embedded Grids for NATCAT Premium -->
+                <div id="blusNatcatGrid" class="hidden" style="margin-top: 6px;">
                     <table style="width: auto; font-size: 0.75rem; border: 1px solid #cbd5e1; border-collapse: collapse; background: #fff; font-family: sans-serif;">
-                        <tr><td style="padding: 2px 6px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">50/50</td></tr>
-                        <tr><td style="padding: 2px 6px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">25/0</td></tr>
-                        <tr><td style="padding: 2px 6px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">15/0</td></tr>
-                        <tr><td style="padding: 2px 6px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">0/0</td></tr>
+                        <tr><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">1</td><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">50</td></tr>
+                        <tr><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">2</td><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">25</td></tr>
+                        <tr><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">3</td><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">15</td></tr>
+                        <tr><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">4</td><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">0</td></tr>
+                    </table>
+                </div>
+                <div id="sfspNatcatGrid" class="hidden" style="margin-top: 6px;">
+                    <table style="width: auto; font-size: 0.75rem; border: 1px solid #cbd5e1; border-collapse: collapse; background: #fff; font-family: sans-serif;">
+                        <tr><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">1</td><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">50</td></tr>
+                        <tr><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">2</td><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">0</td></tr>
+                        <tr><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">3</td><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">0</td></tr>
+                        <tr><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">4</td><td style="padding: 2px 8px; border: 1px solid #cbd5e1; color: #000; font-weight: normal;">0</td></tr>
                     </table>
                 </div>
             </div>
@@ -1103,15 +1121,18 @@ const combinedRates = [
             }
         }
         
-        // Handle conditional visibility for the embedded custom grids (BLUS and SFSP selection only)
-        const basicGrid = document.getElementById('basicPremiumGrid');
-        const natcatGrid = document.getElementById('natcatPremiumGrid');
-        if (selectedPolicyType === 'BLUS' || selectedPolicyType === 'SFSP') {
-            if (basicGrid) basicGrid.classList.remove('hidden');
-            if (natcatGrid) natcatGrid.classList.remove('hidden');
-        } else {
-            if (basicGrid) basicGrid.classList.add('hidden');
-            if (natcatGrid) natcatGrid.classList.add('hidden');
+        // Handle conditional dynamic routing for specific embedded grids layout structures
+        document.getElementById('blusBasicGrid').classList.add('hidden');
+        document.getElementById('sfspBasicGrid').classList.add('hidden');
+        document.getElementById('blusNatcatGrid').classList.add('hidden');
+        document.getElementById('sfspNatcatGrid').classList.add('hidden');
+
+        if (selectedPolicyType === 'BLUS') {
+            document.getElementById('blusBasicGrid').classList.remove('hidden');
+            document.getElementById('blusNatcatGrid').classList.remove('hidden');
+        } else if (selectedPolicyType === 'SFSP') {
+            document.getElementById('sfspBasicGrid').classList.remove('hidden');
+            document.getElementById('sfspNatcatGrid').classList.remove('hidden');
         }
         
         evaluateRowVisibility();
