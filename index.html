@@ -249,6 +249,27 @@
             font-weight: 600;
         }
 
+        .badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .badge-warning {
+            background-color: #fef3c7;
+            color: #d97706;
+            border: 1px solid #fde68a;
+        }
+
+        .badge-danger {
+            background-color: #fee2e2;
+            color: #dc2626;
+            border: 1px solid #fca5a5;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
@@ -324,7 +345,7 @@
             background-color: #c2410c;
         }
 
-        /* Revamped BSUS Layout Panels Configuration styling rules */
+        /* Revamped BSUS Layout Elements */
         .bsus-worksheet-panel {
             background-color: #ffffff;
             border: 2px solid var(--primary);
@@ -393,7 +414,7 @@
 
 <div class="container">
     <header style="margin-bottom: 25px;">
-        <h1 style="font-size: 2.2rem; color: #0f172a; border-bottom: 2px solid var(--primary); padding-bottom: 10px;">NIA Fire Insurance Premium Calculator</h1>
+        <h1 style="font-size: 2.2rem; color: #0f172a; border-bottom: 2px solid var(--primary); padding-bottom: 10px;">NIA Fire Insc Premium Calc</h1>
     </header>
 
     <!-- STEP 1: CHOOSE YOUR POLICY TYPE -->
@@ -467,7 +488,7 @@
                 <input type="number" id="sumInsured" readonly style="background-color: #f1f5f9; font-weight: bold; color: #0f172a;" value="10000000">
             </div>
 
-            <!-- CRITICAL PLACEMENT CHANGE: 2. Enter Rate Manually? Dropdown (Placed exactly below Total Sum Insured) -->
+            <!-- REQUIRED PLACEMENT: 2. Enter Rate Manually Dropdown Box directly below Total Sum Insured row -->
             <div class="form-group id-commercial distinct-label hidden" id="manualRateOptionContainer">
                 <label for="enterRateManuallyToggle">2. Enter Rate Manually?</label>
                 <select id="enterRateManuallyToggle">
@@ -476,12 +497,11 @@
                 </select>
             </div>
 
-            <!-- Manual Custom entry form elements block wrapper -->
+            <!-- Manual Value parameters configuration overrides panel element -->
             <div class="form-group hidden" id="manualRateInputContainer" style="background-color: #f8fafc; border: 1px solid var(--border); padding: 14px; border-radius: 6px;">
                 <label for="manualRateValue" style="font-weight: bold;">Custom Basic Flexa Rate (per mille)</label>
                 <input type="number" id="manualRateValue" placeholder="e.g. 0.75" step="0.001" value="">
                 
-                <!-- Secondary dynamic selectors required to run backend formulas under pure manual modes -->
                 <div id="manualMetaSelectors" style="margin-top: 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                     <div>
                         <label style="font-size: 0.8rem; font-weight: bold; color: #475569;">Manual Section Map</label>
@@ -505,16 +525,16 @@
                 </div>
             </div>
 
-            <!-- UNIFIED MASTER OCCUPANCY SEARCH COMPONENT (FOR ALL COMMERCIAL POLICIES) -->
+            <!-- UNIFIED SINGLE SEARCH REPOSITORY LOOKUP AUTOCOMPLETE FORM GROUP -->
             <div class="form-group id-commercial distinct-label hidden" id="occupancyContainer">
-                <label for="occupancySearch">3. Occupancy / Risk Selection (Search Table Records)</label>
+                <label for="occupancySearch">3. Occupancy / Risk Selection (Search Matrix Indices)</label>
                 <div class="search-container">
-                    <input type="text" id="occupancySearch" placeholder="Type risk description or code (e.g. 1002, Libraries)..." autocomplete="off" style="border: 1px solid var(--primary);">
+                    <input type="text" id="occupancySearch" placeholder="Type description or risk code (e.g. 1002, Libraries)..." autocomplete="off" style="border: 1px solid var(--primary);">
                     <div id="autocompleteResultsList" class="autocomplete-results hidden"></div>
                 </div>
                 <input type="hidden" id="selectedOccupancyIndex" value="">
 
-                <!-- Shared Metadata Banner layout viewport card -->
+                <!-- Metadata Cards display box wrapper -->
                 <div id="metaBox" class="meta-container hidden" style="background-color: #f0f9ff; border-color: #bae6fd;">
                     <div class="meta-item">
                         <span class="meta-label">Section</span>
@@ -525,7 +545,7 @@
                         <span id="meta-code" class="meta-value">-</span>
                     </div>
                     <div class="meta-item">
-                        <span class="meta-label">Category Index</span>
+                        <span class="meta-label">Category</span>
                         <span id="meta-category" class="meta-value" style="color: var(--accent);">-</span>
                     </div>
                     <div class="meta-item">
@@ -535,10 +555,10 @@
                 </div>
             </div>
 
-            <!-- BSUS EXCLUSIVE RATING SHEET MATRIX DATA CONTAINER VIEWPORTS -->
+            <!-- BSUS EXCLUSIVE SPREADSHEET MATRIX WORKING AREA -->
             <div id="bsusRevampedSection" class="hidden">
                 <div class="bsus-worksheet-panel">
-                    <h3 style="color: var(--primary); font-size: 1.1rem; border-bottom: 2px dashed var(--primary); padding-bottom: 5px; margin-bottom: 12px;">BSUS Internal Rating Matrix Calculations</h3>
+                    <h3 style="color: var(--primary); font-size: 1.1rem; border-bottom: 2px dashed var(--primary); padding-bottom: 5px; margin-bottom: 12px;">BSUS Internal Rating Matrix</h3>
                     <table class="bsus-table-layout">
                         <thead>
                             <tr>
@@ -633,7 +653,7 @@
                         </tbody>
                     </table>
 
-                    <h3 style="color: #b45309; font-size: 0.95rem; border-bottom: 2px solid #f59e0b; padding-bottom: 4px; margin-top: 15px; margin-bottom: 8px;">Good / Bad Features Safety Multipliers Survey</h3>
+                    <h3 style="color: #b45309; font-size: 0.95rem; border-bottom: 2px solid #f59e0b; padding-bottom: 4px; margin-top: 15px; margin-bottom: 8px;">Good / Bad Safety Feature Modifiers Survey</h3>
                     <table class="bsus-table-layout" style="font-size: 0.75rem;">
                         <thead>
                             <tr style="background-color: #fef3c7;">
@@ -648,7 +668,7 @@
                 </div>
             </div>
 
-            <!-- BGR FIXED DROPDOWN (ONLY SHOWS FOR BGR TYPE) -->
+            <!-- BGR BASIC RATE OPTIONS SELECT CONTROL -->
             <div class="form-group" id="bgrRateContainer">
                 <label for="bgrRateOption">BGR Basic Rate Option</label>
                 <select id="bgrRateOption">
@@ -930,7 +950,7 @@ const combinedRates = [
   {"sec":"IV","code":"2056","cat":1,"ho":"","dec":"","desc":"Coffee Curing, Roasting / Grinding","bsus":0.57,"blus":0.64,"sfsp":0.64},
   {"sec":"IV","code":"2057","cat":2,"ho":"","dec":"","desc":"Coir Factories","bsus":2.48,"blus":2.07,"sfsp":2.07},
   {"sec":"IV","code":"2058","cat":1,"ho":"","dec":"","desc":"Collieries - Underground Machinery and pit head gear and Dragline Machine used in Collieries","bsus":1.28,"blus":1.51,"sfsp":1.51},
-  {"sec":"IV","code":"2059","cat":1,"ho":"","dec":"","desc":"Condensed Milk Factories, Milk Pasteurising Plants and Dairies","bsus":0.52,"blus":0.5, "sfsp":0.5},
+  {"sec":"IV","code":"2059","cat":1,"ho":"","dec":"","desc":"Condensed Milk Factories, Milk Pasteurising Plants and Dairies","bsus":0.52,"blus":0.5,"sfsp":0.5},
   {"sec":"IV","code":"2060","cat":3,"ho":"","dec":"","desc":"Confectionery Manufacturing Plants/Sugar Candy Manufacturing Plants/Sweet Meat Manufacturing Plants","bsus":0.98,"blus":0.82,"sfsp":0.82},
   {"sec":"IV","code":"2209","cat":1,"ho":"","dec":"","desc":"Contractors Plant and Machinery anywhere in India (at specified locations)","bsus":0.88,"blus":0.96,"sfsp":0.96},
   {"sec":"IV","code":"2061","cat":2,"ho":"","dec":"","desc":"Contractors Plant and Machinery - At one location only","bsus":0.77,"blus":0.89,"sfsp":0.89},
@@ -991,7 +1011,7 @@ const combinedRates = [
   {"sec":"IV","code":"2106","cat":1,"ho":"","dec":"","desc":"Incandescent Gas mantle Manufacturing","bsus":1.42,"blus":1.67,"sfsp":1.67},
   {"sec":"IV","code":"2107","cat":1,"ho":"","dec":"","desc":"Industrial Diamonds Manufacturing","bsus":0.59,"blus":0.67,"sfsp":0.67},
   {"sec":"IV","code":"2108","cat":1,"ho":"","dec":"","desc":"Industrial Gas Manufacturing","bsus":1.6,"blus":1.33,"sfsp":1.33},
-  {"sec":"IV","code":"2109","cat":1,"ho":"","dec":"","desc":"Ink (excluding printing ink) Manufacturing","bsus":1.10,"blus":1.29,"sfsp":1.29},
+  {"sec":"IV","code":"2109","cat":1,"ho":"","dec":"","desc":"Ink (excluding printing ink) Manufacturing","bsus":1.1,"blus":1.29,"sfsp":1.29},
   {"sec":"IV","code":"2110","cat":1,"ho":"","dec":"","desc":"Jaggery Manufacturing","bsus":0.82,"blus":0.77,"sfsp":0.77},
   {"sec":"IV","code":"2111","cat":4,"ho":"","dec":"","desc":"Jute Mills","bsus":3.1,"blus":2.58,"sfsp":2.58},
   {"sec":"IV","code":"2112","cat":1,"ho":"","dec":"","desc":"Katha Manufacturing","bsus":1.62,"blus":1.89,"sfsp":1.89},
@@ -1042,7 +1062,7 @@ const combinedRates = [
   {"sec":"IV","code":"2156","cat":1,"ho":"","dec":"","desc":"Presses for hides and skins","bsus":1.36,"blus":1.6,"sfsp":1.6},
   {"sec":"IV","code":"2157","cat":4,"ho":"","dec":"","desc":"Printing Ink Manufacturing / Roller composition factories","bsus":1.88,"blus":1.57,"sfsp":1.57},
   {"sec":"IV","code":"2158","cat":1,"ho":"","dec":"","desc":"Printing Press","bsus":1.18,"blus":0.98,"sfsp":0.98},
-  {"sec":"IV","code":"2159","cat":1,"ho":"","dec":"","desc":"Pulverising Plants(Metals and non-hazardous goods)","bsus":0.47,"blus":0.5, "sfsp":0.5},
+  {"sec":"IV","code":"2159","cat":1,"ho":"","dec":"","desc":"Pulverising Plants(Metals and non-hazardous goods)","bsus":0.47,"blus":0.5,"sfsp":0.5},
   {"sec":"IV","code":"2160","cat":1,"ho":"","dec":"","desc":"Pulverizing Plants (Others)","bsus":1.36,"blus":1.51,"sfsp":1.51},
   {"sec":"IV","code":"2161","cat":1,"ho":"","dec":"","desc":"Rice Mills","bsus":0.88,"blus":0.73,"sfsp":0.73},
   {"sec":"IV","code":"2162","cat":1,"ho":"","dec":"","desc":"Rice Polishing Units","bsus":1.01,"blus":0.84,"sfsp":0.84},
@@ -1140,6 +1160,8 @@ const combinedRates = [
   {"sec":"IV","code":"2232","cat":3,"ho":"","dec":"","desc":"Sports goods manufacturing","bsus":0.0,"blus":1.25,"sfsp":1.25}
 ];
 
+let selectedPolicyType = 'BGR';
+
 function handleAutocompleteSearch(query) {
     const listContainer = document.getElementById('autocompleteResultsList');
     const searchVal = query.toLowerCase().trim();
@@ -1212,7 +1234,7 @@ function adjustLayoutRules() {
     const rowTerrorismLine = document.getElementById('row-terrorism-line');
 
     if (selectedPolicyType === 'BSUS') {
-        stdControls1.classList.remove('hidden'); // keep manual toggle container visible
+        stdControls1.classList.remove('hidden'); 
         stdControls2.classList.add('hidden');
         bsusSection.classList.remove('hidden');
 
