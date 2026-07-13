@@ -505,7 +505,7 @@
                         <thead>
                             <tr>
                                 <th>LINE ITEM DESCRIPTION</th>
-                                <th style="width: 120px; text-align: right;">RATE</th>
+                                <th style="width: 150px; text-align: right;">RATE</th>
                                 <th style="width: 140px; text-align: right;">PREMIUM (₹)</th>
                             </tr>
                         </thead>
@@ -547,13 +547,14 @@
                             </tr>
                             <tr>
                                 <td class="bsus-row-heading">B ADJUSTED EQ RATE</td>
-                                <td style="text-align: right;">
-                                    <select id="bsus_eq_zone_select" class="bsus-select-field" style="padding: 2px 4px; font-size: 0.78rem;">
+                                <td style="text-align: right; display: flex; align-items: center; justify-content: flex-end; gap: 5px; border: none; padding: 4px 0;">
+                                    <select id="bsus_eq_zone_select" class="bsus-select-field" style="padding: 2px 4px; font-size: 0.78rem; width: 90px; margin: 0;">
                                         <option value="ZONE_I">Zone I</option>
                                         <option value="ZONE_II">Zone II</option>
                                         <option value="ZONE_III">Zone III</option>
-                                        <option value="ZONE_IV" selected>Zone IV (Default)</option>
+                                        <option value="ZONE_IV" selected>Zone IV</option>
                                     </select>
+                                    <span id="br_rate_8" style="font-size: 0.8rem; font-weight: bold; color: #475569;">0.000</span>
                                 </td>
                                 <td id="br_prem_8" class="text-right">0.00</td>
                             </tr>
@@ -742,7 +743,7 @@
             </div>
         </div>
 
-        <!-- RIGHT: PREMIUM WORKING WORKSHEET SUMMARY LOGS -->
+        <!-- RIGHT: PREMIUM WORKING WORKSHEET SUMMARY LEDGER -->
         <div>
             <div id="premiumWorkingPanel" class="panel">
                 <h2>Premium Working Summary Ledger</h2>
@@ -890,7 +891,7 @@
 
 <script>
 // =========================================================================
-// UPDATED BSUS RATE SCHEDULE MATRIX - 289 VALIDATED ROWS INJECTED
+// VALIDATED AUTOMATED EXCEL DATABASE CODES INJECTION MATRIX (289 RECORDS)
 // =========================================================================
 const bsusRateSchedule = [
   {"sec":"III","code":"1002","cat":1,"desc":"Places of worships","rate":0.14},
@@ -927,8 +928,8 @@ const bsusRateSchedule = [
   {"sec":"IV","code":"2004","cat":1,"desc":"Agarbatti Manufacturing","rate":1.98},
   {"sec":"IV","code":"2005","cat":1,"desc":"Aircraft Hangers","rate":0.98},
   {"sec":"IV","code":"2006","cat":2,"desc":"Airport Terminal Buildings [ including all facilities like Cafes, Shops etc]","rate":0.29},
-  {"sec":"IV","code":"2007","cat":4,"desc":"Aluminium/ Magnesium Powder Plants","rate":1.06},
   {"sec":"IV","code":"2008","cat":1,"desc":"Aluminium, Zinc, Copper Factories","rate":0.6},
+  {"sec":"IV","code":"2007","cat":4,"desc":"Aluminium/ Magnesium Powder Plants","rate":1.06},
   {"sec":"IV","code":"2009","cat":1,"desc":"Areca nut and/or Betel nut factories","rate":0.94},
   {"sec":"IV","code":"2010","cat":1,"desc":"Asbestos Steam Packing and lagging manufacturing","rate":0.55},
   {"sec":"IV","code":"2011","cat":1,"desc":"Atta and Cereal Grinding [Excluding Dal Mills]","rate":0.73},
@@ -939,7 +940,7 @@ const bsusRateSchedule = [
   {"sec":"IV","code":"2016","cat":1,"desc":"Battery Manufacturing","rate":0.78},
   {"sec":"IV","code":"2017","cat":1,"desc":"Beedi Factories","rate":1.18},
   {"sec":"IV","code":"2018","cat":1,"desc":"Biscuit Factories","rate":0.82},
-  {"sec":"IV","code":"2019","cat":4,"desc":"Bitumenised Paper and / or Hessian Cloth Manufacturing including Tar Felt Manufacturing","rate":1.64},
+  {"sec":"IV","code":"2019","cat":4,"desc":"Bituminised Paper and / or Hessian Cloth Manufacturing including Tar Felt Manufacturing","rate":1.64},
   {"sec":"IV","code":"2020","cat":3,"desc":"Book Binders, Envelope and Paper Bag Manufacturing","rate":1.36},
   {"sec":"IV","code":"2021","cat":1,"desc":"Breweries","rate":1.07},
   {"sec":"IV","code":"2022","cat":3,"desc":"Brickworks {including refractories and fire bricks}.","rate":0.41},
@@ -973,7 +974,7 @@ const bsusRateSchedule = [
   {"sec":"IV","code":"2050","cat":1,"desc":"Cinematography Film Editing, Laboratory and Sound recording rooms without Film Processing","rate":0.55},
   {"sec":"IV","code":"2051","cat":2,"desc":"Cinema Theatres [For single screen]","rate":0.44},
   {"sec":"IV","code":"2052","cat":1,"desc":"Circus, Touring Drama Troupes and Touring Cinema Theatres","rate":5.29},
-  {"sec":"IV","code":"2053","cat":4,"desc":"Cloth Proessing units situated  outside  the compound  of Textile  mills  and cloth processing   units   which are   not   owned   by the   textile   mills but are   situated   within   the   textile   mills   complex/compound.","rate":1.32},
+  {"sec":"IV","code":"2053","cat":4,"desc":"Cloth Proessing units situated  outside  the compound  of Textile  mills  and cloth processing   units   which are  not  owned  by the  textile  mills but are  situated  within  the   textile  mills   complex/compound.","rate":1.32},
   {"sec":"IV","code":"2054","cat":1,"desc":"Coal/cake/Charcoal ball and briquettes Manufacturing","rate":1.49},
   {"sec":"IV","code":"2055","cat":1,"desc":"Coal Processing Plants","rate":0.67},
   {"sec":"IV","code":"2056","cat":1,"desc":"Coffee Curing, Roasting / Grinding","rate":0.57},
@@ -1064,7 +1065,7 @@ const bsusRateSchedule = [
   {"sec":"IV","code":"2141","cat":3,"desc":"Paint (others) & Varnish Factories","rate":2.18},
   {"sec":"IV","code":"2142","cat":4,"desc":"Paints - Nitrocellulose based","rate":2.65},
   {"sec":"IV","code":"2143","cat":1,"desc":"Pan Masala making","rate":0.91},
-  {"sec":"IV","code":"2144","cat":4,"desc":"Paper and Cardboard Mills (including Lamination)","rate":1.25},
+  {"sec":"IV","code":"2144","cat":4,"desc":"Paper and Cardboard Mills (including Lamination) ","rate":1.25},
   {"sec":"IV","code":"2145","cat":2,"desc":"Particle Board Manufacturing","rate":2.18},
   {"sec":"IV","code":"2146","cat":1,"desc":"Pencil Manufacturing","rate":1.49},
   {"sec":"IV","code":"2147","cat":1,"desc":"Petroleum Coke Calcination","rate":0.93},
@@ -1077,6 +1078,7 @@ const bsusRateSchedule = [
   {"sec":"IV","code":"2154","cat":1,"desc":"Presses for coir yarn / cotton/senna leaves","rate":2.86},
   {"sec":"IV","code":"2155","cat":1,"desc":"Presses for carpets, rugs and tobacco","rate":2.6},
   {"sec":"IV","code":"2156","cat":1,"desc":"Presses for hides and skins","rate":1.36},
+  {"sec":"IV","code":"2157","cat":4,"desc":"Printing Ink Manufacturing / Roller composition factories","rate":1.88},
   {"sec":"IV","code":"2158","cat":1,"desc":"Printing Press","rate":1.18},
   {"sec":"IV","code":"2159","cat":1,"desc":"Pulverising Plants(Metals and non-hazardous goods)","rate":0.47},
   {"sec":"IV","code":"2160","cat":1,"desc":"Pulverizing Plants (Others)","rate":1.36},
@@ -1091,6 +1093,7 @@ const bsusRateSchedule = [
   {"sec":"IV","code":"2169","cat":1,"desc":"Saw Mills (including Timber Merchants premises where sawing is done).","rate":3.07},
   {"sec":"IV","code":"2170","cat":1,"desc":"Sea Food / Meat Processing","rate":1.01},
   {"sec":"IV","code":"2171","cat":4,"desc":"Silk Mills / Spun Silk Mills","rate":0.95},
+  {"sec":"IV","code":"2230","cat":1,"desc":"Shopping Malls (other than multiplexes)","rate":0.49},
   {"sec":"IV","code":"2172","cat":1,"desc":"Snuff Manufacturing","rate":0.93},
   {"sec":"IV","code":"2173","cat":4,"desc":"Soap Manufacturing","rate":1.09},
   {"sec":"IV","code":"2174","cat":1,"desc":"Sponge Iron Plants","rate":1.02},
@@ -1107,6 +1110,7 @@ const bsusRateSchedule = [
   {"sec":"IV","code":"2187","cat":4,"desc":"Tea Factories","rate":1.07},
   {"sec":"IV","code":"2188","cat":1,"desc":"Telephone Exchanges","rate":1.64},
   {"sec":"IV","code":"2189","cat":3,"desc":"Textile Mills - Spinning Mills","rate":1.16},
+  {"sec":"IV","code":"2211","cat":1,"desc":"Textile Mills- Composite Mills","rate":1.62},
   {"sec":"IV","code":"2190","cat":1,"desc":"Tile & Pottery works","rate":0.76},
   {"sec":"IV","code":"2191","cat":3,"desc":"Tiny sector Industries with values at risk not exceeding Rs 10 lakhs","rate":0.78},
   {"sec":"IV","code":"2192","cat":1,"desc":"Tissue Culture Premises (Excluding Crops)","rate":0.83},
@@ -1128,9 +1132,8 @@ const bsusRateSchedule = [
   {"sec":"IV","code":"2208","cat":1,"desc":"Zip fasteners Manufacturing","rate":1.3},
   {"sec":"IV","code":"2209","cat":1,"desc":"Contractors Plant and Machinery anywhere in India (at specified locations)","rate":0.88},
   {"sec":"IV","code":"2210","cat":1,"desc":"Electric Generation Stations- Others","rate":0.62},
-  {"sec":"IV","code":"2211","cat":1,"desc":"Textile Mills- Composite Mills","rate":1.62},
   {"sec":"IV","code":"2212","cat":1,"desc":"Automobile Filter Manufacturing","rate":1.18},
-  {"sec":"IV","code":"2216","cat":3,"desc":"Plastic Goods Manufacturing(excluding Foam Plastics)/ II. Using Plastic raw materials having calorific value of above 15000 btu/lb polyethylene, Polypropylene, Prolystyrene, Polyalphamethylstyrene, Acrylonitrilebutadiene-styrene, Polybutylene.","rate":1.54},
+  {"sec":"IV","code":"2216","cat":3,"desc":"Plastic Goods Manufacturing (excluding Foam Plastics)/ II. Using Plastic raw materials having calorific value of above 15000 btu/lb polyethylene, Polypropylene, Prolystyrene, Polyalphamethylstyrene, Acrylonitrilebutadiene-styrene, Polybutylene.","rate":1.54},
   {"sec":"IV","code":"2217","cat":1,"desc":"Electric Generation Stations- Thermal Power Stations","rate":0.39},
   {"sec":"IV","code":"2218","cat":1,"desc":"Electric Generation Stations- Solar Power Stations","rate":0.62},
   {"sec":"IV","code":"2219","cat":1,"desc":"Electric Generation Stations- Windmill","rate":0.72},
@@ -1140,8 +1143,6 @@ const bsusRateSchedule = [
   {"sec":"IV","code":"2225","cat":1,"desc":"Engineering Workshop-Metal Extraction, Ore processing (other than Aluminium, Copper, Zinc), Plant processing Raw sand into silica","rate":0.79},
   {"sec":"IV","code":"2227","cat":1,"desc":"Engineering Workshop- Clock/Watch Manufacturing","rate":1.63},
   {"sec":"IV","code":"2229","cat":1,"desc":"Multiplex Theatre Complexes","rate":0.69},
-  {"sec":"IV","code":"2230","cat":1,"desc":"Shopping Malls (other than multiplexes)","rate":0.49},
-  {"sec":"IV","code":"2231","cat":1,"desc":"Disposable Diaper manufacturing","rate":1.18},
   {"sec":"V","code":"3001","cat":1,"desc":"Analytical / Quality Control Laboratories","rate":0.6},
   {"sec":"V","code":"3002","cat":1,"desc":"Boiler House","rate":0.41},
   {"sec":"V","code":"3003","cat":1,"desc":"Dams","rate":0.35},
@@ -1251,7 +1252,7 @@ function filterBsusAutocomplete(val) {
             count++;
             const div = document.createElement('div');
             div.className = 'autocomplete-item';
-            // Explicitly bringing the occupancy description, risk code, and base flexa rate to the search layout format
+            // Adjusted search format as requested: bringing occupancy description, risk code, and base rate together into view index
             div.innerHTML = `<strong>[Code ${item.code}]</strong> ${item.desc} — <span style="color: var(--primary); font-weight: 600;">Rate: ${item.rate.toFixed(3)}‰</span>`;
             div.addEventListener('mousedown', (e) => {
                 e.preventDefault();
@@ -1445,17 +1446,25 @@ function runCalculation() {
         document.getElementById('visible-summary-si').innerText = formattedSiText;
     }
 
-    // ==========================================
-    // DIVERGENT TRACK LOGIC ROUTE: BSUS MODEL MATRIX
-    // ==========================================
+    // =========================================================================
+    // DIVERGENT TRACK LOGIC ROUTE: BSUS MODEL MATRIX WITH INTEGRATED FORMULAS
+    // =========================================================================
     if (selectedPolicyType === 'BSUS') {
         const bsusIndexVal = document.getElementById('selectedBsusIndex').value;
         if (bsusIndexVal === "") return;
         
         const record = bsusRateSchedule[parseInt(bsusIndexVal)];
         const category = record.cat;
-        const section = record.sec;
+        const section = record.sec.trim();
         const riskCode = record.code;
+
+        // General Category Adjustment Weights Mapping
+        let catModifierWeight = 0; 
+        let flexaModLabel = "0.00 %";
+        if (category === 1) { catModifierWeight = -0.25; flexaModLabel = "-25.00 %"; }
+        else if (category === 2) { catModifierWeight = -0.10; flexaModLabel = "-10.00 %"; }
+        else if (category === 3) { catModifierWeight = 0.25;  flexaModLabel = "+25.00 %"; }
+        else if (category === 4) { catModifierWeight = 1.60;  flexaModLabel = "+160.00 %"; }
 
         // Row 1: FLEXA RATE
         const flexaRate = record.rate;
@@ -1463,15 +1472,8 @@ function runCalculation() {
         document.getElementById('br_rate_1').innerText = flexaRate.toFixed(3);
         document.getElementById('br_prem_1').innerText = prem1.toFixed(2);
 
-        // Row 2: ADJUSTED FLEXA RATE DISC/LOAD
-        let flexaModFactorPct = 0;
-        let flexaModLabel = "0.00 %";
-        if (category === 1) { flexaModFactorPct = -25; flexaModLabel = "-25.00 %"; }
-        else if (category === 2) { flexaModFactorPct = -10; flexaModLabel = "-10.00 %"; }
-        else if (category === 3) { flexaModFactorPct = 25;  flexaModLabel = "+25.00 %"; }
-        else if (category === 4) { flexaModFactorPct = 160; flexaModLabel = "+160.00 %"; }
-        
-        const prem2 = prem1 * (flexaModFactorPct / 100);
+        // Row 2: ADJUSTED FLEXA RATE DISC/LOAD (Formula 1 Implementation)
+        const prem2 = prem1 * catModifierWeight;
         document.getElementById('br_rate_2').innerText = flexaModLabel;
         document.getElementById('br_prem_2').innerText = (prem2 >= 0 ? "+" : "") + prem2.toFixed(2);
 
@@ -1514,56 +1516,45 @@ function runCalculation() {
         document.getElementById('br_rate_7').innerText = rate7.toFixed(3);
         document.getElementById('br_prem_7').innerText = prem7.toFixed(2);
 
-        // Row 8: B ADJUSTED EQ RATE
+        // Row 8: B ADJUSTED EQ RATE (Formula 3 Implementation)
         const chosenZone = document.getElementById('bsus_eq_zone_select').value;
-        let baseUnadjustedEq = 0;
+        let baseUnadjustedEq = 0.05; // default fallback mapping
+        
         if (section === "III") {
             if (chosenZone === "ZONE_I") baseUnadjustedEq = 0.25;
             else if (chosenZone === "ZONE_II") baseUnadjustedEq = 0.15;
             else if (chosenZone === "ZONE_III") baseUnadjustedEq = 0.10;
             else if (chosenZone === "ZONE_IV") baseUnadjustedEq = 0.05;
         } else {
+            // General industrial fallback limits logic mapping context
             if (chosenZone === "ZONE_I") baseUnadjustedEq = 0.50;
             else if (chosenZone === "ZONE_II") baseUnadjustedEq = 0.25;
             else if (chosenZone === "ZONE_III") baseUnadjustedEq = 0.10;
             else if (chosenZone === "ZONE_IV") baseUnadjustedEq = 0.05;
         }
         
-        let eqCatModifier = 1.0;
-        if (category === 1) eqCatModifier = 0.75;
-        else if (category === 2) eqCatModifier = 0.90;
-        else if (category === 3) eqCatModifier = 1.25;
-        else if (category === 4) eqCatModifier = 2.60;
-        
-        const adjustedEqRate = baseUnadjustedEq * eqCatModifier;
+        const adjustedEqRate = baseUnadjustedEq * (1 + catModifierWeight);
         const prem8 = M * adjustedEqRate;
+        document.getElementById('br_rate_8').innerText = adjustedEqRate.toFixed(3) + "‰";
         document.getElementById('br_prem_8').innerText = prem8.toFixed(2);
 
-        // Row 9: C ADJUSTED STFI RATE
+        // Row 9: C ADJUSTED STFI RATE (Formula 2 Implementation)
         let baseUnadjustedStfi = 0.25;
-        if (section === "III") baseUnadjustedStfi = 0.15;
-        else if (section === "IV") baseUnadjustedStfi = 0.25;
-        else if (section === "V") baseUnadjustedStfi = 0.25;
-        else if (section === "VI") {
+        if (section === "III") {
+            baseUnadjustedStfi = 0.15;
+        } else if (section === "VI") {
             baseUnadjustedStfi = 0.35;
-            const openCodesList = ["4012", "4013", "4014", "4015", "4016", "4017", "4018", "4019"];
-            if (openCodesList.includes(riskCode)) {
-                baseUnadjustedStfi = 1.50;
-            }
+        } else {
+            // Sections IV, V, VII (Including any hybrid nomenclature flags like IV/V)
+            baseUnadjustedStfi = 0.25;
         }
         
-        let stfiCatModifier = 1.0;
-        if (category === 1) stfiCatModifier = 0.75;
-        else if (category === 2) stfiCatModifier = 0.90;
-        else if (category === 3) stfiCatModifier = 1.25;
-        else if (category === 4) stfiCatModifier = 2.60;
-        
-        const adjustedStfiRate = baseUnadjustedStfi * stfiCatModifier;
+        const adjustedStfiRate = baseUnadjustedStfi * (1 + catModifierWeight);
         const prem9 = M * adjustedStfiRate;
         document.getElementById('br_rate_9').innerText = adjustedStfiRate.toFixed(3);
         document.getElementById('br_prem_9').innerText = prem9.toFixed(2);
 
-        // Row 10: D TERRORISM
+        // Row 10: D TERRORISM (Formula 4 Implementation)
         const terrorismRateValue = (section === "III") ? 0.13 : 0.21;
         const prem10 = M * terrorismRateValue;
         document.getElementById('br_rate_10').innerText = terrorismRateValue.toFixed(3);
@@ -1792,6 +1783,18 @@ document.getElementById('floaterToggle').addEventListener('change', runCalculati
 // Realtime listeners for all asset breakup modifications to ensure dynamic responsiveness
 document.querySelectorAll('.si-input').forEach(input => {
     input.addEventListener('input', calculateAggregateSumInsured);
+});
+
+// Setup dynamic change weights survey trigger tracking context
+document.addEventListener('change', function(e) {
+    if (e.target.classList.contains('survey-toggle') || e.target.classList.contains('survey-rate-weight')) {
+        runCalculation();
+    }
+});
+document.addEventListener('input', function(e) {
+    if (e.target.classList.contains('survey-rate-weight')) {
+        runCalculation();
+    }
 });
 
 document.addEventListener('click', function(e) {
