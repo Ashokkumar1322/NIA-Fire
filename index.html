@@ -419,7 +419,7 @@
     </div>
 
     <!-- MAIN CALCULATOR WORKSPACE -->
-    <div class="workspace">
+    <div class="workspace" id="workspace">
         
         <!-- LEFT: INPUT PARAMETERS -->
         <div class="panel">
@@ -890,7 +890,7 @@
 
 <script>
 // =========================================================================
-// NEW ENJECTED BSUS RATE SCHEDULE ARRAY MATRIX (289 RECORDS DIRECTLY LOADED)
+// UPDATED BSUS RATE SCHEDULE MATRIX - 289 VALIDATED ROWS INJECTED
 // =========================================================================
 const bsusRateSchedule = [
   {"sec":"III","code":"1002","cat":1,"desc":"Places of worships","rate":0.14},
@@ -927,13 +927,12 @@ const bsusRateSchedule = [
   {"sec":"IV","code":"2004","cat":1,"desc":"Agarbatti Manufacturing","rate":1.98},
   {"sec":"IV","code":"2005","cat":1,"desc":"Aircraft Hangers","rate":0.98},
   {"sec":"IV","code":"2006","cat":2,"desc":"Airport Terminal Buildings [ including all facilities like Cafes, Shops etc]","rate":0.29},
-  {"sec":"IV","code":"2008","cat":1,"desc":"Aluminium, Zinc, Copper Factories","rate":0.6},
   {"sec":"IV","code":"2007","cat":4,"desc":"Aluminium/ Magnesium Powder Plants","rate":1.06},
+  {"sec":"IV","code":"2008","cat":1,"desc":"Aluminium, Zinc, Copper Factories","rate":0.6},
   {"sec":"IV","code":"2009","cat":1,"desc":"Areca nut and/or Betel nut factories","rate":0.94},
   {"sec":"IV","code":"2010","cat":1,"desc":"Asbestos Steam Packing and lagging manufacturing","rate":0.55},
   {"sec":"IV","code":"2011","cat":1,"desc":"Atta and Cereal Grinding [Excluding Dal Mills]","rate":0.73},
   {"sec":"IV","code":"2012","cat":1,"desc":"Audio/Video Cassette Manufacturing","rate":1.97},
-  {"sec":"IV","code":"2212","cat":1,"desc":"Automobile Filter Manufacturing","rate":1.18},
   {"sec":"IV","code":"2013","cat":1,"desc":"Automobile Manufacturing","rate":0.59},
   {"sec":"IV","code":"2014","cat":1,"desc":"Bakeries","rate":0.84},
   {"sec":"IV","code":"2015","cat":1,"desc":"Basket Weavers and Cane Furniture Makers","rate":3.19},
@@ -954,7 +953,7 @@ const bsusRateSchedule = [
   {"sec":"IV","code":"2030","cat":1,"desc":"Capsule Manufacturing","rate":0.79},
   {"sec":"IV","code":"2031","cat":4,"desc":"Carbon paper / Typewriter Ribbon Manufacturing","rate":1.43},
   {"sec":"IV","code":"2032","cat":1,"desc":"Cardamom Factories","rate":0.97},
-  {"sec":"IV","code":"2033","cat":3,"desc":"Cardboard Box Manufacturing","rate":1.70},
+  {"sec":"IV","code":"2033","cat":3,"desc":"Cardboard Box Manufacturing","rate":1.7},
   {"sec":"IV","code":"2034","cat":2,"desc":"Carpenters, Wood wool Manufacturing, Furniture Manufacturing and other wood worker shops [Excluding saw Mill]","rate":1.81},
   {"sec":"IV","code":"2035","cat":1,"desc":"Carpet and Drugget Manufacturing [Cotton/jute/wool]","rate":2.14},
   {"sec":"IV","code":"2036","cat":1,"desc":"Carpet and Drugget Manufacturing [Others]","rate":1.65},
@@ -974,7 +973,7 @@ const bsusRateSchedule = [
   {"sec":"IV","code":"2050","cat":1,"desc":"Cinematography Film Editing, Laboratory and Sound recording rooms without Film Processing","rate":0.55},
   {"sec":"IV","code":"2051","cat":2,"desc":"Cinema Theatres [For single screen]","rate":0.44},
   {"sec":"IV","code":"2052","cat":1,"desc":"Circus, Touring Drama Troupes and Touring Cinema Theatres","rate":5.29},
-  {"sec":"IV","code":"2053","cat":4,"desc":"Cloth Proessing units situated  outside  the compound  of Textile  mills  and cloth processing   units   which are  not  owned  by the  textile  mills but are  situated  within  the   textile  mills   complex/compound.","rate":1.32},
+  {"sec":"IV","code":"2053","cat":4,"desc":"Cloth Proessing units situated  outside  the compound  of Textile  mills  and cloth processing   units   which are   not   owned   by the   textile   mills but are   situated   within   the   textile   mills   complex/compound.","rate":1.32},
   {"sec":"IV","code":"2054","cat":1,"desc":"Coal/cake/Charcoal ball and briquettes Manufacturing","rate":1.49},
   {"sec":"IV","code":"2055","cat":1,"desc":"Coal Processing Plants","rate":0.67},
   {"sec":"IV","code":"2056","cat":1,"desc":"Coffee Curing, Roasting / Grinding","rate":0.57},
@@ -982,7 +981,6 @@ const bsusRateSchedule = [
   {"sec":"IV","code":"2058","cat":1,"desc":"Collieries - Underground Machinery and pit head gear and Dragline Machine used in Collieries","rate":1.28},
   {"sec":"IV","code":"2059","cat":1,"desc":"Condensed Milk Factories, Milk Pasteurising Plants and Dairies","rate":0.52},
   {"sec":"IV","code":"2060","cat":3,"desc":"Confectionery Manufacturing Plants/Sugar Candy Manufacturing Plants/Sweet Meat Manufacturing Plants","rate":0.98},
-  {"sec":"IV","code":"2209","cat":1,"desc":"Contractors Plant and Machinery anywhere in India (at specified locations)","rate":0.88},
   {"sec":"IV","code":"2061","cat":2,"desc":"Contractors Plant and Machinery - At one location only","rate":0.77},
   {"sec":"IV","code":"2062","cat":1,"desc":"Cork Products Manufacturing","rate":2.36},
   {"sec":"IV","code":"2063","cat":3,"desc":"Cotton Gin and Press Houses","rate":2.15},
@@ -990,25 +988,15 @@ const bsusRateSchedule = [
   {"sec":"IV","code":"2065","cat":1,"desc":"Dehydration Factories","rate":0.74},
   {"sec":"IV","code":"2066","cat":1,"desc":"Detergent Manufacturing with Sulphonation Plant","rate":1.44},
   {"sec":"IV","code":"2067","cat":1,"desc":"Detergent Manufacturing (Others)","rate":1.12},
-  {"sec":"IV","code":"2231","cat":1,"desc":"Disposable Diaper manufacturing","rate":1.18},
   {"sec":"IV","code":"2068","cat":1,"desc":"Distilleries","rate":0.83},
   {"sec":"IV","code":"2069","cat":1,"desc":"Duplicating.stencil paper Manufacturing","rate":1.61},
   {"sec":"IV","code":"2070","cat":3,"desc":"Electric  Generation Stations - Hydro Power  Stations","rate":0.54},
   {"sec":"IV","code":"2071","cat":1,"desc":"Electric Lamp/T.V. Picture Tube Manufacturing","rate":1.06},
-  {"sec":"IV","code":"2072","cat":3,"desc":"Electronic Goods Manufacturing/Assembly","rate":1.00},
-  {"sec":"IV","code":"2074","cat":4,"desc":"Enamel-ware factories","rate":1.01},
-  {"sec":"IV","code":"2221","cat":1,"desc":"Electric Generation Stations- Biomass Power Stations","rate":0.66},
-  {"sec":"IV","code":"2210","cat":1,"desc":"Electric Generation Stations- Others","rate":0.62},
-  {"sec":"IV","code":"2218","cat":1,"desc":"Electric Generation Stations- Solar Power Stations","rate":0.62},
-  {"sec":"IV","code":"2217","cat":1,"desc":"Electric Generation Stations- Thermal Power Stations","rate":0.39},
-  {"sec":"IV","code":"2219","cat":1,"desc":"Electric Generation Stations- Windmill","rate":0.72},
+  {"sec":"IV","code":"2072","cat":3,"desc":"Electronic Goods Manufacturing/Assembly","rate":1.0},
   {"sec":"IV","code":"2073","cat":1,"desc":"Electronic Software Parks/Electronic Software Development Units","rate":0.19},
+  {"sec":"IV","code":"2074","cat":4,"desc":"Enamel-ware factories","rate":1.01},
   {"sec":"IV","code":"2075","cat":2,"desc":"Engineering Workshop-Structural Steel Fabricators, Sheet Metal fabricators","rate":0.38},
   {"sec":"IV","code":"2076","cat":1,"desc":"Engineering Workshop [Others], Motor Vehicle Garages","rate":0.65},
-  {"sec":"IV","code":"2227","cat":1,"desc":"Engineering Workshop- Clock/Watch Manufacturing","rate":1.63},
-  {"sec":"IV","code":"2222","cat":1,"desc":"Engineering Workshop- Steel Plants","rate":0.44},
-  {"sec":"IV","code":"2224","cat":4,"desc":"Engineering Workshop-Pipe Extruding, Stamping, Pressing, Forging Mills, Metal smelting, Foundries, Galvanising works","rate":0.44},
-  {"sec":"IV","code":"2225","cat":1,"desc":"Engineering Workshop-Metal Extraction, Ore processing (other than Aluminium, Copper, Zinc), Plant processing Raw sand into silica","rate":0.79},
   {"sec":"IV","code":"2077","cat":1,"desc":"Exhibitions, Fetes, Mandaps","rate":2.58},
   {"sec":"IV","code":"2078","cat":1,"desc":"Explosives / Blasting Factories","rate":2.07},
   {"sec":"IV","code":"2079","cat":1,"desc":"Fertiliser Manufacturing [other than those rateable under Petrochemical Tariff]","rate":1.36},
@@ -1027,10 +1015,10 @@ const bsusRateSchedule = [
   {"sec":"IV","code":"2092","cat":4,"desc":"Glass wool Manufacturing","rate":1.43},
   {"sec":"IV","code":"2093","cat":1,"desc":"Glass Manufacturing/Automobile Glass Manufacturing","rate":1.1},
   {"sec":"IV","code":"2094","cat":1,"desc":"Gold thread factories / Gilding factories","rate":0.74},
-  {"sec":"IV","code":"2098","cat":1,"desc":"Grain/seeds disintegrating/crushing/ Decorticating factories/ Dal mills.","rate":1.04},
-  {"sec":"IV","code":"2096","cat":1,"desc":"Granite Factories (Others)","rate":0.28},
   {"sec":"IV","code":"2095","cat":1,"desc":"Granite Factories using inflammable solvents","rate":0.66},
+  {"sec":"IV","code":"2096","cat":1,"desc":"Granite Factories (Others)","rate":0.28},
   {"sec":"IV","code":"2097","cat":1,"desc":"Graphite electrode Manufacturing","rate":1.13},
+  {"sec":"IV","code":"2098","cat":1,"desc":"Grain/seeds disintegrating/crushing/ Decorticating factories/ Dal mills.","rate":1.04},
   {"sec":"IV","code":"2099","cat":1,"desc":"Grease / Wax Manufacturing","rate":1.72},
   {"sec":"IV","code":"2100","cat":1,"desc":"Green Houses/ Algae/ Spirulina and the like","rate":1.11},
   {"sec":"IV","code":"2101","cat":1,"desc":"Gum/Glue/Gelatine Manufacturing","rate":1.13},
@@ -1050,29 +1038,28 @@ const bsusRateSchedule = [
   {"sec":"IV","code":"2115","cat":1,"desc":"Leather Cloth Factories","rate":2.38},
   {"sec":"IV","code":"2116","cat":1,"desc":"Leather Goods Manufacturing ( incl. boot/shoe)","rate":1.31},
   {"sec":"IV","code":"2117","cat":1,"desc":"Lime Kiln","rate":0.6},
-  {"sec":"IV","code":"2119","cat":1,"desc":"Liquified Gas Bottling/ Recovery Plants","rate":0.8},
   {"sec":"IV","code":"2118","cat":1,"desc":"Lithographic presses","rate":1.06},
+  {"sec":"IV","code":"2119","cat":1,"desc":"Liquified Gas Bottling/ Recovery Plants","rate":0.8},
   {"sec":"IV","code":"2120","cat":1,"desc":"Malt Extraction Plants","rate":0.82},
   {"sec":"IV","code":"2121","cat":1,"desc":"Man-made Fibre Manufacturing (using Cellulose)","rate":0.43},
   {"sec":"IV","code":"2122","cat":1,"desc":"Man-made Fibre Manufacturing Plant (Others)","rate":0.62},
   {"sec":"IV","code":"2123","cat":4,"desc":"Manure Blending works","rate":0.84},
   {"sec":"IV","code":"2124","cat":1,"desc":"Match Factories","rate":2.85},
   {"sec":"IV","code":"2125","cat":1,"desc":"Mattress and Pillow making","rate":3.55},
-  {"sec":"IV","code":"2128","cat":1,"desc":"Metal/Tin printers","rate":1.81},
-  {"sec":"IV","code":"2127","cat":1,"desc":"Metallising Works (others)","rate":0.87},
   {"sec":"IV","code":"2126","cat":1,"desc":"Metallizing works ( involving metals only)","rate":0.52},
+  {"sec":"IV","code":"2127","cat":1,"desc":"Metallising Works (others)","rate":0.87},
+  {"sec":"IV","code":"2128","cat":1,"desc":"Metal/Tin printers","rate":1.81},
   {"sec":"IV","code":"2129","cat":1,"desc":"Mica Products Manufacturing","rate":0.9},
   {"sec":"IV","code":"2130","cat":2,"desc":"Mineral Oil blending and processing","rate":0.66},
   {"sec":"IV","code":"2131","cat":1,"desc":"Mosaic Factories","rate":0.71},
-  {"sec":"IV","code":"2229","cat":1,"desc":"Multiplex Theatre Complexes","rate":0.69},
   {"sec":"IV","code":"2132","cat":3,"desc":"Mushroom Growing Premises (Excluding Crops)","rate":0.68},
   {"sec":"IV","code":"2133","cat":1,"desc":"Nitro Cellulose Manufacturing- Industrial Grade","rate":11.12},
   {"sec":"IV","code":"2134","cat":4,"desc":"Non-woven fabric Manufacturing","rate":2.17},
-  {"sec":"IV","code":"2139","cat":1,"desc":"Oil and Leather Cloth Factories","rate":1.83},
-  {"sec":"IV","code":"2136","cat":1,"desc":"Oil Distillation Plants (essential)","rate":1.44},
   {"sec":"IV","code":"2135","cat":1,"desc":"Oil Extraction","rate":1.66},
+  {"sec":"IV","code":"2136","cat":1,"desc":"Oil Distillation Plants (essential)","rate":1.44},
   {"sec":"IV","code":"2137","cat":4,"desc":"Oil Mills refining ( Veg/Animal)","rate":1.19},
   {"sec":"IV","code":"2138","cat":1,"desc":"Oil Mills (Vegetable)","rate":1.11},
+  {"sec":"IV","code":"2139","cat":1,"desc":"Oil and Leather Cloth Factories","rate":1.83},
   {"sec":"IV","code":"2140","cat":1,"desc":"Paint factories (Water based)","rate":0.99},
   {"sec":"IV","code":"2141","cat":3,"desc":"Paint (others) & Varnish Factories","rate":2.18},
   {"sec":"IV","code":"2142","cat":4,"desc":"Paints - Nitrocellulose based","rate":2.65},
@@ -1086,11 +1073,10 @@ const bsusRateSchedule = [
   {"sec":"IV","code":"2150","cat":2,"desc":"Polyester Film Manufacturing / BOPP Film Manufacturing","rate":0.8},
   {"sec":"IV","code":"2151","cat":1,"desc":"Port Premises including jetties and equipment thereon And other port facilities","rate":0.36},
   {"sec":"IV","code":"2152","cat":1,"desc":"Poultry Farms (Excluding birds therein)","rate":0.59},
-  {"sec":"IV","code":"2155","cat":1,"desc":"Presses for carpets, rugs and tobacco","rate":2.6},
   {"sec":"IV","code":"2153","cat":1,"desc":"Presses for coir fibres/waste/Grass/fodder/boosa/Jute","rate":5.89},
   {"sec":"IV","code":"2154","cat":1,"desc":"Presses for coir yarn / cotton/senna leaves","rate":2.86},
+  {"sec":"IV","code":"2155","cat":1,"desc":"Presses for carpets, rugs and tobacco","rate":2.6},
   {"sec":"IV","code":"2156","cat":1,"desc":"Presses for hides and skins","rate":1.36},
-  {"sec":"IV","cat":4,"desc":"Printing Ink Manufacturing / Roller composition factories","rate":1.88},
   {"sec":"IV","code":"2158","cat":1,"desc":"Printing Press","rate":1.18},
   {"sec":"IV","code":"2159","cat":1,"desc":"Pulverising Plants(Metals and non-hazardous goods)","rate":0.47},
   {"sec":"IV","code":"2160","cat":1,"desc":"Pulverizing Plants (Others)","rate":1.36},
@@ -1105,7 +1091,6 @@ const bsusRateSchedule = [
   {"sec":"IV","code":"2169","cat":1,"desc":"Saw Mills (including Timber Merchants premises where sawing is done).","rate":3.07},
   {"sec":"IV","code":"2170","cat":1,"desc":"Sea Food / Meat Processing","rate":1.01},
   {"sec":"IV","code":"2171","cat":4,"desc":"Silk Mills / Spun Silk Mills","rate":0.95},
-  {"sec":"IV","code":"2230","cat":1,"desc":"Shopping Malls (other than multiplexes)","rate":0.49},
   {"sec":"IV","code":"2172","cat":1,"desc":"Snuff Manufacturing","rate":0.93},
   {"sec":"IV","code":"2173","cat":4,"desc":"Soap Manufacturing","rate":1.09},
   {"sec":"IV","code":"2174","cat":1,"desc":"Sponge Iron Plants","rate":1.02},
@@ -1122,27 +1107,41 @@ const bsusRateSchedule = [
   {"sec":"IV","code":"2187","cat":4,"desc":"Tea Factories","rate":1.07},
   {"sec":"IV","code":"2188","cat":1,"desc":"Telephone Exchanges","rate":1.64},
   {"sec":"IV","code":"2189","cat":3,"desc":"Textile Mills - Spinning Mills","rate":1.16},
-  {"sec":"IV","code":"2211","cat":1,"desc":"Textile Mills- Composite Mills","rate":1.62},
   {"sec":"IV","code":"2190","cat":1,"desc":"Tile & Pottery works","rate":0.76},
   {"sec":"IV","code":"2191","cat":3,"desc":"Tiny sector Industries with values at risk not exceeding Rs 10 lakhs","rate":0.78},
   {"sec":"IV","code":"2192","cat":1,"desc":"Tissue Culture Premises (Excluding Crops)","rate":0.83},
   {"sec":"IV","code":"2193","cat":2,"desc":"Tobacco Curing / Redrying Factories","rate":1.15},
   {"sec":"IV","code":"2194","cat":3,"desc":"Tobacco grinding/ crushing Manufacturing","rate":1.01},
   {"sec":"IV","code":"2195","cat":1,"desc":"Turpentine and rosin distilleries","rate":3.34},
-  {"sec":"IV","code":"2197","cat":1,"desc":"Tyre Retreading and Resoling factories","rate":1.75},
   {"sec":"IV","code":"2196","cat":1,"desc":"Tyres and Tubes Manufacturing","rate":0.83},
+  {"sec":"IV","code":"2197","cat":1,"desc":"Tyre Retreading and Resoling factories","rate":1.75},
   {"sec":"IV","code":"2198","cat":1,"desc":"Umbrella Assembly factories","rate":0.85},
   {"sec":"IV","code":"2199","cat":1,"desc":"Velvet Cloth Manufacturing","rate":1.66},
   {"sec":"IV","code":"2200","cat":1,"desc":"Vermicelli factories","rate":0.65},
-  {"sec":"IV","code":"2201","cat":1,"desc":"Weigh Bridges","rate":0.90},
+  {"sec":"IV","code":"2201","cat":1,"desc":"Weigh Bridges","rate":0.9},
   {"sec":"IV","code":"2202","cat":2,"desc":"Weaving Mills","rate":1.04},
   {"sec":"IV","code":"2203","cat":1,"desc":"Wheat Threshers","rate":4.58},
   {"sec":"IV","code":"2204","cat":1,"desc":"Wood seasoning/treatment/ impregnation","rate":1.12},
   {"sec":"IV","code":"2205","cat":1,"desc":"Wool cleaning and pressing factories","rate":1.18},
   {"sec":"IV","code":"2206","cat":1,"desc":"Woollen Mills/Fur garments & accessories","rate":1.31},
   {"sec":"IV","code":"2207","cat":4,"desc":"Yarn Processing","rate":1.19},
-  {"sec":"IV","code":"2208","cat":1,"desc":"Zip fasteners Manufacturing","rate":1.30},
+  {"sec":"IV","code":"2208","cat":1,"desc":"Zip fasteners Manufacturing","rate":1.3},
+  {"sec":"IV","code":"2209","cat":1,"desc":"Contractors Plant and Machinery anywhere in India (at specified locations)","rate":0.88},
+  {"sec":"IV","code":"2210","cat":1,"desc":"Electric Generation Stations- Others","rate":0.62},
+  {"sec":"IV","code":"2211","cat":1,"desc":"Textile Mills- Composite Mills","rate":1.62},
+  {"sec":"IV","code":"2212","cat":1,"desc":"Automobile Filter Manufacturing","rate":1.18},
   {"sec":"IV","code":"2216","cat":3,"desc":"Plastic Goods Manufacturing(excluding Foam Plastics)/ II. Using Plastic raw materials having calorific value of above 15000 btu/lb polyethylene, Polypropylene, Prolystyrene, Polyalphamethylstyrene, Acrylonitrilebutadiene-styrene, Polybutylene.","rate":1.54},
+  {"sec":"IV","code":"2217","cat":1,"desc":"Electric Generation Stations- Thermal Power Stations","rate":0.39},
+  {"sec":"IV","code":"2218","cat":1,"desc":"Electric Generation Stations- Solar Power Stations","rate":0.62},
+  {"sec":"IV","code":"2219","cat":1,"desc":"Electric Generation Stations- Windmill","rate":0.72},
+  {"sec":"IV","code":"2221","cat":1,"desc":"Electric Generation Stations- Biomass Power Stations","rate":0.66},
+  {"sec":"IV","code":"2222","cat":1,"desc":"Engineering Workshop- Steel Plants","rate":0.44},
+  {"sec":"IV","code":"2224","cat":4,"desc":"Engineering Workshop-Pipe Extruding, Stamping, Pressing, Forging Mills, Metal smelting, Foundries, Galvanising works","rate":0.44},
+  {"sec":"IV","code":"2225","cat":1,"desc":"Engineering Workshop-Metal Extraction, Ore processing (other than Aluminium, Copper, Zinc), Plant processing Raw sand into silica","rate":0.79},
+  {"sec":"IV","code":"2227","cat":1,"desc":"Engineering Workshop- Clock/Watch Manufacturing","rate":1.63},
+  {"sec":"IV","code":"2229","cat":1,"desc":"Multiplex Theatre Complexes","rate":0.69},
+  {"sec":"IV","code":"2230","cat":1,"desc":"Shopping Malls (other than multiplexes)","rate":0.49},
+  {"sec":"IV","code":"2231","cat":1,"desc":"Disposable Diaper manufacturing","rate":1.18},
   {"sec":"V","code":"3001","cat":1,"desc":"Analytical / Quality Control Laboratories","rate":0.6},
   {"sec":"V","code":"3002","cat":1,"desc":"Boiler House","rate":0.41},
   {"sec":"V","code":"3003","cat":1,"desc":"Dams","rate":0.35},
@@ -1164,16 +1163,16 @@ const bsusRateSchedule = [
   {"sec":"V","code":"3019","cat":1,"desc":"Electric Crematoriums","rate":0.6},
   {"sec":"VI","code":"4001","cat":1,"desc":"Storage of Non-hazardous goods(Godowns & Silos) subject to warranty that hazardous goods of Category I, II, III , Coir waste, Coir fibre and Caddies are not stored therein.","rate":0.55},
   {"sec":"VI","code":"4002","cat":1,"desc":"Storage of Category I hazardous Goods (Godowns & Silos) subject to warranty that goods listed in Category II, III, Coir waste, Coir fibre and Caddies are not stored therein.","rate":1.12},
-  {"sec":"VI","code":"4012","cat":2,"desc":"Storage of Non-hazardous goods(open) subject to warranty that hazardous goods of Category I, II, III , Coir waste, Coir fibre and Caddies are not stored therein.","rate":1.94},
-  {"sec":"VI","code":"4013","cat":1,"desc":"Storage of Category I hazardous Goods(open) subject to warranty that goods listed in Category II, III, Coir waste, Coir fibre and Caddies are not stored therein.","rate":2.16},
   {"sec":"VI","code":"4003","cat":1,"desc":"Storage of hazardous Goods listed in Category II(Godowns & Silos) subject to warranty that goods listed in Category III, Coir waste, Coir fibre and Caddies are not stored therein.","rate":2.49},
-  {"sec":"VI","code":"4014","cat":1,"desc":"Storage of hazardous Goods listed in Category II(open) subject to warranty that goods listed in Category III, Coir waste, Coir fibre and Caddies are not stored therein.","rate":5.33},
-  {"sec":"VI","code":"4015","cat":4,"desc":"Storage of hazardous Goods listed in Category III (open) subject to warranty that Coir waste, Coir fibre and , Caddies are not stored therein.","rate":5.0},
   {"sec":"VI","code":"4004","cat":1,"desc":"Storage of hazardous Goods listed in Category III(Godowns & Silos) subject to warranty that Coir waste, Coir fibre and , Caddies are not stored therein.","rate":3.72},
   {"sec":"VI","code":"4005","cat":1,"desc":"Transporter’s godowns (Godowns & Silos)& Godowns of clearing and forwarding agents.","rate":0.86},
-  {"sec":"VI","code":"4016","cat":1,"desc":"Transporter’s godowns(open) & Godowns of clearing and forwarding agents.","rate":0.8},
   {"sec":"VI","code":"4006","cat":1,"desc":"Storage of Coir Waste(Godowns & Silos) ,Coir Fibre, Caddies","rate":5.12},
   {"sec":"VI","code":"4007","cat":1,"desc":"Cold Storage premises","rate":1.28},
+  {"sec":"VI","code":"4012","cat":2,"desc":"Storage of Non-hazardous goods(open) subject to warranty that hazardous goods of Category I, II, III , Coir waste, Coir fibre and Caddies are not stored therein.","rate":1.94},
+  {"sec":"VI","code":"4013","cat":1,"desc":"Storage of Category I hazardous Goods(open) subject to warranty that goods listed in Category II, III, Coir waste, Coir fibre and Caddies are not stored therein.","rate":2.16},
+  {"sec":"VI","code":"4014","cat":1,"desc":"Storage of hazardous Goods listed in Category II(open) subject to warranty that goods listed in Category III, Coir waste, Coir fibre and Caddies are not stored therein.","rate":5.33},
+  {"sec":"VI","code":"4015","cat":4,"desc":"Storage of hazardous Goods listed in Category III (open) subject to warranty that Coir waste, Coir fibre and , Caddies are not stored therein.","rate":5.0},
+  {"sec":"VI","code":"4016","cat":1,"desc":"Transporter’s godowns(open) & Godowns of clearing and forwarding agents.","rate":0.8},
   {"sec":"VI","code":"4017","cat":1,"desc":"Storage of Coir Waste(open) ,Coir Fibre, Caddies","rate":11.86},
   {"sec":"VI","code":"4018","cat":1,"desc":"Bus Terminus","rate":3.12},
   {"sec":"VI","code":"4019","cat":1,"desc":"Vehicles stored in open including Tractors","rate":1.97},
@@ -1185,16 +1184,16 @@ const bsusRateSchedule = [
 ];
 
 const standardRates = [
-  {"sec": "III", "code": "1002", "cat": "1.0", "ho": "", "dec": "", "desc": "Places of worship", "bsus": 0.14, "blus": 0.12, "sfsp": 0.12},
-  {"sec": "III", "code": "1003", "cat": "1.0", "ho": "", "dec": "", "desc": "Libraries", "bsus": 0.21, "blus": 0.21, "sfsp": 0.21},
-  {"sec": "III", "code": "1004", "cat": "1.0", "ho": "", "dec": "", "desc": "Museums", "bsus": 0.25, "blus": 0.23, "sfsp": 0.23},
-  {"sec": "III", "code": "1005", "cat": "1.0", "ho": "", "dec": "", "desc": "Schools/Colleges", "bsus": 0.22, "blus": 0.2, "sfsp": 0.2},
-  {"sec": "III", "code": "1006", "cat": "1.0", "ho": "", "dec": "", "desc": "Hospitals including X-ray and other diagnostic clinics", "bsus": 0.28, "blus": 0.23, "sfsp": 0.23},
-  {"sec": "III", "code": "1007", "cat": "1.0", "ho": "", "dec": "", "desc": "Office premises / Meeting rooms", "bsus": 0.3, "blus": 0.25, "sfsp": 0.25},
-  {"sec": "IV", "code": "2001", "cat": "3.0", "ho": "", "dec": "", "desc": "Abrasive Manufacturing", "bsus": 0.82, "blus": 0.69, "sfsp": 0.69},
-  {"sec": "IV", "code": "2002", "cat": "2.0", "ho": "", "dec": "", "desc": "Aerated Water Factories", "bsus": 0.59, "blus": 0.62, "sfsp": 0.62},
-  {"sec": "VI", "code": "4001", "cat": "2.0", "ho": "", "dec": "", "desc": "Storage of Non-hazardous goods (Godowns & Silos)", "bsus": 0.55, "blus": 0.46, "sfsp": 0.46},
-  {"sec": "VII", "code": "4011", "cat": "2.0", "ho": "", "dec": "", "desc": "Tanks (others)", "bsus": 0.59, "blus": 0.67, "sfsp": 0.67}
+    {"sec": "III", "code": "1002", "cat": "1.0", "ho": "", "dec": "", "desc": "Places of worship", "bsus": 0.14, "blus": 0.12, "sfsp": 0.12},
+    {"sec": "III", "code": "1003", "cat": "1.0", "ho": "", "dec": "", "desc": "Libraries", "bsus": 0.21, "blus": 0.21, "sfsp": 0.21},
+    {"sec": "III", "code": "1004", "cat": "1.0", "ho": "", "dec": "", "desc": "Museums", "bsus": 0.25, "blus": 0.23, "sfsp": 0.23},
+    {"sec": "III", "code": "1005", "cat": "1.0", "ho": "", "dec": "", "desc": "Schools/Colleges", "bsus": 0.22, "blus": 0.2, "sfsp": 0.2},
+    {"sec": "III", "code": "1006", "cat": "1.0", "ho": "", "dec": "", "desc": "Hospitals including X-ray and other diagnostic clinics", "bsus": 0.28, "blus": 0.23, "sfsp": 0.23},
+    {"sec": "III", "code": "1007", "cat": "1.0", "ho": "", "dec": "", "desc": "Office premises / Meeting rooms", "bsus": 0.3, "blus": 0.25, "sfsp": 0.25},
+    {"sec": "IV", "code": "2001", "cat": "3.0", "ho": "", "dec": "", "desc": "Abrasive Manufacturing", "bsus": 0.82, "blus": 0.69, "sfsp": 0.69},
+    {"sec": "IV", "code": "2002", "cat": "2.0", "ho": "", "dec": "", "desc": "Aerated Water Factories", "bsus": 0.59, "blus": 0.62, "sfsp": 0.62},
+    {"sec": "VI", "code": "4001", "cat": "2.0", "ho": "", "dec": "", "desc": "Storage of Non-hazardous goods (Godowns & Silos)", "bsus": 0.55, "blus": 0.46, "sfsp": 0.46},
+    {"sec": "VII", "code": "4011", "cat": "2.0", "ho": "", "dec": "", "desc": "Tanks (others)", "bsus": 0.59, "blus": 0.67, "sfsp": 0.67}
 ];
 
 // Survey modifier configuration keys mapping matrix
@@ -1252,7 +1251,8 @@ function filterBsusAutocomplete(val) {
             count++;
             const div = document.createElement('div');
             div.className = 'autocomplete-item';
-            div.innerHTML = `<strong>[Sec ${item.sec} | Code ${item.code} | Cat ${item.cat}]</strong> ${item.desc}`;
+            // Explicitly bringing the occupancy description, risk code, and base flexa rate to the search layout format
+            div.innerHTML = `<strong>[Code ${item.code}]</strong> ${item.desc} — <span style="color: var(--primary); font-weight: 600;">Rate: ${item.rate.toFixed(3)}‰</span>`;
             div.addEventListener('mousedown', (e) => {
                 e.preventDefault();
                 selectBsusOccupancy(index);
@@ -1523,7 +1523,6 @@ function runCalculation() {
             else if (chosenZone === "ZONE_III") baseUnadjustedEq = 0.10;
             else if (chosenZone === "ZONE_IV") baseUnadjustedEq = 0.05;
         } else {
-            // Sections IV, V, VI, VII
             if (chosenZone === "ZONE_I") baseUnadjustedEq = 0.50;
             else if (chosenZone === "ZONE_II") baseUnadjustedEq = 0.25;
             else if (chosenZone === "ZONE_III") baseUnadjustedEq = 0.10;
@@ -1541,7 +1540,7 @@ function runCalculation() {
         document.getElementById('br_prem_8').innerText = prem8.toFixed(2);
 
         // Row 9: C ADJUSTED STFI RATE
-        let baseUnadjustedStfi = 0.25; // Default reference baseline mapping factor
+        let baseUnadjustedStfi = 0.25;
         if (section === "III") baseUnadjustedStfi = 0.15;
         else if (section === "IV") baseUnadjustedStfi = 0.25;
         else if (section === "V") baseUnadjustedStfi = 0.25;
@@ -1615,6 +1614,7 @@ function runCalculation() {
     // STANDARD PIPELINE SEQUENCE (BGR, BLUS, SFSP)
     // ==========================================
     let basicPrem = 0;
+    let basicRateText = "0.00";
     if (selectedPolicyType === 'BGR') {
         const perMilleRate = parseFloat(document.getElementById('bgrRateOption').value);
         basicPrem = M * perMilleRate;
@@ -1788,6 +1788,11 @@ document.getElementById('bsus_eq_zone_select').addEventListener('change', runCal
 document.getElementById('bsus_discount_pct_input').addEventListener('input', runCalculation);
 document.getElementById('construction').addEventListener('change', runCalculation);
 document.getElementById('floaterToggle').addEventListener('change', runCalculation);
+
+// Realtime listeners for all asset breakup modifications to ensure dynamic responsiveness
+document.querySelectorAll('.si-input').forEach(input => {
+    input.addEventListener('input', calculateAggregateSumInsured);
+});
 
 document.addEventListener('click', function(e) {
     if (!e.target.closest('.search-container')) {
