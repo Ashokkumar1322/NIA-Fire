@@ -345,7 +345,7 @@
             background-color: #c2410c;
         }
 
-        /* Revamped BSUS Layout Elements */
+        /* Revamped BSUS Styles Grid Wrapper Panels */
         .bsus-worksheet-panel {
             background-color: #ffffff;
             border: 2px solid var(--primary);
@@ -488,7 +488,7 @@
                 <input type="number" id="sumInsured" readonly style="background-color: #f1f5f9; font-weight: bold; color: #0f172a;" value="10000000">
             </div>
 
-            <!-- REQUIRED PLACEMENT: 2. Enter Rate Manually Dropdown Box directly below Total Sum Insured row -->
+            <!-- EXPLICIT PLACEMENT FIX: 2. Enter Rate Manually Dropdown Box directly below Total Sum Insured row -->
             <div class="form-group id-commercial distinct-label hidden" id="manualRateOptionContainer">
                 <label for="enterRateManuallyToggle">2. Enter Rate Manually?</label>
                 <select id="enterRateManuallyToggle">
@@ -527,7 +527,7 @@
 
             <!-- UNIFIED SINGLE SEARCH REPOSITORY LOOKUP AUTOCOMPLETE FORM GROUP -->
             <div class="form-group id-commercial distinct-label hidden" id="occupancyContainer">
-                <label for="occupancySearch">3. Occupancy / Risk Selection (Search Matrix Indices)</label>
+                <label for="occupancySearch">3. Occupancy / Risk Selection (Search Table Records)</label>
                 <div class="search-container">
                     <input type="text" id="occupancySearch" placeholder="Type description or risk code (e.g. 1002, Libraries)..." autocomplete="off" style="border: 1px solid var(--primary);">
                     <div id="autocompleteResultsList" class="autocomplete-results hidden"></div>
@@ -545,7 +545,7 @@
                         <span id="meta-code" class="meta-value">-</span>
                     </div>
                     <div class="meta-item">
-                        <span class="meta-label">Category</span>
+                        <span class="meta-label">Category Index</span>
                         <span id="meta-category" class="meta-value" style="color: var(--accent);">-</span>
                     </div>
                     <div class="meta-item">
@@ -558,7 +558,7 @@
             <!-- BSUS EXCLUSIVE SPREADSHEET MATRIX WORKING AREA -->
             <div id="bsusRevampedSection" class="hidden">
                 <div class="bsus-worksheet-panel">
-                    <h3 style="color: var(--primary); font-size: 1.1rem; border-bottom: 2px dashed var(--primary); padding-bottom: 5px; margin-bottom: 12px;">BSUS Internal Rating Matrix</h3>
+                    <h3 style="color: var(--primary); font-size: 1.1rem; border-bottom: 2px dashed var(--primary); padding-bottom: 5px; margin-bottom: 12px;">BSUS Internal Rating Matrix Calculations</h3>
                     <table class="bsus-table-layout">
                         <thead>
                             <tr>
@@ -684,6 +684,18 @@
                     <option value="no">No (Single Location Policy)</option>
                     <option value="yes">Yes, Apply Floater Loading (+10% on Stock-Floating S.I. only)</option>
                 </select>
+            </div>
+
+            <!-- Side Head 5 -->
+            <div class="form-group distinct-label">
+                <label for="construction">5. Construction Type</label>
+                <select id="construction">
+                    <option value="pucca">Pucca (RCC / First Class Construction)</option>
+                    <option value="kutcha">Kutcha (See definition below)</option>
+                </select>
+                <span id="kutchaHelpText" class="help-text hidden">
+                    <strong>Kutcha Definition:</strong> Building(s) having walls and/or roofs of wooden planks / thatched leaves and/or grass / hay of any kind / bamboo / plastic cloth / asphalt cloth / canvas / tarpaulin.
+                </span>
             </div>
 
             <div id="standardCommercialControlsContainer2">
