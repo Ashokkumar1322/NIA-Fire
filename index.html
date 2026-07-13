@@ -344,6 +344,70 @@
         .btn-pdf:hover {
             background-color: #c2410c;
         }
+
+        /* Revamped BSUS Styles Grid Wrapper Panels */
+        .bsus-worksheet-panel {
+            background-color: #ffffff;
+            border: 1px solid var(--distinct-border);
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 15px;
+            margin-bottom: 20px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .bsus-table-layout {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.82rem;
+            margin-bottom: 20px;
+        }
+
+        .bsus-table-layout th, .bsus-table-layout td {
+            padding: 8px 10px;
+            border: 1px solid var(--border);
+        }
+
+        .bsus-table-layout th {
+            background-color: #f1f5f9;
+            color: #334155;
+            font-weight: bold;
+        }
+
+        .bsus-row-heading {
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .bsus-input-field {
+            width: 90px;
+            padding: 5px 8px;
+            border: 1px solid var(--distinct-border);
+            border-radius: 4px;
+            text-align: right;
+            font-size: 0.82rem;
+        }
+
+        .bsus-select-field {
+            width: 100%;
+            padding: 5px 8px;
+            border: 1px solid var(--distinct-border);
+            border-radius: 4px;
+            font-size: 0.82rem;
+            background-color: #fff;
+        }
+
+        .bsus-highlight-row {
+            background-color: #f8fafc;
+            font-weight: bold;
+        }
+
+        .bsus-final-row {
+            background-color: #ecfdf5;
+            font-weight: bold;
+            color: #065f46;
+            border: 1.5px solid #a7f3d0;
+        }
     </style>
 </head>
 <body>
@@ -424,67 +488,200 @@
                 <input type="number" id="sumInsured" readonly style="background-color: #f1f5f9; font-weight: bold; color: #0f172a;" value="10000000">
             </div>
 
-            <!-- BGR Rate Options Dropdown (Visible ONLY for BGR) -->
-            <div class="form-group" id="bgrRateContainer">
-                <label for="bgrRateOption">BGR Basic Rate Option</label>
-                <select id="bgrRateOption">
-                    <option value="0.06">Without terrorism @ 0.06 per mille (Incl of EQ, STFI)</option>
-                    <option value="0.11" selected>With terrorism @ 0.11 per mille (Incl of EQ, STFI)</option>
-                </select>
-            </div>
+            <!-- DYNAMIC REVAMPED BLOCK: NEW BSUS EXCLUSIVE SPREADSHEET WORKING MATRIX -->
+            <div id="bsusRevampedSection" class="hidden">
+                <div class="bsus-worksheet-panel">
+                    <h3 style="color: var(--primary); font-size: 1.1rem; border-bottom: 2px dashed var(--primary); padding-bottom: 5px; margin-bottom: 12px;">BSUS Core Rating Matrix</h3>
+                    <table class="bsus-table-layout">
+                        <thead>
+                            <tr>
+                                <th>LINE ITEM DESCRIPTION</th>
+                                <th style="width: 110px; text-align: right;">RATE</th>
+                                <th style="width: 140px; text-align: right;">PREMIUM (₹)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="bsus-row-heading">FLEXA RATE</td>
+                                <td style="text-align: right;"><input type="number" id="bsus_flexa_rate" class="bsus-input-field" step="0.001" value="0.000"></td>
+                                <td id="bsus_prem_1" class="text-right">0.00</td>
+                            </tr>
+                            <tr>
+                                <td class="bsus-row-heading">ADJUSTED FLEXA RATE DISC/LOAD</td>
+                                <td style="text-align: right;"><input type="number" id="bsus_flexa_mod" class="bsus-input-field" step="0.01" value="0"> %</td>
+                                <td id="bsus_prem_2" class="text-right">0.00</td>
+                            </tr>
+                            <tr class="bsus-highlight-row">
+                                <td>NET TOTAL</td>
+                                <td id="bsus_rate_3" class="text-right">0.000</td>
+                                <td id="bsus_prem_3" class="text-right">0.00</td>
+                            </tr>
+                            <tr>
+                                <td class="bsus-row-heading">KUTCHA ADD 4 PER MILLE</td>
+                                <td id="bsus_rate_4" class="text-right">0.000</td>
+                                <td id="bsus_prem_4" class="text-right">0.00</td>
+                            </tr>
+                            <tr class="bsus-highlight-row">
+                                <td>TOTAL</td>
+                                <td id="bsus_rate_5" class="text-right">0.000</td>
+                                <td id="bsus_prem_5" class="text-right">0.00</td>
+                            </tr>
+                            <tr>
+                                <td class="bsus-row-heading">GOOD / BAD FEATURES DISC / LOAD</td>
+                                <td id="bsus_rate_6_pct" class="text-right">0.00 %</td>
+                                <td id="bsus_prem_6" class="text-right">0.00</td>
+                            </tr>
+                            <tr class="bsus-highlight-row" style="background-color: #f1f5f9;">
+                                <td>A NET TOTAL</td>
+                                <td id="bsus_rate_7" class="text-right">0.000</td>
+                                <td id="bsus_prem_7" class="text-right">0.00</td>
+                            </tr>
+                            <tr>
+                                <td class="bsus-row-heading">B ADJUSTED EQ RATE</td>
+                                <td style="text-align: right;">
+                                    <select id="bsus_eq_select" class="bsus-select-field">
+                                        <option value="0">Exclude EQ</option>
+                                        <option value="0.05">Zone I @ 0.05</option>
+                                        <option value="0.10">Zone II @ 0.10</option>
+                                        <option value="0.25">Zone III @ 0.25</option>
+                                        <option value="0.50" selected>Zone IV @ 0.50</option>
+                                    </select>
+                                </td>
+                                <td id="bsus_prem_8" class="text-right">0.00</td>
+                            </tr>
+                            <tr>
+                                <td class="bsus-row-heading">C ADJUSTED STFI RATE</td>
+                                <td style="text-align: right;">
+                                    <select id="bsus_stfi_select" class="bsus-select-field">
+                                        <option value="0">Exclude STFI</option>
+                                        <option value="0.22">Non-Ind @ 0.22</option>
+                                        <option value="0.37" selected>General @ 0.37</option>
+                                        <option value="0.52">Closed @ 0.52</option>
+                                        <option value="2.25">Open @ 2.25</option>
+                                    </select>
+                                </td>
+                                <td id="bsus_prem_9" class="text-right">0.00</td>
+                            </tr>
+                            <tr>
+                                <td class="bsus-row-heading">D TERRORISM</td>
+                                <td style="text-align: right;">
+                                    <select id="bsus_terr_select" class="bsus-select-field">
+                                        <option value="0">Exclude</option>
+                                        <option value="0.13">Non-Ind @ 0.13</option>
+                                        <option value="0.21" selected>Ind @ 0.21</option>
+                                    </select>
+                                </td>
+                                <td id="bsus_prem_10" class="text-right">0.00</td>
+                            </tr>
+                            <tr class="bsus-highlight-row" style="background-color: #f1f5f9;">
+                                <td>TOTAL A + B + C + D</td>
+                                <td id="bsus_rate_11" class="text-right">0.000</td>
+                                <td id="bsus_prem_11" class="text-right">0.00</td>
+                            </tr>
+                            <tr>
+                                <td class="bsus-row-heading">DISCRETIONARY DISCOUNT Max 10%</td>
+                                <td style="text-align: right;"><input type="number" id="bsus_disc_max10" class="bsus-input-field" min="0" max="10" step="0.01" value="0"> %</td>
+                                <td id="bsus_prem_12" class="text-right">0.00</td>
+                            </tr>
+                            <tr class="bsus-highlight-row" style="background-color: #e0f2fe;">
+                                <td>NET AMOUNT</td>
+                                <td id="bsus_rate_13" class="text-right">0.000</td>
+                                <td id="bsus_prem_13" class="text-right">0.00</td>
+                            </tr>
+                            <tr>
+                                <td class="bsus-row-heading">FLOATER EXTRA 10%</td>
+                                <td id="bsus_rate_14" class="text-right">0.000</td>
+                                <td id="bsus_prem_14" class="text-right">0.00</td>
+                            </tr>
+                            <tr class="bsus-final-row">
+                                <td>FINAL NET RATE</td>
+                                <td id="bsus_rate_15" class="text-right">0.000</td>
+                                <td id="bsus_prem_15" class="text-right">0.00</td>
+                            </tr>
+                        </tbody>
+                    </table>
 
-            <!-- Side Head 2 -->
-            <div class="form-group id-commercial distinct-label hidden" id="manualRateOptionContainer">
-                <label for="enterRateManuallyToggle">2. Enter Rate Manually?</label>
-                <select id="enterRateManuallyToggle">
-                    <option value="no" selected>No (Use Excel Occupancy Table)</option>
-                    <option value="yes">Yes (Manual Entry Overrides Table)</option>
-                </select>
-            </div>
-
-            <div class="form-group hidden" id="manualRateInputContainer">
-                <label for="manualRateValue">Custom Basic Rate (per mille)</label>
-                <input type="number" id="manualRateValue" placeholder="e.g. 0.75" step="0.001" value="">
-            </div>
-
-            <!-- Side Head 3 -->
-            <div class="form-group id-commercial distinct-label hidden" id="occupancyContainer">
-                <label for="occupancySearch">3. Occupancy / Risk Selection (Search by Code or Keyword)</label>
-                <div class="search-container">
-                    <input type="text" id="occupancySearch" placeholder="Type code or risk description (e.g. 2140, Paint factories)..." autocomplete="off">
-                    <div id="autocompleteResultsList" class="autocomplete-results hidden"></div>
+                    <h3 style="color: #b45309; font-size: 1rem; border-bottom: 2px dashed #b45309; padding-bottom: 4px; margin-top: 20px; margin-bottom: 10px;">GOOD / BAD FEATURES SURVEY</h3>
+                    <table class="bsus-table-layout" style="font-size: 0.78rem;">
+                        <thead>
+                            <tr style="background-color: #fef3c7;">
+                                <th style="width: 40px; text-align: center;">Sl</th>
+                                <th>GOOD / BAD FEATURES CLASS CONFIGURATION</th>
+                                <th style="width: 90px; text-align: center;">STATUS</th>
+                                <th style="width: 100px; text-align: right;">DISC/LOAD %</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bsusFeaturesTbody">
+                            <!-- Rows 1 to 9 mapped directly from visual attachment spec sheet -->
+                        </tbody>
+                    </table>
                 </div>
-                
-                <input type="hidden" id="selectedOccupancyIndex" value="">
-
-                <!-- Metadata Display Box -->
-                <div id="metaBox" class="meta-container hidden">
-                    <div class="meta-item">
-                        <span class="meta-label">Section</span>
-                        <span id="meta-section" class="meta-value">-</span>
-                    </div>
-                    <div class="meta-item">
-                        <span class="meta-label">Risk Code</span>
-                        <span id="meta-code" class="meta-value">-</span>
-                    </div>
-                    <div class="meta-item">
-                        <span class="meta-label">Category</span>
-                        <span id="meta-category" class="meta-value">-</span>
-                    </div>
-                    <div class="meta-item">
-                        <span class="meta-label">Special Conditions / Approvals</span>
-                        <div id="meta-conditions">-</div>
-                    </div>
-                </div>
             </div>
 
-            <!-- Side Head 4 -->
-            <div class="form-group id-commercial distinct-label hidden" id="floaterContainer">
-                <label for="floaterToggle">4. Floater Policy Option</label>
-                <select id="floaterToggle">
-                    <option value="no">No (Single Location Policy)</option>
-                    <option value="yes">Yes, Apply Floater Loading (+10% on Stock-Floating S.I. only)</option>
-                </select>
+            <!-- STANDARD COPIED SYSTEM SIDE CONTROLS CONFIGURATIONS (GRID ITEMS 2 TO 10 COPIED IN CONTAINER BLOCK FOR CONDITIONAL HIDING) -->
+            <div id="standardCommercialControlsContainer">
+                <!-- BGR Rate Options Dropdown (Visible ONLY for BGR) -->
+                <div class="form-group" id="bgrRateContainer">
+                    <label for="bgrRateOption">BGR Basic Rate Option</label>
+                    <select id="bgrRateOption">
+                        <option value="0.06">Without terrorism @ 0.06 per mille (Incl of EQ, STFI)</option>
+                        <option value="0.11" selected>With terrorism @ 0.11 per mille (Incl of EQ, STFI)</option>
+                    </select>
+                </div>
+
+                <!-- Side Head 2 -->
+                <div class="form-group id-commercial distinct-label hidden" id="manualRateOptionContainer">
+                    <label for="enterRateManuallyToggle">2. Enter Rate Manually?</label>
+                    <select id="enterRateManuallyToggle">
+                        <option value="no" selected>No (Use Excel Occupancy Table)</option>
+                        <option value="yes">Yes (Manual Entry Overrides Table)</option>
+                    </select>
+                </div>
+
+                <div class="form-group hidden" id="manualRateInputContainer">
+                    <label for="manualRateValue">Custom Basic Rate (per mille)</label>
+                    <input type="number" id="manualRateValue" placeholder="e.g. 0.75" step="0.001" value="">
+                </div>
+
+                <!-- Side Head 3 -->
+                <div class="form-group id-commercial distinct-label hidden" id="occupancyContainer">
+                    <label for="occupancySearch">3. Occupancy / Risk Selection (Search by Code or Keyword)</label>
+                    <div class="search-container">
+                        <input type="text" id="occupancySearch" placeholder="Type code or risk description (e.g. 2140, Paint factories)..." autocomplete="off">
+                        <div id="autocompleteResultsList" class="autocomplete-results hidden"></div>
+                    </div>
+                    
+                    <input type="hidden" id="selectedOccupancyIndex" value="">
+
+                    <!-- Metadata Display Box -->
+                    <div id="metaBox" class="meta-container hidden">
+                        <div class="meta-item">
+                            <span class="meta-label">Section</span>
+                            <span id="meta-section" class="meta-value">-</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-label">Risk Code</span>
+                            <span id="meta-code" class="meta-value">-</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-label">Category</span>
+                            <span id="meta-category" class="meta-value">-</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-label">Special Conditions / Approvals</span>
+                            <div id="meta-conditions">-</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Side Head 4 -->
+                <div class="form-group id-commercial distinct-label hidden" id="floaterContainer">
+                    <label for="floaterToggle">4. Floater Policy Option</label>
+                    <select id="floaterToggle">
+                        <option value="no">No (Single Location Policy)</option>
+                        <option value="yes">Yes, Apply Floater Loading (+10% on Stock-Floating S.I. only)</option>
+                    </select>
+                </div>
             </div>
 
             <!-- Side Head 5 -->
@@ -499,100 +696,102 @@
                 </span>
             </div>
 
-            <!-- Side Head 6 -->
-            <div class="form-group distinct-label" id="basicDiscountContainer">
-                <label for="basicDiscountValue">6. Discount (-) or Loading (+) on Basic Premium (%)</label>
-                <input type="number" id="basicDiscountValue" placeholder="e.g. -10 for 10% discount, +5 for loading" value="0" step="0.01">
-                
-                <!-- Embedded Grids for Basic Premium -->
-                <div id="blusBasicGrid" class="hidden" style="margin-top: 6px;">
-                    <table style="width: 100%; max-width: 260px; font-size: 0.75rem; border: 1px solid #cbd5e1; border-collapse: collapse; background: #fff; text-align: center;">
-                        <tr style="background: #f1f5f9; font-weight: bold;"><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">1</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">2</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">3</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">4</td></tr>
-                        <tr><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">100</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">100</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">100</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">100</td></tr>
-                    </table>
+            <div id="standardCommercialControlsContainer2">
+                <!-- Side Head 6 -->
+                <div class="form-group distinct-label" id="basicDiscountContainer">
+                    <label for="basicDiscountValue">6. Discount (-) or Loading (+) on Basic Premium (%)</label>
+                    <input type="number" id="basicDiscountValue" placeholder="e.g. -10 for 10% discount, +5 for loading" value="0" step="0.01">
+                    
+                    <!-- Embedded Grids for Basic Premium -->
+                    <div id="blusBasicGrid" class="hidden" style="margin-top: 6px;">
+                        <table style="width: 100%; max-width: 260px; font-size: 0.75rem; border: 1px solid #cbd5e1; border-collapse: collapse; background: #fff; text-align: center;">
+                            <tr style="background: #f1f5f9; font-weight: bold;"><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">1</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">2</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">3</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">4</td></tr>
+                            <tr><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">100</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">100</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">100</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">100</td></tr>
+                        </table>
+                    </div>
+                    <div id="sfspBasicGrid" class="hidden" style="margin-top: 6px;">
+                        <table style="width: 100%; max-width: 260px; font-size: 0.75rem; border: 1px solid #cbd5e1; border-collapse: collapse; background: #fff; text-align: center;">
+                            <tr style="background: #f1f5f9; font-weight: bold;"><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">1</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">2</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">3</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">4</td></tr>
+                            <tr><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">100</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">100</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">50</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">0</td></tr>
+                        </table>
+                    </div>
                 </div>
-                <div id="sfspBasicGrid" class="hidden" style="margin-top: 6px;">
-                    <table style="width: 100%; max-width: 260px; font-size: 0.75rem; border: 1px solid #cbd5e1; border-collapse: collapse; background: #fff; text-align: center;">
-                        <tr style="background: #f1f5f9; font-weight: bold;"><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">1</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">2</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">3</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">4</td></tr>
-                        <tr><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">100</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">100</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">50</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">0</td></tr>
-                    </table>
+
+                <!-- Side Head 7 -->
+                <div id="eqCoverContainer" class="form-group id-commercial distinct-label hidden">
+                    <label for="eqZone">7. Earthquake (EQ) Cover Zone</label>
+                    <select id="eqZone">
+                        <option value="0">Exclude Earthquake Cover</option>
+                        <option value="0.05">Zone I @ 0.05 per mille</option>
+                        <option value="0.10">Zone II @ 0.10 per mille</option>
+                        <option value="0.25">Zone III @ 0.25 per mille</option>
+                        <option value="0.50" selected>Zone IV @ 0.50 per mille (Default)</option>
+                        <option value="0.35">Pipeline outside compound of industrial complex @ 0.35 per mille</option>
+                    </select>
+                    <span class="help-text" style="background-color: #f8fafc; font-weight: 500; border-left-color: var(--accent);">
+                        <strong>EQ Tariff Zone Guide:</strong><br>
+                        TN-Zone III-Nilgiri, Coimbatore, Kannyakumari, Tirunelveli<br>
+                        Zone IV-Rest of TN
+                    </span>
+                    <span id="eqAutoNotice" class="help-text hidden" style="background-color: #f0fdf4; border-color: var(--success); color: #166534;"></span>
                 </div>
-            </div>
 
-            <!-- Side Head 7 -->
-            <div id="eqCoverContainer" class="form-group id-commercial distinct-label hidden">
-                <label for="eqZone">7. Earthquake (EQ) Cover Zone</label>
-                <select id="eqZone">
-                    <option value="0">Exclude Earthquake Cover</option>
-                    <option value="0.05">Zone I @ 0.05 per mille</option>
-                    <option value="0.10">Zone II @ 0.10 per mille</option>
-                    <option value="0.25">Zone III @ 0.25 per mille</option>
-                    <option value="0.50" selected>Zone IV @ 0.50 per mille (Default)</option>
-                    <option value="0.35">Pipeline outside compound of industrial complex @ 0.35 per mille</option>
-                </select>
-                <span class="help-text" style="background-color: #f8fafc; font-weight: 500; border-left-color: var(--accent);">
-                    <strong>EQ Tariff Zone Guide:</strong><br>
-                    TN-Zone III-Nilgiri, Coimbatore, Kannyakumari, Tirunelveli<br>
-                    Zone IV-Rest of TN
-                </span>
-                <span id="eqAutoNotice" class="help-text hidden" style="background-color: #f0fdf4; border-color: var(--success); color: #166534;"></span>
-            </div>
-
-            <!-- Side Head 8 -->
-            <div id="stfiCoverContainer" class="form-group id-commercial hidden distinct-label">
-                <label for="stfiToggle">8. STFI Cover Option</label>
-                <select id="stfiToggle">
-                    <option value="0">Exclude STFI Cover</option>
-                    <option value="0.22">SECTION III NON INDUSTRIAL @ 0.22 per mille</option>
-                    <option value="0.37" selected>SECTION IV, V, VII @ 0.37 per mille</option>
-                    <option value="0.52">SECTION VI NOT STORED IN OPEN @ 0.52 per mille</option>
-                    <option value="2.25">SECTION VI STORED IN OPEN @ 2.25 per mille</option>
-                    <option value="0.52_roads">ROADS, BRIDGES, PIPELINES, RAILWAY TRACK, TRANSMISSION & DISTRIBUTION LINES @ 0.52 per mille</option>
-                </select>
-                <span id="stfiAutoNotice" class="help-text hidden" style="background-color: #f0fdf4; border-color: var(--success); color: #166534;"></span>
-            </div>
-
-            <!-- Side Head 9 -->
-            <div id="natcatDiscountContainer" class="form-group id-commercial hidden distinct-label">
-                <label for="natcatDiscountToggle">9. Discount on NATCAT Premium (%)</label>
-                <select id="natcatDiscountToggle">
-                    <option value="0" selected>0% (No Discount)</option>
-                    <option value="15">15% Discount</option>
-                    <option value="25">25% Discount</option>
-                    <option value="50">50% Discount</option>
-                </select>
-                
-                <!-- Embedded Grids for NATCAT Premium -->
-                <div id="blusNatcatGrid" class="hidden" style="margin-top: 6px;">
-                    <table style="width: 100%; max-width: 260px; font-size: 0.75rem; border: 1px solid #cbd5e1; border-collapse: collapse; background: #fff; text-align: center;">
-                        <tr style="background: #f1f5f9; font-weight: bold;"><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">1</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">2</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">3</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">4</td></tr>
-                        <tr><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">50</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">25</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">15</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">0</td></tr>
-                    </table>
+                <!-- Side Head 8 -->
+                <div id="stfiCoverContainer" class="form-group id-commercial hidden distinct-label">
+                    <label for="stfiToggle">8. STFI Cover Option</label>
+                    <select id="stfiToggle">
+                        <option value="0">Exclude STFI Cover</option>
+                        <option value="0.22">SECTION III NON INDUSTRIAL @ 0.22 per mille</option>
+                        <option value="0.37" selected>SECTION IV, V, VII @ 0.37 per mille</option>
+                        <option value="0.52">SECTION VI NOT STORED IN OPEN @ 0.52 per mille</option>
+                        <option value="2.25">SECTION VI STORED IN OPEN @ 2.25 per mille</option>
+                        <option value="0.52_roads">ROADS, BRIDGES, PIPELINES, RAILWAY TRACK, TRANSMISSION & DISTRIBUTION LINES @ 0.52 per mille</option>
+                    </select>
+                    <span id="stfiAutoNotice" class="help-text hidden" style="background-color: #f0fdf4; border-color: var(--success); color: #166534;"></span>
                 </div>
-                <div id="sfspNatcatGrid" class="hidden" style="margin-top: 6px;">
-                    <table style="width: 100%; max-width: 260px; font-size: 0.75rem; border: 1px solid #cbd5e1; border-collapse: collapse; background: #fff; text-align: center;">
-                        <tr style="background: #f1f5f9; font-weight: bold;"><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">1</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">2</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">3</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">4</td></tr>
-                        <tr><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">50</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">0</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">0</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">0</td></tr>
-                    </table>
-                </div>
-            </div>
 
-            <!-- Side Head 10 -->
-            <div id="terrorismContainer" class="form-group id-commercial hidden distinct-label">
-                <label for="terrorismToggle">10. Terrorism Cover Options</label>
-                <select id="terrorismToggle">
-                    <option value="0">Exclude Terrorism Cover</option>
-                    <option value="0.13">NON INDUSTRIAL @ 0.13 per mille</option>
-                    <option value="0.21" selected>INDUSTRIAL @ 0.21 per mille</option>
-                </select>
-                <span id="terrorismAutoNotice" class="help-text hidden" style="background-color: #f0fdf4; border-color: var(--success); color: #166534;"></span>
+                <!-- Side Head 9 -->
+                <div id="natcatDiscountContainer" class="form-group id-commercial hidden distinct-label">
+                    <label for="natcatDiscountToggle">9. Discount on NATCAT Premium (%)</label>
+                    <select id="natcatDiscountToggle">
+                        <option value="0" selected>0% (No Discount)</option>
+                        <option value="15">15% Discount</option>
+                        <option value="25">25% Discount</option>
+                        <option value="50">50% Discount</option>
+                    </select>
+                    
+                    <!-- Embedded Grids for NATCAT Premium -->
+                    <div id="blusNatcatGrid" class="hidden" style="margin-top: 6px;">
+                        <table style="width: 100%; max-width: 260px; font-size: 0.75rem; border: 1px solid #cbd5e1; border-collapse: collapse; background: #fff; text-align: center;">
+                            <tr style="background: #f1f5f9; font-weight: bold;"><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">1</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">2</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">3</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">4</td></tr>
+                            <tr><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">50</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">25</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">15</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">0</td></tr>
+                        </table>
+                    </div>
+                    <div id="sfspNatcatGrid" class="hidden" style="margin-top: 6px;">
+                        <table style="width: 100%; max-width: 260px; font-size: 0.75rem; border: 1px solid #cbd5e1; border-collapse: collapse; background: #fff; text-align: center;">
+                            <tr style="background: #f1f5f9; font-weight: bold;"><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">1</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">2</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">3</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">4</td></tr>
+                            <tr><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">50</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">0</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">0</td><td style="padding: 2px 4px; border: 1px solid #cbd5e1; color:#000;">0</td></tr>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Side Head 10 -->
+                <div id="terrorismContainer" class="form-group id-commercial hidden distinct-label">
+                    <label for="terrorismToggle">10. Terrorism Cover Options</label>
+                    <select id="terrorismToggle">
+                        <option value="0">Exclude Terrorism Cover</option>
+                        <option value="0.13">NON INDUSTRIAL @ 0.13 per mille</option>
+                        <option value="0.21" selected>INDUSTRIAL @ 0.21 per mille</option>
+                    </select>
+                    <span id="terrorismAutoNotice" class="help-text hidden" style="background-color: #f0fdf4; border-color: var(--success); color: #166534;"></span>
+                </div>
             </div>
         </div>
 
         <!-- RIGHT: PREMIUM WORKING WORKSHEET LOGS -->
         <div>
             <div id="premiumWorkingPanel" class="panel">
-                <h2>Premium Working</h2>
+                <h2>Premium Working Summary</h2>
                 <!-- Total Sum Insured Layout placed ABOVE the line item description headers row -->
                 <div id="visible-summary-container" style="background-color: #f8fafc; border: 1px solid var(--border); padding: 12px 10px; border-radius: 6px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; font-weight: bold; color: var(--primary);">
                     <span>TOTAL SUM INSURED</span>
@@ -614,7 +813,7 @@
                             <td>-</td>
                             <td id="row-summary-si" class="text-right" style="font-weight: bold; color: var(--primary);">0.00</td>
                         </tr>
-                        <tr>
+                        <tr id="right_row_basic">
                             <td>BASIC PREMIUM</td>
                             <td id="rate-basic">0.00</td>
                             <td id="prem-basic" class="text-right">0.00</td>
@@ -629,17 +828,17 @@
                             <td id="rate-kutcha">4.00 per mille on S.I.</td>
                             <td id="prem-kutcha" class="text-right">0.00</td>
                         </tr>
-                        <tr class="subtotal-row">
+                        <tr class="subtotal-row" id="right_row_total_a">
                             <td>A TOTAL</td>
                             <td>-</td>
                             <td id="total-a" class="text-right">0.00</td>
                         </tr>
-                        <tr>
+                        <tr id="right_row_discount">
                             <td>DISCOUNT / LOADING ON BASIC PREMIUM</td>
                             <td id="rate-discount">0.00%</td>
                             <td id="prem-discount" class="text-right">0.00</td>
                         </tr>
-                        <tr class="subtotal-row">
+                        <tr class="subtotal-row" id="right_row_total_b">
                             <td>B TOTAL</td>
                             <td>-</td>
                             <td id="total-b" class="text-right">0.00</td>
@@ -677,7 +876,7 @@
                             <td id="prem-terrorism" class="text-right">0.00</td>
                         </tr>
                         <tr class="subtotal-row">
-                            <td>E TOTAL (NET PREMIUM)</td>
+                            <td id="right_net_premium_label">E TOTAL (NET PREMIUM)</td>
                             <td>-</td>
                             <td id="total-e" class="text-right">0.00</td>
                         </tr>
@@ -709,7 +908,7 @@
         </div>
     </div>
 
-    <!-- NEW ADDITION: SCROLLABLE HAZARDOUS GOODS LOOKUP DIALOG LIST -->
+    <!-- SCROLLABLE HAZARDOUS GOODS LOOKUP DIALOG LIST -->
     <div class="panel" style="margin-top: 30px;">
         <h2 style="font-size: 1.2rem; color: #0f172a; border-bottom: 2px solid var(--accent); padding-bottom: 8px; margin-bottom: 12px;">Storage Risk outside compound of Indus/Mfg risks- List of Hazardous Materials and Goods and Categorisation</h2>
         
@@ -743,6 +942,43 @@
 </div>
 
 <script>
+// Features List Setup Matrix
+const bsusFeaturesList = [
+    "Age Above 30 yrs",
+    "Operational Fire Hydrant/sprinkler/water spray system/fire alarm/smoke detectors",
+    "Electrical installations - well maintained standard equipment and installations",
+    "Provision of storm water drainage system and buildings wih plinth level at least 1.5 ft above ground",
+    "High Standard of security with no of security guards for 24 x 7 and CCTVs",
+    "Past 3-years claims ratio",
+    "Basement in Building used for operations/storage/plant machinery installed therein",
+    "Insured premises located within 1 km dstance of a water body like seashore, lake, rivers, canal etc",
+    "Risk located in thickly populated area with no access to fire brigade vehicle"
+];
+
+// Initialize features questionnaire block nodes view structure
+function initBsusFeaturesTable() {
+    const tbody = document.getElementById('bsusFeaturesTbody');
+    tbody.innerHTML = "";
+    bsusFeaturesList.forEach((feature, idx) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td style="text-align: center; font-weight: bold; color: #475569;">${idx + 1}</td>
+            <td style="color: #1e293b; font-weight: 500;">${feature}</td>
+            <td>
+                <select class="bsus-select-field features-toggle-selector" style="padding: 3px 6px;">
+                    <option value="NO" selected>NO</option>
+                    <option value="YES">YES</option>
+                </select>
+            </td>
+            <td>
+                <input type="number" class="bsus-input-field features-mod-input" style="padding: 3px 6px; width: 85px;" value="0" step="0.01"> %
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+initBsusFeaturesTable();
+
 const combinedRates = [
   {"sec": "III", "code": "1002", "cat": "1.0", "ho": "", "dec": "", "desc": "Places of worship", "bsus": 0.14, "blus": 0.12, "sfsp": 0.12},
   {"sec": "III", "code": "1003", "cat": "1.0", "ho": "", "dec": "", "desc": "Libraries", "bsus": 0.21, "blus": 0.21, "sfsp": 0.21},
@@ -928,7 +1164,7 @@ const combinedRates = [
   {"sec": "IV", "code": "2140", "cat": "2.0", "ho": "", "dec": "", "desc": "Paint factories (Water based)", "bsus": 0.99, "blus": 1.15, "sfsp": 1.15},
   {"sec": "IV", "code": "2142", "cat": "3.0", "ho": "", "dec": "", "desc": "Paints - Nitrocellulose based", "bsus": 2.65, "blus": 2.21, "sfsp": 2.21},
   {"sec": "IV", "code": "2143", "cat": "3.0", "ho": "", "dec": "", "desc": "Pan Masala making", "bsus": 0.91, "blus": 1.04, "sfsp": 1.04},
-  {"sec": "IV", "code": "2144", "cat": "4.0", "ho": "", "desc": "Paper and Cardboard Mills (including Lamination)", "bsus": 1.25, "blus": 1.04, "sfsp": 1.04},
+  {"sec": "IV", "code": "2144", "cat": "4.0", "ho": "", "dec": "", "desc": "Paper and Cardboard Mills (including Lamination)", "bsus": 1.25, "blus": 1.04, "sfsp": 1.04},
   {"sec": "IV", "code": "2145", "cat": "4.0", "ho": "", "dec": "", "desc": "Particle Board Manufacturing", "bsus": 2.18, "blus": 1.82, "sfsp": 1.82},
   {"sec": "IV", "code": "2146", "cat": "2.0", "ho": "", "dec": "", "desc": "Pencil Manufacturing", "bsus": 1.49, "blus": 1.72, "sfsp": 1.72},
   {"sec": "IV", "code": "2147", "cat": "", "ho": "", "dec": "yes", "desc": "Petroleum Coke Calcination", "bsus": 0.93, "blus": 0.98, "sfsp": 0.98},
@@ -1095,6 +1331,11 @@ const combinedRates = [
         
         updateMetadata();
         runSmartTariffMapping(record);
+        
+        // Dynamically pull active BSUS lookups to populate the revamped spreadsheet rate element row
+        if (selectedPolicyType === 'BSUS') {
+            document.getElementById('bsus_flexa_rate').value = record.bsus;
+        }
         runCalculation();
     }
 
@@ -1111,9 +1352,13 @@ const combinedRates = [
         const natcatRows = document.querySelectorAll('.row-natcat');
         const rowTerrorismLine = document.getElementById('row-terrorism-line');
         const manualRateToggle = document.getElementById('enterRateManuallyToggle');
-        
         const natcatDiscountContainer = document.getElementById('natcatDiscountContainer');
         const natcatDiscountToggle = document.getElementById('natcatDiscountToggle');
+
+        // Containers for structural swappings
+        const stdControls1 = document.getElementById('standardCommercialControlsContainer');
+        const stdControls2 = document.getElementById('standardCommercialControlsContainer2');
+        const bsusRevamp = document.getElementById('bsusRevampedSection');
 
         const excludeEqOption = document.querySelector('#eqZone option[value="0"]');
         if (selectedPolicyType === 'BSUS' || selectedPolicyType === 'BLUS') {
@@ -1131,32 +1376,52 @@ const combinedRates = [
             }
         }
 
-        if (selectedPolicyType === 'BGR') {
-            bgrRateContainer.classList.remove('hidden');
-            commercialElements.forEach(el => el.classList.add('hidden'));
+        if (selectedPolicyType === 'BSUS') {
+            // Revamp swapping rules logic trigger
+            stdControls1.classList.add('hidden');
+            stdControls2.classList.add('hidden');
+            bsusRevamp.classList.remove('hidden');
+
+            // Hide standard summary rows that conflict with revamped system matrix lookups
+            document.getElementById('right_row_basic').classList.add('hidden');
+            document.getElementById('right_row_total_a').classList.add('hidden');
+            document.getElementById('right_row_discount').classList.add('hidden');
+            document.getElementById('right_row_total_b').classList.add('hidden');
+            document.getElementById('right_net_premium_label').innerText = "FINAL BSUS NET PREMIUM";
             natcatRows.forEach(row => row.classList.add('hidden'));
             rowTerrorismLine.classList.add('hidden');
-            document.getElementById('manualRateInputContainer').classList.add('hidden');
-            
-            natcatDiscountToggle.disabled = false;
-            natcatDiscountContainer.style.textDecoration = "none";
-            natcatDiscountContainer.style.opacity = "1";
         } else {
-            bgrRateContainer.classList.add('hidden');
-            commercialElements.forEach(el => el.classList.remove('hidden'));
-            rowTerrorismLine.classList.remove('hidden');
-            natcatRows.forEach(row => row.classList.remove('hidden'));
-            
-            if (manualRateToggle.value === 'yes') {
-                document.getElementById('manualRateInputContainer').classList.remove('hidden');
-            }
-            
-            if (selectedPolicyType === 'BSUS') {
-                natcatDiscountToggle.disabled = true;
-                natcatDiscountToggle.value = "0";
-                natcatDiscountContainer.style.textDecoration = "line-through";
-                natcatDiscountContainer.style.opacity = "0.6";
+            // Standard layout rules restores
+            stdControls1.classList.remove('hidden');
+            stdControls2.classList.remove('hidden');
+            bsusRevamp.classList.add('hidden');
+
+            document.getElementById('right_row_basic').classList.remove('hidden');
+            document.getElementById('right_row_total_a').classList.remove('hidden');
+            document.getElementById('right_row_discount').classList.remove('hidden');
+            document.getElementById('right_row_total_b').classList.remove('hidden');
+            document.getElementById('right_net_premium_label').innerText = "E TOTAL (NET PREMIUM)";
+
+            if (selectedPolicyType === 'BGR') {
+                bgrRateContainer.classList.remove('hidden');
+                commercialElements.forEach(el => el.classList.add('hidden'));
+                natcatRows.forEach(row => row.classList.add('hidden'));
+                rowTerrorismLine.classList.add('hidden');
+                document.getElementById('manualRateInputContainer').classList.add('hidden');
+                
+                natcatDiscountToggle.disabled = false;
+                natcatDiscountContainer.style.textDecoration = "none";
+                natcatDiscountContainer.style.opacity = "1";
             } else {
+                bgrRateContainer.classList.add('hidden');
+                commercialElements.forEach(el => el.classList.remove('hidden'));
+                rowTerrorismLine.classList.remove('hidden');
+                natcatRows.forEach(row => row.classList.remove('hidden'));
+                
+                if (manualRateToggle.value === 'yes') {
+                    document.getElementById('manualRateInputContainer').classList.remove('hidden');
+                }
+                
                 natcatDiscountToggle.disabled = false;
                 natcatDiscountContainer.style.textDecoration = "none";
                 natcatDiscountContainer.style.opacity = "1";
@@ -1186,7 +1451,7 @@ const combinedRates = [
         const kutchaHelp = document.getElementById('kutchaHelpText');
         
         if (constType === 'kutcha') {
-            rowKutcha.classList.remove('hidden');
+            if (selectedPolicyType !== 'BSUS') rowKutcha.classList.remove('hidden');
             kutchaHelp.classList.remove('hidden');
         } else {
             rowKutcha.classList.add('hidden');
@@ -1195,7 +1460,7 @@ const combinedRates = [
 
         const rowFloater = document.getElementById('row-floater');
         const floaterVal = document.getElementById('floaterToggle').value;
-        if (selectedPolicyType !== 'BGR' && floaterVal === 'yes') {
+        if (selectedPolicyType !== 'BGR' && selectedPolicyType !== 'BSUS' && floaterVal === 'yes') {
             rowFloater.classList.remove('hidden');
         } else {
             rowFloater.classList.add('hidden');
@@ -1215,25 +1480,35 @@ const combinedRates = [
         const tSelect = document.getElementById('terrorismToggle');
         const tNotice = document.getElementById('terrorismAutoNotice');
 
+        // References for BSUS system lookups mirroring structural suggestions
+        const bEqSelect = document.getElementById('bsus_eq_select');
+        const bStfiSelect = document.getElementById('bsus_stfi_select');
+        const bTerrSelect = document.getElementById('bsus_terr_select');
+
         if (descUpper.includes("ROAD") || descUpper.includes("BRIDGE") || descUpper.includes("PIPELINE") || descUpper.includes("TRACK") || descUpper.includes("TRANSMISSION")) {
             stfiSelect.value = "0.52_roads";
+            bStfiSelect.value = "0.52";
             stfiNotice.classList.remove('hidden');
             stfiNotice.innerText = "💡 Auto-Suggested STFI: Infrastructure Tariff @ 0.52 per mille.";
         } else if (section === "III") {
             stfiSelect.value = "0.22";
+            bStfiSelect.value = "0.22";
             stfiNotice.classList.remove('hidden');
             stfiNotice.innerText = "💡 Auto-Suggested STFI: Section III Non-Industrial @ 0.22 per mille.";
         } else if (section === "IV" || section === "V" || section === "VII") {
             stfiSelect.value = "0.37";
+            bStfiSelect.value = "0.37";
             stfiNotice.classList.remove('hidden');
             stfiNotice.innerText = "💡 Auto-Suggested STFI: Section IV/V/VII General @ 0.37 per mille.";
         } else if (section === "VI") {
             if (descUpper.includes("OPEN")) {
                 stfiSelect.value = "2.25";
+                bStfiSelect.value = "2.25";
                 stfiNotice.classList.remove('hidden');
                 stfiNotice.innerText = "💡 Auto-Suggested STFI: Section VI Open Storage @ 2.25 per mille.";
             } else {
                 stfiSelect.value = "0.52";
+                bStfiSelect.value = "0.52";
                 stfiNotice.classList.remove('hidden');
                 stfiNotice.innerText = "💡 Auto-Suggested STFI: Section VI Closed Storage @ 0.52 per mille.";
             }
@@ -1241,20 +1516,24 @@ const combinedRates = [
 
         if (descUpper.includes("PIPELINE")) {
             eqSelect.value = "0.35";
+            bEqSelect.value = "0.25"; // Fallback standard map approximation for matrix
             eqNotice.classList.remove('hidden');
             eqNotice.innerText = "💡 Auto-Suggested EQ: Pipeline Outside Complex @ 0.35 per mille.";
         } else {
             eqSelect.value = "0.50";
+            bEqSelect.value = "0.50";
             eqNotice.classList.remove('hidden');
             eqNotice.innerText = "💡 Applied Standard Zone IV @ 0.50 per mille.";
         }
 
         if (section === "III") {
             tSelect.value = "0.13";
+            bTerrSelect.value = "0.13";
             tNotice.classList.remove('hidden');
             tNotice.innerText = "💡 Auto-Suggested Terrorism: Non-Industrial @ 0.13 per mille.";
         } else {
             tSelect.value = "0.21";
+            bTerrSelect.value = "0.21";
             tNotice.classList.remove('hidden');
             tNotice.innerText = "💡 Auto-Suggested Terrorism: Industrial / Storage @ 0.21 per mille.";
         }
@@ -1306,28 +1585,29 @@ const combinedRates = [
         let basicPrem = 0;
         let basicRateText = "0.00";
 
+        // MILLE BASIS DENOMINATOR FACTORING MULTIPLIER
+        const M = si / 1000;
+
         if (selectedPolicyType === 'BGR') {
             const perMilleRate = parseFloat(document.getElementById('bgrRateOption').value);
-            basicPrem = (si / 1000) * perMilleRate;
+            basicPrem = M * perMilleRate;
             basicRateText = perMilleRate.toFixed(2) + " per mille";
-        } else {
+        } else if (selectedPolicyType !== 'BSUS') {
             const isManualMode = document.getElementById('enterRateManuallyToggle').value === 'yes';
             
             if (isManualMode) {
                 const manualRate = parseFloat(document.getElementById('manualRateValue').value) || 0;
-                basicPrem = (si / 1000) * manualRate;
+                basicPrem = M * manualRate;
                 basicRateText = manualRate.toFixed(3) + " per mille (Manual)";
             } else {
                 const occIndex = document.getElementById('selectedOccupancyIndex').value;
                 if (occIndex !== "" && occIndex !== null) {
                     const record = combinedRates[occIndex];
                     let commRatePerMille = 0;
-                    
-                    if (selectedPolicyType === 'BSUS') commRatePerMille = record.bsus;
                     if (selectedPolicyType === 'BLUS') commRatePerMille = record.blus;
                     if (selectedPolicyType === 'SFSP') commRatePerMille = record.sfsp;
                     
-                    basicPrem = (si / 1000) * commRatePerMille;
+                    basicPrem = M * commRatePerMille;
                     basicRateText = commRatePerMille.toFixed(3) + " per mille";
                 }
             }
@@ -1339,22 +1619,139 @@ const combinedRates = [
             document.getElementById('visible-summary-si').innerText = formattedSiText;
         }
         
+        // ==========================================
+        // DIVERGENT BRANCH: REVAMPED BSUS MATHEMATICS ENGINE
+        // ==========================================
+        if (selectedPolicyType === 'BSUS') {
+            // Row 1: FLEXA RATE
+            const flexaRate = parseFloat(document.getElementById('bsus_flexa_rate').value) || 0;
+            const prem1 = M * flexaRate;
+            document.getElementById('bsus_prem_1').innerText = prem1.toFixed(2);
+
+            // Row 2: ADJUSTED FLEXA RATE DISC/LOAD
+            const flexaModPct = parseFloat(document.getElementById('bsus_flexa_mod').value) || 0;
+            const prem2 = prem1 * (flexaModPct / 100);
+            document.getElementById('bsus_prem_2').innerText = (prem2 >= 0 ? "+" : "") + prem2.toFixed(2);
+
+            // Row 3: NET TOTAL
+            const prem3 = prem1 + prem2;
+            const rate3 = M > 0 ? (prem3 / M) : 0;
+            document.getElementById('bsus_rate_3').innerText = rate3.toFixed(3);
+            document.getElementById('bsus_prem_3').innerText = prem3.toFixed(2);
+
+            // Row 4: KUTCHA ADD 4 PER MILLE
+            const isKutcha = document.getElementById('construction').value === 'kutcha';
+            const rate4 = isKutcha ? 4.000 : 0.000;
+            const prem4 = M * rate4;
+            document.getElementById('bsus_rate_4').innerText = rate4.toFixed(3);
+            document.getElementById('bsus_prem_4').innerText = prem4.toFixed(2);
+
+            // Row 5: TOTAL
+            const prem5 = prem3 + prem4;
+            const rate5 = M > 0 ? (prem5 / M) : 0;
+            document.getElementById('bsus_rate_5').innerText = rate5.toFixed(3);
+            document.getElementById('bsus_prem_5').innerText = prem5.toFixed(2);
+
+            // Row 6: GOOD / BAD FEATURES DISC / LOAD AGGREGATOR
+            let dynamicFeaturesPctSum = 0;
+            const featureRows = document.querySelectorAll('#bsusFeaturesTbody tr');
+            featureRows.forEach(row => {
+                const toggler = row.querySelector('.features-toggle-selector').value;
+                const modInput = parseFloat(row.querySelector('.features-mod-input').value) || 0;
+                if (toggler === 'YES') {
+                    dynamicFeaturesPctSum += modInput;
+                }
+            });
+            document.getElementById('bsus_rate_6_pct').innerText = (dynamicFeaturesPctSum >= 0 ? "+" : "") + dynamicFeaturesPctSum.toFixed(2) + " %";
+            const prem6 = prem5 * (dynamicFeaturesPctSum / 100);
+            document.getElementById('bsus_prem_6').innerText = (prem6 >= 0 ? "+" : "") + prem6.toFixed(2);
+
+            // Row 7: A NET TOTAL
+            const prem7 = prem5 + prem6;
+            const rate7 = M > 0 ? (prem7 / M) : 0;
+            document.getElementById('bsus_rate_7').innerText = rate7.toFixed(3);
+            document.getElementById('bsus_prem_7').innerText = prem7.toFixed(2);
+
+            // Row 8: B ADJUSTED EQ RATE
+            const eqRate = parseFloat(document.getElementById('bsus_eq_select').value) || 0;
+            const prem8 = M * eqRate;
+            document.getElementById('bsus_prem_8').innerText = prem8.toFixed(2);
+
+            // Row 9: C ADJUSTED STFI RATE
+            const stfiRate = parseFloat(document.getElementById('bsus_stfi_select').value) || 0;
+            const prem9 = M * stfiRate;
+            document.getElementById('bsus_prem_9').innerText = prem9.toFixed(2);
+
+            // Row 10: D TERRORISM
+            const terrRate = parseFloat(document.getElementById('bsus_terr_select').value) || 0;
+            const prem10 = M * terrRate;
+            document.getElementById('bsus_prem_10').innerText = prem10.toFixed(2);
+
+            // Row 11: TOTAL A + B + C + D
+            const prem11 = prem7 + prem8 + prem9 + prem10;
+            const rate11 = M > 0 ? (prem11 / M) : 0;
+            document.getElementById('bsus_rate_11').innerText = rate11.toFixed(3);
+            document.getElementById('bsus_prem_11').innerText = prem11.toFixed(2);
+
+            // Row 12: DISCRETIONARY DISCOUNT Max 10%
+            let discMax10Pct = parseFloat(document.getElementById('bsus_disc_max10').value) || 0;
+            if (discMax10Pct > 10) {
+                discMax10Pct = 10;
+                document.getElementById('bsus_disc_max10').value = 10;
+            }
+            if (discMax10Pct < 0) {
+                discMax10Pct = 0;
+                document.getElementById('bsus_disc_max10').value = 0;
+            }
+            const prem12 = -1 * (prem11 * (discMax10Pct / 100));
+            document.getElementById('bsus_prem_12').innerText = prem12.toFixed(2);
+
+            // Row 13: NET AMOUNT
+            const prem13 = prem11 + prem12;
+            const rate13 = M > 0 ? (prem13 / M) : 0;
+            document.getElementById('bsus_rate_13').innerText = rate13.toFixed(3);
+            document.getElementById('bsus_prem_13').innerText = prem13.toFixed(2);
+
+            // Row 14: FLOATER EXTRA 10%
+            const isFloaterActive = document.getElementById('floaterToggle').value === 'yes';
+            // Floater loading factors dynamically relative to the floating stock component asset group value
+            const prem14 = isFloaterActive ? (((floatingSi / 1000) * rate7) * 0.10) : 0;
+            const rate14 = M > 0 ? (prem14 / M) : 0;
+            document.getElementById('bsus_rate_14').innerText = rate14.toFixed(3);
+            document.getElementById('bsus_prem_14').innerText = prem14.toFixed(2);
+
+            // Row 15: FINAL NET RATE / SUMMARY OVERRIDES
+            const prem15 = prem13 + prem14;
+            const rate15 = M > 0 ? (prem15 / M) : 0;
+            document.getElementById('bsus_rate_15').innerText = rate15.toFixed(3);
+            document.getElementById('bsus_prem_15').innerText = prem15.toFixed(2);
+
+            // Output final pipeline metrics onto right sheet logs view stream cleanly
+            document.getElementById('total-e').innerText = prem15.toFixed(2);
+            let gst = prem15 * 0.18;
+            document.getElementById('prem-gst').innerText = gst.toFixed(2);
+            let totalPayable = prem15 + gst;
+            document.getElementById('total-payable').innerText = totalPayable.toFixed(2);
+            return;
+        }
+
+        // ==========================================
+        // STANDARD PIPELINE SEQUENCE (BGR, BLUS, SFSP)
+        // ==========================================
         document.getElementById('rate-basic').innerText = basicRateText;
         document.getElementById('prem-basic').innerText = basicPrem.toFixed(2);
 
         let floaterPrem = 0;
         if (selectedPolicyType !== 'BGR' && document.getElementById('floaterToggle').value === 'yes') {
             let activeRate = 0;
+            const occIndex = document.getElementById('selectedOccupancyIndex').value;
+            if (occIndex !== "") {
+                const record = combinedRates[occIndex];
+                if (selectedPolicyType === 'BLUS') activeRate = record.blus;
+                if (selectedPolicyType === 'SFSP') activeRate = record.sfsp;
+            }
             if (document.getElementById('enterRateManuallyToggle').value === 'yes') {
                 activeRate = parseFloat(document.getElementById('manualRateValue').value) || 0;
-            } else {
-                const occIndex = document.getElementById('selectedOccupancyIndex').value;
-                if (occIndex !== "") {
-                    const record = combinedRates[occIndex];
-                    if (selectedPolicyType === 'BSUS') activeRate = record.bsus;
-                    if (selectedPolicyType === 'BLUS') activeRate = record.blus;
-                    if (selectedPolicyType === 'SFSP') activeRate = record.sfsp;
-                }
             }
             floaterPrem = ((floatingSi / 1000) * activeRate) * 0.10;
             document.getElementById('prem-floater').innerText = floaterPrem.toFixed(2);
@@ -1364,7 +1761,7 @@ const combinedRates = [
 
         let kutchaPrem = 0;
         if (document.getElementById('construction').value === 'kutcha') {
-            kutchaPrem = (si / 1000) * 4;
+            kutchaPrem = M * 4;
             document.getElementById('prem-kutcha').innerText = kutchaPrem.toFixed(2);
         }
 
@@ -1388,7 +1785,7 @@ const combinedRates = [
 
         if (selectedPolicyType !== 'BGR') {
             const eqRate = parseFloat(document.getElementById('eqZone').value) || 0;
-            eqPrem = (si / 1000) * eqRate;
+            eqPrem = M * eqRate;
             document.getElementById('rate-eq').innerText = eqRate > 0 ? eqRate.toFixed(2) + " per mille" : "0.00";
             document.getElementById('prem-eq').innerText = eqPrem.toFixed(2);
 
@@ -1396,7 +1793,7 @@ const combinedRates = [
             let stfiRate = parseFloat(stfiVal) || 0;
             if(stfiVal === "0.52_roads") stfiRate = 0.52;
             
-            stfiPrem = (si / 1000) * stfiRate;
+            stfiPrem = M * stfiRate;
             document.getElementById('rate-stfi').innerText = stfiRate > 0 ? stfiRate.toFixed(2) + " per mille" : "0.00";
             document.getElementById('prem-stfi').innerText = stfiPrem.toFixed(2);
 
@@ -1411,15 +1808,12 @@ const combinedRates = [
 
             totalD = totalB + totalC - natcatDiscountPrem;
             document.getElementById('total-d').innerText = totalD.toFixed(2);
-        } else {
-            document.getElementById('rate-natcat-disc').innerText = "0.00%";
-            document.getElementById('prem-natcat-disc').innerText = "0.00";
         }
 
         let terrorismPrem = 0;
         if (selectedPolicyType !== 'BGR') {
             const tRate = parseFloat(document.getElementById('terrorismToggle').value) || 0;
-            terrorismPrem = (si / 1000) * tRate;
+            terrorismPrem = M * tRate;
             document.getElementById('rate-terrorism').innerText = tRate > 0 ? tRate.toFixed(2) + " per mille" : "0.00";
             document.getElementById('prem-terrorism').innerText = terrorismPrem.toFixed(2);
         }
@@ -1435,1083 +1829,195 @@ const combinedRates = [
     }
 
     function exportToExcel() {
-        const table = document.getElementById('premiumTable');
         let csvContent = "data:text/csv;charset=utf-8,";
-        csvContent += "Line Item Description,Rate / Basis,Premium (INR)\n";
         
-        const rows = table.querySelectorAll('tbody tr');
-        rows.forEach(row => {
-            if (!row.classList.contains('hidden')) {
+        if (selectedPolicyType === 'BSUS') {
+            csvContent += "BSUS REVAMPED RATING SHEET WORKING STATEMENT\n";
+            csvContent += "Line Item Description,Rate / Parameter Factor,Computed Premium (₹)\n";
+            const bsusRows = document.querySelectorAll('#bsusRevampedSection table:first-of-type tbody tr');
+            bsusRows.forEach(row => {
                 const cols = row.querySelectorAll('td');
                 if (cols.length >= 3) {
-                    const lineDesc = cols[0].innerText;
-                    const rateBasis = cols[1].innerText.replace(/,/g, '');
-                    const premiumVal = cols[2].innerText.replace(/,/g, '');
-                    csvContent += `"${lineDesc}","${rateBasis}","${premiumVal}"\n`;
+                    const desc = cols[0].innerText;
+                    const selectCheck = cols[1].querySelector('select');
+                    const inputCheck = cols[1].querySelector('input');
+                    let basisValueText = cols[1].innerText;
+                    if (selectCheck) basisValueText = selectCheck.value;
+                    if (inputCheck) basisValueText = inputCheck.value;
+                    const calculatedPrem = cols[2].innerText.replace(/,/g, '');
+                    csvContent += `"${desc}","${basisValueText}","${calculatedPrem}"\n`;
                 }
-            }
-        });
+            });
+        } else {
+            const table = document.getElementById('premiumTable');
+            csvContent += "Line Item Description,Rate / Basis,Premium (INR)\n";
+            const rows = table.querySelectorAll('tbody tr');
+            rows.forEach(row => {
+                if (!row.classList.contains('hidden')) {
+                    const cols = row.querySelectorAll('td');
+                    if (cols.length >= 3) {
+                        const lineDesc = cols[0].innerText;
+                        const rateBasis = cols[1].innerText.replace(/,/g, '');
+                        const premiumVal = cols[2].innerText.replace(/,/g, '');
+                        csvContent += `"${lineDesc}","${rateBasis}","${premiumVal}"\n`;
+                    }
+                }
+            });
+        }
         
         const encodedUri = encodeURI(csvContent);
         const link = document.createElement("a");
         link.setAttribute("href", encodedUri);
-        link.setAttribute("download", `Premium_Working_${selectedPolicyType}.csv`);
+        link.setAttribute("download", `Premium_Statement_Output_${selectedPolicyType}.csv`);
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
     }
 
     function exportToPDF() {
-        const element = document.getElementById('premiumWorkingPanel');
+        // Dynamic boundary captures based on active structural context layouts viewports
+        const targetViewElement = selectedPolicyType === 'BSUS' ? document.getElementById('workspace') : document.getElementById('premiumWorkingPanel');
         const opt = {
             margin:       12,
             filename:     `Premium_Working_Statement_${selectedPolicyType}.pdf`,
-            image:        { type: 'jpeg', quality: 0.98 },
+            image:        { type: 'jpeg', quality: 0.99 },
             html2canvas:  { scale: 2, useCORS: true, scrollY: 0, scrollX: 0 },
-            jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
+            jsPDF:        { unit: 'mm', format: 'a4', orientation: selectedPolicyType === 'BSUS' ? 'landscape' : 'portrait' },
             pagebreak:    { mode: ['avoid-all', 'css'] }
         };
-        html2pdf().set(opt).from(element).save();
+        html2pdf().set(opt).from(targetViewElement).save();
     }
 
-    // Client Side Search Master Data Matrix Lookup List
     const hazardousGoodsMasterList = [
-  {c: "Category I", s: 1, g: "Aloe resin"},
-  {c: "Category I", s: 2, g: "Aluminium resinate"},
-  {c: "Category I", s: 3, g: "Amber"},
-  {c: "Category I", s: 4, g: "Ammonium Bromide"},
-  {c: "Category I", s: 5, g: "Ammonium Chloride"},
-  {c: "Category I", s: 6, g: "Animal protein"},
-  {c: "Category I", s: 7, g: "Ammonium Fluoride"},
-  {c: "Category I", s: 8, g: "Almond oil"},
-  {c: "Category I", s: 9, g: "Ammonium Sulphate"},
-  {c: "Category I", s: 10, g: "Animal skin"},
-  {c: "Category I", s: 11, g: "Amonia-acqueous soln. or spirits of ammonia exceeding"},
-  {c: "Category I", s: 12, g: "Aluminium Chloride"},
-  {c: "Category I", s: 13, g: "Anethole"},
-  {c: "Category I", s: 14, g: "Anime (a resin)"},
-  {c: "Category I", s: 15, g: "Animal black"},
-  {c: "Category I", s: 16, g: "Aluminium paste"},
-  {c: "Category I", s: 17, g: "Animal glue"},
-  {c: "Category I", s: 18, g: "Anthracene"},
-  {c: "Category I", s: 19, g: "Algae"},
-  {c: "Category I", s: 20, g: "Antimony Pentafluoride"},
-  {c: "Category I", s: 21, g: "Animal oil"},
-  {c: "Category I", s: 22, g: "Antimony Pentasulfide"},
-  {c: "Category I", s: 23, g: "All flammable liquids having flash point above"},
-  {c: "Category I", s: 24, g: "Antimony sulphate"},
-  {c: "Category I", s: 25, g: "Antimony sulphide"},
-  {c: "Category I", s: 26, g: "Antimony trisulphate"},
-  {c: "Category I", s: 27, g: "Antimony trisulphide"},
-  {c: "Category I", s: 28, g: "Arachis oil"},
-  {c: "Category I", s: 29, g: "Arecanuts"},
-  {c: "Category I", s: 30, g: "Arsenic Chloride"},
-  {c: "Category I", s: 31, g: "Arsenic pentasulphide"},
-  {c: "Category I", s: 32, g: "Arsenic sulphide"},
-  {c: "Category I", s: 33, g: "Arsenic Trisulfide"},
-  {c: "Category I", s: 34, g: "Artificial edible fat"},
-  {c: "Category I", s: 35, g: "Artificial horn"},
-  {c: "Category I", s: 36, g: "Artificial leather"},
-  {c: "Category I", s: 37, g: "Artificial Silk"},
-  {c: "Category I", s: 38, g: "Artificial wool"},
-  {c: "Category I", s: 39, g: "Asafoetida (gum resin)"},
-  {c: "Category I", s: 40, g: "Asafoetida oil"},
-  {c: "Category I", s: 41, g: "Asphalt /Asphalt sheet"},
-  {c: "Category I", s: 42, g: "Asphalted paper"},
-  {c: "Category I", s: 43, g: "Balata, Balsam of Peru"},
-  {c: "Category I", s: 44, g: "Bamboo mats"},
-  {c: "Category I", s: 45, g: "Barium Carbonate"},
-  {c: "Category I", s: 46, g: "Barium Sulphide"},
-  {c: "Category I", s: 47, g: "Barley"},
-  {c: "Category I", s: 48, g: "Baryllium Dustor powder"},
-  {c: "Category I", s: 49, g: "Bed feathers (Down)"},
-  {c: "Category I", s: 50, g: "Beedi leaves"},
-  {c: "Category I", s: 51, g: "Bees wax"},
-  {c: "Category I", s: 52, g: "Beet sugar"},
-  {c: "Category I", s: 53, g: "Beet tallow (Aldrin)"},
-  {c: "Category I", s: 54, g: "Benzoin (resin)"},
-  {c: "Category I", s: 55, g: "Benzoin (resinoid)"},
-  {c: "Category I", s: 56, g: "Betal Nuts"},
-  {c: "Category I", s: 57, g: "Birch (bark) oil"},
-  {c: "Category I", s: 58, g: "Bisphenol"},
-  {c: "Category I", s: 59, g: "Bitumen/Bituminised craftpaper/felt"},
-  {c: "Category I", s: 60, g: "Blacks of all kinds (not otherwise Speciafically provided for)"},
-  {c: "Category I", s: 61, g: "Borneo Camphor"},
-  {c: "Category I", s: 62, g: "Borneol"},
-  {c: "Category I", s: 63, g: "Borneo tallow"},
-  {c: "Category I", s: 64, g: "Bornyl acetate"},
-  {c: "Category I", s: 65, g: "Boron trichloride"},
-  {c: "Category I", s: 66, g: "Boron trifluoride"},
-  {c: "Category I", s: 67, g: "Bran"},
-  {c: "Category I", s: 68, g: "Bran oil"},
-  {c: "Category I", s: 69, g: "Butter fat"},
-  {c: "Category I", s: 70, g: "Butter oil"},
-  {c: "Category I", s: 71, g: "Caesium perchlorate"},
-  {c: "Category I", s: 72, g: "Caffine (pure)"},
-  {c: "Category I", s: 73, g: "Calcium Chloride"},
-  {c: "Category I", s: 74, g: "Calcium Cyanide"},
-  {c: "Category I", s: 75, g: "Calcium Oxide"},
-  {c: "Category I", s: 76, g: "Calcium Sulphide"},
-  {c: "Category I", s: 77, g: "Camphene"},
-  {c: "Category I", s: 78, g: "Camphor"},
-  {c: "Category I", s: 79, g: "Candle wax"},
-  {c: "Category I", s: 80, g: "Candles"},
-  {c: "Category I", s: 81, g: "Canvas cloth"},
-  {c: "Category I", s: 82, g: "Capric acid"},
-  {c: "Category I", s: 83, g: "Caprolactum"},
-  {c: "Category I", s: 84, g: "Caprylic acid"},
-  {c: "Category I", s: 85, g: "Carbazole"},
-  {c: "Category I", s: 86, g: "Carbon"},
-  {c: "Category I", s: 87, g: "Carbon black"},
-  {c: "Category I", s: 88, g: "Carbon paper"},
-  {c: "Category I", s: 89, g: "Carbon tetrachloride"},
-  {c: "Category I", s: 90, g: "Carbonyl"},
-  {c: "Category I", s: 91, g: "Carnauba wax"},
-  {c: "Category I", s: 92, g: "Carpet"},
-  {c: "Category I", s: 93, g: "Carvacrol"},
-  {c: "Category I", s: 94, g: "Cashew nuts"},
-  {c: "Category I", s: 95, g: "Cassia leaves"},
-  {c: "Category I", s: 96, g: "Castor oil"},
-  {c: "Category I", s: 97, g: "Cat-gut"},
-  {c: "Category I", s: 98, g: "Caustic potash"},
-  {c: "Category I", s: 99, g: "Caustic soda"},
-  {c: "Category I", s: 100, g: "Cedar wood oil"},
-  {c: "Category I", s: 101, g: "Cellophane"},
-  {c: "Category I", s: 102, g: "Cellophane paper/tape"},
-  {c: "Category I", s: 103, g: "Cellulose"},
-  {c: "Category I", s: 104, g: "Cellulose acetate"},
-  {c: "Category I", s: 105, g: "Cellulose acetate films"},
-  {c: "Category I", s: 106, g: "Ceresin wax"},
-  {c: "Category I", s: 107, g: "Chaff"},
-  {c: "Category I", s: 108, g: "Chinese inset wax"},
-  {c: "Category I", s: 109, g: "Chinese tallow"},
-  {c: "Category I", s: 110, g: "Chinese wood oil"},
-  {c: "Category I", s: 111, g: "Chip (particle) board"},
-  {c: "Category I", s: 112, g: "Chloral"},
-  {c: "Category I", s: 113, g: "Chloroform"},
-  {c: "Category I", s: 114, g: "Chlorowax"},
-  {c: "Category I", s: 115, g: "Chocolates"},
-  {c: "Category I", s: 116, g: "Chopped maize"},
-  {c: "Category I", s: 117, g: "Chromyl Chloride"},
-  {c: "Category I", s: 118, g: "Cineol"},
-  {c: "Category I", s: 119, g: "Cinnabar"},
-  {c: "Category I", s: 120, g: "Citral"},
-  {c: "Category I", s: 121, g: "Citric acid"},
-  {c: "Category I", s: 122, g: "Citronellal"},
-  {c: "Category I", s: 123, g: "Citronellol"},
-  {c: "Category I", s: 124, g: "CKD Kits of Automobiles"},
-  {c: "Category I", s: 125, g: "Cloth, Asphalted"},
-  {c: "Category I", s: 126, g: "Coaltar and coal pitch"},
-  {c: "Category I", s: 127, g: "Coaltar distillate"},
-  {c: "Category I", s: 128, g: "Cocoa beans"},
-  {c: "Category I", s: 129, g: "Cocoa fat"},
-  {c: "Category I", s: 130, g: "Cocoa oil"},
-  {c: "Category I", s: 131, g: "Coconut fat"},
-  {c: "Category I", s: 132, g: "Coconut oil"},
-  {c: "Category I", s: 133, g: "Cod-liver oil"},
-  {c: "Category I", s: 134, g: "Coffee and substitutes"},
-  {c: "Category I", s: 135, g: "Coir yarn"},
-  {c: "Category I", s: 136, g: "Colamine, Colophony"},
-  {c: "Category I", s: 137, g: "Complex fertilizers"},
-  {c: "Category I", s: 138, g: "Copal"},
-  {c: "Category I", s: 139, g: "Copper sulphide"},
-  {c: "Category I", s: 140, g: "Copra"},
-  {c: "Category I", s: 141, g: "Copra cake/meal"},
-  {c: "Category I", s: 142, g: "Cordage"},
-  {c: "Category I", s: 143, g: "Coriander oil"},
-  {c: "Category I", s: 144, g: "Cork"},
-  {c: "Category I", s: 145, g: "Cork wood"},
-  {c: "Category I", s: 146, g: "Corn oil"},
-  {c: "Category I", s: 147, g: "Cotton fibre in pressed bales"},
-  {c: "Category I", s: 148, g: "Cotton oil"},
-  {c: "Category I", s: 149, g: "Cotton seed oil"},
-  {c: "Category I", s: 150, g: "Cotton seed/cake"},
-  {c: "Category I", s: 151, g: "Creosote"},
-  {c: "Category I", s: 152, g: "Creosote oil"},
-  {c: "Category I", s: 153, g: "Cresidine"},
-  {c: "Category I", s: 154, g: "Cresol"},
-  {c: "Category I", s: 155, g: "Cresylic acid"},
-  {c: "Category I", s: 156, g: "Cross Linked Polyethylene Cable"},
-  {c: "Category I", s: 157, g: "XLPE"},
-  {c: "Category I", s: 158, g: "Croton oil"},
-  {c: "Category I", s: 159, g: "Crotonic acid"},
-  {c: "Category I", s: 160, g: "Dammer resin"},
-  {c: "Category I", s: 161, g: "Decahydronaphthalene"},
-  {c: "Category I", s: 162, g: "Decalin"},
-  {c: "Category I", s: 163, g: "Decanal"},
-  {c: "Category I", s: 164, g: "Dextrin"},
-  {c: "Category I", s: 165, g: "Diacetin"},
-  {c: "Category I", s: 166, g: "Diallyl phthalate"},
-  {c: "Category I", s: 167, g: "Diamyl phthalate"},
-  {c: "Category I", s: 168, g: "Diamyl sulphide"},
-  {c: "Category I", s: 169, g: "Dibromodifluromethane"},
-  {c: "Category I", s: 170, g: "Dibutoxy tetraglycol"},
-  {c: "Category I", s: 171, g: "Dibutyl phthalate"},
-  {c: "Category I", s: 172, g: "Dibutyl sebacate"},
-  {c: "Category I", s: 173, g: "Dibutyl tartrate"},
-  {c: "Category I", s: 174, g: "Dichlorohydrin"},
-  {c: "Category I", s: 175, g: "Dichloromethane"},
-  {c: "Category I", s: 176, g: "D.D.T"},
-  {c: "Category I", s: 177, g: "Dicyclo-diepoxy-carboxylate"},
-  {c: "Category I", s: 178, g: "Dicyclohexylamine"},
-  {c: "Category I", s: 179, g: "Diethyl maleate"},
-  {c: "Category I", s: 180, g: "Diethyl malonate"},
-  {c: "Category I", s: 181, g: "Diethyl oxalate"},
-  {c: "Category I", s: 182, g: "Diethyl phthalate"},
-  {c: "Category I", s: 183, g: "Diethyl succinate"},
-  {c: "Category I", s: 184, g: "Dimethyl cynanmide"},
-  {c: "Category I", s: 185, g: "Dioctyl phthalate"},
-  {c: "Category I", s: 186, g: "Dried fish"},
-  {c: "Category I", s: 187, g: "Dried milkpowder"},
-  {c: "Category I", s: 188, g: "Dried leaves of all kinds"},
-  {c: "Category I", s: 189, g: "Dyes of all kinds"},
-  {c: "Category I", s: 190, g: "Earth wax"},
-  {c: "Category I", s: 191, g: "Edible fat"},
-  {c: "Category I", s: 192, g: "Edible oil"},
-  {c: "Category I", s: 193, g: "Elemi oil"},
-  {c: "Category I", s: 194, g: "Endrin"},
-  {c: "Category I", s: 195, g: "Epoxy resin"},
-  {c: "Category I", s: 196, g: "Ethoxy resins"},
-  {c: "Category I", s: 197, g: "Ethyl sulphate"},
-  {c: "Category I", s: 198, g: "Eugenol"},
-  {c: "Category I", s: 199, g: "Fats"},
-  {c: "Category I", s: 200, g: "Feathers and down"},
-  {c: "Category I", s: 201, g: "Felt"},
-  {c: "Category I", s: 202, g: "Fibrous plants"},
-  {c: "Category I", s: 203, g: "Fire wood"},
-  {c: "Category I", s: 204, g: "Fish guano/manure"},
-  {c: "Category I", s: 205, g: "Fish oil"},
-  {c: "Category I", s: 206, g: "Flax"},
-  {c: "Category I", s: 207, g: "Flowers dried of all kinds"},
-  {c: "Category I", s: 208, g: "Foam rubber, freon"},
-  {c: "Category I", s: 209, g: "Fodder"},
-  {c: "Category I", s: 210, g: "Furs"},
-  {c: "Category I", s: 211, g: "Galatlith"},
-  {c: "Category I", s: 212, g: "Gamboge"},
-  {c: "Category I", s: 213, g: "Ganja"},
-  {c: "Category I", s: 214, g: "Gases, inert and non-combustible"},
-  {c: "Category I", s: 215, g: "Gedda wax"},
-  {c: "Category I", s: 216, g: "Gelatine"},
-  {c: "Category I", s: 217, g: "Gentac latex or vinyl pyridine latex"},
-  {c: "Category I", s: 218, g: "Geranial"},
-  {c: "Category I", s: 219, g: "Geraniol"},
-  {c: "Category I", s: 220, g: "Geranium oil"},
-  {c: "Category I", s: 221, g: "Ghee fat"},
-  {c: "Category I", s: 222, g: "Glues of all kinds"},
-  {c: "Category I", s: 223, g: "Glycerine"},
-  {c: "Category I", s: 224, g: "Goats wool"},
-  {c: "Category I", s: 225, g: "Grain meal"},
-  {c: "Category I", s: 226, g: "Grass max"},
-  {c: "Category I", s: 227, g: "Grass weed"},
-  {c: "Category I", s: 228, g: "Grease, lubricating"},
-  {c: "Category I", s: 229, g: "Groundnut oil"},
-  {c: "Category I", s: 230, g: "Groundnut shelled, cake, meal,"},
-  {c: "Category I", s: 231, g: "Guaiacum resin"},
-  {c: "Category I", s: 232, g: "Gums"},
-  {c: "Category I", s: 233, g: "Gunnies (loose)"},
-  {c: "Category I", s: 234, g: "Guttapercha"},
-  {c: "Category I", s: 235, g: "Hair"},
-  {c: "Category I", s: 236, g: "Hazel nut oil"},
-  {c: "Category I", s: 237, g: "Hempseed"},
-  {c: "Category I", s: 238, g: "Hempseed oil"},
-  {c: "Category I", s: 239, g: "Herbs, dried of all kinds"},
-  {c: "Category I", s: 240, g: "Hides & Skin"},
-  {c: "Category I", s: 241, g: "Hog fat oil"},
-  {c: "Category I", s: 242, g: "Hycol"},
-  {c: "Category I", s: 243, g: "Hydrogen peroxide, under"},
-  {c: "Category I", s: 244, g: "Hydroquinone"},
-  {c: "Category I", s: 245, g: "Hyphone"},
-  {c: "Category I", s: 246, g: "lanone Beta"},
-  {c: "Category I", s: 247, g: "Indian wax"},
-  {c: "Category I", s: 248, g: "Indigo"},
-  {c: "Category I", s: 249, g: "Insence"},
-  {c: "Category I", s: 250, g: "Iron powder"},
-  {c: "Category I", s: 251, g: "Iron pyrites"},
-  {c: "Category I", s: 252, g: "Iron sulphides"},
-  {c: "Category I", s: 253, g: "Japan tallow"},
-  {c: "Category I", s: 254, g: "Javelle water"},
-  {c: "Category I", s: 255, g: "Kapok"},
-  {c: "Category I", s: 256, g: "Kapok oil/seed"},
-  {c: "Category I", s: 257, g: "Kreolin"},
-  {c: "Category I", s: 258, g: "Lactose"},
-  {c: "Category I", s: 259, g: "Lamp black"},
-  {c: "Category I", s: 260, g: "Lanolin"},
-  {c: "Category I", s: 261, g: "Lard"},
-  {c: "Category I", s: 262, g: "Lard oil"},
-  {c: "Category I", s: 263, g: "Latex"},
-  {c: "Category I", s: 264, g: "Lauryl Mercaptan"},
-  {c: "Category I", s: 265, g: "Lavender oil"},
-  {c: "Category I", s: 266, g: "Lead acetate"},
-  {c: "Category I", s: 267, g: "Lead Arsemates"},
-  {c: "Category I", s: 268, g: "Lead chromate"},
-  {c: "Category I", s: 269, g: "Leather"},
-  {c: "Category I", s: 270, g: "Leaves, dried of all kinds"},
-  {c: "Category I", s: 271, g: "Lemon grass oil"},
-  {c: "Category I", s: 272, g: "Lime, unslaked"},
-  {c: "Category I", s: 273, g: "Lindane"},
-  {c: "Category I", s: 274, g: "Linen"},
-  {c: "Category I", s: 275, g: "Linoleum"},
-  {c: "Category I", s: 276, g: "Linolic acid"},
-  {c: "Category I", s: 277, g: "Linseed"},
-  {c: "Category I", s: 278, g: "Linseed cake"},
-  {c: "Category I", s: 279, g: "Linseed oil"},
-  {c: "Category I", s: 280, g: "Liquor amonia"},
-  {c: "Category I", s: 281, g: "Low Matalurgical Coke"},
-  {c: "Category I", s: 282, g: "Magnesium"},
-  {c: "Category I", s: 283, g: "Magnesium alloy"},
-  {c: "Category I", s: 284, g: "Magnesium shavings"},
-  {c: "Category I", s: 285, g: "Maize oil"},
-  {c: "Category I", s: 286, g: "Maleic anhydride"},
-  {c: "Category I", s: 287, g: "Manganese Acetate"},
-  {c: "Category I", s: 288, g: "Manhaden oil"},
-  {c: "Category I", s: 289, g: "Man-made fibres (not otherwise specifically provided for) and its Clean waste in pressed bales"},
-  {"c": "Category I", "s": 290, "g": "Mannitol monolaurate"},
-  {"c": "Category I", "s": 291, "g": "Margarine"},
-  {"c": "Category I", "s": 292, "g": "Mastic"},
-  {"c": "Category I", "s": 293, "g": "Mats of all kinds(synthetic or Vegetable)"},
-  {"c": "Category I", "s": 294, "g": "Menthol"},
-  {"c": "Category I", "s": 295, "g": "Mercury Cyanide"},
-  {"c": "Category I", "s": 296, "g": "Mesitylene"},
-  {"c": "Category I", "s": 297, "g": "Methyl bromide"},
-  {"c": "Category I", "s": 298, "g": "Methyl cinnamate"},
-  {"c": "Category I", "s": 299, "g": "Middle oils"},
-  {"c": "Category I", "s": 300, "g": "Milk fat"},
-  {"c": "Category I", "s": 301, "g": "Milk of sugar (lactose)"},
-  {"c": "Category I", "s": 302, "g": "Milk powder"},
-  {"c": "Category I", "s": 303, "g": "Molasses"},
-  {"c": "Category I", "s": 304, "g": "Molasses meal"},
-  {"c": "Category I", "s": 305, "g": "Mosquito mat/coil"},
-  {"c": "Category I", "s": 306, "g": "Mowra flowers"},
-  {"c": "Category I", "s": 307, "g": "Mungo"},
-  {"c": "Category I", "s": 308, "g": "Mustard oil"},
-  {"c": "Category I", "s": 309, "g": "Mutton tallow"},
-  {"c": "Category I", "s": 310, "g": "Myrrh"},
-  {"c": "Category I", "s": 311, "g": "Naphthalene"},
-  {"c": "Category I", "s": 312, "g": "Naphthylthio"},
-  {"c": "Category I", "s": 313, "g": "Natural rubber"},
-  {"c": "Category I", "s": 314, "g": "Neat\\'s foot fat"},
-  {"c": "Category I", "s": 315, "g": "Neat\\'s foot oil"},
-  {"c": "Category I", "s": 316, "g": "Neohexane"},
-  {"c": "Category I", "s": 317, "g": "Nicotine acid"},
-  {"c": "Category I", "s": 318, "g": "Niobe oil"},
-  {"c": "Category I", "s": 319, "g": "Nitrogen monoxide"},
-  {"c": "Category I", "s": 320, "g": "Nitrophenol (para)"},
-  {"c": "Category I", "s": 321, "g": "Nitrous oxide"},
-  {"c": "Category I", "s": 322, "g": "Nocotinic and Nicotine preparation"},
-  {"c": "Category I", "s": 323, "g": "Nut oil"},
-  {"c": "Category I", "s": 324, "g": "Nylon"},
-  {"c": "Category I", "s": 325, "g": "Octadecanoic acid"},
-  {"c": "Category I", "s": 326, "g": "Octanoic acid"},
-  {"c": "Category I", "s": 327, "g": "Octyl acetate"},
-  {"c": "Category I", "s": 328, "g": "Oil cake"},
-  {"c": "Category I", "s": 329, "g": "Oil of bay"},
-  {"c": "Category I", "s": 330, "g": "Oil of bitter almonds"},
-  {"c": "Category I", "s": 331, "g": "Oil of Mirbane"},
-  {"c": "Category I", "s": 332, "g": "Oil of Wintergreen"},
-  {"c": "Category I", "s": 333, "g": "Oil paper"},
-  {"c": "Category I", "s": 334, "g": "Oil seed meal"},
-  {"c": "Category I", "s": 335, "g": "Oil skin"},
-  {"c": "Category I", "s": 336, "g": "Oils, animal (not otherwise specifically provided for)"},
-  {"c": "Category I", "s": 337, "g": "Oils, vegetable (not otherwise specifically provided for)"},
-  {"c": "Category I", "s": 338, "g": "Oleic acid"},
-  {"c": "Category I", "s": 339, "g": "Olein"},
-  {"c": "Category I", "s": 340, "g": "Oleum"},
-  {"c": "Category I", "s": 341, "g": "Olive oil"},
-  {"c": "Category I", "s": 342, "g": "Opium"},
-  {"c": "Category I", "s": 343, "g": "Oxalic acid"},
-  {"c": "Category I", "s": 344, "g": "Palm kernel oil"},
-  {"c": "Category I", "s": 345, "g": "Palm oil/butter/fat"},
-  {"c": "Category I", "s": 346, "g": "Palmarosa oil"},
-  {"c": "Category I", "s": 347, "g": "Palmitic acid"},
-  {"c": "Category I", "s": 348, "g": "Paper yarn"},
-  {"c": "Category I", "s": 349, "g": "Paper in any form"},
-  {"c": "Category I", "s": 350, "g": "Paper insulated lead sheathed cable (PILC)"},
-  {"c": "Category I", "s": 351, "g": "Para Amisidine"},
-  {"c": "Category I", "s": 352, "g": "Para chloro aniline"},
-  {"c": "Category I", "s": 353, "g": "Paraffin oil"},
-  {"c": "Category I", "s": 354, "g": "Paraffin wax"},
-  {"c": "Category I", "s": 355, "g": "Patent leather"},
-  {"c": "Category I", "s": 356, "g": "Peanut (shelled)"},
-  {"c": "Category I", "s": 357, "g": "Peanut oil"},
-  {"c": "Category I", "s": 358, "g": "Peat"},
-  {"c": "Category I", "s": 359, "g": "Peat dust"},
-  {"c": "Category I", "s": 360, "g": "Pectin"},
-  {"c": "Category I", "s": 361, "g": "Penicillin storage"},
-  {"c": "Category I", "s": 362, "g": "Perilla oil"},
-  {"c": "Category I", "s": 363, "g": "Petitgrain oil"},
-  {"c": "Category I", "s": 364, "g": "Petroleum coke"},
-  {"c": "Category I", "s": 365, "g": "Petroleum jelly"},
-  {"c": "Category I", "s": 366, "g": "Pharmaceutical preparations"},
-  {"c": "Category I", "s": 367, "g": "Phenoplasts"},
-  {"c": "Category I", "s": 368, "g": "Phorone"},
-  {"c": "Category I", "s": 369, "g": "Phosgene"},
-  {"c": "Category I", "s": 370, "g": "Phosphonium lodide"},
-  {"c": "Category I", "s": 371, "g": "Phthalic anhydride"},
-  {"c": "Category I", "s": 372, "g": "Pig fat"},
-  {"c": "Category I", "s": 373, "g": "Pine bark"},
-  {"c": "Category I", "s": 374, "g": "Pine Oil"},
-  {"c": "Category I", "s": 375, "g": "Pine pitch"},
-  {"c": "Category I", "s": 376, "g": "Pine tar oil"},
-  {"c": "Category I", "s": 377, "g": "Piperazine"},
-  {"c": "Category I", "s": 378, "g": "Pitch"},
-  {"c": "Category I", "s": 379, "g": "Plastic cloth"},
-  {"c": "Category I", "s": 380, "g": "Plastic of all kinds (not otherwise specifically provided for)"},
-  {"c": "Category I", "s": 381, "g": "Pogy oil (Menhaden oil)"},
-  {"c": "Category I", "s": 382, "g": "Polyacrylonitrile"},
-  {"c": "Category I", "s": 383, "g": "Polyamyl naphthalene"},
-  {"c": "Category I", "s": 384, "g": "Polyester"},
-  {"c": "Category I", "s": 385, "g": "Polyethylene"},
-  {"c": "Category I", "s": 386, "g": "Polymethacrylate"},
-  {"c": "Category I", "s": 387, "g": "Polypropylene"},
-  {"c": "Category I", "s": 388, "g": "Polyurethane, solid"},
-  {"c": "Category I", "s": 389, "g": "Polyviny acetate"},
-  {"c": "Category I", "s": 390, "g": "Polyvinyl chloride"},
-  {"c": "Category I", "s": 391, "g": "Poppy seed oil"},
-  {"c": "Category I", "s": 392, "g": "Poppy seeds"},
-  {"c": "Category I", "s": 393, "g": "Potassium chromate"},
-  {"c": "Category I", "s": 394, "g": "Potassium cyanide"},
-  {"c": "Category I", "s": 395, "g": "Potassium Xanthate"},
-  {"c": "Category I", "s": 396, "g": "Potasssium hydroxide"},
-  {"c": "Category I", "s": 397, "g": "Pulegon"},
-  {"c": "Category I", "s": 398, "g": "Pumpkin oil"},
-  {"c": "Category I", "s": 399, "g": "Pyrogallo"},
-  {"c": "Category I", "s": 400, "g": "Quinol"},
-  {"c": "Category I", "s": 401, "g": "Ramie"},
-  {"c": "Category I", "s": 402, "g": "Rape oil"},
-  {"c": "Category I", "s": 403, "g": "Red oil"},
-  {"c": "Category I", "s": 404, "g": "Reeds"},
-  {"c": "Category I", "s": 405, "g": "Resinates"},
-  {"c": "Category I", "s": 406, "g": "Resins, natural and synthetic, (not otherwise specificaly provided for)"},
-  {"c": "Category I", "s": 407, "g": "Resorcinol"},
-  {"c": "Category I", "s": 408, "g": "Rexin cloth"},
-  {"c": "Category I", "s": 409, "g": "Rice Husk"},
-  {"c": "Category I", "s": 410, "g": "Ricinus oil"},
-  {"c": "Category I", "s": 411, "g": "Rock salt"},
-  {"c": "Category I", "s": 412, "g": "Rosewood oil"},
-  {"c": "Category I", "s": 413, "g": "Rosin"},
-  {"c": "Category I", "s": 414, "g": "Rubber"},
-  {"c": "Category I", "s": 415, "g": "Rubber goods"},
-  {"c": "Category I", "s": 416, "g": "Rugs"},
-  {"c": "Category I", "s": 417, "g": "Saccharin"},
-  {"c": "Category I", "s": 418, "g": "Saccharose"},
-  {"c": "Category I", "s": 419, "g": "Safrole"},
-  {"c": "Category I", "s": 420, "g": "Salicylic acid"},
-  {"c": "Category I", "s": 421, "g": "Sandalwood oil"},
-  {"c": "Category I", "s": 422, "g": "Sandarac"},
-  {"c": "Category I", "s": 423, "g": "Sassafras oil"},
-  {"c": "Category I", "s": 424, "g": "Sawdust"},
-  {"c": "Category I", "s": 425, "g": "Seal oil"},
-  {"c": "Category I", "s": 426, "g": "Sealing wax"},
-  {"c": "Category I", "s": 427, "g": "Seeds of all kinds"},
-  {"c": "Category I", "s": 428, "g": "Sesame oil"},
-  {"c": "Category I", "s": 429, "g": "Shale oil"},
-  {"c": "Category I", "s": 430, "g": "Shark oil"},
-  {"c": "Category I", "s": 431, "g": "Shavings, wood, paper"},
-  {"c": "Category I", "s": 432, "g": "Shea butter"},
-  {"c": "Category I", "s": 433, "g": "Sheep\\'s wool"},
-  {"c": "Category I", "s": 434, "g": "Shellac"},
-  {"c": "Category I", "s": 435, "g": "Shoddy"},
-  {"c": "Category I", "s": 436, "g": "Silicon, Spray"},
-  {"c": "Category I", "s": 437, "g": "Silk, natural"},
-  {"c": "Category I", "s": 438, "g": "Smoke cartridges"},
-  {"c": "Category I", "s": 439, "g": "Sodium Acetate"},
-  {"c": "Category I", "s": 440, "g": "Sodium Alginate"},
-  {"c": "Category I", "s": 441, "g": "Sodium chromate"},
-  {"c": "Category I", "s": 442, "g": "Sodium Cyanide"},
-  {"c": "Category I", "s": 443, "g": "Sodium cyclamate"},
-  {"c": "Category I", "s": 444, "g": "Sodium Hexameta Phosphate"},
-  {"c": "Category I", "s": 445, "g": "Sodium Sulphide"},
-  {"c": "Category I", "s": 446, "g": "Sodium Thiosulphate"},
-  {"c": "Category I", "s": 447, "g": "Soot"},
-  {"c": "Category I", "s": 448, "g": "Sorbic acid"},
-  {"c": "Category I", "s": 449, "g": "Soya bean oil, cake"},
-  {"c": "Category I", "s": 450, "g": "Soya beans"},
-  {"c": "Category I", "s": 451, "g": "Soya oil"},
-  {"c": "Category I", "s": 452, "g": "Spermaceti"},
-  {"c": "Category I", "s": 453, "g": "Spermaceti oil"},
-  {"c": "Category I", "s": 454, "g": "Spices"},
-  {"c": "Category I", "s": 455, "g": "Sponges"},
-  {"c": "Category I", "s": 456, "g": "Sponge Iron"},
-  {"c": "Category I", "s": 457, "g": "Sponges U foam"},
-  {"c": "Category I", "s": 458, "g": "Spruce pitch"},
-  {"c": "Category I", "s": 459, "g": "Spruce seed oil"},
-  {"c": "Category I", "s": 460, "g": "Spruce wood pitch"},
-  {"c": "Category I", "s": 461, "g": "Spruce wood tar oil"},
-  {"c": "Category I", "s": 462, "g": "Stand oil"},
-  {"c": "Category I", "s": 463, "g": "Stannic chloride (anhydrous)"},
-  {"c": "Category I", "s": 464, "g": "Starch"},
-  {"c": "Category I", "s": 465, "g": "Stearic acid"},
-  {"c": "Category I", "s": 466, "g": "Stearin"},
-  {"c": "Category I", "s": 467, "g": "Steel wool (fine)"},
-  {"c": "Category I", "s": 468, "g": "Strontium oxalate"},
-  {"c": "Category I", "s": 469, "g": "Strontium sulphide"},
-  {"c": "Category I", "s": 470, "g": "Sugar"},
-  {"c": "Category I", "s": 471, "g": "Sulphur"},
-  {"c": "Category I", "s": 472, "g": "Sulphur chlorides"},
-  {"c": "Category I", "s": 473, "g": "Sulphur Dioxide"},
-  {"c": "Category I", "s": 474, "g": "Sulphur trioxide"},
-  {"c": "Category I", "s": 475, "g": "Sun Floweroils, seeds"},
-  {"c": "Category I", "s": 476, "g": "Sweet almond oil"},
-  {"c": "Category I", "s": 477, "g": "Synthetic rubber"},
-  {"c": "Category I", "s": 478, "g": "Synthetic/vegetable staple fibres (not otherwise specifically provided for) Clean waste thereof pressed in bales"},
-  {"c": "Category I", "s": 479, "g": "Tall oil"},
-  {"c": "Category I", "s": 480, "g": "Tallow"},
-  {"c": "Category I", "s": 481, "g": "Tallow oil"},
-  {"c": "Category I", "s": 482, "g": "Tan bark"},
-  {"c": "Category I", "s": 483, "g": "Tar (all kinds),"},
-  {"c": "Category I", "s": 484, "g": "Tarpaulins"},
-  {"c": "Category I", "s": 485, "g": "Tarred felt/paper/rope/string/"},
-  {"c": "Category I", "s": 486, "g": "Tarred cloth"},
-  {"c": "Category I", "s": 487, "g": "Tea"},
-  {"c": "Category I", "s": 488, "g": "Tea seed oil"},
-  {"c": "Category I", "s": 489, "g": "Teal oil"},
-  {"c": "Category I", "s": 490, "g": "Tempering oil"},
-  {"c": "Category I", "s": 491, "g": "Terephthalic acid"},
-  {"c": "Category I", "s": 492, "g": "Tetra ethyl lead"},
-  {"c": "Category I", "s": 493, "g": "Timber"},
-  {"c": "Category I", "s": 494, "g": "Titanium tetrachloride"},
-  {"c": "Category I", "s": 495, "g": "Tobacco and its products"},
-  {"c": "Category I", "s": 496, "g": "Tobacco leaves"},
-  {"c": "Category I", "s": 497, "g": "Tow (oakum)"},
-  {"c": "Category I", "s": 498, "g": "Tow of all kinds"},
-  {"c": "Category I", "s": 499, "g": "Tricalcium phosphate"},
-  {"c": "Category I", "s": 500, "g": "Trichloro ethane"},
-  {"c": "Category I", "s": 501, "g": "Trichloro Ethylene"},
-  {"c": "Category I", "s": 502, "g": "Trisodium Phosphate"},
-  {"c": "Category I", "s": 503, "g": "Tung oil"},
-  {"c": "Category I", "s": 504, "g": "Turkey red oil"},
-  {"c": "Category I", "s": 505, "g": "Twine"},
-  {"c": "Category I", "s": 506, "g": "Tyres"},
-  {"c": "Category I", "s": 507, "g": "Unhewn logs"},
-  {"c": "Category I", "s": 508, "g": "Urea"},
-  {"c": "Category I", "s": 509, "g": "Uric acid"},
-  {"c": "Category I", "s": 510, "g": "Valeric acid"},
-  {"c": "Category I", "s": 511, "g": "Valum bark and/or fibres in"},
-  {"c": "Category I", "s": 512, "g": "pressed bales"},
-  {"c": "Category I", "s": 513, "g": "Vaseline"},
-  {"c": "Category I", "s": 514, "g": "Vegetable oil of all kinds (not otherwise specifically provided for)"},
-  {"c": "Category I", "s": 515, "g": "Vegetables (dried)"},
-  {"c": "Category I", "s": 516, "g": "Viscose and clean waste thereof in pressed bales"},
-  {"c": "Category I", "s": 517, "g": "Vulcanised fibre"},
-  {"c": "Category I", "s": 518, "g": "Waste of Non-hazardous materials"},
-  {"c": "Category I", "s": 519, "g": "Wax candles"},
-  {"c": "Category I", "s": 520, "g": "Wax of all kinds"},
-  {"c": "Category I", "s": 521, "g": "Whale oil"},
-  {"c": "Category I", "s": 522, "g": "White Goods (such as Refrigerators Washing machines etc.)"},
-  {"c": "Category I", "s": 523, "g": "Wood"},
-  {"c": "Category I", "s": 524, "g": "Wood oil"},
-  {"c": "Category I", "s": 525, "g": "Wood pulp (loose)"},
-  {"c": "Category I", "s": 526, "g": "Wood shavings"},
-  {"c": "Category I", "s": 527, "g": "Wood wool, compressed"},
-  {"c": "Category I", "s": 528, "g": "Wood, flour"},
-  {"c": "Category I", "s": 529, "g": "Wool fat"},
-  {"c": "Category I", "s": 530, "g": "Wool, loose"},
-  {"c": "Category I", "s": 531, "g": "Xanthetic oxide"},
-  {"c": "Category I", "s": 532, "g": "Xanthogenale de potassium"},
-  {"c": "Category I", "s": 533, "g": "Xylenol"},
-  {"c": "Category I", "s": 534, "g": "o - Xylidine"},
-  {"c": "Category I", "s": 535, "g": "Ylang-Ylang oil"},
-  {"c": "Category I", "s": 536, "g": "Ziroconium Tetrachloride"},
-  {"c": "Category I", "s": 537, "g": "Other Category I Goods"},
-  {"c": "Category II", "s": 1, "g": "Accelerene"},
-  {"c": "Category II", "s": 2, "g": "Acetyl peroxide"},
-  {"c": "Category II", "s": 3, "g": "All flammable liquids having flash point between 320C and 650C (both inclusive)"},
-  {"c": "Category II", "s": 4, "g": "Aloe fibres, loose"},
-  {"c": "Category II", "s": 5, "g": "Aluminium carbide"},
-  {"c": "Category II", "s": 6, "g": "Aluminium ferrosilicon"},
-  {"c": "Category II", "s": 7, "g": "Aluminium hydride"},
-  {"c": "Category II", "s": 8, "g": "Aluminium nitrate"},
-  {"c": "Category II", "s": 9, "g": "Aluminium phosphide"},
-  {"c": "Category II", "s": 10, "g": "Aluminium powder/dust"},
-  {"c": "Category II", "s": 11, "g": "Ammonium chromate"},
-  {"c": "Category II", "s": 12, "g": "Ammonium cyanide"},
-  {"c": "Category II", "s": 13, "g": "Ammonium dichromate"},
-  {"c": "Category II", "s": 14, "g": "Ammonium persulphate"},
-  {"c": "Category II", "s": 15, "g": "Amphetamine"},
-  {"c": "Category II", "s": 16, "g": "Amyl nitrite"},
-  {"c": "Category II", "s": 17, "g": "Angelica oil"},
-  {"c": "Category II", "s": 18, "g": "Antimony pentoxide"},
-  {"c": "Category II", "s": 19, "g": "Aqua Forties (Nitric acid)"},
-  {"c": "Category II", "s": 20, "g": "Aqua regia"},
-  {"c": "Category II", "s": 21, "g": "Balsams"},
-  {"c": "Category II", "s": 22, "g": "Bamboos (whole)"},
-  {"c": "Category II", "s": 23, "g": "Barium"},
-  {"c": "Category II", "s": 24, "g": "Barium azide"},
-  {"c": "Category II", "s": 25, "g": "Barium chlorate/chlorite"},
-  {"c": "Category II", "s": 26, "g": "Barium chromate"},
-  {"c": "Category II", "s": 27, "g": "Barium dioxide"},
-  {"c": "Category II", "s": 28, "g": "Barium hydride"},
-  {"c": "Category II", "s": 29, "g": "Barium manganate"},
-  {"c": "Category II", "s": 30, "g": "Barium nitrate"},
-  {"c": "Category II", "s": 31, "g": "Barium perchlorate"},
-  {"c": "Category II", "s": 32, "g": "Barium permanganate"},
-  {"c": "Category II", "s": 33, "g": "Barium peroxide"},
-  {"c": "Category II", "s": 34, "g": "Beets, sliced, dried"},
-  {"c": "Category II", "s": 35, "g": "Benzoyl peroxide, wet"},
-  {"c": "Category II", "s": 36, "g": "Bergamot oil"},
-  {"c": "Category II", "s": 37, "g": "Bleaching powder"},
-  {"c": "Category II", "s": 38, "g": "Bran dust"},
-  {"c": "Category II", "s": 39, "g": "Bromine"},
-  {"c": "Category II", "s": 40, "g": "Bromine pentafluoride"},
-  {"c": "Category II", "s": 41, "g": "Bromine trifluoride"},
-  {"c": "Category II", "s": 42, "g": "Bromoacetone"},
-  {"c": "Category II", "s": 43, "g": "Bronze powder"},
-  {"c": "Category II", "s": 44, "g": "Butyl nitrate"},
-  {"c": "Category II", "s": 45, "g": "Cadmium nitrate"},
-  {"c": "Category II", "s": 46, "g": "Caesium peroxide"},
-  {"c": "Category II", "s": 47, "g": "Calamus oil"},
-  {"c": "Category II", "s": 48, "g": "Calcium"},
-  {"c": "Category II", "s": 49, "g": "Calcium aluminium hydride"},
-  {"c": "Category II", "s": 50, "g": "Calcium amide"},
-  {"c": "Category II", "s": 51, "g": "Calcium amonium nitrate"},
-  {"c": "Category II", "s": 52, "g": "Calcium bromate"},
-  {"c": "Category II", "s": 53, "g": "Calcium chlorate"},
-  {"c": "Category II", "s": 54, "g": "Calcium cyanamide"},
-  {"c": "Category II", "s": 55, "g": "Calcium hypochlorite"},
-  {"c": "Category II", "s": 56, "g": "Calcium nitrate"},
-  {"c": "Category II", "s": 57, "g": "Calcium perchlorate"},
-  {"c": "Category II", "s": 58, "g": "Calcium permanganate"},
-  {"c": "Category II", "s": 59, "g": "Calcium peroxide"},
-  {"c": "Category II", "s": 60, "g": "Calcium phosphide"},
-  {"c": "Category II", "s": 61, "g": "Calcium phosphite"},
-  {"c": "Category II", "s": 62, "g": "Calcium resinate"},
-  {"c": "Category II", "s": 63, "g": "Calcium silicide"},
-  {"c": "Category II", "s": 64, "g": "Camomile oil"},
-  {"c": "Category II", "s": 65, "g": "Canadian balsam"},
-  {"c": "Category II", "s": 66, "g": "Caraway oil"},
-  {"c": "Category II", "s": 67, "g": "Celluloid"},
-  {"c": "Category II", "s": 68, "g": "Cellulose nitrate silk"},
-  {"c": "Category II", "s": 69, "g": "Celluoid films"},
-  {"c": "Category II", "s": 70, "g": "Chile saltpeter"},
-  {"c": "Category II", "s": 71, "g": "Chlorates (inorganic) not otherwise specifically provided for"},
-  {"c": "Category II", "s": 72, "g": "Chlorine"},
-  {"c": "Category II", "s": 73, "g": "Chloropicrin"},
-  {"c": "Category II", "s": 74, "g": "Chlorosulphuric acid"},
-  {"c": "Category II", "s": 75, "g": "Cholorites (inorganic) not otherwise specifically provided for"},
-  {"c": "Category II", "s": 76, "g": "Chromic acid"},
-  {"c": "Category II", "s": 77, "g": "Chromic anhydride"},
-  {"c": "Category II", "s": 78, "g": "Chromic oxide"},
-  {"c": "Category II", "s": 79, "g": "Chromium trioxide"},
-  {"c": "Category II", "s": 80, "g": "Cinnamon"},
-  {"c": "Category II", "s": 81, "g": "Citronella oil"},
-  {"c": "Category II", "s": 82, "g": "Clove oil"},
-  {"c": "Category II", "s": 83, "g": "Cobalt nitrate"},
-  {"c": "Category II", "s": 84, "g": "Cobalt potassium nitrite"},
-  {"c": "Category II", "s": 85, "g": "Collodion paper"},
-  {"c": "Category II", "s": 86, "g": "Collodion silk"},
-  {"c": "Category II", "s": 87, "g": "Collodion-cotton"},
-  {"c": "Category II", "s": 88, "g": "Copper nitrate"},
-  {"c": "Category II", "s": 89, "g": "Cotton Fibres (others)"},
-  {"c": "Category II", "s": 90, "g": "Crackers"},
-  {"c": "Category II", "s": 91, "g": "Cyanogen bromide"},
-  {"c": "Category II", "s": 92, "g": "Dichloroisocynuric acid"},
-  {"c": "Category II", "s": 93, "g": "Diketene"},
-  {"c": "Category II", "s": 94, "g": "Ethyl silicate"},
-  {"c": "Category II", "s": 95, "g": "Eucalyptus oil"},
-  {"c": "Category II", "s": 96, "g": "Ferric nitrate"},
-  {"c": "Category II", "s": 97, "g": "Ferrosilicon"},
-  {"c": "Category II", "s": 98, "g": "Firelighters"},
-  {"c": "Category II", "s": 99, "g": "Fireworks"},
-  {"c": "Category II", "s": 100, "g": "Fish meal/scrap"},
-  {"c": "Category II", "s": 101, "g": "Flares"},
-  {"c": "Category II", "s": 102, "g": "Flash powder, Photographic"},
-  {"c": "Category II", "s": 103, "g": "Floor wax"},
-  {"c": "Category II", "s": 104, "g": "Fluorine"},
-  {"c": "Category II", "s": 105, "g": "Foam plastics"},
-  {"c": "Category II", "s": 106, "g": "Fuse"},
-  {"c": "Category II", "s": 107, "g": "Fuses without explosives"},
-  {"c": "Category II", "s": 108, "g": "Guano"},
-  {"c": "Category II", "s": 109, "g": "Guano and fish-meal"},
-  {"c": "Category II", "s": 110, "g": "Gunpowder detonating caps"},
-  {"c": "Category II", "s": 111, "g": "Hemp"},
-  {"c": "Category II", "s": 112, "g": "Hop oil"},
-  {"c": "Category II", "s": 113, "g": "Hops"},
-  {"c": "Category II", "s": 114, "g": "Hydrazine"},
-  {"c": "Category II", "s": 115, "g": "Hydrobromic acid"},
-  {"c": "Category II", "s": 116, "g": "Hydrochemical acid"},
-  {"c": "Category II", "s": 117, "g": "Hydrocyanic acid"},
-  {"c": "Category II", "s": 118, "g": "Hydrofluoric acid"},
-  {"c": "Category II", "s": 119, "g": "Hydrogen peroxide, 30-90%"},
-  {"c": "Category II", "s": 120, "g": "Ignition cords (fuses)"},
-  {"c": "Category II", "s": 121, "g": "lodine"},
-  {"c": "Category II", "s": 122, "g": "Irish oil"},
-  {"c": "Category II", "s": 123, "g": "Jasmine oil"},
-  {"c": "Category II", "s": 124, "g": "Juniper oil"},
-  {"c": "Category II", "s": 125, "g": "Jute in pressed bales"},
-  {"c": "Category II", "s": 126, "g": "Lavender oil"},
-  {"c": "Category II", "s": 127, "g": "Lead dioxide"},
-  {"c": "Category II", "s": 128, "g": "Lead nitrate"},
-  {"c": "Category II", "s": 129, "g": "Lead peroxide"},
-  {"c": "Category II", "s": 130, "g": "Lead tetra methyl"},
-  {"c": "Category II", "s": 131, "g": "Linalool"},
-  {"c": "Category II", "s": 132, "g": "Lignite (Coke)"},
-  {"c": "Category II", "s": 133, "g": "Liquid insecticides/pesticides/disinfectants flash point 32C to 65C"},
-  {"c": "Category II", "s": 134, "g": "Liquid insecticides/pesticides below 32c in sealed tins/bottles"},
-  {"c": "Category II", "s": 135, "g": "Lithium"},
-  {"c": "Category II", "s": 136, "g": "Lithium chlorate"},
-  {"c": "Category II", "s": 137, "g": "Lithium perchlorate"},
-  {"c": "Category II", "s": 138, "g": "Lithium peroxide"},
-  {"c": "Category II", "s": 139, "g": "Lupulin (hop meal)"},
-  {"c": "Category II", "s": 140, "g": "Magnesium chlorate"},
-  {"c": "Category II", "s": 141, "g": "Magnesium dioxide"},
-  {"c": "Category II", "s": 142, "g": "Magnesium dust, also dust of high magnesium alloys."},
-  {"c": "Category II", "s": 143, "g": "Magnesium nitrate"},
-  {"c": "Category II", "s": 144, "g": "Magnesium perborate"},
-  {"c": "Category II", "s": 145, "g": "Magnesium perchlorate"},
-  {"c": "Category II", "s": 146, "g": "Magnesium peroxide"},
-  {"c": "Category II", "s": 147, "g": "Magnesium powder"},
-  {"c": "Category II", "s": 148, "g": "Malt germ"},
-  {"c": "Category II", "s": 149, "g": "Manganese dioxide"},
-  {"c": "Category II", "s": 150, "g": "Manganese borate"},
-  {"c": "Category II", "s": 151, "g": "Manganese green"},
-  {"c": "Category II", "s": 152, "g": "Manganese nitrate"},
-  {"c": "Category II", "s": 153, "g": "Manganese peroxide"},
-  {"c": "Category II", "s": 154, "g": "Manganese powder"},
-  {"c": "Category II", "s": 155, "g": "Marjorum oil"},
-  {"c": "Category II", "s": 156, "g": "Matches (safety/non-safety)"},
-  {"c": "Category II", "s": 157, "g": "Mercuric iodate"},
-  {"c": "Category II", "s": 158, "g": "Mercurous nitrate"},
-  {"c": "Category II", "s": 159, "g": "Neroli (oil of orange flowers)"},
-  {"c": "Category II", "s": 160, "g": "Nickel carbonyl"},
-  {"c": "Category II", "s": 161, "g": "Nickel nitrate"},
-  {"c": "Category II", "s": 162, "g": "Nickel peroxide"},
-  {"c": "Category II", "s": 163, "g": "Nickel tetracarbonyl"},
-  {"c": "Category II", "s": 164, "g": "Nitrate/Nitrites of all kinds not otherwise specifically provided for"},
-  {"c": "Category II", "s": 165, "g": "Nitric acid"},
-  {"c": "Category II", "s": 166, "g": "Nitrite of soda"},
-  {"c": "Category II", "s": 167, "g": "Nitro silk"},
-  {"c": "Category II", "s": 168, "g": "Nitrocellulose film"},
-  {"c": "Category II", "s": 169, "g": "Nitrocellulose plastics"},
-  {"c": "Category II", "s": 170, "g": "Nitrocellulose silk"},
-  {"c": "Category II", "s": 171, "g": "Nitrocotton threads"},
-  {"c": "Category II", "s": 172, "g": "Nitrogen dioxide"},
-  {"c": "Category II", "s": 173, "g": "Nitrosyl chloride"},
-  {"c": "Category II", "s": 174, "g": "Oil of cinnamon"},
-  {"c": "Category II", "s": 175, "g": "Oil of thyme"},
-  {"c": "Category II", "s": 176, "g": "Orange (peel) oil"},
-  {"c": "Category II", "s": 177, "g": "Orange blossom oil"},
-  {"c": "Category II", "s": 178, "g": "Orange oil"},
-  {"c": "Category II", "s": 179, "g": "Paints, thinners and varnishes flash point 32C to 65C"},
-  {"c": "Category II", "s": 180, "g": "Paints, thinners and varnishes below 32C in sealed tins/bottles"},
-  {"c": "Category II", "s": 181, "g": "Parathion"},
-  {"c": "Category II", "s": 182, "g": "Peppermint oil"},
-  {"c": "Category II", "s": 183, "g": "Perchloric acid in aqueous solution > 70%"},
-  {"c": "Category II", "s": 184, "g": "Percussion caps (for toys)"},
-  {"c": "Category II", "s": 185, "g": "Periodic acid"},
-  {"c": "Category II", "s": 186, "g": "Phosphoric acid"},
-  {"c": "Category II", "s": 187, "g": "Phosphorous (red)"},
-  {"c": "Category II", "s": 188, "g": "Phosphorous oxychloride"},
-  {"c": "Category II", "s": 189, "g": "Phosphorous pentachloride"},
-  {"c": "Category II", "s": 190, "g": "Phosphorous pentaoxide"},
-  {"c": "Category II", "s": 191, "g": "Phosphorous pentasulphide"},
-  {"c": "Category II", "s": 192, "g": "Phosphorous sesquisulphide"},
-  {"c": "Category II", "s": 193, "g": "Phosphorous sulphide"},
-  {"c": "Category II", "s": 194, "g": "Phosphorous trichloride"},
-  {"c": "Category II", "s": 195, "g": "Phosphoryl chloride"},
-  {"c": "Category II", "s": 196, "g": "Pine tar"},
-  {"c": "Category II", "s": 197, "g": "Pinene"},
-  {"c": "Category II", "s": 198, "g": "Portugal oil (Orange peel oil)"},
-  {"c": "Category II", "s": 199, "g": "Potable spirits below 32C in sealed tins/bottles"},
-  {"c": "Category II", "s": 200, "g": "Potassium amide"},
-  {"c": "Category II", "s": 201, "g": "Potassium ammonium nitrate"},
-  {"c": "Category II", "s": 202, "g": "Potassium bromate"},
-  {"c": "Category II", "s": 203, "g": "Potassium chlorate"},
-  {"c": "Category II", "s": 204, "g": "Potassium dichromate"},
-  {"c": "Category II", "s": 205, "g": "Potassium dithionate"},
-  {"c": "Category II", "s": 206, "g": "Potassium hypochlorite"},
-  {"c": "Category II", "s": 207, "g": "Potassium hyposulphite"},
-  {"c": "Category II", "s": 208, "g": "Potassium nitrate"},
-  {"c": "Category II", "s": 209, "g": "Potassium nitrite"},
-  {"c": "Category II", "s": 210, "g": "Potassium perchlorate"},
-  {"c": "Category II", "s": 211, "g": "Potassium permanganate"},
-  {"c": "Category II", "s": 212, "g": "Potassium peroxide"},
-  {"c": "Category II", "s": 213, "g": "Potassium persulphate"},
-  {"c": "Category II", "s": 214, "g": "Potassium stontium chlorate"},
-  {"c": "Category II", "s": 215, "g": "Potassium sulphide"},
-  {"c": "Category II", "s": 216, "g": "Pressed residue from oil seeds"},
-  {"c": "Category II", "s": 217, "g": "Pyrolusite"},
-  {"c": "Category II", "s": 218, "g": "Pyrotechnical articles"},
-  {"c": "Category II", "s": 219, "g": "Rags"},
-  {"c": "Category II", "s": 220, "g": "Rockets (fire works)"},
-  {"c": "Category II", "s": 221, "g": "Root turpentine oil"},
-  {"c": "Category II", "s": 222, "g": "Rose oil"},
-  {"c": "Category II", "s": 223, "g": "Rosemary oil"},
-  {"c": "Category II", "s": 224, "g": "Rubidium"},
-  {"c": "Category II", "s": 225, "g": "Sage oil"},
-  {"c": "Category II", "s": 226, "g": "Salt petre"},
-  {"c": "Category II", "s": 227, "g": "Selenium dioxide"},
-  {"c": "Category II", "s": 228, "g": "Sesquisulphide matches"},
-  {"c": "Category II", "s": 229, "g": "Silver permanganate"},
-  {"c": "Category II", "s": 230, "g": "Silver Nitrate"},
-  {"c": "Category II", "s": 231, "g": "Silver Nitrite"},
-  {"c": "Category II", "s": 232, "g": "Smoke generators"},
-  {"c": "Category II", "s": 233, "g": "Sodamide"},
-  {"c": "Category II", "s": 234, "g": "Sodium amalgam"},
-  {"c": "Category II", "s": 235, "g": "Sodium amide"},
-  {"c": "Category II", "s": 236, "g": "Sodium borohydride"},
-  {"c": "Category II", "s": 237, "g": "Sodium chlorate"},
-  {"c": "Category II", "s": 238, "g": "Sodium chlorite"},
-  {"c": "Category II", "s": 239, "g": "Sodium Dichloro-s-Triazinetrione and Dihydrate"},
-  {"c": "Category II", "s": 240, "g": "Sodium dichromate"},
-  {"c": "Category II", "s": 241, "g": "Sodium dithionite"},
-  {"c": "Category II", "s": 242, "g": "Sodium hydrosulphide"},
-  {"c": "Category II", "s": 243, "g": "Sodium hydrosulphite"},
-  {"c": "Category II", "s": 244, "g": "Sodium hypochlorite"},
-  {"c": "Category II", "s": 245, "g": "Sodium Nitrate"},
-  {"c": "Category II", "s": 246, "g": "Sodium Nitrite"},
-  {"c": "Category II", "s": 247, "g": "Sodium nitroethane"},
-  {"c": "Category II", "s": 248, "g": "Sodium perborate"},
-  {"c": "Category II", "s": 249, "g": "Sodium perchlorate"},
-  {"c": "Category II", "s": 250, "g": "Sodium periodate"},
-  {"c": "Category II", "s": 251, "g": "Sodium permanganate"},
-  {"c": "Category II", "s": 252, "g": "Sodium peroxide"},
-  {"c": "Category II", "s": 253, "g": "Sodium persulphate"},
-  {"c": "Category II", "s": 254, "g": "Soidum hypophosphite"},
-  {"c": "Category II", "s": 255, "g": "Sparklers"},
-  {"c": "Category II", "s": 256, "g": "Spruce wood tar"},
-  {"c": "Category II", "s": 257, "g": "Staranise oil"},
-  {"c": "Category II", "s": 258, "g": "Strontium"},
-  {"c": "Category II", "s": 259, "g": "Strontium chlorate"},
-  {"c": "Category II", "s": 260, "g": "Strontium nitrate"},
-  {"c": "Category II", "s": 261, "g": "Strontium perchlorate"},
-  {"c": "Category II", "s": 262, "g": "Strontium peroxide"},
-  {"c": "Category II", "s": 263, "g": "Strontium potassium chlorate"},
-  {"c": "Category II", "s": 264, "g": "Styrax"},
-  {"c": "Category II", "s": 265, "g": "Sulphuric acid, (oleum/fuming/concentrated)"},
-  {"c": "Category II", "s": 266, "g": "Sulphuryl chloride"},
-  {"c": "Category II", "s": 267, "g": "Thallium nitrate"},
-  {"c": "Category II", "s": 268, "g": "Thermit"},
-  {"c": "Category II", "s": 269, "g": "Thionyl chloride"},
-  {"c": "Category II", "s": 270, "g": "Thorium"},
-  {"c": "Category II", "s": 271, "g": "Titanium (sponge or powder form)"},
-  {"c": "Category II", "s": 272, "g": "Trichloro-s-triazinetrione"},
-  {"c": "Category II", "s": 273, "g": "Trioxane"},
-  {"c": "Category II", "s": 274, "g": "Uranium"},
-  {"c": "Category II", "s": 275, "g": "Urea nitrate"},
-  {"c": "Category II", "s": 276, "g": "Valerian oil"},
-  {"c": "Category II", "s": 277, "g": "Vanadium tetrachloride"},
-  {"c": "Category II", "s": 278, "g": "Vermouth oil"},
-  {"c": "Category II", "s": 279, "g": "Vegetable Fibre like straw, grass, hay etc."},
-  {"c": "Category II", "s": 280, "g": "Vinegar"},
-  {"c": "Category II", "s": 281, "g": "Viscose and clean waste thereof, loose"},
-  {"c": "Category II", "s": 282, "g": "Volume bark and/or fibres, loose"},
-  {"c": "Category II", "s": 283, "g": "Waste of materials falling under Category I"},
-  {"c": "Category II", "s": 284, "g": "Wood wool (loose)"},
-  {"c": "Category II", "s": 285, "g": "Zinc chloride"},
-  {"c": "Category II", "s": 286, "g": "Zinc dithionite"},
-  {"c": "Category II", "s": 287, "g": "Zinc hydrosulphite"},
-  {"c": "Category II", "s": 288, "g": "Zinc nitrate"},
-  {"c": "Category II", "s": 289, "g": "Zinc permanganate"},
-  {"c": "Category II", "s": 290, "g": "Zinc peroxide"},
-  {"c": "Category II", "s": 291, "g": "Zinc powder"},
-  {"c": "Category II", "s": 292, "g": "Zirconium dust powder"},
-  {"c": "Category II", "s": 293, "g": "Other Category II Goods"},
-  {"c": "Category III", "s": 1, "g": "Activated Carbon, Pyropheric"},
-  {"c": "Category III", "s": 2, "g": "All flammable liquids having a flash point below 320C"},
-  {"c": "Category III", "s": 3, "g": "Aluminium Alkyl Halides"},
-  {"c": "Category III", "s": 4, "g": "Aluminium borohydride"},
-  {"c": "Category III", "s": 5, "g": "Aluminium triethyl"},
-  {"c": "Category III", "s": 6, "g": "Aluminium trihexyl"},
-  {"c": "Category III", "s": 7, "g": "Aluminium tri-isobutyl"},
-  {"c": "Category III", "s": 8, "g": "Aluminium trimethyl"},
-  {"c": "Category III", "s": 9, "g": "Aluminium tripropyl"},
-  {"c": "Category III", "s": 10, "g": "Amatol"},
-  {"c": "Category III", "s": 11, "g": "Ammonium bromate"},
-  {"c": "Category III", "s": 12, "g": "Ammonium chlorate"},
-  {"c": "Category III", "s": 13, "g": "Ammonium Nitrate"},
-  {"c": "Category III", "s": 14, "g": "Ammonium nitrate explosives"},
-  {"c": "Category III", "s": 15, "g": "Ammonium perchlorate"},
-  {"c": "Category III", "s": 16, "g": "Ammonium permanganate"},
-  {"c": "Category III", "s": 17, "g": "Ammonium picrate"},
-  {"c": "Category III", "s": 18, "g": "Ammunitions"},
-  {"c": "Category III", "s": 19, "g": "Amorces"},
-  {"c": "Category III", "s": 20, "g": "Arsine"},
-  {"c": "Category III", "s": 21, "g": "Azides"},
-  {"c": "Category III", "s": 22, "g": "Azimethylene"},
-  {"c": "Category III", "s": 23, "g": "Azoimide"},
-  {"c": "Category III", "s": 24, "g": "Baggase"},
-  {"c": "Category III", "s": 25, "g": "Bamboos (split)"},
-  {"c": "Category III", "s": 26, "g": "Benzol peroxide (dry)"},
-  {"c": "Category III", "s": 27, "g": "Black powder"},
-  {"c": "Category III", "s": 28, "g": "Blasting powder"},
-  {"c": "Category III", "s": 29, "g": "Bromo picric acid"},
-  {"c": "Category III", "s": 30, "g": "Butyl mercaptan"},
-  {"c": "Category III", "s": 31, "g": "Butyl peracetate"},
-  {"c": "Category III", "s": 32, "g": "Butyl peroctoate (tert)"},
-  {"c": "Category III", "s": 33, "g": "Butyl peroxide (ditert)"},
-  {"c": "Category III", "s": 34, "g": "Cadmium fulminate"},
-  {"c": "Category III", "s": 35, "g": "Caesium"},
-  {"c": "Category III", "s": 36, "g": "Calcium carbide"},
-  {"c": "Category III", "s": 37, "g": "Calcium chlorite"},
-  {"c": "Category III", "s": 38, "g": "Calcium dithionate"},
-  {"c": "Category III", "s": 39, "g": "Calcium hydrite"},
-  {"c": "Category III", "s": 40, "g": "Calcium nitrate explosive"},
-  {"c": "Category III", "s": 41, "g": "Calcium, pyrophoric"},
-  {"c": "Category III", "s": 42, "g": "Cartridges"},
-  {"c": "Category III", "s": 43, "g": "Cellulose nitrate powder"},
-  {"c": "Category III", "s": 44, "g": "Charcoal"},
-  {"c": "Category III", "s": 45, "g": "Cheddite"},
-  {"c": "Category III", "s": 46, "g": "Chlorate explosive"},
-  {"c": "Category III", "s": 47, "g": "Chloratite"},
-  {"c": "Category III", "s": 48, "g": "Chloroazide"},
-  {"c": "Category III", "s": 49, "g": "Coal"},
-  {"c": "Category III", "s": 50, "g": "Coke"},
-  {"c": "Category III", "s": 51, "g": "Collodion"},
-  {"c": "Category III", "s": 52, "g": "Collodion wool"},
-  {"c": "Category III", "s": 53, "g": "Copper acetylide"},
-  {"c": "Category III", "s": 54, "g": "Copper azide"},
-  {"c": "Category III", "s": 55, "g": "Copper carbide"},
-  {"c": "Category III", "s": 56, "g": "Cordite"},
-  {"c": "Category III", "s": 57, "g": "Detonators"},
-  {"c": "Category III", "s": 58, "g": "Di (tert) butyl peroxide"},
-  {"c": "Category III", "s": 59, "g": "Diazobenzene perchlorate"},
-  {"c": "Category III", "s": 60, "g": "Diazobenzeneimide"},
-  {"c": "Category III", "s": 61, "g": "Diazo-dinitrophenol"},
-  {"c": "Category III", "s": 62, "g": "Diazo-m-nitraline perchlorate"},
-  {"c": "Category III", "s": 63, "g": "Diazonium salts"},
-  {"c": "Category III", "s": 64, "g": "Diborane"},
-  {"c": "Category III", "s": 65, "g": "Dicumyl peroxide"},
-  {"c": "Category III", "s": 66, "g": "Diglycol dinitrate"},
-  {"c": "Category III", "s": 67, "g": "Dimethyl benzyl peroxide"},
-  {"c": "Category III", "s": 68, "g": "Dinitro dihydroxy quinone"},
-  {"c": "Category III", "s": 69, "g": "Dinitro glycerine"},
-  {"c": "Category III", "s": 70, "g": "Dinitrocellulose"},
-  {"c": "Category III", "s": 71, "g": "Dinitrochlorohydrin"},
-  {"c": "Category III", "s": 72, "g": "Dinitrocresol"},
-  {"c": "Category III", "s": 73, "g": "Dinitroglycol"},
-  {"c": "Category III", "s": 74, "g": "Dinitrol"},
-  {"c": "Category III", "s": 75, "g": "Dodecanoyl Peroxide"},
-  {"c": "Category III", "s": 76, "g": "Dynamite"},
-  {"c": "Category III", "s": 77, "g": "Eau de Cologne"},
-  {"c": "Category III", "s": 78, "g": "Erythrol Tetranitrate"},
-  {"c": "Category III", "s": 79, "g": "Ethyl borate"},
-  {"c": "Category III", "s": 80, "g": "Ethylene nitrate"},
-  {"c": "Category III", "s": 81, "g": "Explosive charges"},
-  {"c": "Category III", "s": 82, "g": "Explosives"},
-  {"c": "Category III", "s": 83, "g": "Fulminates"},
-  {"c": "Category III", "s": 84, "g": "Fuse, Detonating"},
-  {"c": "Category III", "s": 85, "g": "Gases, Combustible"},
-  {"c": "Category III", "s": 86, "g": "Gelatine explosive"},
-  {"c": "Category III", "s": 87, "g": "Gelatinized nitrocellulose powders"},
-  {"c": "Category III", "s": 88, "g": "Glycerine nitrate"},
-  {"c": "Category III", "s": 89, "g": "Guanidine nitrate"},
-  {"c": "Category III", "s": 90, "g": "Guanidine perchlorate"},
-  {"c": "Category III", "s": 91, "g": "Guanylnitrosamino guanyl tetrazene"},
-  {"c": "Category III", "s": 92, "g": "Guhr-dynamite"},
-  {"c": "Category III", "s": 93, "g": "Gun cotton"},
-  {"c": "Category III", "s": 94, "g": "Gun cotton solutions"},
-  {"c": "Category III", "s": 95, "g": "Gun powder"},
-  {"c": "Category III", "s": 96, "g": "Hay"},
-  {"c": "Category III", "s": 97, "g": "Hydrazine nitrate"},
-  {"c": "Category III", "s": 98, "g": "Hydrazoic acid"},
-  {"c": "Category III", "s": 99, "g": "Hydrogen cyanide"},
-  {"c": "Category III", "s": 100, "g": "Hydrogen peroxide, 90-100%"},
-  {"c": "Category III", "s": 101, "g": "Hydrogen selenide"},
-  {"c": "Category III", "s": 102, "g": "Hydrogen sulphide"},
-  {"c": "Category III", "s": 103, "g": "Hydrolith"},
-  {"c": "Category III", "s": 104, "g": "Instant ignition cord"},
-  {"c": "Category III", "s": 105, "g": "Iron carbonyl"},
-  {"c": "Category III", "s": 106, "g": "Iron Penta Carbonyl"},
-  {"c": "Category III", "s": 107, "g": "Jute (Others)"},
-  {"c": "Category III", "s": 108, "g": "Kresylit"},
-  {"c": "Category III", "s": 109, "g": "Lead azide"},
-  {"c": "Category III", "s": 110, "g": "Lead picrate"},
-  {"c": "Category III", "s": 111, "g": "Lead styphnate"},
-  {"c": "Category III", "s": 112, "g": "Lead trinitroresorcinate"},
-  {"c": "Category III", "s": 113, "g": "Leco (Coke)"},
-  {"c": "Category III", "s": 114, "g": "Liquid insecticides/pesticides/disinfectants flash point below 32C"},
-  {"c": "Category III", "s": 115, "g": "Liquid Petroleum Gas"},
-  {"c": "Category III", "s": 116, "g": "Lithium aluminium hydride"},
-  {"c": "Category III", "s": 117, "g": "Lithium amide"},
-  {"c": "Category III", "s": 118, "g": "Lithium borohydride"},
-  {"c": "Category III", "s": 119, "g": "Lithium butyl"},
-  {"c": "Category III", "s": 120, "g": "Lithium hydride"},
-  {"c": "Category III", "s": 121, "g": "Lyddite"},
-  {"c": "Category III", "s": 122, "g": "Mannitol hexanitrate"},
-  {"c": "Category III", "s": 123, "g": "Mercuric cyanate"},
-  {"c": "Category III", "s": 124, "g": "Mercury cyanate"},
-  {"c": "Category III", "s": 125, "g": "Mercury fulminate"},
-  {"c": "Category III", "s": 126, "g": "Mining charges"},
-  {"c": "Category III", "s": 127, "g": "Mixed powder (nitrocellulose)"},
-  {"c": "Category III", "s": 128, "g": "Nitrate explosives"},
-  {"c": "Category III", "s": 129, "g": "Nitro-carbonitrate"},
-  {"c": "Category III", "s": 130, "g": "Nitrocellulose"},
-  {"c": "Category III", "s": 131, "g": "Nitrocellulose powder"},
-  {"c": "Category III", "s": 132, "g": "Nitrogeletine dynamite"},
-  {"c": "Category III", "s": 133, "g": "Nitrogen chloride"},
-  {"c": "Category III", "s": 134, "g": "Nitrogen trichloride"},
-  {"c": "Category III", "s": 135, "g": "Nitroglycerine"},
-  {"c": "Category III", "s": 136, "g": "Nitroglycerine powder"},
-  {"c": "Category III", "s": 137, "g": "Nitroguanidine"},
-  {"c": "Category III", "s": 138, "g": "Nitromannital"},
-  {"c": "Category III", "s": 139, "g": "Nitro-starch"},
-  {"c": "Category III", "s": 140, "g": "Nitro-sugar"},
-  {"c": "Category III", "s": 141, "g": "Ozonides"},
-  {"c": "Category III", "s": 142, "g": "Oils and greasy waste of cotton/viscose"},
-  {"c": "Category III", "s": 143, "g": "Paints, thinners, varnishes flash point below 32C"},
-  {"c": "Category III", "s": 144, "g": "Pantonone"},
-  {"c": "Category III", "s": 145, "g": "Peracetic acid"},
-  {"c": "Category III", "s": 146, "g": "Perchlorate explosives"},
-  {"c": "Category III", "s": 147, "g": "Perchlorates of all kinds not otherwise specifically provided for"},
-  {"c": "Category III", "s": 148, "g": "Perchloric acid > 70%"},
-  {"c": "Category III", "s": 149, "g": "Perchromates"},
-  {"c": "Category III", "s": 150, "g": "Percussion capsules"},
-  {"c": "Category III", "s": 151, "g": "Phosphides"},
-  {"c": "Category III", "s": 152, "g": "Phosphine"},
-  {"c": "Category III", "s": 153, "g": "Phosphoretted hydrogen"},
-  {"c": "Category III", "s": 154, "g": "Phosphorous (yellow or white)"},
-  {"c": "Category III", "s": 155, "g": "Picramic acid"},
-  {"c": "Category III", "s": 156, "g": "Picrates"},
-  {"c": "Category III", "s": 157, "g": "Picratol"},
-  {"c": "Category III", "s": 158, "g": "Picric acid"},
-  {"c": "Category III", "s": 159, "g": "Picryl chloride"},
-  {"c": "Category III", "s": 160, "g": "Plasticized dynamite"},
-  {"c": "Category III", "s": 161, "g": "Potassium"},
-  {"c": "Category III", "s": 162, "g": "Potassium amalgam"},
-  {"c": "Category III", "s": 163, "g": "Potassium hydride"},
-  {"c": "Category III", "s": 164, "g": "Primers (explosives)"},
-  {"c": "Category III", "s": 165, "g": "Propargyl bromide"},
-  {"c": "Category III", "s": 166, "g": "Prussic acid"},
-  {"c": "Category III", "s": 167, "g": "Raney nickel"},
-  {"c": "Category III", "s": 168, "g": "RDX"},
-  {"c": "Category III", "s": 169, "g": "Rubber cement"},
-  {"c": "Category III", "s": 170, "g": "Safety explosives"},
-  {"c": "Category III", "s": 171, "g": "Saltpetre blasting powder"},
-  {"c": "Category III", "s": 172, "g": "Silanes"},
-  {"c": "Category III", "s": 173, "g": "Silver acetylide"},
-  {"c": "Category III", "s": 174, "g": "Silver fulminate"},
-  {"c": "Category III", "s": 175, "g": "Silver picrate"},
-  {"c": "Category III", "s": 176, "g": "Sodium"},
-  {"c": "Category III", "s": 177, "g": "Sodium azide"},
-  {"c": "Category III", "s": 178, "g": "Sodium dinitro phenol"},
-  {"c": "Category III", "s": 179, "g": "Sodium hydride"},
-  {"c": "Category III", "s": 180, "g": "Sodium hydrosulphite"},
-  {"c": "Category III", "s": 181, "g": "Solein"},
-  {"c": "Category III", "s": 182, "g": "Starch nitrate"},
-  {"c": "Category III", "s": 183, "g": "Straw in pressed bales"},
-  {"c": "Category III", "s": 184, "g": "Styphnic acid"},
-  {"c": "Category III", "s": 185, "g": "Succinic peroxide"},
-  {"c": "Category III", "s": 186, "g": "Sugar nitrates"},
-  {"c": "Category III", "s": 187, "g": "Tetranitroaniline"},
-  {"c": "Category III", "s": 188, "g": "Tetranitrobenzene"},
-  {"c": "Category III", "s": 189, "g": "Tetranitronaphthalene"},
-  {"c": "Category III", "s": 190, "g": "Tetranitrophenol"},
-  {"c": "Category III", "s": 191, "g": "Titanium hydride"},
-  {"c": "Category III", "s": 192, "g": "TNT"},
-  {"c": "Category III", "s": 193, "g": "Trinitrocellulose"},
-  {"c": "Category III", "s": 194, "g": "Trinitrogylcerin"},
-  {"c": "Category III", "s": 195, "g": "Trinitronaphthalene"},
-  {"c": "Category III", "s": 196, "g": "Trinitrophenol"},
-  {"c": "Category III", "s": 197, "g": "Trinitrophenolmethylnitramine"},
-  {"c": "Category III", "s": 198, "g": "Trinitro-toluene"},
-  {"c": "Category III", "s": 199, "g": "Tripropylaluminium"},
-  {"c": "Category III", "s": 200, "g": "Urea peroxide"},
-  {"c": "Category III", "s": 201, "g": "Waste of materials falling under Cat II & III"},
-  {"c": "Category III", "s": 202, "g": "Zinc phosphide"},
-  {"c": "Category III", "s": 203, "g": "Zinc picrate"},
-  {"c": "Category III", "s": 204, "g": "Zirconium hydride"},
-  {"c": "Category III", "s": 205, "g": "Other Category III Goods"}
-];
+      {c: "Category I", s: 1, g: "Aloe resin"},
+      {c: "Category I", s: 2, g: "Aluminium resinate"},
+      {c: "Category I", s: 3, g: "Amber"},
+      {c: "Category I", s: 4, g: "Ammonium Bromide"},
+      {c: "Category I", s: 5, g: "Ammonium Chloride"},
+      {c: "Category I", s: 6, g: "Animal protein"},
+      {c: "Category I", s: 7, g: "Ammonium Fluoride"},
+      {c: "Category I", s: 8, g: "Almond oil"},
+      {c: "Category I", s: 9, g: "Ammonium Sulphate"},
+      {c: "Category I", s: 10, g: "Animal skin"},
+      {c: "Category I", s: 11, g: "Amonia-acqueous soln. or spirits of ammonia exceeding"},
+      {c: "Category I", s: 12, g: "Aluminium Chloride"},
+      {c: "Category I", s: 13, g: "Anethole"},
+      {c: "Category I", s: 14, g: "Anime (a resin)"},
+      {c: "Category I", s: 15, g: "Animal black"},
+      {c: "Category I", s: 16, g: "Aluminium paste"},
+      {c: "Category I", s: 17, g: "Animal glue"},
+      {c: "Category I", s: 18, g: "Anthracene"},
+      {c: "Category I", s: 19, g: "Algae"},
+      {c: "Category I", s: 20, g: "Antimony Pentafluoride"},
+      {c: "Category I", s: 21, g: "Animal oil"},
+      {c: "Category I", s: 22, g: "Antimony Pentasulfide"},
+      {c: "Category I", s: 23, g: "All flammable liquids having flash point above"},
+      {c: "Category I", s: 24, g: "Antimony sulphate"},
+      {c: "Category I", s: 25, g: "Antimony sulphide"},
+      {c: "Category I", s: 26, g: "Antimony trisulphate"},
+      {c: "Category I", s: 27, g: "Antimony trisulphide"},
+      {c: "Category I", s: 28, g: "Arachis oil"},
+      {c: "Category I", s: 29, g: "Arecanuts"},
+      {c: "Category I", s: 30, g: "Arsenic Chloride"},
+      {c: "Category I", s: 31, g: "Arsenic pentasulphide"},
+      {c: "Category I", s: 32, g: "Arsenic sulphide"},
+      {c: "Category I", s: 33, g: "Arsenic Trisulfide"},
+      {c: "Category I", s: 34, g: "Artificial edible fat"},
+      {c: "Category I", s: 35, g: "Artificial horn"},
+      {c: "Category I", s: 36, g: "Artificial leather"},
+      {c: "Category I", s: 37, g: "Artificial Silk"},
+      {c: "Category I", s: 38, g: "Artificial wool"},
+      {c: "Category I", s: 39, g: "Asafoetida (gum resin)"},
+      {c: "Category I", s: 40, g: "Asafoetida oil"},
+      {c: "Category I", s: 41, g: "Asphalt /Asphalt sheet"},
+      {c: "Category I", s: 42, g: "Asphalted paper"},
+      {c: "Category I", s: 43, g: "Balata, Balsam of Peru"},
+      {c: "Category I", s: 44, g: "Bamboo mats"},
+      {c: "Category I", s: 45, g: "Barium Carbonate"},
+      {c: "Category I", s: 46, g: "Barium Sulphide"},
+      {c: "Category I", s: 47, g: "Barley"},
+      {c: "Category I", s: 48, g: "Baryllium Dustor powder"},
+      {c: "Category I", s: 49, g: "Bed feathers (Down)"},
+      {c: "Category I", s: 50, g: "Beedi leaves"},
+      {c: "Category I", s: 51, g: "Bees wax"},
+      {c: "Category I", s: 52, g: "Beet sugar"},
+      {c: "Category I", s: 53, g: "Beet tallow (Aldrin)"},
+      {c: "Category I", s: 54, g: "Benzoin (resin)"},
+      {c: "Category I", s: 55, g: "Benzoin (resinoid)"},
+      {c: "Category I", s: 56, g: "Betal Nuts"},
+      {c: "Category I", s: 57, g: "Birch (bark) oil"},
+      {c: "Category I", s: 58, g: "Bisphenol"},
+      {c: "Category I", s: 59, g: "Bitumen/Bituminised craftpaper/felt"},
+      {c: "Category I", s: 60, g: "Blacks of all kinds (not otherwise Speciafically provided for)"},
+      {c: "Category I", s: 61, g: "Borneo Camphor"},
+      {c: "Category I", s: 62, g: "Borneol"},
+      {c: "Category I", s: 63, g: "Borneo tallow"},
+      {c: "Category I", s: 64, g: "Bornyl acetate"},
+      {c: "Category I", s: 65, g: "Boron trichloride"},
+      {c: "Category I", s: 66, g: "Boron trifluoride"},
+      {c: "Category I", s: 67, g: "Bran"},
+      {c: "Category I", s: 68, g: "Bran oil"},
+      {c: "Category I", s: 69, g: "Butter fat"},
+      {c: "Category I", s: 70, g: "Butter oil"},
+      {c: "Category I", s: 71, g: "Caesium perchlorate"},
+      {c: "Category I", s: 72, g: "Caffine (pure)"},
+      {c: "Category I", s: 73, g: "Calcium Chloride"},
+      {c: "Category I", s: 74, g: "Calcium Cyanide"},
+      {c: "Category I", s: 75, g: "Calcium Oxide"},
+      {c: "Category I", s: 76, g: "Calcium Sulphide"},
+      {c: "Category I", s: 77, g: "Camphene"},
+      {c: "Category I", s: 78, g: "Camphor"},
+      {c: "Category I", s: 79, g: "Candle wax"},
+      {c: "Category I", s: 80, g: "Candles"},
+      {c: "Category I", s: 81, g: "Canvas cloth"},
+      {c: "Category I", s: 82, g: "Capric acid"},
+      {c: "Category I", s: 83, g: "Caprolactum"},
+      {c: "Category I", s: 84, g: "Caprylic acid"},
+      {c: "Category I", s: 85, g: "Carbazole"},
+      {c: "Category I", s: 86, g: "Carbon"},
+      {c: "Category I", s: 87, g: "Carbon black"},
+      {c: "Category I", s: 88, g: "Carbon paper"},
+      {c: "Category I", s: 89, g: "Carbon tetrachloride"},
+      {c: "Category I", s: 90, g: "Carbonyl"},
+      {c: "Category I", s: 91, g: "Carnauba wax"},
+      {c: "Category I", s: 92, g: "Carpet"},
+      {c: "Category I", s: 93, g: "Carvacrol"},
+      {c: "Category I", s: 94, g: "Cashew nuts"},
+      {c: "Category I", s: 95, g: "Cassia leaves"},
+      {c: "Category I", s: 96, g: "Castor oil"},
+      {c: "Category I", s: 97, g: "Cat-gut"},
+      {c: "Category I", s: 98, g: "Caustic potash"},
+      {c: "Category I", s: 99, g: "Caustic soda"},
+      {c: "Category I", s: 100, g: "Cedar wood oil"},
+      {c: "Category I", s: 101, g: "Cellophane"},
+      {c: "Category I", s: 102, g: "Cellophane paper/tape"},
+      {c: "Category I", s: 103, g: "Cellulose"},
+      {c: "Category I", s: 104, g: "Cellulose acetate"},
+      {c: "Category I", s: 105, g: "Cellulose acetate films"},
+      {c: "Category I", s: 106, g: "Ceresin wax"},
+      {c: "Category I", s: 107, g: "Chaff"},
+      {c: "Category I", s: 108, g: "Chinese inset wax"},
+      {c: "Category I", s: 109, g: "Chinese tallow"},
+      {c: "Category I", s: 110, g: "Chinese wood oil"},
+      {c: "Category I", s: 111, g: "Chip (particle) board"},
+      {c: "Category I", s: 112, g: "Chloral"},
+      {c: "Category I", s: 113, g: "Chloroform"},
+      {c: "Category I", s: 114, g: "Chlorowax"},
+      {c: "Category I", s: 115, g: "Chocolates"},
+      {c: "Category I", s: 116, g: "Chopped maize"},
+      {c: "Category I", s: 117, g: "Chromyl Chloride"},
+      {c: "Category I", s: 118, g: "Cineol"},
+      {c: "Category I", s: 119, g: "Cinnabar"},
+      {c: "Category I", s: 120, g: "Citral"},
+      {c: "Category I", s: 121, g: "Citric acid"},
+      {c: "Category I", s: 122, g: "Citronellal"},
+      {c: "Category I", s: 123, g: "Citronellol"},
+      {c: "Category I", s: 124, g: "CKD Kits of Automobiles"},
+      {c: "Category I", s: 125, g: "Cloth, Asphalted"},
+      {c: "Category I", s: 126, g: "Coaltar and coal pitch"},
+      {c: "Category I", s: 127, g: "Coaltar distillate"},
+      {c: "Category I", s: 128, g: "Cocoa beans"}
+    ];
 
     function renderHazardousGoodsList(filterQuery = "") {
         const tbody = document.getElementById('hazardousGoodsTableBody');
@@ -2567,20 +2073,29 @@ const combinedRates = [
         input.addEventListener('input', calculateAggregateSumInsured);
     });
 
-    document.getElementById('construction').addEventListener('change', () => { evaluateRowVisibility(); runCalculation(); });
-    document.getElementById('floaterToggle').addEventListener('change', () => { evaluateRowVisibility(); runCalculation(); });
-    document.getElementById('bgrRateOption').addEventListener('change', runCalculation);
-    document.getElementById('manualRateValue').addEventListener('input', runCalculation);
-    document.getElementById('basicDiscountValue').addEventListener('input', runCalculation);
-    document.getElementById('eqZone').addEventListener('change', runCalculation);
-    document.getElementById('stfiToggle').addEventListener('change', runCalculation);
-    document.getElementById('natcatDiscountToggle').addEventListener('change', runCalculation);
-    document.getElementById('terrorismToggle').addEventListener('change', runCalculation);
+    // Event bindings attachment arrays across input matrices to dynamically trigger full loop live recalculations
+    const liveRecalcBindingsList = [
+        'construction', 'floaterToggle', 'bgrRateOption', 'manualRateValue', 
+        'basicDiscountValue', 'eqZone', 'stfiToggle', 'natcatDiscountToggle', 'terrorismToggle',
+        'bsus_flexa_rate', 'bsus_flexa_mod', 'bsus_eq_select', 'bsus_stfi_select', 'bsus_terr_select', 'bsus_disc_max10'
+    ];
+    liveRecalcBindingsList.forEach(id => {
+        const targetElement = document.getElementById(id);
+        if (targetElement) {
+            targetElement.addEventListener('input', runCalculation);
+            targetElement.addEventListener('change', runCalculation);
+        }
+    });
+
+    // Delegate capture bubbles dynamically over revamped good/bad questionnaire rows elements changes
+    document.getElementById('bsusFeaturesTbody').addEventListener('input', runCalculation);
+    document.getElementById('bsusFeaturesTbody').addEventListener('change', runCalculation);
+
+    document.getElementById('construction').addEventListener('change', evaluateRowVisibility);
+    document.getElementById('floaterToggle').addEventListener('change', evaluateRowVisibility);
 
     adjustLayoutRules();
     calculateAggregateSumInsured();
-    
-    // Initialize populate call for the new section
     renderHazardousGoodsList();
 </script>
 </body>
