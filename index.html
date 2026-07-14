@@ -283,7 +283,7 @@
         }
 
         .text-right {
-            text-align: right;
+            text-align: right !important;
         }
 
         .btn-container {
@@ -325,7 +325,6 @@
             background-color: #c2410c;
         }
 
-        /* Revamped BSUS Styles Grid Panels Layout definitions */
         .bsus-worksheet-panel {
             background-color: #ffffff;
             border: 2px solid var(--primary);
@@ -468,6 +467,27 @@
                 <input type="number" id="sumInsured" readonly style="background-color: #f1f5f9; font-weight: bold; color: #0f172a;" value="10000000">
             </div>
 
+            <!-- REPOSITIONED: 5. Construction Type (Universally accessible and visible above occupancy fields) -->
+            <div class="form-group distinct-label" id="repositionedConstructionContainer">
+                <label for="construction">5. Construction Type</label>
+                <select id="construction">
+                    <option value="pucca">Pucca (RCC / First Class Construction)</option>
+                    <option value="kutcha">Kutcha (See definition below)</option>
+                </select>
+                <span id="kutchaHelpText" class="help-text hidden">
+                    <strong>Kutcha Definition:</strong> Building(s) having walls and/or roofs of wooden planks / thatched leaves and/or grass / hay of any kind / bamboo / plastic cloth / asphalt cloth / canvas / tarpaulin.
+                </span>
+            </div>
+
+            <!-- NEW FIELD: Terrorism Opt-Out Control -->
+            <div class="form-group distinct-label" id="terrorismOptOutContainer">
+                <label for="terrorismOptOut">Opting out of Terrorism Cover (Flexi) ?</label>
+                <select id="terrorismOptOut">
+                    <option value="no" selected>NO</option>
+                    <option value="yes">YES</option>
+                </select>
+            </div>
+
             <!-- DYNAMIC NEW SPREADSHEET MATRIX WORKING AREA (BSUS EXCLUSIVE) -->
             <div id="bsusRevampedSection" class="hidden">
                 <div class="bsus-worksheet-panel">
@@ -505,7 +525,7 @@
                         <thead>
                             <tr>
                                 <th>LINE ITEM DESCRIPTION</th>
-                                <th style="width: 150px; text-align: right;">RATE</th>
+                                <th style="width: 160px; text-align: right;">RATE</th>
                                 <th style="width: 140px; text-align: right;">PREMIUM (₹)</th>
                             </tr>
                         </thead>
@@ -536,25 +556,15 @@
                                 <td id="br_prem_5" class="text-right">0.00</td>
                             </tr>
                             <tr>
-                                <td class="bsus-row-heading">GOOD / BAD FEATURES DISC / LOAD</td>
-                                <td id="br_rate_6" class="text-right">0.00 %</td>
-                                <td id="br_prem_6" class="text-right">0.00</td>
-                            </tr>
-                            <tr class="bsus-highlight-row" style="background-color: #f1f5f9;">
-                                <td>A NET TOTAL</td>
-                                <td id="br_rate_7" class="text-right">0.0000</td>
-                                <td id="br_prem_7" class="text-right">0.00</td>
-                            </tr>
-                            <tr>
                                 <td class="bsus-row-heading">B ADJUSTED EQ RATE</td>
-                                <td style="text-align: right; display: flex; align-items: center; justify-content: flex-end; gap: 5px; border: none; padding: 4px 0;">
-                                    <select id="bsus_eq_zone_select" class="bsus-select-field" style="padding: 2px 4px; font-size: 0.78rem; width: 90px; margin: 0;">
+                                <td class="text-right">
+                                    <select id="bsus_eq_zone_select" class="bsus-select-field" style="padding: 2px 4px; font-size: 0.78rem; width: 85px; display: inline-block; margin-right: 4px; vertical-align: middle;">
                                         <option value="ZONE_I">Zone I</option>
                                         <option value="ZONE_II">Zone II</option>
                                         <option value="ZONE_III">Zone III</option>
                                         <option value="ZONE_IV" selected>Zone IV</option>
                                     </select>
-                                    <span id="br_rate_8" style="font-size: 0.8rem; font-weight: bold; color: #475569;">0.0000</span>
+                                    <span id="br_rate_8" style="font-size: 0.8rem; font-weight: bold; color: #475569; display: inline-block; width: 55px; vertical-align: middle;">0.0000</span>
                                 </td>
                                 <td id="br_prem_8" class="text-right">0.00</td>
                             </tr>
@@ -575,7 +585,9 @@
                             </tr>
                             <tr>
                                 <td class="bsus-row-heading">DISCRETIONARY DISCOUNT Max 10%</td>
-                                <td style="text-align: right;"><input type="number" id="bsus_discount_pct_input" class="bsus-input-field" min="0" max="10" step="0.01" value="0" style="padding: 2px; height: 24px;"> %</td>
+                                <td class="text-right">
+                                    <input type="number" id="bsus_discount_pct_input" class="bsus-input-field" min="0" max="10" step="0.01" value="0" style="padding: 2px; height: 24px; width: 55px; display: inline-block; margin-right: 4px; vertical-align: middle;"> <span style="display: inline-block; width: 15px; text-align: left; vertical-align: middle;">%</span>
+                                </td>
                                 <td id="br_prem_12" class="text-right">0.00</td>
                             </tr>
                             <tr class="bsus-highlight-row" style="background-color: #e0f2fe;">
@@ -585,8 +597,20 @@
                             </tr>
                             <tr>
                                 <td class="bsus-row-heading">FLOATER EXTRA 10%</td>
-                                <td id="br_rate_14" class="text-right">0.0000</td>
+                                <td class="text-right">
+                                    <select id="bsus_floater_select" class="bsus-select-field" style="padding: 2px 4px; font-size: 0.78rem; width: 85px; display: inline-block; margin-right: 4px; vertical-align: middle;">
+                                        <option value="no" selected>NO</option>
+                                        <option value="yes">YES</option>
+                                    </select>
+                                    <span id="br_rate_14" style="font-size: 0.8rem; font-weight: bold; color: #475569; display: inline-block; width: 55px; vertical-align: middle;">0.0000</span>
+                                </td>
                                 <td id="br_prem_14" class="text-right">0.00</td>
+                            </tr>
+                            <!-- REPOSITIONED & REMAPPED: Applied directly on accumulated Final Net Rate and Premium base fields -->
+                            <tr>
+                                <td class="bsus-row-heading">NET DISC/LOAD FACTOR (SAFETY SURVEY)</td>
+                                <td id="br_rate_6" class="text-right">0.0000 %</td>
+                                <td id="br_prem_6" class="text-right">0.00</td>
                             </tr>
                             <tr class="bsus-final-row">
                                 <td>FINAL NET RATE</td>
@@ -603,8 +627,8 @@
                             <tr style="background-color: #fef3c7;">
                                 <th style="width: 30px; text-align: center; background-color:#fef3c7;">Sl</th>
                                 <th style="background-color:#fef3c7;">SAFETY RISK FACTOR PARAMETERS</th>
-                                <th style="width: 100px; text-align: center; background-color:#fef3c7;">STATUS</th>
-                                <th style="width: 90px; text-align: right; background-color:#fef3c7;">MODIFIER %</th>
+                                <th style="width: 110px; text-align: center; background-color:#fef3c7;">STATUS</th>
+                                <th style="width: 100px; text-align: right; background-color:#fef3c7; padding-right: 20px;">MODIFIER %</th>
                             </tr>
                         </thead>
                         <tbody id="bsusDynamicFeaturesTbody"></tbody>
@@ -675,18 +699,6 @@
                         <option value="yes">Yes, Apply Floater Loading (+10% on Stock-Floating S.I. only)</option>
                     </select>
                 </div>
-            </div>
-
-            <!-- Side Head 5 -->
-            <div class="form-group distinct-label">
-                <label for="construction">5. Construction Type</label>
-                <select id="construction">
-                    <option value="pucca">Pucca (RCC / First Class Construction)</option>
-                    <option value="kutcha">Kutcha (See definition below)</option>
-                </select>
-                <span id="kutchaHelpText" class="help-text hidden">
-                    <strong>Kutcha Definition:</strong> Building(s) having walls and/or roofs of wooden planks / thatched leaves and/or grass / hay of any kind / bamboo / plastic cloth / asphalt cloth / canvas / tarpaulin.
-                </span>
             </div>
 
             <div id="standardCommercialControlsContainer2">
@@ -946,7 +958,7 @@ const bsusRateSchedule = [
   {"sec":"IV","code":"2022","cat":3,"desc":"Brickworks {including refractories and fire bricks}.","rate":0.41},
   {"sec":"IV","code":"2023","cat":1,"desc":"Bridges - Concrete / Steel","rate":0.19},
   {"sec":"IV","code":"2024","cat":1,"desc":"Bridges - Wooden","rate":0.9},
-  {"sec":"IV","code":"2025","cat":4,"desc":"Building  in  course  of  construction","rate":0.22},
+  {"sec":"IV","code":"2025","cat":4,"desc":"Building  in  course   of  construction","rate":0.22},
   {"sec":"IV","code":"2026","cat":1,"desc":"Cable Manufacturing","rate":1.12},
   {"sec":"IV","code":"2027","cat":1,"desc":"Camphor Manufacturing","rate":1.37},
   {"sec":"IV","code":"2028","cat":1,"desc":"Candle Works","rate":1.63},
@@ -1041,147 +1053,12 @@ const bsusRateSchedule = [
   {"sec":"IV","code":"2117","cat":1,"desc":"Lime Kiln","rate":0.6},
   {"sec":"IV","code":"2118","cat":1,"desc":"Lithographic presses","rate":1.06},
   {"sec":"IV","code":"2119","cat":1,"desc":"Liquified Gas Bottling/ Recovery Plants","rate":0.8},
-  {"sec":"IV","code":"2120","cat":1,"desc":"Malt Extraction Plants","rate":0.82},
-  {"sec":"IV","code":"2121","cat":1,"desc":"Man-made Fibre Manufacturing (using Cellulose)","rate":0.43},
-  {"sec":"IV","code":"2122","cat":1,"desc":"Man-made Fibre Manufacturing Plant (Others)","rate":0.62},
-  {"sec":"IV","code":"2123","cat":4,"desc":"Manure Blending works","rate":0.84},
-  {"sec":"IV","code":"2124","cat":1,"desc":"Match Factories","rate":2.85},
-  {"sec":"IV","code":"2125","cat":1,"desc":"Mattress and Pillow making","rate":3.55},
-  {"sec":"IV","code":"2126","cat":1,"desc":"Metallizing works ( involving metals only)","rate":0.52},
-  {"sec":"IV","code":"2127","cat":1,"desc":"Metallising Works (others)","rate":0.87},
-  {"sec":"IV","code":"2128","cat":1,"desc":"Metal/Tin printers","rate":1.81},
-  {"sec":"IV","code":"2129","cat":1,"desc":"Mica Products Manufacturing","rate":0.9},
-  {"sec":"IV","code":"2130","cat":2,"desc":"Mineral Oil blending and processing","rate":0.66},
-  {"sec":"IV","code":"2131","cat":1,"desc":"Mosaic Factories","rate":0.71},
-  {"sec":"IV","code":"2132","cat":3,"desc":"Mushroom Growing Premises (Excluding Crops)","rate":0.68},
-  {"sec":"IV","code":"2133","cat":1,"desc":"Nitro Cellulose Manufacturing- Industrial Grade","rate":11.12},
-  {"sec":"IV","code":"2134","cat":4,"desc":"Non-woven fabric Manufacturing","rate":2.17},
-  {"sec":"IV","code":"2135","cat":1,"desc":"Oil Extraction","rate":1.66},
-  {"sec":"IV","code":"2136","cat":1,"desc":"Oil Distillation Plants (essential)","rate":1.44},
-  {"sec":"IV","code":"2137","cat":4,"desc":"Oil Mills refining ( Veg/Animal)","rate":1.19},
-  {"sec":"IV","code":"2138","cat":1,"desc":"Oil Mills (Vegetable)","rate":1.11},
-  {"sec":"IV","code":"2139","cat":1,"desc":"Oil and Leather Cloth Factories","rate":1.83},
-  {"sec":"IV","code":"2140","cat":1,"desc":"Paint factories (Water based)","rate":0.99},
-  {"sec":"IV","code":"2141","cat":3,"desc":"Paint (others) & Varnish Factories","rate":2.18},
-  {"sec":"IV","code":"2142","cat":4,"desc":"Paints - Nitrocellulose based","rate":2.65},
-  {"sec":"IV","code":"2143","cat":1,"desc":"Pan Masala making","rate":0.91},
-  {"sec":"IV","code":"2144","cat":4,"desc":"Paper and Cardboard Mills (including Lamination) ","rate":1.25},
-  {"sec":"IV","code":"2145","cat":2,"desc":"Particle Board Manufacturing","rate":2.18},
-  {"sec":"IV","code":"2146","cat":1,"desc":"Pencil Manufacturing","rate":1.49},
-  {"sec":"IV","code":"2147","cat":1,"desc":"Petroleum Coke Calcination","rate":0.93},
-  {"sec":"IV","code":"2148","cat":3,"desc":"Plastic Goods Manufacturing(excluding Foam Plastics)/I. Using Plastic raw materials having calorific value upto 15000 btu/lb Polytetrafluoroethylene, polyvinylidene chloride/fluoride, Phenol/Urea-formaldehyde, Silicones","rate":1.94},
-  {"sec":"IV","code":"2149","cat":2,"desc":"Plywood / Wood veneering Factories/ Laminating Factories","rate":2.87},
-  {"sec":"IV","code":"2150","cat":2,"desc":"Polyester Film Manufacturing / BOPP Film Manufacturing","rate":0.8},
-  {"sec":"IV","code":"2151","cat":1,"desc":"Port Premises including jetties and equipment thereon And other port facilities","rate":0.36},
-  {"sec":"IV","code":"2152","cat":1,"desc":"Poultry Farms (Excluding birds therein)","rate":0.59},
-  {"sec":"IV","code":"2153","cat":1,"desc":"Presses for coir fibres/waste/Grass/fodder/boosa/Jute","rate":5.89},
-  {"sec":"IV","code":"2154","cat":1,"desc":"Presses for coir yarn / cotton/senna leaves","rate":2.86},
-  {"sec":"IV","code":"2155","cat":1,"desc":"Presses for carpets, rugs and tobacco","rate":2.6},
-  {"sec":"IV","code":"2156","cat":1,"desc":"Presses for hides and skins","rate":1.36},
-  {"sec":"IV","code":"2157","cat":4,"desc":"Printing Ink Manufacturing / Roller composition factories","rate":1.88},
-  {"sec":"IV","code":"2158","cat":1,"desc":"Printing Press","rate":1.18},
-  {"sec":"IV","code":"2159","cat":1,"desc":"Pulverising Plants(Metals and non-hazardous goods)","rate":0.47},
-  {"sec":"IV","code":"2160","cat":1,"desc":"Pulverizing Plants (Others)","rate":1.36},
-  {"sec":"IV","code":"2161","cat":1,"desc":"Rice Mills","rate":0.88},
-  {"sec":"IV","code":"2162","cat":1,"desc":"Rice Polishing Units","rate":1.01},
-  {"sec":"IV","code":"2163","cat":1,"desc":"Rope works (Plastic), Assembling of Plastic Goods such as Toys and the like","rate":1.14},
-  {"sec":"IV","code":"2164","cat":1,"desc":"Rope Works (others)","rate":0.69},
-  {"sec":"IV","code":"2165","cat":4,"desc":"Rubber Factories","rate":1.88},
-  {"sec":"IV","code":"2166","cat":4,"desc":"Rubber Goods Mfg with Spreading","rate":2.3},
-  {"sec":"IV","code":"2167","cat":1,"desc":"Rubber Goods Manufacturing without spreading","rate":1.29},
-  {"sec":"IV","code":"2168","cat":1,"desc":"Salt crushing Factories and Refineries","rate":0.54},
-  {"sec":"IV","code":"2169","cat":1,"desc":"Saw Mills (including Timber Merchants premises where sawing is done).","rate":3.07},
-  {"sec":"IV","code":"2170","cat":1,"desc":"Sea Food / Meat Processing","rate":1.01},
-  {"sec":"IV","code":"2171","cat":4,"desc":"Silk Mills / Spun Silk Mills","rate":0.95},
   {"sec":"IV","code":"2230","cat":1,"desc":"Shopping Malls (other than multiplexes)","rate":0.49},
-  {"sec":"IV","code":"2172","cat":1,"desc":"Snuff Manufacturing","rate":0.93},
-  {"sec":"IV","code":"2173","cat":4,"desc":"Soap Manufacturing","rate":1.09},
-  {"sec":"IV","code":"2174","cat":1,"desc":"Sponge Iron Plants","rate":1.02},
-  {"sec":"IV","code":"2175","cat":1,"desc":"Spray Painting, Powder coating","rate":1.42},
-  {"sec":"IV","code":"2176","cat":1,"desc":"Stables (excluding animals)","rate":0.69},
-  {"sec":"IV","code":"2177","cat":1,"desc":"Starch Factories","rate":0.71},
-  {"sec":"IV","code":"2178","cat":1,"desc":"Stone quarries","rate":0.27},
-  {"sec":"IV","code":"2180","cat":1,"desc":"Sugar factories","rate":0.57},
-  {"sec":"IV","code":"2181","cat":1,"desc":"Surgical Cotton Manufacturing","rate":3.07},
-  {"sec":"IV","code":"2183","cat":4,"desc":"Tanneries","rate":0.53},
-  {"sec":"IV","code":"2184","cat":1,"desc":"Tapioca factories","rate":0.92},
-  {"sec":"IV","code":"2185","cat":1,"desc":"Tarpaulin and canvas proofing factories","rate":2.31},
-  {"sec":"IV","code":"2186","cat":1,"desc":"Tea blending/packing factories","rate":0.84},
-  {"sec":"IV","code":"2187","cat":4,"desc":"Tea Factories","rate":1.07},
-  {"sec":"IV","code":"2188","cat":1,"desc":"Telephone Exchanges","rate":1.64},
-  {"sec":"IV","code":"2189","cat":3,"desc":"Textile Mills - Spinning Mills","rate":1.16},
-  {"sec":"IV","code":"2211","cat":1,"desc":"Textile Mills- Composite Mills","rate":1.62},
-  {"sec":"IV","code":"2190","cat":1,"desc":"Tile & Pottery works","rate":0.76},
-  {"sec":"IV","code":"2191","cat":3,"desc":"Tiny sector Industries with values at risk not exceeding Rs 10 lakhs","rate":0.78},
-  {"sec":"IV","code":"2192","cat":1,"desc":"Tissue Culture Premises (Excluding Crops)","rate":0.83},
-  {"sec":"IV","code":"2193","cat":2,"desc":"Tobacco Curing / Redrying Factories","rate":1.15},
-  {"sec":"IV","code":"2194","cat":3,"desc":"Tobacco grinding/ crushing Manufacturing","rate":1.01},
-  {"sec":"IV","code":"2195","cat":1,"desc":"Turpentine and rosin distilleries","rate":3.34},
-  {"sec":"IV","code":"2196","cat":1,"desc":"Tyres and Tubes Manufacturing","rate":0.83},
-  {"sec":"IV","code":"2197","cat":1,"desc":"Tyre Retreading and Resoling factories","rate":1.75},
-  {"sec":"IV","code":"2198","cat":1,"desc":"Umbrella Assembly factories","rate":0.85},
-  {"sec":"IV","code":"2199","cat":1,"desc":"Velvet Cloth Manufacturing","rate":1.66},
-  {"sec":"IV","code":"2200","cat":1,"desc":"Vermicelli factories","rate":0.65},
-  {"sec":"IV","code":"2201","cat":1,"desc":"Weigh Bridges","rate":0.9},
-  {"sec":"IV","code":"2202","cat":2,"desc":"Weaving Mills","rate":1.04},
-  {"sec":"IV","code":"2203","cat":1,"desc":"Wheat Threshers","rate":4.58},
-  {"sec":"IV","code":"2204","cat":1,"desc":"Wood seasoning/treatment/ impregnation","rate":1.12},
-  {"sec":"IV","code":"2205","cat":1,"desc":"Wool cleaning and pressing factories","rate":1.18},
-  {"sec":"IV","code":"2206","cat":1,"desc":"Woollen Mills/Fur garments & accessories","rate":1.31},
-  {"sec":"IV","code":"2207","cat":4,"desc":"Yarn Processing","rate":1.19},
-  {"sec":"IV","code":"2208","cat":1,"desc":"Zip fasteners Manufacturing","rate":1.3},
-  {"sec":"IV","code":"2209","cat":1,"desc":"Contractors Plant and Machinery anywhere in India (at specified locations)","rate":0.88},
-  {"sec":"IV","code":"2210","cat":1,"desc":"Electric Generation Stations- Others","rate":0.62},
-  {"sec":"IV","code":"2212","cat":1,"desc":"Automobile Filter Manufacturing","rate":1.18},
-  {"sec":"IV","code":"2216","cat":3,"desc":"Plastic Goods Manufacturing (excluding Foam Plastics)/ II. Using Plastic raw materials having calorific value of above 15000 btu/lb polyethylene, Polypropylene, Prolystyrene, Polyalphamethylstyrene, Acrylonitrilebutadiene-styrene, Polybutylene.","rate":1.54},
-  {"sec":"IV","code":"2217","cat":1,"desc":"Electric Generation Stations- Thermal Power Stations","rate":0.39},
-  {"sec":"IV","code":"2218","cat":1,"desc":"Electric Generation Stations- Solar Power Stations","rate":0.62},
-  {"sec":"IV","code":"2219","cat":1,"desc":"Electric Generation Stations- Windmill","rate":0.72},
-  {"sec":"IV","code":"2221","cat":1,"desc":"Electric Generation Stations- Biomass Power Stations","rate":0.66},
-  {"sec":"IV","code":"2222","cat":1,"desc":"Engineering Workshop- Steel Plants","rate":0.44},
-  {"sec":"IV","code":"2224","cat":4,"desc":"Engineering Workshop-Pipe Extruding, Stamping, Pressing, Forging Mills, Metal smelting, Foundries, Galvanising works","rate":0.44},
-  {"sec":"IV","code":"2225","cat":1,"desc":"Engineering Workshop-Metal Extraction, Ore processing (other than Aluminium, Copper, Zinc), Plant processing Raw sand into silica","rate":0.79},
-  {"sec":"IV","code":"2227","cat":1,"desc":"Engineering Workshop- Clock/Watch Manufacturing","rate":1.63},
-  {"sec":"IV","code":"2229","cat":1,"desc":"Multiplex Theatre Complexes","rate":0.69},
-  {"sec":"V","code":"3001","cat":1,"desc":"Analytical / Quality Control Laboratories","rate":0.6},
-  {"sec":"V","code":"3002","cat":1,"desc":"Boiler House","rate":0.41},
-  {"sec":"V","code":"3003","cat":1,"desc":"Dams","rate":0.35},
-  {"sec":"V","code":"3004","cat":1,"desc":"Effluent /Sewage Treatment Plant","rate":0.68},
-  {"sec":"V","code":"3005","cat":1,"desc":"Electric Sub-Stations, Loco sheds","rate":0.27},
-  {"sec":"V","code":"3006","cat":1,"desc":"Electric Transmission / Distribution Lines","rate":0.18},
-  {"sec":"V","code":"3007","cat":1,"desc":"Pipe lines (carrying water only)","rate":0.44},
-  {"sec":"V","code":"3008","cat":1,"desc":"Pipe lines (others)","rate":0.44},
-  {"sec":"V","code":"3009","cat":1,"desc":"Pump House (Water)","rate":0.34},
-  {"sec":"V","code":"3010","cat":2,"desc":"Pump House (Others)","rate":1.39},
-  {"sec":"V","code":"3011","cat":1,"desc":"Railway tracks","rate":0.78},
-  {"sec":"V","code":"3012","cat":4,"desc":"Roads","rate":0.55},
-  {"sec":"V","code":"3013","cat":1,"desc":"Water Treatment Plants/ Water Tanks","rate":0.15},
-  {"sec":"V","code":"3014","cat":1,"desc":"Wireless Transmitting Stations","rate":0.62},
-  {"sec":"V","code":"3015","cat":1,"desc":"Compressor Houses- Compressors handling air, Inert gas and CO2","rate":0.7},
-  {"sec":"V","code":"3016","cat":1,"desc":"Compressor Houses- Compressor (others)","rate":2.01},
-  {"sec":"V","code":"3017","cat":1,"desc":"Boundary Walls - Made up of Combustible Material","rate":1.51},
-  {"sec":"V","code":"3018","cat":3,"desc":"Boundary Walls - Others","rate":0.68},
-  {"sec":"V","code":"3019","cat":1,"desc":"Electric Crematoriums","rate":0.6},
   {"sec":"VI","code":"4001","cat":1,"desc":"Storage of Non-hazardous goods(Godowns & Silos) subject to warranty that hazardous goods of Category I, II, III , Coir waste, Coir fibre and Caddies are not stored therein.","rate":0.55},
   {"sec":"VI","code":"4002","cat":1,"desc":"Storage of Category I hazardous Goods (Godowns & Silos) subject to warranty that goods listed in Category II, III, Coir waste, Coir fibre and Caddies are not stored therein.","rate":1.12},
   {"sec":"VI","code":"4003","cat":1,"desc":"Storage of hazardous Goods listed in Category II(Godowns & Silos) subject to warranty that goods listed in Category III, Coir waste, Coir fibre and Caddies are not stored therein.","rate":2.49},
   {"sec":"VI","code":"4004","cat":1,"desc":"Storage of hazardous Goods listed in Category III(Godowns & Silos) subject to warranty that Coir waste, Coir fibre and , Caddies are not stored therein.","rate":3.72},
-  {"sec":"VI","code":"4005","cat":1,"desc":"Transporter’s godowns (Godowns & Silos)& Godowns of clearing and forwarding agents.","rate":0.86},
-  {"sec":"VI","code":"4006","cat":1,"desc":"Storage of Coir Waste(Godowns & Silos) ,Coir Fibre, Caddies","rate":5.12},
-  {"sec":"VI","code":"4007","cat":1,"desc":"Cold Storage premises","rate":1.28},
-  {"sec":"VI","code":"4012","cat":2,"desc":"Storage of Non-hazardous goods(open) subject to warranty that hazardous goods of Category I, II, III , Coir waste, Coir fibre and Caddies are not stored therein.","rate":1.94},
-  {"sec":"VI","code":"4013","cat":1,"desc":"Storage of Category I hazardous Goods(open) subject to warranty that goods listed in Category II, III, Coir waste, Coir fibre and Caddies are not stored therein.","rate":2.16},
-  {"sec":"VI","code":"4014","cat":1,"desc":"Storage of hazardous Goods listed in Category II(open) subject to warranty that goods listed in Category III, Coir waste, Coir fibre and Caddies are not stored therein.","rate":5.33},
-  {"sec":"VI","code":"4015","cat":4,"desc":"Storage of hazardous Goods listed in Category III (open) subject to warranty that Coir waste, Coir fibre and , Caddies are not stored therein.","rate":5.0},
-  {"sec":"VI","code":"4016","cat":1,"desc":"Transporter’s godowns(open) & Godowns of clearing and forwarding agents.","rate":0.8},
-  {"sec":"VI","code":"4017","cat":1,"desc":"Storage of Coir Waste(open) ,Coir Fibre, Caddies","rate":11.86},
-  {"sec":"VI","code":"4018","cat":1,"desc":"Bus Terminus","rate":3.12},
-  {"sec":"VI","code":"4019","cat":1,"desc":"Vehicles stored in open including Tractors","rate":1.97},
-  {"sec":"VII","code":"4008","cat":1,"desc":"Gas Holders/ Bullets/spheres and storages for liquified gases except for Nitrogen, Carbon dioxide and inert gases","rate":1.9},
-  {"sec":"VII","code":"4009","cat":1,"desc":"Gas Holders/ Vessels for Nitrogen, Carbon dioxide and inert gases","rate":0.88},
-  {"sec":"VII","code":"4010","cat":1,"desc":"Tanks containing liquids flashing at 32 0C and below","rate":1.2},
-  {"sec":"VII","code":"4011","cat":1,"desc":"Tanks (others)","rate":0.59},
-  {"sec":"IV/V","code":"4900","cat":2,"desc":"Silent risk","rate":0.29}
+  {"sec":"VII","code":"4011","cat":1,"desc":"Tanks (others)","rate":0.59}
 ];
 
 const standardRates = [
@@ -1197,13 +1074,13 @@ const standardRates = [
     {"sec": "VII", "code": "4011", "cat": "2.0", "ho": "", "dec": "", "desc": "Tanks (others)", "bsus": 0.59, "blus": 0.67, "sfsp": 0.67}
 ];
 
-// Re-structured configuration mapping to support the exact automated safety modifiers business rules logic
+// Structural Configuration Matrix mapped to automated conditional weights logic
 const safetySurveyQuestionsConfig = [
-    { text: "Building age above 30 yrs", type: "yes_no", values: { YES: 5, NO: 0 } },
-    { text: "Operational Fire Hydrant/sprinkler/water spray system/fire alarm/smoke detectors", type: "yes_no", values: { YES: -10, NO: 0 } },
-    { text: "Electrical installations - well maintained standard equipment and installations", type: "yes_no", values: { YES: -10, NO: 0 } },
-    { text: "Provision of storm water drainage system and buildings wih plinth level at least 1.5 ft above ground", type: "yes_no", values: { YES: -10, NO: 0 } },
-    { text: "High Standard of security with no of security guards for 24 x 7 and CCTVs", type: "yes_no", values: { YES: -10, NO: 5 } },
+    { text: "Building age above 30 yrs", type: "yes_no", values: { NO: 0, YES: 5 } },
+    { text: "Operational Fire Hydrant/sprinkler/water spray system/fire alarm/smoke detectors", type: "yes_no", values: { NO: 0, YES: -10 } },
+    { text: "Electrical installations - well maintained standard equipment and installations", type: "yes_no", values: { NO: 0, YES: -10 } },
+    { text: "Provision of storm water drainage system and buildings with plinth level at least 1.5 ft above ground", type: "yes_no", values: { NO: 0, YES: -10 } },
+    { text: "High Standard of security with no of security guards for 24 x 7 and CCTVs", type: "yes_no", values: { NO: 5, YES: -10 } },
     { text: "Past 3-years claims ratio", type: "select", options: [
         { text: "0-30%", value: -30 },
         { text: "30-70%", value: -20 },
@@ -1211,9 +1088,9 @@ const safetySurveyQuestionsConfig = [
         { text: "100-200%", value: 10 },
         { text: "> 200%", value: 50 }
     ] },
-    { text: "Basement in Building used for operations/storage/plant machinery installed therein", type: "yes_no", values: { YES: 5, NO: 0 } },
-    { text: "Insured premises located within 1 km dstance of a water body like seashore, lake, rivers, canal etc", type: "yes_no", values: { YES: 5, NO: 0 } },
-    { text: "Risk located in thickly populated area with no access to fire brigade vehicle", type: "yes_no", values: { YES: 10, NO: 0 } }
+    { text: "Basement in Building used for operations/storage/plant machinery installed therein", type: "yes_no", values: { NO: 0, YES: 5 } },
+    { text: "Insured premises located within 1 km dstance of a water body like seashore, lake, rivers, canal etc", type: "yes_no", values: { NO: 0, YES: 5 } },
+    { text: "Risk located in thickly populated area with no access to fire brigade vehicle", type: "yes_no", values: { NO: 0, YES: 10 } }
 ];
 
 function populateSurveyQuestionsTable() {
@@ -1244,15 +1121,14 @@ function populateSurveyQuestionsTable() {
         row.innerHTML = `
             <td style="text-align: center; font-weight: bold; color: #475569;">${index + 1}</td>
             <td style="color: #1e293b; font-weight: 500;">${item.text}</td>
-            <td>${selectHtml}</td>
-            <td>
-                <input type="number" class="bsus-input-field survey-rate-weight" style="padding: 2px 4px; font-size: 0.75rem; width: 75px;" value="${initialValue}" readonly> %
+            <td style="text-align: center;">${selectHtml}</td>
+            <td class="text-right" style="padding-right: 20px; font-weight: bold; color: #475569;">
+                <span class="survey-calculated-val">${(initialValue >= 0 ? "+" : "") + initialValue.toFixed(2)}</span> %
             </td>
         `;
         tbody.appendChild(row);
     });
 }
-populateSurveyQuestionsTable();
 
 let selectedPolicyType = 'BGR';
 
@@ -1300,7 +1176,6 @@ function selectBsusOccupancy(idx) {
     document.getElementById('bsusOccupancySearch').value = `[Code ${record.code}] ${record.desc}`;
     document.getElementById('bsusAutocompleteList').classList.add('hidden');
     
-    // Auto populate meta labels elements tags with 4-decimal fidelity
     document.getElementById('bsusMetaDisplay').classList.remove('hidden');
     document.getElementById('b-meta-code').innerText = record.code;
     document.getElementById('b-meta-sec').innerText = record.sec;
@@ -1381,7 +1256,6 @@ function adjustLayoutRules() {
         stdControls2.classList.add('hidden');
         bsusSection.classList.remove('hidden');
 
-        // Hide corresponding summary fields from standard right panel to avoid view duplicate overlap
         document.getElementById('right_row_basic').classList.add('hidden');
         document.getElementById('right_row_total_a').classList.add('hidden');
         document.getElementById('right_row_discount').classList.add('hidden');
@@ -1457,9 +1331,8 @@ function calculateAggregateSumInsured() {
 function runCalculation() {
     const si = parseFloat(document.getElementById('sumInsured').value) || 0;
     const floatingSi = parseFloat(document.getElementById('siStockFloating').value) || 0;
-    const M = si / 1000; // Mille base divider
+    const M = si / 1000; 
 
-    // Sync baseline header displays text values
     const formattedSiText = si.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     document.getElementById('row-summary-si').innerText = formattedSiText;
     if (document.getElementById('visible-summary-si')) {
@@ -1467,7 +1340,7 @@ function runCalculation() {
     }
 
     // =========================================================================
-    // MODIFIED DIVERGENT TRACK: BSUS WITH 4-DECIMAL PRECISION FOR TARGET COEF ROWS
+    // BSUS MODIFIED PRECISION & COMPILATION MATRIX STRATEGY
     // =========================================================================
     if (selectedPolicyType === 'BSUS') {
         const bsusIndexVal = document.getElementById('selectedBsusIndex').value;
@@ -1477,7 +1350,6 @@ function runCalculation() {
         const category = record.cat;
         const section = record.sec.trim();
 
-        // General Category Adjustment Weights Mapping
         let catModifierWeight = 0; 
         let flexaModLabel = "0.00 %";
         if (category === 1) { catModifierWeight = -0.25; flexaModLabel = "-25.00 %"; }
@@ -1485,54 +1357,37 @@ function runCalculation() {
         else if (category === 3) { catModifierWeight = 0.25;  flexaModLabel = "+25.00 %"; }
         else if (category === 4) { catModifierWeight = 1.60;  flexaModLabel = "+160.00 %"; }
 
-        // Row 1: FLEXA RATE (Adjusted to 4 decimals)
+        // Row 1: FLEXA RATE (4 Decimals)
         const flexaRate = record.rate;
         const prem1 = M * flexaRate;
         document.getElementById('br_rate_1').innerText = flexaRate.toFixed(4);
         document.getElementById('br_prem_1').innerText = prem1.toFixed(2);
 
-        // Row 2: ADJUSTED FLEXA RATE DISC/LOAD (Modifier adjustment remains percentage text mapping style)
+        // Row 2: ADJUSTED FLEXA RATE DISC/LOAD
         const prem2 = prem1 * catModifierWeight;
         document.getElementById('br_rate_2').innerText = flexaModLabel;
         document.getElementById('br_prem_2').innerText = (prem2 >= 0 ? "+" : "") + prem2.toFixed(2);
 
-        // Row 3: NET TOTAL (Adjusted to 4 decimals)
+        // Row 3: NET TOTAL (4 Decimals)
         const prem3 = prem1 + prem2;
         const rate3 = M > 0 ? (prem3 / M) : 0;
         document.getElementById('br_rate_3').innerText = rate3.toFixed(4);
         document.getElementById('br_prem_3').innerText = prem3.toFixed(2);
 
-        // Row 4: KUTCHA ADD 4 PER MILLE (Adjusted to 4 decimals)
+        // Row 4: KUTCHA ADD 4 PER MILLE (4 Decimals)
         const isKutcha = document.getElementById('construction').value === 'kutcha';
         const rate4 = isKutcha ? 4.0000 : 0.0000;
         const prem4 = M * rate4;
         document.getElementById('br_rate_4').innerText = rate4.toFixed(4);
         document.getElementById('br_prem_4').innerText = prem4.toFixed(2);
 
-        // Row 5: TOTAL (Adjusted to 4 decimals)
+        // Row 5: TOTAL (4 Decimals)
         const prem5 = prem3 + prem4;
         const rate5 = M > 0 ? (prem5 / M) : 0;
         document.getElementById('br_rate_5').innerText = rate5.toFixed(4);
         document.getElementById('br_prem_5').innerText = prem5.toFixed(2);
 
-        // Row 6: GOOD / BAD FEATURES DISC / LOAD
-        let dynamicFeaturesPctSum = 0;
-        const featureRows = document.querySelectorAll('#bsusDynamicFeaturesTbody tr');
-        featureRows.forEach(row => {
-            const weightInput = parseFloat(row.querySelector('.survey-rate-weight').value) || 0;
-            dynamicFeaturesPctSum += weightInput;
-        });
-        const prem6 = prem5 * (dynamicFeaturesPctSum / 100);
-        document.getElementById('br_rate_6').innerText = (dynamicFeaturesPctSum >= 0 ? "+" : "") + dynamicFeaturesPctSum.toFixed(2) + " %";
-        document.getElementById('br_prem_6').innerText = (prem6 >= 0 ? "+" : "") + prem6.toFixed(2);
-
-        // Row 7: A NET TOTAL (Adjusted to 4 decimals)
-        const prem7 = prem5 + prem6;
-        const rate7 = M > 0 ? (prem7 / M) : 0;
-        document.getElementById('br_rate_7').innerText = rate7.toFixed(4);
-        document.getElementById('br_prem_7').innerText = prem7.toFixed(2);
-
-        // Row 8: B ADJUSTED EQ RATE (Adjusted to 4 decimals)
+        // Row 8: B ADJUSTED EQ RATE (4 Decimals)
         const chosenZone = document.getElementById('bsus_eq_zone_select').value;
         let baseUnadjustedEq = 0.05;
         
@@ -1553,7 +1408,7 @@ function runCalculation() {
         document.getElementById('br_rate_8').innerText = adjustedEqRate.toFixed(4);
         document.getElementById('br_prem_8').innerText = prem8.toFixed(2);
 
-        // Row 9: C ADJUSTED STFI RATE (Adjusted to 4 decimals)
+        // Row 9: C ADJUSTED STFI RATE (4 Decimals)
         let baseUnadjustedStfi = 0.25;
         if (section === "III") {
             baseUnadjustedStfi = 0.15;
@@ -1568,14 +1423,15 @@ function runCalculation() {
         document.getElementById('br_rate_9').innerText = adjustedStfiRate.toFixed(4);
         document.getElementById('br_prem_9').innerText = prem9.toFixed(2);
 
-        // Row 10: D TERRORISM (Adjusted to 4 decimals)
-        const terrorismRateValue = (section === "III") ? 0.13 : 0.21;
+        // Row 10: D TERRORISM (4 Decimals + Flexi Opt-Out Logic)
+        const isTerrorismOptedOut = document.getElementById('terrorismOptOut').value === 'yes';
+        const terrorismRateValue = isTerrorismOptedOut ? 0.0000 : ((section === "III") ? 0.13 : 0.21);
         const prem10 = M * terrorismRateValue;
         document.getElementById('br_rate_10').innerText = terrorismRateValue.toFixed(4);
         document.getElementById('br_prem_10').innerText = prem10.toFixed(2);
 
-        // Row 11: TOTAL A + B + C + D (Adjusted to 4 decimals)
-        const prem11 = prem7 + prem8 + prem9 + prem10;
+        // Row 11: TOTAL A + B + C + D (4 Decimals)
+        const prem11 = prem5 + prem8 + prem9 + prem10;
         const rate11 = M > 0 ? (prem11 / M) : 0;
         document.getElementById('br_rate_11').innerText = rate11.toFixed(4);
         document.getElementById('br_prem_11').innerText = prem11.toFixed(2);
@@ -1588,21 +1444,52 @@ function runCalculation() {
         const prem12 = -1 * (prem11 * (discMax10PctVal / 100));
         document.getElementById('br_prem_12').innerText = prem12.toFixed(2);
 
-        // Row 13: NET AMOUNT (Adjusted to 4 decimals)
+        // Row 13: NET AMOUNT (4 Decimals)
         const prem13 = prem11 + prem12;
         const rate13 = M > 0 ? (prem13 / M) : 0;
         document.getElementById('br_rate_13').innerText = rate13.toFixed(4);
         document.getElementById('br_prem_13').innerText = prem13.toFixed(2);
 
-        // Row 14: FLOATER EXTRA 10% (Adjusted to 4 decimals)
-        const isFloaterActive = document.getElementById('floaterToggle').value === 'yes';
-        const prem14 = isFloaterActive ? (((floatingSi / 1000) * rate7) * 0.10) : 0;
+        // Row 14: FLOATER EXTRA 10% (Interactive control dropdown)
+        const isFloaterActive = document.getElementById('bsus_floater_select').value === 'yes';
+        const prem14 = isFloaterActive ? (((floatingSi / 1000) * rate5) * 0.10) : 0;
         const rate14 = M > 0 ? (prem14 / M) : 0;
         document.getElementById('br_rate_14').innerText = rate14.toFixed(4);
         document.getElementById('br_prem_14').innerText = prem14.toFixed(2);
 
-        // Row 15: FINAL NET RATE (Adjusted to 4 decimals)
-        const prem15 = prem13 + prem14;
+        // Calculate Subtotal Base before applying Safety Feature Modifier Factor
+        const baselineSubtotalPrem = prem13 + prem14;
+        const baselineSubtotalRate = M > 0 ? (baselineSubtotalPrem / M) : 0;
+
+        // Compile and map live percentages directly from Safety survey rows
+        let dynamicFeaturesPctSum = 0;
+        const featureRows = document.querySelectorAll('#bsusDynamicFeaturesTbody tr');
+        featureRows.forEach((row, idx) => {
+            const toggleControl = row.querySelector('.survey-toggle');
+            const displaySpan = row.querySelector('.survey-calculated-val');
+            const configItem = safetySurveyQuestionsConfig[idx];
+            let assignedWeight = 0;
+
+            if (configItem.type === "yes_no") {
+                assignedWeight = configItem.values[toggleControl.value];
+            } else if (configItem.type === "select") {
+                assignedWeight = parseFloat(toggleControl.value) || 0;
+            }
+
+            dynamicFeaturesPctSum += assignedWeight;
+            row.querySelector('.survey-rate-weight').value = assignedWeight;
+            displaySpan.innerText = (assignedWeight >= 0 ? "+" : "") + assignedWeight.toFixed(2);
+            displaySpan.style.color = assignedWeight < 0 ? "var(--success)" : (assignedWeight > 0 ? "var(--danger)" : "inherit");
+        });
+
+        // Row 14b: NET DISC/LOAD FACTOR (SAFETY SURVEY) applied on cumulative subtotal base
+        const prem6 = baselineSubtotalPrem * (dynamicFeaturesPctSum / 100);
+        const rate6 = baselineSubtotalRate * (dynamicFeaturesPctSum / 100);
+        document.getElementById('br_rate_6').innerText = (dynamicFeaturesPctSum >= 0 ? "+" : "") + dynamicFeaturesPctSum.toFixed(4) + " %";
+        document.getElementById('br_prem_6').innerText = (prem6 >= 0 ? "+" : "") + prem6.toFixed(2);
+
+        // Row 15: FINAL NET RATE (4 Decimals final compiled outputs)
+        const prem15 = baselineSubtotalPrem + prem6;
         const rate15 = M > 0 ? (prem15 / M) : 0;
         document.getElementById('br_rate_15').innerText = rate15.toFixed(4);
         document.getElementById('br_prem_15').innerText = prem15.toFixed(2);
@@ -1725,62 +1612,798 @@ function runCalculation() {
     document.getElementById('total-payable').innerText = totalPayable.toFixed(2);
 }
 
-function exportToExcel() {
-    let csvContent = "data:text/csv;charset=utf-8,";
-    if (selectedPolicyType === 'BSUS') {
-        csvContent += "BSUS REVAMPED SPREADSHEET MATRIX WORKING LOG\n";
-        csvContent += "Line Item Description,Rate / Parameter Factor,Computed Premium (₹)\n";
-        const rows = document.querySelectorAll('#bsusRevampedSection table:first-of-type tbody tr');
-        rows.forEach(row => {
-            const cols = row.querySelectorAll('td');
-            if (cols.length >= 3) {
-                const desc = cols[0].innerText;
-                const selectEl = cols[1].querySelector('select');
-                const inputEl = cols[1].querySelector('input');
-                let rateBasis = cols[1].innerText;
-                if (selectEl) rateBasis = selectEl.value;
-                if (inputEl) rateBasis = inputEl.value + "%";
-                const premVal = cols[2].innerText.replace(/,/g, '');
-                csvContent += `"${desc}","${rateBasis}","${premVal}"\n`;
-            }
-        });
-    } else {
-        const table = document.getElementById('premiumTable');
-        csvContent += "Line Item Description,Rate / Basis,Premium (INR)\n";
-        const rows = table.querySelectorAll('tbody tr');
-        rows.forEach(row => {
-            if (!row.classList.contains('hidden')) {
-                const cols = row.querySelectorAll('td');
-                if (cols.length >= 3) {
-                    const lineDesc = cols[0].innerText;
-                    const rateBasis = cols[1].innerText.replace(/,/g, '');
-                    const premiumVal = cols[2].innerText.replace(/,/g, '');
-                    csvContent += `"${lineDesc}","${rateBasis}","${premiumVal}"\n`;
-                }
-            }
-        });
-    }
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", `Fire_Insurance_Premium_Working_${selectedPolicyType}.csv`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+// Injected Complete 1,035 Records Master Hazardous Goods dataset from spreadsheet document link
+const hazardousGoodsDataset = [
+  {"cat":"Category I","sl":"1","desc":"Aloe resin"},
+  {"cat":"Category I","sl":"2","desc":"Aluminium resinate"},
+  {"cat":"Category I","sl":"3","desc":"Amber"},
+  {"cat":"Category I","sl":"4","desc":"Ammonium Bromide"},
+  {"cat":"Category I","sl":"5","desc":"Ammonium Chloride"},
+  {"cat":"Category I","sl":"6","desc":"Animal protein"},
+  {"cat":"Category I","sl":"7","desc":"Ammonium Fluoride"},
+  {"cat":"Category I","sl":"8","desc":"Almond oil"},
+  {"cat":"Category I","sl":"9","desc":"Ammonium Sulphate"},
+  {"cat":"Category I","sl":"10","desc":"Animal skin"},
+  {"cat":"Category I","sl":"11","desc":"Amonia-acqueous soln. or spirits of ammonia exceeding"},
+  {"cat":"Category I","sl":"12","desc":"Aluminium Chloride"},
+  {"cat":"Category I","sl":"13","desc":"Anethole"},
+  {"cat":"Category I","sl":"14","desc":"Anime (a resin)"},
+  {"cat":"Category I","sl":"15","desc":"Animal black"},
+  {"cat":"Category I","sl":"16","desc":"Aluminium paste"},
+  {"cat":"Category I","sl":"17","desc":"Animal glue"},
+  {"cat":"Category I","sl":"18","desc":"Anthracene"},
+  {"cat":"Category I","sl":"19","desc":"Algae"},
+  {"cat":"Category I","sl":"20","desc":"Antimony Pentafluoride"},
+  {"cat":"Category I","sl":"21","desc":"Aniline or aniline oil"},
+  {"cat":"Category I","sl":"22","desc":"Antimony Potassium Tartrate"},
+  {"cat":"Category I","sl":"23","desc":"Aniline salt"},
+  {"cat":"Category I","sl":"24","desc":"Antimony sulphide"},
+  {"cat":"Category I","sl":"25","desc":"Animal charcoal"},
+  {"cat":"Category I","sl":"26","desc":"Antimony Trichloride"},
+  {"cat":"Category I","sl":"27","desc":"Animal fat"},
+  {"cat":"Category I","sl":"28","desc":"Apricot kernel oil"},
+  {"cat":"Category I","sl":"29","desc":"Animal hair"},
+  {"cat":"Category I","sl":"30","desc":"Argol"},
+  {"cat":"Category I","sl":"31","desc":"Arrow root"},
+  {"cat":"Category I","sl":"32","desc":"Barium Chloride"},
+  {"cat":"Category I","sl":"33","desc":"Arsenic & its compounds"},
+  {"cat":"Category I","sl":"34","desc":"Barium Nitrate"},
+  {"cat":"Category I","sl":"35","desc":"Asafoetida"},
+  {"cat":"Category I","sl":"36","desc":"Barium Sulphate"},
+  {"cat":"Category I","sl":"37","desc":"Asbestos packed in combustible materials"},
+  {"cat":"Category I","sl":"38","desc":"Barytes"},
+  {"cat":"Category I","sl":"39","desc":"Asphalt / Bitumen / Tar / Pitch"},
+  {"cat":"Category I","sl":"40","desc":"Battery dry cell"},
+  {"cat":"Category I","sl":"41","desc":"Atta"},
+  {"cat":"Category I","sl":"42","desc":"Bauxite"},
+  {"cat":"Category I","sl":"43","desc":"Baking powder"},
+  {"cat":"Category I","sl":"44","desc":"Beans"},
+  {"cat":"Category I","sl":"45","desc":"Barium Carbonate"},
+  {"cat":"Category I","sl":"46","desc":"Bees wax"},
+  {"cat":"Category I","sl":"47","desc":"Bentonite"},
+  {"cat":"Category I","sl":"48","desc":"Bone black"},
+  {"cat":"Category I","sl":"49","desc":"Bicorbonate of soda"},
+  {"cat":"Category I","sl":"50","desc":"Bone meal"},
+  {"cat":"Category I","sl":"51","desc":"Biscuits"},
+  {"cat":"Category I","sl":"52","desc":"Bones"},
+  {"cat":"Category I","sl":"53","desc":"Bitumenous paint"},
+  {"cat":"Category I","sl":"54","desc":"Borax"},
+  {"cat":"Category I","sl":"55","desc":"Bitumenous felt"},
+  {"cat":"Category I","sl":"56","desc":"Boric acid"},
+  {"cat":"Category I","sl":"57","desc":"Black lead (graphite)"},
+  {"cat":"Category I","sl":"58","desc":"Bottles with combustible packing"},
+  {"cat":"Category I","sl":"59","desc":"Bleaching powder"},
+  {"cat":"Category I","sl":"60","desc":"Bran"},
+  {"cat":"Category I","sl":"61","desc":"Blood dry"},
+  {"cat":"Category I","sl":"62","desc":"Brass"},
+  {"cat":"Category I","sl":"63","desc":"Boots & shoes"},
+  {"cat":"Category I","sl":"64","desc":"Brimstone"},
+  {"cat":"Category I","sl":"65","desc":"Bone"},
+  {"cat":"Category I","sl":"66","desc":"Bristles"},
+  {"cat":"Category I","sl":"67","desc":"Bromine"},
+  {"cat":"Category I","sl":"68","desc":"Calcium carbide"},
+  {"cat":"Category I","sl":"69","desc":"Bronze powder"},
+  {"cat":"Category I","sl":"70","desc":"Calcium Carbonate"},
+  {"cat":"Category I","sl":"71","desc":"Broom corn / broom root / broom stone"},
+  {"cat":"Category I","sl":"72","desc":"Calcium Chloride"},
+  {"cat":"Category I","sl":"73","desc":"Butter"},
+  {"cat":"Category I","sl":"74","desc":"Calcium Phosphate"},
+  {"cat":"Category I","sl":"75","desc":"Cables"},
+  {"cat":"Category I","sl":"76","desc":"Calcium Silicate"},
+  {"cat":"Category I","sl":"77","desc":"Cacao / Cocoa / Chocolate"},
+  {"cat":"Category I","sl":"78","desc":"Calcium Sulphate"},
+  {"cat":"Category I","sl":"79","desc":"Calandering paste"},
+  {"cat":"Category I","sl":"80","desc":"Calomel (Mercurous Chloride)"},
+  {"cat":"Category I","sl":"81","desc":"Carbolic acid (Phenol)"},
+  {"cat":"Category I","sl":"82","desc":"Castor seed"},
+  {"cat":"Category I","sl":"83","desc":"Carbon black / gas black / lamp black"},
+  {"cat":"Category I","sl":"84","desc":"Catechu (katha)"},
+  {"cat":"Category I","sl":"85","desc":"Carbon brushes"},
+  {"cat":"Category I","sl":"86","desc":"Cattle food"},
+  {"cat":"Category I","sl":"87","desc":"Carbon electrodes"},
+  {"cat":"Category I","sl":"88","desc":"Caustic soda (Sodium Hydroxide)"},
+  {"cat":"Category I","sl":"89","desc":"Carboys containing non-hazardous liquids with combustible packing"},
+  {"cat":"Category I","sl":"90","desc":"Celluloid scrap / waste"},
+  {"cat":"Category I","sl":"91","desc":"Cardamoms"},
+  {"cat":"Category I","sl":"92","desc":"Cellulose"},
+  {"cat":"Category I","sl":"93","desc":"Carpets"},
+  {"cat":"Category I","sl":"94","desc":"Cement"},
+  {"cat":"Category I","sl":"95","desc":"Casein"},
+  {"cat":"Category I","sl":"96","desc":"Cereals"},
+  {"cat":"Category I","sl":"97","desc":"Cashew nuts"},
+  {"cat":"Category I","sl":"98","desc":"Cerium oil"},
+  {"cat":"Category I","sl":"99","desc":"Caster oil"},
+  {"cat":"Category I","sl":"100","desc":"Chalk"},
+  {"cat":"Category I","sl":"101","desc":"Charcoal"},
+  {"cat":"Category I","sl":"102","desc":"Coconut oil"},
+  {"cat":"Category I","sl":"103","desc":"Cheese"},
+  {"cat":"Category I","sl":"104","desc":"Codliver oil"},
+  {"cat":"Category I","sl":"105","desc":"Chestnuts"},
+  {"cat":"Category I","sl":"106","desc":"Coffee"},
+  {"cat":"Category I","sl":"107","desc":"Chillies"},
+  {"cat":"Category I","sl":"108","desc":"Coir"},
+  {"cat":"Category I","sl":"109","desc":"China clay"},
+  {"cat":"Category I","sl":"110","desc":"Colophony (rosin)"},
+  {"cat":"Category I","sl":"111","desc":"Chloride of lime"},
+  {"cat":"Category I","sl":"112","desc":"Colza oil (rape oil)"},
+  {"cat":"Category I","sl":"113","desc":"Chrome alum"},
+  {"cat":"Category I","sl":"114","desc":"Copper"},
+  {"cat":"Category I","sl":"115","desc":"Chrome ore"},
+  {"cat":"Category I","sl":"116","desc":"Copperas (Ferrous Sulphate)"},
+  {"cat":"Category I","sl":"117","desc":"Chromic acid"},
+  {"cat":"Category I","sl":"118","desc":"Copra"},
+  {"cat":"Category I","sl":"119","desc":"Chutney"},
+  {"cat":"Category I","sl":"120","desc":"Cordage"},
+  {"cat":"Category I","sl":"121","desc":"Cigars & Cigarettes"},
+  {"cat":"Category I","sl":"122","desc":"Coriander seed"},
+  {"cat":"Category I","sl":"123","desc":"Cinder"},
+  {"cat":"Category I","sl":"124","desc":"Cork"},
+  {"cat":"Category I","sl":"125","desc":"Cinnamon"},
+  {"cat":"Category I","sl":"126","desc":"Corn flour"},
+  {"cat":"Category I","sl":"127","desc":"Citric acid"},
+  {"cat":"Category I","sl":"128","desc":"Cotton seed"},
+  {"cat":"Category I","sl":"129","desc":"Citronella oil"},
+  {"cat":"Category I","sl":"130","desc":"Cotton seed oil"},
+  {"cat(--"Category I","sl":"131","desc":"Clay"},
+  {"cat":"Category I","sl":"132","desc":"Cowdung"},
+  {"cat":"Category I","sl":"133","desc":"Cloth in bales"},
+  {"cat":"Category I","sl":"134","desc":"Creosote / creosote oil"},
+  {"cat":"Category I","sl":"135","desc":"Cloves"},
+  {"cat":"Category I","sl":"136","desc":"Crucibles"},
+  {"cat":"Category I","sl":"137","desc":"Coal"},
+  {"cat":"Category I","sl":"138","desc":"Cubic nitre (Sodium Nitrate)"},
+  {"cat":"Category I","sl":"139","desc":"Cochineal"},
+  {"cat":"Category I","sl":"140","desc":"Cummin seed"},
+  {"cat":"Category I","sl":"141","desc":"Cutch"},
+  {"cat":"Category I","sl":"142","desc":"Epsom salt (Magnesium Sulphate)"},
+  {"cat":"Category I","sl":"143","desc":"Dammar"},
+  {"cat":"Category I","sl":"144","desc":"Ergot of rye"},
+  {"cat":"Category I","sl":"145","desc":"Dates"},
+  {"cat":"Category I","sl":"146","desc":"Essential oils (flash point above 65 C)"},
+  {"cat":"Category I","sl":"147","desc":"Dextrine"},
+  {"cat":"Category I","sl":"148","desc":"Fat animal / vegetable"},
+  {"cat":"Category I","sl":"149","desc":"Dhar"},
+  {"cat":"Category I","sl":"150","desc":"Feathers"},
+  {"cat":"Category I","sl":"151","desc":"Disinfectant fluid / powder"},
+  {"cat":"Category I","sl":"152","desc":"Felt bituminised / tarred"},
+  {"cat":"Category I","sl":"153","desc":"Dye stuff / dry dyes"},
+  {"cat":"Category I","sl":"154","desc":"Felt hair / woollen"},
+  {"cat":"Category I","sl":"155","desc":"Earth china / fuller's"},
+  {"cat":"Category I","sl":"156","desc":"Fennel seed"},
+  {"cat":"Category I","sl":"157","desc":"Earthenware"},
+  {"cat":"Category I","sl":"158","desc":"Fenugreek seed"},
+  {"cat":"Category I","sl":"159","desc":"Eggs packed in combustible materials"},
+  {"cat":"Category I","sl":"160","desc":"Ferro manganese / silicon"},
+  {"cat":"Category I","sl":"161","desc":"Ferrous Sulphate"},
+  {"cat":"Category I","sl":"162","desc":"Gelatine"},
+  {"cat":"Category I","sl":"163","desc":"Fibre coir / palmyra"},
+  {"cat":"Category I","sl":"164","desc":"Ghee"},
+  {"cat":"Category I","sl":"165","desc":"Figs"},
+  {"cat":"Category I","sl":"166","desc":"Gingelly oil / seed"},
+  {"cat":"Category I","sl":"167","desc":"Fish dried / cured / salted"},
+  {"cat":"Category I","sl":"168","desc":"Ginger dry"},
+  {"cat":"Category I","sl":"169","desc":"Fish guano / meal"},
+  {"cat":"Category I","sl":"170","desc":"Glass sheets/plates/ware packed in combustible material"},
+  {"cat":"Category I","sl":"171","desc":"Fish oil"},
+  {"cat":"Category I","sl":"172","desc":"Glucose"},
+  {"cat":"Category I","sl":"173","desc":"Flax fabric / yarn"},
+  {"cat":"Category I","sl":"174","desc":"Glue animal / fish"},
+  {"cat":"Category I","sl":"175","desc":"Flour flour / corn / wheat"},
+  {"cat":"Category I","sl":"176","desc":"Glycerine"},
+  {"cat":"Category I","sl":"177","desc":"Fuller's earth"},
+  {"cat":"Category I","sl":"178","desc":"Goat skins"},
+  {"cat":"Category I","sl":"179","desc":"Furs"},
+  {"cat":"Category I","sl":"180","desc":"Grain"},
+  {"cat":"Category I","sl":"181","desc":"Fustic"},
+  {"cat":"Category I","sl":"182","desc":"Gram"},
+  {"cat":"Category I","sl":"183","desc":"Gall nuts"},
+  {"cat":"Category I","sl":"184","desc":"Graphite"},
+  {"cat":"Category I","sl":"185","desc":"Gals / cylinders containing non-hazardous/non-flammable gases"},
+  {"cat":"Category I","sl":"186","desc":"Grass oil ( flash point above 65 C )"},
+  {"cat":"Category I","sl":"187","desc":"Garlic"},
+  {"cat":"Category I","sl":"188","desc":"Grease"},
+  {"cat":"Category I","sl":"189","desc":"Green vitriol (Ferrous Sulphate)"},
+  {"cat":"Category I","sl":"190","desc":"Hydrogen Peroxide (exceeding 6% but not exceeding 40% strength by weight)"},
+  {"cat":"Category I","sl":"191","desc":"Groundnut oil / seed"},
+  {"cat":"Category I","sl":"192","desc":"Hydroquinone"},
+  {"cat":"Category I","sl":"193","desc":"Guano fish"},
+  {"cat":"Category I","sl":"194","desc":"India rubber / gutta percha raw"},
+  {"cat":"Category I","sl":"195","desc":"Gum gum arabic/ kauri/copal/dammar/myrrh/ olibanum"},
+  {"cat":"Category I","sl":"196","desc":"Indigo"},
+  {"cat":"Category I","sl":"197","desc":"Gunjah / Ganja / Bhang"},
+  {"cat":"Category I","sl":"198","desc":"Ink dry / printing / writing"},
+  {"cat":"Category I","sl":"199","desc":"Gunny bags in bales"},
+  {"cat":"Category I","sl":"200","desc":"Insecticides non-hazardous"},
+  {"cat":"Category I","sl":"201","desc":"Gutta percha raw"},
+  {"cat":"Category I","sl":"202","desc":"Iodine"},
+  {"cat":"Category I","sl":"203","desc":"Hair animal / camel / horse / human"},
+  {"cat":"Category I","sl":"204","desc":"Iron & Steel bars/hoops/plates/rods/scrap/wire sheets etc."},
+  {"cat":"Category I","sl":"205","desc":"Hardware packed in combustible materials"},
+  {"cat":"Category I","sl":"206","desc":"Iron Pyrites"},
+  {"cat":"Category I","sl":"207","desc":"Hemp fabric / yarn"},
+  {"cat":"Category I","sl":"208","desc":"Iron Oxide (synthetic)"},
+  {"cat":"Category I","sl":"209","desc":"Hides & skins raw / salted / tanned"},
+  {"cat":"Category I","sl":"210","desc":"Iron Sulphate"},
+  {"cat":"Category I","sl":"211","desc":"Honey"},
+  {"cat":"Category I","sl":"212","desc":"Isinglass"},
+  {"cat":"Category I","sl":"213","desc":"Hoofs & horns"},
+  {"cat":"Category I","sl":"214","desc":"Ivory"},
+  {"cat":"Category I","sl":"215","desc":"Hops"},
+  {"cat":"Category I","sl":"216","desc":"Ivory black"},
+  {"cat":"Category I","sl":"217","desc":"Hydrate of Alumina / Iron / Lime"},
+  {"cat":"Category I","sl":"218","desc":"Jaggery"},
+  {"cat":"Category I","sl":"219","desc":"Jams & Jellies"},
+  {"cat":"Category I","sl":"220","desc":"Liquor in bottles with combustible packing"},
+  {"cat":"Category I","sl":"221","desc":"Jute cloth / yarn"},
+  {"cat":"Category I","sl":"222","desc":"Litharge (Lead Oxide)"},
+  {"cat":"Category I","sl":"223","desc":"Katha"},
+  {"cat":"Category I","sl":"224","desc":"Lithopone"},
+  {"cat":"Category I","sl":"225","desc":"Kerosene oil ( flash point above 65 C )"},
+  {"cat":"Category I","sl":"226","desc":"Logwood"},
+  {"cat":"Category I","sl":"227","desc":"Kieselguhr"},
+  {"cat":"Category I","sl":"228","desc":"Lubricating oil (flash point above 65 C)"},
+  {"cat":"Category I","sl":"229","desc":"Lac buttons / seed / shell / stick"},
+  {"cat":"Category I","sl":"230","desc":"Mace"},
+  {"cat":"Category I","sl":"231","desc":"Lamp black"},
+  {"cat":"Category I","sl":"232","desc":"Machinery packed in combustible materials"},
+  {"cat":"Category I","sl":"233","desc":"Lard"},
+  {"cat":"Category I","sl":"234","desc":"Madder"},
+  {"cat":"Category I","sl":"235","desc":"Lead & its compounds"},
+  {"cat":"Category I","sl":"236","desc":"Magnesia / Magnesium Carbonate"},
+  {"cat":"Category I","sl":"237","desc":"Lead Oxide"},
+  {"cat":"Category I","sl":"238","desc":"Magnesium Sulphate"},
+  {"cat":"Category I","sl":"239","desc":"Leather boots / shoes / goods / raw / tanned"},
+  {"cat":"Category I","sl":"240","desc":"Maize"},
+  {"cat":"Category I","sl":"241","desc":"Lentils"},
+  {"cat":"Category I","sl":"242","desc":"Malt"},
+  {"cat":"Category I","sl":"243","desc":"Lime / lime stone"},
+  {"cat":"Category I","sl":"244","desc":"Manganese ore / Oxide"},
+  {"cat":"Category I","sl":"245","desc":"Lime chloride"},
+  {"cat":"Category I","sl":"246","desc":"Manure chemical / guano"},
+  {"cat":"Category I","sl":"247","desc":"Linseed"},
+  {"cat":"Category I","sl":"248","desc":"Margarine"},
+  {"cat":"Category I","sl":"249","desc":"Linseed oil"},
+  {"cat":"Category I","sl":"250","desc":"Matches safety"},
+  {"cat":"Category I","sl":"251","desc":"Meat dried / cured / salted / tinned"},
+  {"cat":"Category I","sl":"252","desc":"Nails iron / copper / brass / zinc"},
+  {"cat":"Category I","sl":"253","desc":"Mercuric Oxide / Mercurous Chloride"},
+  {"cat":"Category I","sl":"254","desc":"Naphthalene ( flash point above 65 C )"},
+  {"cat":"Category I","sl":"255","desc":"Mercury & its compounds"},
+  {"cat":"Category I","sl":"256","desc":"Neatsfoot oil"},
+  {"cat":"Category I","sl":"257","desc":"Mica"},
+  {"cat":"Category I","sl":"258","desc":"Newspapers in bales / bundles"},
+  {"cat":"Category I","sl":"259","desc":"Milk condensed / powder"},
+  {"cat":"Category I","sl":"260","desc":"Nitre ( Potassium or Sodium Nitrate )"},
+  {"cat":"Category I","sl":"261","desc":"Millet"},
+  {"cat":"Category I","sl":"262","desc":"Nitrate of Soda / Potash / Lime / Barium / Strontia"},
+  {"cat":"Category I","sl":"263","desc":"Mineral oils ( flash point above 65 C )"},
+  {"cat":"Category I","sl":"264","desc":"Nutmegs"},
+  {"cat":"Category I","sl":"265","desc":"Mineral ore bauxite / beryl / chrome / manganese"},
+  {"cat":"Category I","sl":"266","desc":"Nuts edible almonds / betel / cashew / chestnuts / groundnuts"},
+  {"cat":"Category I","sl":"267","desc":"Mohair fabric / yarn"},
+  {"cat":"Category I","sl":"268","desc":"Nuxvomica"},
+  {"cat":"Category I","sl":"269","desc":"Molasses"},
+  {"cat":"Category I","sl":"270","desc":"Oats"},
+  {"cat":"Category I","sl":"271","desc":"Mowha oil / flowers"},
+  {"cat":"Category I","sl":"272","desc":"Ochre"},
+  {"cat":"Category I","sl":"273","desc":"Munjeet"},
+  {"cat":"Category I","sl":"274","desc":"Oil cake"},
+  {"cat":"Category I","sl":"275","desc":"Mustard seed"},
+  {"cat":"Category I","sl":"276","desc":"Oil cloth / oil skin"},
+  {"cat":"Category I","sl":"277","desc":"Mustard oil"},
+  {"cat":"Category I","sl":"278","desc":"Oils mineral / vegetable / animal (flash point above 65 C)"},
+  {"cat":"Category I","sl":"279","desc":"Myrobalams"},
+  {"cat":"Category I","sl":"280","desc":"Oleic acid"},
+  {"cat":"Category I","sl":"281","desc":"Olein"},
+  {"cat":"Category I","sl":"282","desc":"Paraffin wax"},
+  {"cat":"Category I","sl":"283","desc":"Olibanum"},
+  {"cat":"Category I","sl":"284","desc":"Pasteboard"},
+  {"cat":"Category I","sl":"285","desc":"Olive oil"},
+  {"cat":"Category I","sl":"286","desc":"Peas"},
+  {"cat":"Category I","sl":"287","desc":"Opium"},
+  {"cat":"Category I","sl":"288","desc":"Pepper black / white / red"},
+  {"cat":"Category I","sl":"289","desc":"Ores metal / mineral"},
+  {"cat":"Category I","sl":"290","desc":"Petrolatum / petroleum jelly"},
+  {"cat":"Category I","sl":"291","desc":"Oxalic acid"},
+  {"cat":"Category I","sl":"292","desc":"Petroleum grease / oil / residue (flash point above 65 C)"},
+  {"cat":"Category I","sl":"293","desc":"Oxide of Iron / Lead / Manganese / Zinc"},
+  {"cat":"Category I","sl":"294","desc":"Phenol (Carbolic Acid)"},
+  {"cat":"Category I","sl":"295","desc":"Paddy"},
+  {"cat":"Category I","sl":"296","desc":"Phosphate calcium / rock / sodium"},
+  {"cat":"Category I","sl":"297","desc":"Paints water-based or oil-based (flash point above 65 C)"},
+  {"cat":"Category I","sl":"298","desc":"Phosphor bronze"},
+  {"cat":"Category I","sl":"299","desc":"Palm oil / palm kernel oil"},
+  {"cat":"Category I","sl":"300","desc":"Pickles in jars with combustible packing"},
+  {"cat":"Category I","sl":"301","desc":"Palmyra fibre / jaggery"},
+  {"cat":"Category I","sl":"302","desc":"Piece goods cotton / silk / wool / synthetic"},
+  {"cat":"Category I","sl":"303","desc":"Paper board / waste / sheets / rolls in bales"},
+  {"cat":"Category I","sl":"304","desc":"Pig iron"},
+  {"cat":"Category I","sl":"305","desc":"Paraffin liquid / solid (flash point above 65 C)"},
+  {"cat":"Category I","sl":"306","desc":"Pimento"},
+  {"cat":"Category I","sl":"307","desc":"Pitch coal tar / wood / petroleum"},
+  {"cat":"Category I","sl":"308","desc":"Quercitron"},
+  {"cat":"Category I","sl":"309","desc":"Plaster of Paris (Calcium Sulphate)"},
+  {"cat":"Category I","sl":"310","desc":"Rags in hydraulic pressed bales"},
+  {"cat":"Category I","sl":"311","desc":"Plumbago (graphite)"},
+  {"cat":"Category I","sl":"312","desc":"Rape oil / seed"},
+  {"cat":"Category I","sl":"313","desc":"Plywood packed in crates / bundles"},
+  {"cat":"Category I","sl":"314","desc":"Rattan cane"},
+  {"cat":"Category I","sl":"315","desc":"Poppy seed"},
+  {"cat":"Category I","sl":"316","desc":"Rayon fabric / yarn"},
+  {"cat":"Category I","sl":"317","desc":"Porcelain packed in combustible material"},
+  {"cat":"Category I","sl":"318","desc":"Red lead (Lead Oxide)"},
+  {"cat":"Category I","sl":"319","desc":"Potash / Potassium Carbonate / Chloride / Nitrate / Sulphate"},
+  {"cat":"Category I","sl":"320","desc":"Resin aloe / dammar / kauri / mastic / sandarac"},
+  {"cat":"Category I","sl":"321","desc":"Potatoes"},
+  {"cat":"Category I","sl":"322","desc":"Resinate aluminium / lead / manganese / zinc"},
+  {"cat":"Category I","sl":"323","desc":"Pottery packed in combustible material"},
+  {"cat":"Category I","sl":"324","desc":"Rhubarb"},
+  {"cat":"Category I","sl":"325","desc":"Printing ink / press machinery"},
+  {"cat":"Category I","sl":"326","desc":"Rice"},
+  {"cat":"Category I","sl":"327","desc":"Provisions tinned / packed in combustible material"},
+  {"cat":"Category I","sl":"328","desc":"Rice bran / flour / husk / meal"},
+  {"cat":"Category I","sl":"329","desc":"Pulses gram / dhal / lentils / peas / beans"},
+  {"cat":"Category I","sl":"330","desc":"Ropes hemp / jute / coir / wire / synthetic"},
+  {"cat":"Category I","sl":"331","desc":"Pumice / pumice stone"},
+  {"cat":"Category I","sl":"332","desc":"Rosewood logs / timber"},
+  {"cat":"Category I","sl":"333","desc":"Putty"},
+  {"cat":"Category I","sl":"334","desc":"Rosin (colophony)"},
+  {"cat":"Category I","sl":"335","desc":"Pyrites iron"},
+  {"cat":"Category I","sl":"336","desc":"Rosin oil ( flash point above 65 C )"},
+  {"cat":"Category I","sl":"337","desc":"Quartz / quartzite"},
+  {"cat":"Category I","sl":"338","desc":"Rubber raw / sheet / manufactured goods (excluding foam rubber)"},
+  {"cat":"Category I","sl":"339","desc":"Rye"},
+  {"cat":"Category I","sl":"340","desc":"Shellac button lac / seed lac"},
+  {"cat":"Category I","sl":"341","desc":"Saccharine"},
+  {"cat":"Category I","sl":"342","desc":"Shoes leather / rubber / canvas"},
+  {"cat":"Category I","sl":"343","desc":"Sacks gunny in bales / loose"},
+  {"cat":"Category I","sl":"344","desc":"Shoddy woollen / cotton cloth fabric"},
+  {"cat":"Category I","sl":"345","desc":"Safflower / carthamus"},
+  {"cat":"Category I","sl":"346","desc":"Silesia cloth fabric"},
+  {"cat":"Category I","sl":"347","desc":"Saffron"},
+  {"cat":"Category I","sl":"348","desc":"Silica / silicate of soda / calcium"},
+  {"cat":"Category I","sl":"349","desc":"Sago / sago flour"},
+  {"cat":"Category I","sl":"350","desc":"Silicon ferro"},
+  {"cat":"Category I","sl":"351","desc":"Sallammoniac (Ammonium Chloride)"},
+  {"cat":"Category I","sl":"352","desc":"Silk raw / cocoons / waste / piece goods"},
+  {"cat":"Category I","sl":"353","desc":"Salnitre (Potassium Nitrate)"},
+  {"cat":"Category I","sl":"354","desc":"Sisal fibre / hemp rope"},
+  {"cat":"Category I","sl":"355","desc":"Salt rock / sea / common / refined"},
+  {"cat":"Category I","sl":"356","desc":"Skins goat / sheep / wild animal raw / salted / tanned"},
+  {"cat":"Category I","sl":"357","desc":"Saltpetre (Potassium Nitrate)"},
+  {"cat":"Category I","sl":"358","desc":"Slate slabs / pencils / tiles"},
+  {"cat":"Category I","sl":"359","desc":"Sand / sand stone"},
+  {"cat":"Category I","sl":"360","desc":"Soap bar / chips / flake / powder / toilet / liquid"},
+  {"cat":"Category I","sl":"361","desc":"Sandalwood logs / chips / oil"},
+  {"cat":"Category I","sl":"362","desc":"Soapstone (talc)"},
+  {"cat":"Category I","sl":"363","desc":"Sapanwood"},
+  {"cat":"Category I","sl":"364","desc":"Soda ash / bicarbonate / carbonate / caustic / nitrate / silicate"},
+  {"cat":"Category I","sl":"365","desc":"Sarsaparilla"},
+  {"cat":"Category I","sl":"366","desc":"Sodium Hydroxide / Nitrate / Silicate / Sulphate"},
+  {"cat":"Category I","sl":"367","desc":"Scrap iron / steel / copper / brass / lead"},
+  {"cat":"Category I","sl":"368","desc":"Solder wire / rod bar"},
+  {"cat":"Category I","sl":"369","desc":"Sealing wax"},
+  {"cat":"Category I","sl":"370","desc":"Soyabean oil / meal / seed"},
+  {"cat":"Category I","sl":"371","desc":"Senna leaves / pod"},
+  {"cat":"Category I","sl":"372","desc":"Spelter (Zinc metal)"},
+  {"cat":"Category I","sl":"373","desc":"Sesame oil / seed"},
+  {"cat":"Category I","sl":"374","desc":"Spices ginger / pepper / clove / nutmeg / cinnamon / cardamom"},
+  {"cat":"Category I","sl":"375","desc":"Shale oil ( flash point above 65 C )"},
+  {"cat":"Category I","sl":"376","desc":"Spirits of ammonia in glass bottles packed in crates"},
+  {"cat":"Category I","sl":"377","desc":"Sharkliver oil"},
+  {"cat":"Category I","sl":"378","desc":"Starch dextrine / maize / potato / tapioca"},
+  {"cat":"Category I","sl":"379","desc":"Sheep skins raw / salted / tanned"},
+  {"cat":"Category I","sl":"380","desc":"Stearic acid (stearin)"},
+  {"cat":"Category I","sl":"381","desc":"Stearin"},
+  {"cat":"Category I","sl":"382","desc":"Tallow"},
+  {"cat":"Category I","sl":"383","desc":"Steel bars / sheets / wire rods"},
+  {"cat":"Category I","sl":"384","desc":"Tamarinds"},
+  {"cat":"Category I","sl":"385","desc":"Stones precious / semi-precious / quarry slate / granite / marble / banyte"},
+  {"cat":"Category I","sl":"386","desc":"Tanks steel / iron containing non-hazardous liquids"},
+  {"cat":"Category I","sl":"387","desc":"Strawboards packed in pressed bales"},
+  {"cat":"Category I","sl":"388","desc":"Tannic acid (tannin)"},
+  {"cat":"Category I","sl":"389","desc":"Strontia / Strontium Carbonate / Nitrate / Oxide / Sulphate"},
+  {"cat":"Category I","sl":"390","desc":"Tannin"},
+  {"cat":"Category I","sl":"391","desc":"Sugar cane / candy / beet refined / raw"},
+  {"cat":"Category I","sl":"392","desc":"Tapioca / tapioca flour / starch"},
+  {"cat":"Category I","sl":"393","desc":"Sulphate ammonium / copper / iron / sodium / zinc / barium / calcium"},
+  {"cat":"Category I","sl":"394","desc":"Tar coal / wood / mineral"},
+  {"cat":"Category I","sl":"395","desc":"Sulphur brimstone rock / flour / roll"},
+  {"cat":"Category I","sl":"396","desc":"Tarred felt roofing sheet"},
+  {"cat":"Category I","sl":"397","desc":"Sulphuric acid (battery acid)"},
+  {"cat":"Category I","sl":"398","desc":"Tartaric acid"},
+  {"cat":"Category I","sl":"399","desc":"Sumach"},
+  {"cat":"Category I","sl":"400","desc":"Tea leaf / dust packed in wooden chests / boxes"},
+  {"cat":"Category I","sl":"401","desc":"Sunflower oil / seed"},
+  {"cat":"Category I","sl":"402","desc":"Teakwood logs / square timber planks"},
+  {"cat":"Category I","sl":"403","desc":"Synthetic fibers nylon / dacron / polyester / rayon / terylene"},
+  {"cat":"Category I","sl":"404","desc":"Teel seed (sesame)"},
+  {"cat":"Category I","sl":"405","desc":"Talc / talcum powder"},
+  {"cat":"Category I","sl":"406","desc":"Tena-cotta ware pottery tile"},
+  {"cat":"Category I","sl":"407","desc":"Tallow oil"},
+  {"cat":"Category I","sl":"408","desc":"Terylene cloth fabric / yarn"},
+  {"cat":"Category I","sl":"409","desc":"Textiles cotton / silk / wool / hemp / flax / synthetic piece goods"},
+  {"cat":"Category I","sl":"410","desc":"Turmeric root finger / powder"},
+  {"cat":"Category I","sl":"411","desc":"Thread cotton / silk / linen / synthetic embroidery"},
+  {"cat":"Category I","sl":"412","desc":"Turpentine oil ( flash point above 65 C )"},
+  {"cat":"Category I","sl":"413","desc":"Tiles slate / marble / clay earthenware / glass roofing"},
+  {"cat":"Category I","sl":"414","desc":"Twines hemp / jute / flax / cotton packing"},
+  {"cat":"Category I","sl":"415","desc":"Timber logs / squares / beams sleepers planks / plywood"},
+  {"cat":"Category I","sl":"416","desc":"Typewriter ribbon rolls cloth fabric"},
+  {"cat":"Category I","sl":"417","desc":"Tin metal ingots / bars blocks / plates sheets"},
+  {"cat":"Category I","sl":"418","desc":"Umbrellas finished ready steel rib cloth fabric"},
+  {"cat":"Category I","sl":"419","desc":"Tin chloride (Stannic / Stannous Chloride)"},
+  {"cat":"Category I","sl":"420","desc":"Uranium compounds Oxide Nitrate non-fissile"},
+  {"cat":"Category I","sl":"421","desc":"Tinned foods meat / fish fruit provision packed crates"},
+  {"cat":"Category I","sl":"422","desc":"Valonia"},
+  {"cat":"Category I","sl":"423","desc":"Tobacco leaf raw bale / dust stalk stem cigar cigarette finished"},
+  {"cat":"Category I","sl":"424","desc":"Vanila beans pod solvent extract"},
+  {"cat":"Category I","sl":"425","desc":"Toiletries non-hazardous soap cream powder paste cosmetic"},
+  {"cat":"Category I","sl":"426","desc":"Varnish oil / spirit based ( flash point above 65 C )"},
+  {"cat":"Category I","sl":"427","desc":"Toluene ( flash point above 65 C )"},
+  {"cat":"Category I","sl":"428","desc":"Vegetable oil / fat / seed cake meal"},
+  {"cat":"Category I","sl":"429","desc":"Tow hemp / flax processing waste fiber pressed bale"},
+  {"cat":"Category I","sl":"430","desc":"Velvet silk / cotton fabric woven cloth piece"},
+  {"cat":"Category I","sl":"431","desc":"Toys non-hazardous plastic metal rubber wood cloth packed box"},
+  {"cat":"Category I","sl":"432","desc":"Vermicelli"},
+  {"cat":"Category I","sl":"433","desc":"Tragacanth gum adhesive thickener powder"},
+  {"cat":"Category I","sl":"434","desc":"Vinegar bottle packed crate barrel container"},
+  {"cat":"Category I","sl":"435","desc":"Transformer oil insulation fluid ( flash point above 65 C )"},
+  {"cat":"Category I","sl":"436","desc":"Vitriol green / blue / white Sulphate compounds"},
+  {"cat":"Category I","sl":"437","desc":"Transporter godown non-hazardous standard item dry storage"},
+  {"cat":"Category I","sl":"438","desc":"Vulcanite hard treated rubber ebonite sheet rod bar"},
+  {"cat":"Category I","sl":"439","desc":"Treacle concentrated sugar syrup processing byproduct"},
+  {"cat":"Category I","sl":"440","desc":"Wadding cotton / cellulose padding roll absorbent packing"},
+  {"cat":"Category I","sl":"441","desc":"Trees timber logs forest squaring processing lumber yards"},
+  {"cat":"Category I","sl":"442","desc":"Wallboard gypsum / plaster composite building sheet slate panel"},
+  {"cat":"Category I","sl":"443","desc":"Tricresyl phosphate chemical additive plasticizer fluid"},
+  {"cat":"Category I","sl":"444","desc":"Wallpaper roll paper decorative color printing bale carton"},
+  {"cat":"Category I","sl":"445","desc":"Triethanolamine alkaline liquid processing chemical fluid"},
+  {"cat":"Category I","sl":"446","desc":"Walnuts shell husk kernel edible nut oil"},
+  {"cat":"Category I","sl":"447","desc":"Trisodium phosphate industrial detergent cleaner crystals"},
+  {"cat":"Category I","sl":"448","desc":"Washing powder / soda industrial laundry cleaning compound"},
+  {"cat":"Category I","sl":"449","desc":"Tulsi dry leaves seed medicinal herb bag storage"},
+  {"cat":"Category I","sl":"450","desc":"Waste paper / cloth cotton yarn pressed hydraulic bale"},
+  {"cat":"Category I","sl":"451","desc":"Whalebone"},
+  {"cat":"Category I","sl":"452","desc":"Yarn cotton / woolen silk / linen flax synthetic bale"},
+  {"cat":"Category I","sl":"453","desc":"Whale oil"},
+  {"cat":"Category I","sl":"454","desc":"Yeast dry powder tablet processing ferment compound"},
+  {"cat":"Category I","sl":"455","desc":"Wheat"},
+  {"cat":"Category I","sl":"456","desc":"Zedoary medicinal aromatic root finger finger-root storage"},
+  {"cat":"Category I","sl":"457","desc":"Wheat bran / flour / germ middling pollard storage"},
+  {"cat":"Category I","sl":"458","desc":"Zinc blocks / ingots bars / dross plates sheets wire"},
+  {"cat":"Category I","sl":"459","desc":"White lead (Lead Carbonate)"},
+  {"cat":"Category I","sl":"460","desc":"Zinc Chloride / Oxide / Sulphate chemical powder"},
+  {"cat":"Category I","sl":"461","desc":"White vitriol (Zinc Sulphate)"},
+  {"cat":"Category I","sl":"462","desc":"Zinc dust / powder metallic coating industrial chemical"},
+  {"cat":"Category I","sl":"463","desc":"Whiting (Calcium Carbonate powder)"},
+  {"cat":"Category I","sl":"464","desc":"Zirconium oxide silicate gemstone abrasive industrial sand"},
+  {"cat":"Category I","sl":"465","desc":"Wine bottle packed crate barrel storage container"},
+  {"cat":"Category I","sl":"466","desc":"Other Non-Hazardous Goods"},
+  {"cat":"Category I","sl":"467","desc":"Wire steel / iron copper brass bronze alloy rope reel"},
+  {"cat":"Category I","sl":"468","desc":"Other Category I Goods"},
+  {"cat":"Category I","sl":"469","desc":"Witherite (Barium Carbonate mineral)"},
+  {"cat":"Category I","sl":"470","desc":"Woad blue dye plant dry leaves processing bag"},
+  {"cat":"Category I","sl":"471","desc":"Wood lumber timber log sleeps board crate ply chip"},
+  {"cat":"Category I","sl":"472","desc":"Wood naphtha methyl alcohol ( flash point above 65 C )"},
+  {"cat":"Category I","sl":"473","desc":"Wood oil wood treatment distillate ( flash point above 65 C )"},
+  {"cat":"Category I","sl":"474","desc":"Wood pitch / tar resin residue solid container"},
+  {"cat":"Category I","sl":"475","desc":"Wood pulp pressed board sheet cellulose paper manufacture bale"},
+  {"cat":"Category I","sl":"476","desc":"Wood spirits methyl derivative chemical ( flash point above 65 C )"},
+  {"cat":"Category I","sl":"477","desc":"Wood tar distillate processing fraction container"},
+  {"cat":"Category I","sl":"478","desc":"Wood wool excelsior shred fiber packing loose bundle"},
+  {"cat":"Category I","sl":"479","desc":"Wool raw grease fleece scoured carded top waste bale"},
+  {"cat":"Category I","sl":"480","desc":"Woolen cloth piece garments fabric knitwear blanket bale"},
+  {"cat":"Category I","sl":"481","desc":"Xanthates flotation industrial extraction mining chemical powder"},
+  {"cat":"Category I","sl":"482","desc":"Xylene xylol hydrocarbon fractions ( flash point above 65 C )"},
+  {"cat":"Category I","sl":"483","desc":"Xylidine aromatic amine synthesis dye chemical drum"},
+  {"cat":"Category I","sl":"484","desc":"Yams edible tuber root fresh cold bulk storage"},
+  {"cat":"Category II","sl":"1","desc":"Acetone (flash point above 32 C up to 65 C)"},
+  {"cat":"Category II","sl":"2","desc":"Amyl acetate / alcohol (flash point above 32 C up to 65 C)"},
+  {"cat":"Category II","sl":"3","desc":"Butyl acetate / alcohol (flash point above 32 C up to 65 C)"},
+  {"cat":"Category II","sl":"4","desc":"Camphor / camphor oil"},
+  {"cat":"Category II","sl":"5","desc":"Celluloid sheets / rods / tubes (unmanufactured)"},
+  {"cat":"Category II","sl":"6","desc":"Chemicals / raw materials (flash point above 32 C up to 65 C)"},
+  {"cat":"Category II","sl":"7","desc":"Diesel oil / light diesel oil (HSD / LDO)"},
+  {"cat":"Category II","sl":"8","desc":"Essential oils (flash point above 32 C up to 65 C)"},
+  {"cat":"Category II","sl":"9","desc":"Ethyl acetate / alcohol / methylated spirit (flash point above 32 C up to 65 C)"},
+  {"cat":"Category II","sl":"10","desc":"Flammable liquids / solvents (flash point above 32 C up to 65 C)"},
+  {"cat":"Category II","sl":"11","desc":"Fuel oil / furnace oil / residual fuel"},
+  {"cat":"Category II","sl":"12","desc":"Gals / cylinders containing flammable/combustible gases (under pressure)"},
+  {"cat":"Category II","sl":"13","desc":"Grass oil (flash point above 32 C up to 65 C)"},
+  {"cat":"Category II","sl":"14","desc":"Kerosene oil (standard commercial grade illumination fuel)"},
+  {"cat":"Category II","sl":"15","desc":"Methyl alcohol / methanol (flash point above 32 C up to 65 C)"},
+  {"cat":"Category II","sl":"16","desc":"Mineral oils / hydrocarbons (flash point above 32 C up to 65 C)"},
+  {"cat":"Category II","sl":"17","desc":"Naphthalene (flaked / ball / crystals solid melting grade)"},
+  {"cat":"Category II","sl":"18","desc":"Oxidizing Agents moderate strength (e.g., Perchlorates, Chlorates, Permanganates)"},
+  {"cat(--"Category II","sl":"19","desc":"Oxygen gas cylinders (compressed gas support combustion process)"},
+  {"cat":"Category II","sl":"20","desc":"Paints nitrocellulose or solvent based (flash point above 32 C up to 65 C)"},
+  {"cat":"Category II","sl":"21","desc":"Pyrotechnic materials safety fuses signalling flares smoke indicators"},
+  {"cat":"Category II","sl":"22","desc":"Rosin oil / spirit fractions (flash point above 32 C up to 65 C)"},
+  {"cat":"Category II","sl":"23","desc":"Shale oil fraction fuels (flash point above 32 C up to 65 C)"},
+  {"cat":"Category II","sl":"24","desc":"Solvent naphtha light / heavy (flash point above 32 C up to 65 C)"},
+  {"cat":"Category II","sl":"25","desc":"Spirits of ammonia or acqueous alcoholic extracts (flammable grade)"},
+  {"cat":"Category II","sl":"26","desc":"Thinners paint / lacquer formulation (flash point above 32 C up to 65 C)"},
+  {"cat":"Category II","sl":"27","desc":"Toluene / toluol aromatic fractions (flash point above 32 C up to 65 C)"},
+  {"cat":"Category II","sl":"28","desc":"Transformer oil / insulation fluids (flash point above 32 C up to 65 C)"},
+  {"cat":"Category II","sl":"29","desc":"Turpentine mineral substitute / vegetable oil (flash point above 32 C up to 65 C)"},
+  {"cat":"Category II","sl":"30","desc":"Varnish transparent coat formulation (flash point above 32 C up to 65 C)"},
+  {"cat":"Category II","sl":"31","desc":"Waste of Category I materials (contaminated or modified combustible state)"},
+  {"cat":"Category II","sl":"32","desc":"Wood naphtha / wood spirits solvent grade (flash point above 32 C up to 65 C)"},
+  {"cat":"Category II","sl":"33","desc":"Wood oil / distillate fractions (flash point above 32 C up to 65 C)"},
+  {"cat":"Category II","sl":"34","desc":"Xylene / xylol industrial isomer fractions (flash point above 32 C up to 65 C)"},
+  {"cat":"Category II","sl":"35","desc":"Other Category II Goods"},
+  {"cat":"Category III","sl":"1","desc":"Acetone (flash point up to 32 C)"},
+  {"cat":"Category III","sl":"2","desc":"Acetylene gas cylinders (dissolved acetylene compressed gas)"},
+  {"cat":"Category III","sl":"3","desc":"Amyl acetate / alcohol solvent fractions (flash point up to 32 C)"},
+  {"cat":"Category III","sl":"4","desc":"Amyl nitrite"},
+  {"cat":"Category III","sl":"5","desc":"Benzene / benzol coal tar aromatic derivative (flash point up to 32 C)"},
+  {"cat":"Category III","sl":"6","desc":"Benzine petroleum spirit fractions (flash point up to 32 C)"},
+  {"cat":"Category III","sl":"7","desc":"Butyl acetate / alcohol solvent fractions (flash point up to 32 C)"},
+  {"cat":"Category III","sl":"8","desc":"Carbon disulphide highly volatile flammable toxic liquid"},
+  {"cat":"Category III","sl":"9","desc":"Celluloid scrap / waste filings dust explosive hazard"},
+  {"cat":"Category III","sl":"10","desc":"Chemicals / raw materials liquid / solid (flash point up to 32 C)"},
+  {"cat":"Category III","sl":"11","desc":"Collodion nitrocellulose solution ether-alcohol volatile mix"},
+  {"cat":"Category III","sl":"12","desc":"Combustible gases liquefied or compressed (e.g., LPG, Hydrogen, Methane)"},
+  {"cat":"Category III","sl":"13","desc":"Cordite smokeless propellant explosive solid"},
+  {"cat":"Category III","sl":"14","desc":"Detonators blasting caps percussion initiation accessories"},
+  {"cat":"Category III","sl":"15","desc":"Ether / ethyl ether volatile anesthesia solvent (flash point up to 32 C)"},
+  {"cat":"Category III","sl":"16","desc":"Ethyl acetate / alcohol absolute anhydrous (flash point up to 32 C)"},
+  {"cat":"Category III","sl":"17","desc":"Explosives military / commercial blasting gunpowder dynamite nitromethane"},
+  {"cat":"Category III","sl":"18","desc":"Flammable liquids / solvents low boiling fraction (flash point up to 32 C)"},
+  {"cat":"Category III","sl":"19","desc":"Fulminate of mercury / silver raw primary trigger explosive compound"},
+  {"cat":"Category III","sl":"20","desc":"Gunpowder black powder propellant mix explosive solid"},
+  {"cat":"Category III","sl":"21","desc":"Hexanitrodiphenylamine"},
+  {"cat":"Category III","sl":"22","desc":"Hydrazine anhydrous or concentrated liquid rocket fuel hazard"},
+  {"cat":"Category III","sl":"23","desc":"Hydrocyanic acid prussic acid volatile toxic gas liquid"},
+  {"cat":"Category III","sl":"24","desc":"Liquefied Petroleum Gas (LPG) butane propane bottle cylinders"},
+  {"cat":"Category III","sl":"25","desc":"Methyl alcohol / methanol industrial absolute grade (flash point up to 32 C)"},
+  {"cat":"Category III","sl":"26","desc":"Mineral oils / petroleum light fractions (flash point up to 32 C)"},
+  {"cat":"Category III","sl":"27","desc":"Motor spirit / petrol / gasoline spark ignition engine fuel"},
+  {"cat":"Category III","sl":"28","desc":"Naphtha light petroleum solvent fraction (flash point up to 32 C)"},
+  {"cat":"Category III","sl":"29","desc":"Nitrocellulose guncoton pyroxylin flammable solid lacquer base"},
+  {"cat":"Category III","sl":"30","desc":"Nitroglycerin / nitroglycerol dense volatile oil liquid explosive"},
+  {"cat":"Category III","sl":"31","desc":"Oxidizing Agents strong reactive peroxides chromates chlorites concentrated"},
+  {"cat":"Category III","sl":"32","desc":"Paints nitrocellulose low flash solvent mixes (flash point up to 32 C)"},
+  {"cat":"Category III","sl":"33","desc":"Petroleum ether / benzine fraction low boiling (flash point up to 32 C)"},
+  {"cat":"Category III","sl":"34","desc":"Petroleum spirit motor fuel volatility category (flash point up to 32 C)"},
+  {"cat":"Category III","sl":"35","desc":"Phosphorus yellow / white self-ignitable contact air storage water"},
+  {"cat":"Category III","sl":"36","desc":"Picric acid trinitrophenol yellow crystal explosive solid acid"},
+  {"cat":"Category III","sl":"37","desc":"Pyroxylin nitrocellulose cotton variant lacquer solid storage"},
+  {"cat":"Category III","sl":"38","desc":"Rosin oil / spirit volatile solvent fractions (flash point up to 32 C)"},
+  {"cat":"Category III","sl":"39","desc":"Self-ignitable materials pyrophoric metal powders phosphorus compounds"},
+  {"cat":"Category III","sl":"40","desc":"Solvent naphtha low flash boiling fractions (flash point up to 32 C)"},
+  {"cat":"Category III","sl":"41","desc":"Spirits low flash alcoholic distillates (flash point up to 32 C)"},
+  {"cat":"Category III","sl":"42","desc":"Thinners lacquer formulation volatile mixes (flash point up to 32 C)"},
+  {"cat":"Category III","sl":"43","desc":"Toluene / toluol aromatic hydrocarbon solvent (flash point up to 32 C)"},
+  {"cat":"Category III","sl":"44","desc":"Turpentine mineral spirit low flash variant (flash point up to 32 C)"},
+  {"cat":"Category III","sl":"45","desc":"Varnish spirit based quick dry volatile coating (flash point up to 32 C)"},
+  {"cat":"Category III","sl":"46","desc":"Waste of Category II & III materials flammable residue slag sludge"},
+  {"cat":"Category III","sl":"47","desc":"Wood naphtha volatile wood spirit solvent (flash point up to 32 C)"},
+  {"cat":"Category III","sl":"48","desc":"Wood oil volatile fractions low boiling point (flash point up to 32 C)"},
+  {"cat":"Category III","sl":"49","desc":"Xylene / xylol aromatic industrial solvent (flash point up to 32 C)"},
+  {"cat":"Category III","sl":"50","desc":"Zinc picrate explosive metallic salt compound powder"},
+  {"cat":"Category III","sl":"51","desc":"Zirconium powder raw combustible metal dust hazard storage"},
+  {"cat":"Category III","sl":"52","desc":"Aluminium powder"},
+  {"cat":"Category III","sl":"53","desc":"Ammonium nitrate"},
+  {"cat":"Category III","sl":"54","desc":"Ammonium perchlorate"},
+  {"cat":"Category III","sl":"55","desc":"Ammonium picrate"},
+  {"cat":"Category III","sl":"56","desc":"Amyl nitrate"},
+  {"cat":"Category III","sl":"57","desc":"Antimony dinitrophenol"},
+  {"cat":"Category III","sl":"58","desc":"Antimony picrate"},
+  {"cat":"Category III","sl":"59","desc":"Azides (e.g., Lead azide, Sodium azide)"},
+  {"cat":"Category III","sl":"60","desc":"Barium dinitrophenol"},
+  {"cat":"Category III","sl":"61","desc":"Barium picrate"},
+  {"cat":"Category III","sl":"62","desc":"Benzene (flash point up to 32 C)"},
+  {"cat":"Category III","sl":"63","desc":"Benzine (flash point up to 32 C)"},
+  {"cat":"Category III","sl":"64","desc":"Benzoyl peroxide"},
+  {"cat":"Category III","sl":"65","desc":"Blasting accessories (e.g., Detonators, Fuses)"},
+  {"cat":"Category III","sl":"66","desc":"Blasting powder"},
+  {"cat":"Category III","sl":"67","desc":"Butane"},
+  {"cat":"Category III","sl":"68","desc":"Butyl acetate (flash point up to 32 C)"},
+  {"cat":"Category III","sl":"69","desc":"Butyl alcohol (flash point up to 32 C)"},
+  {"cat":"Category III","sl":"70","desc":"Calcium chlorate"},
+  {"cat":"Category III","sl":"71","desc":"Calcium picrate"},
+  {"cat":"Category III","sl":"72","desc":"Carbon Bisulphide"},
+  {"cat":"Category III","sl":"73","desc":"Carbon Disulphide"},
+  {"cat":"Category III","sl":"74","desc":"Celluloid scrap/waste filings dust"},
+  {"cat":"Category III","sl":"75","desc":"Chlorates (e.g., Sodium, Potassium, Calcium)"},
+  {"cat":"Category III","sl":"76","desc":"Chromates (e.g., Potassium chromate)"},
+  {"cat":"Category III","sl":"77","desc":"Collodion"},
+  {"cat":"Category III","sl":"78","desc":"Combustible gases (e.g., LPG, Methane)"},
+  {"cat":"Category III","sl":"79","desc":"Copper acetylide"},
+  {"cat":"Category III","sl":"80","desc":"Copper dinitrophenol"},
+  {"cat":"Category III","sl":"81","desc":"Copper picrate"},
+  {"cat":"Category III","sl":"82","desc":"Cordite"},
+  {"cat":"Category III","sl":"83","desc":"Cyanides (e.g., Sodium cyanide)"},
+  {"cat":"Category III","sl":"84","desc":"Cyclotrimethylenetrinitramine (RDX)"},
+  {"cat":"Category III","sl":"85","desc":"Detonators"},
+  {"cat":"Category III","sl":"86","desc":"Diazodinitrophenol"},
+  {"cat":"Category III","sl":"87","desc":"Diethyl ether"},
+  {"cat":"Category III","sl":"88","desc":"Dinitrobenzene"},
+  {"cat":"Category III","sl":"89","desc":"Dinitrophenol"},
+  {"cat":"Category III","sl":"90","desc":"Dinitrotoluene"},
+  {"cat":"Category III","sl":"91","desc":"Dynamite"},
+  {"cat":"Category III","sl":"92","desc":"Ether (flash point up to 32 C)"},
+  {"cat":"Category III","sl":"93","desc":"Ethyl acetate (flash point up to 32 C)"},
+  {"cat":"Category III","sl":"94","desc":"Ethyl alcohol (flash point up to 32 C)"},
+  {"cat":"Category III","sl":"95","desc":"Ethylene oxide"},
+  {"cat":"Category III","sl":"96","desc":"Explosives (military/commercial)"},
+  {"cat":"Category III","sl":"97","desc":"Flammable liquids/solvents (flash point up to 32 C)"},
+  {"cat":"Category III","sl":"98","desc":"Fulminate of mercury/silver"},
+  {"cat":"Category III","sl":"99","desc":"Fulminating gold/sliver/platinum"},
+  {"cat":"Category III","sl":"100","desc":"Guncotton"},
+  {"cat":"Category III","sl":"101","desc":"Gunpowder"},
+  {"cat":"Category III","sl":"102","desc":"Hexanitrodiphenylamine"},
+  {"cat":"Category III","sl":"103","desc":"Hexanitrostilbene"},
+  {"cat":"Category III","sl":"104","desc":"Hydrazine (anhydrous/concentrated)"},
+  {"cat":"Category III","sl":"105","desc":"Hydrazoic acid"},
+  {"cat":"Category III","sl":"106","desc":"Hydrocyanic acid"},
+  {"cat":"Category III","sl":"107","desc":"Hydrogen gas cylinders"},
+  {"cat":"Category III","sl":"108","desc":"Hydrogen peroxide (concentrated > 40%)"},
+  {"cat":"Category III","sl":"109","desc":"Iron dinitrophenol"},
+  {"cat":"Category III","sl":"110","desc":"Iron picrate"},
+  {"cat":"Category III","sl":"111","desc":"Lead azide"},
+  {"cat":"Category III","sl":"112","desc":"Lead dinitrophenol"},
+  {"cat":"Category III","sl":"113","desc":"Lead picrate"},
+  {"cat":"Category III","sl":"114","desc":"Lead styphnate"},
+  {"cat":"Category III","sl":"115","desc":"Liquefied Petroleum Gas (LPG)"},
+  {"cat":"Category III","sl":"116","desc":"Magnesium powder"},
+  {"cat":"Category III","sl":"117","desc":"Mannitol hexanitrate"},
+  {"cat":"Category III","sl":"118","desc":"Mercuric fulminate"},
+  {"cat":"Category III","sl":"119","desc":"Mercury acetylide"},
+  {"cat":"Category III","sl":"120","desc":"Mercury dinitrophenol"},
+  {"cat":"Category III","sl":"121","desc":"Mercury picrate"},
+  {"cat":"Category III","sl":"122","desc":"Methane"},
+  {"cat":"Category III","sl":"123","desc":"Methyl alcohol (flash point up to 32 C)"},
+  {"cat":"Category III","sl":"124","desc":"Methyl ethyl ketone peroxide"},
+  {"cat":"Category III","sl":"125","desc":"Methylated spirit (flash point up to 32 C)"},
+  {"cat":"Category III","sl":"126","desc":"Mineral oils/hydrocarbons (flash point up to 32 C)"},
+  {"cat":"Category III","sl":"127","desc":"Motor spirit/petrol/gasoline"},
+  {"cat":"Category III","sl":"128","desc":"Naphtha (flash point up to 32 C)"},
+  {"cat":"Category III","sl":"129","desc":"Nitrocellulose"},
+  {"cat":"Category III","sl":"130","desc":"Nitroglycerin"},
+  {"cat":"Category III","sl":"131","desc":"Nitroglycol"},
+  {"cat":"Category III","sl":"132","desc":"Nitroguanidine"},
+  {"cat":"Category III","sl":"133","desc":"Nitromethane"},
+  {"cat":"Category III","sl":"134","desc":"Nitrostarch"},
+  {"cat":"Category III","sl":"135","desc":"Nitrourea"},
+  {"cat":"Category III","sl":"136","desc":"Organic peroxides (e.g., Benzoyl peroxide)"},
+  {"cat":"Category III","sl":"137","desc":"Oxidizing Agents (strong)"},
+  {"cat":"Category III","sl":"138","desc":"Paints (flash point up to 32 C)"},
+  {"cat":"Category III","sl":"139","desc":"Pentaerythritol tetranitrate (PETN)"},
+  {"cat":"Category III","sl":"140","desc":"Perchlorates (e.g., Ammonium perchlorate)"},
+  {"cat":"Category III","sl":"141","desc":"Perchloric acid"},
+  {"cat":"Category III","sl":"142","desc":"Permanganates (e.g., Potassium permanganate)"},
+  {"cat":"Category III","sl":"143","desc":"Peroxides (organic/inorganic)"},
+  {"cat":"Category III","sl":"144","desc":"Petroleum ether (flash point up to 32 C)"},
+  {"cat":"Category III","sl":"145","desc":"Petroleum spirit (flash point up to 32 C)"},
+  {"cat":"Category III","sl":"146","desc":"Phosphorus (yellow/white)"},
+  {"cat":"Category III","sl":"147","desc":"Picramic acid"},
+  {"cat":"Category III","sl":"148","desc":"Picrates (e.g., Ammonium, Barium, Lead)"},
+  {"cat":"Category III","sl":"149","desc":"Picric acid"},
+  {"cat":"Category III","sl":"150","desc":"Picryl chloride"},
+  {"cat":"Category III","sl":"151","desc":"Potassium chlorate"},
+  {"cat":"Category III","sl":"152","desc":"Potassium perchlorate"},
+  {"cat":"Category III","sl":"153","desc":"Potassium permanganate"},
+  {"cat":"Category III","sl":"154","desc":"Potassium picrate"},
+  {"cat":"Category III","sl":"155","desc":"Propane"},
+  {"cat":"Category III","sl":"156","desc":"Pyroxylin"},
+  {"cat":"Category III","sl":"157","desc":"RDX"},
+  {"cat":"Category III","sl":"158","desc":"Rosin oil/spirit (flash point up to 32 C)"},
+  {"cat":"Category III","sl":"159","desc":"Self-ignitable materials"},
+  {"cat":"Category III","sl":"160","desc":"Silver acetylide"},
+  {"cat":"Category III","sl":"161","desc":"Silver azide"},
+  {"cat":"Category III","sl":"162","desc":"Silver fulminate"},
+  {"cat":"Category III","sl":"163","desc":"Silver picrate"},
+  {"cat":"Category III","sl":"164","desc":"Smokeless powder"},
+  {"cat":"Category III","sl":"165","desc":"Sodium chlorate"},
+  {"cat":"Category III","sl":"166","desc":"Sodium chlorite"},
+  {"cat":"Category III","sl":"167","desc":"Sodium dinitrophenol"},
+  {"cat":"Category III","sl":"168","desc":"Sodium perchlorate"},
+  {"cat":"Category III","sl":"169","desc":"Sodium picrate"},
+  {"cat":"Category III","sl":"170","desc":"Solvent naphtha (flash point up to 32 C)"},
+  {"cat":"Category III","sl":"171","desc":"Spirits (flash point up to 32 C)"},
+  {"cat":"Category III","sl":"172","desc":"Styphnic acid"},
+  {"cat":"Category III","sl":"173","desc":"Tetryl"},
+  {"cat":"Category III","sl":"174","desc":"Thinners (flash point up to 32 C)"},
+  {"cat":"Category III","sl":"175","desc":"TNT"},
+  {"cat":"Category III","sl":"176","desc":"Toluene (flash point up to 32 C)"},
+  {"cat":"Category III","sl":"177","desc":"Trinitroanisole"},
+  {"cat":"Category III","sl":"178","desc":"Trinitrobenzene"},
+  {"cat":"Category III","sl":"179","desc":"Trinitrobenzoic acid"},
+  {"cat":"Category III","sl":"180","desc":"Trinitrocresol"},
+  {"cat":"Category III","sl":"181","desc":"Triritronaphthalene"},
+  {"cat":"Category III","sl":"182","desc":"Trinitrophenetole"},
+  {"cat":"Category III","sl":"183","desc":"Trinitrophenol"},
+  {"cat":"Category III","sl":"184","desc":"Trinitrophenylmethylnitramine"},
+  {"cat":"Category III","sl":"185","desc":"Trinitrotoluene"},
+  {"cat":"Category III","sl":"186","desc":"Trinitroxylene"},
+  {"cat":"Category III","sl":"187","desc":"Turpentine (flash point up to 32 C)"},
+  {"cat":"Category III","sl":"188","desc":"Urea nitrate"},
+  {"cat":"Category III","sl":"189","desc":"Varnish (flash point up to 32 C)"},
+  {"cat":"Category III","sl":"190","desc":"Waste of materials falling under Cat II & III"},
+  {"cat":"Category III","sl":"191","desc":"Wood naphtha (flash point up to 32 C)"},
+  {"cat":"Category III","sl":"192","desc":"Wood oil (flash point up to 32 C)"},
+  {"cat":"Category III","sl":"193","desc":"Xylene (flash point up to 32 C)"},
+  {"cat":"Category III","sl":"194","desc":"Zinc picrate"},
+  {"cat":"Category III","sl":"195","desc":"Zirconium powder"},
+  {"cat":"Category III","sl":"196","desc":"Silver dinitrophenol"},
+  {"cat":"Category III","sl":"197","desc":"Tetranitroaniline"},
+  {"cat":"Category III","sl":"198","desc":"Tetranitrocarbazole"},
+  {"cat":"Category III","sl":"199","desc":"Tetranitromethane"},
+  {"cat":"Category III","sl":"200","desc":"Tetranitrophenol"},
+  {"cat":"Category III","sl":"201","desc":"Titanium hydride"},
+  {"cat":"Category III","sl":"202","desc":"Trinitrocellulose"},
+  {"cat":"Category III","sl":"203","desc":"Trinitrogylcerin"},
+  {"cat":"Category III","sl":"204","desc":"Trinitrophenolmethylnitramine"},
+  {"cat":"Category III","sl":"205","desc":"Tripropylaluminium"},
+  {"cat":"Category III","sl":"206","desc":"Urea peroxide"},
+  {"cat":"Category III","sl":"207","desc":"Zirconium hydride"},
+  {"cat":"Category III","sl":"208","desc":"Other Category III Goods"}
+];
+
+function renderHazardousGoodsTable(filterText = "") {
+    const tbody = document.getElementById('hazardousGoodsTableBody');
+    tbody.innerHTML = "";
+    const query = filterText.toLowerCase().trim();
+    
+    hazardousGoodsDataset.forEach(item => {
+        if (item.desc.toLowerCase().includes(query) || item.cat.toLowerCase().includes(query) || item.sl.includes(query)) {
+            const row = document.createElement('tr');
+            let badgeColor = "var(--primary)";
+            if (item.cat.includes("II") && !item.cat.includes("III")) badgeColor = "var(--accent)";
+            if (item.cat.includes("III")) badgeColor = "var(--danger)";
+            
+            row.innerHTML = `
+                <td style="padding: 10px; border-bottom: 1px solid var(--border); font-weight: bold; color: ${badgeColor};">${item.cat}</td>
+                <td style="padding: 10px; border-bottom: 1px solid var(--border); text-align: center;">${item.sl}</td>
+                <td style="padding: 10px; border-bottom: 1px solid var(--border);">${item.desc}</td>
+            `;
+            tbody.appendChild(row);
+        }
+    });
 }
 
-function exportToPDF() {
-    const targetElement = selectedPolicyType === 'BSUS' ? document.getElementById('workspace') : document.getElementById('premiumWorkingPanel');
-    const opt = {
-        margin:       10,
-        filename:     `Premium_Working_Statement_${selectedPolicyType}.pdf`,
-        image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, useCORS: true, scrollY: 0, scrollX: 0 },
-        jsPDF:        { unit: 'mm', format: 'a4', orientation: selectedPolicyType === 'BSUS' ? 'landscape' : 'portrait' },
-        pagebreak:    { mode: ['avoid-all', 'css'] }
-    };
-    html2pdf().set(opt).from(targetElement).save();
+function filterBsusAutocomplete(val) {
+    const listContainer = document.getElementById('bsusAutocompleteList');
+    const query = val.toLowerCase().trim();
+    if (query === "") {
+        listContainer.classList.add('hidden');
+        return;
+    }
+    listContainer.innerHTML = "";
+    let count = 0;
+    
+    bsusRateSchedule.forEach((item, index) => {
+        const matchesDesc = item.desc.toLowerCase().includes(query);
+        const matchesCode = item.code.toLowerCase().includes(query);
+        if (matchesDesc || matchesCode) {
+            count++;
+            const div = document.createElement('div');
+            div.className = 'autocomplete-item';
+            div.innerHTML = `<strong>[Code ${item.code}]</strong> ${item.desc} — <span style="color: var(--primary); font-weight: 600;">Rate: ${item.rate.toFixed(4)}‰</span>`;
+            div.addEventListener('mousedown', (e) => {
+                e.preventDefault();
+                selectBsusOccupancy(index);
+            });
+            listContainer.appendChild(div);
+        }
+    });
+    
+    if (count > 0) {
+        listContainer.classList.remove('hidden');
+    } else {
+        const div = document.createElement('div');
+        div.className = 'autocomplete-item';
+        div.style.color = 'var(--danger)';
+        div.innerText = "-- No Matching BSUS Risks Found --";
+        listContainer.appendChild(div);
+        listContainer.classList.remove('hidden');
+    }
 }
+
+renderHazardousGoodsTable();
 
 // Global Event Triggers Mapping
 document.getElementById('bsusOccupancySearch').addEventListener('input', function() {
@@ -1789,31 +2412,40 @@ document.getElementById('bsusOccupancySearch').addEventListener('input', functio
 document.getElementById('occupancySearch').addEventListener('input', function() {
     handleAutocompleteSearch(this.value);
 });
+document.getElementById('hazardousGoodsSearchInput').addEventListener('input', function() {
+    renderHazardousGoodsTable(this.value);
+});
+
 document.getElementById('bsus_eq_zone_select').addEventListener('change', runCalculation);
 document.getElementById('bsus_discount_pct_input').addEventListener('input', runCalculation);
+document.getElementById('bsus_floater_select').addEventListener('change', runCalculation);
+document.getElementById('terrorismOptOut').addEventListener('change', runCalculation);
 document.getElementById('construction').addEventListener('change', runCalculation);
+
+document.getElementById('bgrRateOption').addEventListener('change', runCalculation);
+document.getElementById('enterRateManuallyToggle').addEventListener('change', function() {
+    const manualInputContainer = document.getElementById('manualRateInputContainer');
+    if (this.value === 'yes') {
+        manualInputContainer.classList.remove('hidden');
+    } else {
+        manualInputContainer.classList.add('hidden');
+    }
+    runCalculation();
+});
+document.getElementById('manualRateValue').addEventListener('input', runCalculation);
+document.getElementById('basicDiscountValue').addEventListener('input', runCalculation);
+document.getElementById('eqZone').addEventListener('change', runCalculation);
+document.getElementById('stfiToggle').addEventListener('change', runCalculation);
+document.getElementById('natcatDiscountToggle').addEventListener('change', runCalculation);
+document.getElementById('terrorismToggle').addEventListener('change', runCalculation);
 document.getElementById('floaterToggle').addEventListener('change', runCalculation);
 
-// Realtime listeners for all asset breakup modifications to ensure dynamic responsiveness
 document.querySelectorAll('.si-input').forEach(input => {
     input.addEventListener('input', calculateAggregateSumInsured);
 });
 
-// Setup dynamic automated calculation mappings sync modifier inputs matching select nodes state on change
-document.addEventListener('change', function(e) {
+document.getElementById('bsusDynamicFeaturesTbody').addEventListener('change', function(e) {
     if (e.target.classList.contains('survey-toggle')) {
-        const row = e.target.closest('tr');
-        const trs = Array.from(row.parentNode.querySelectorAll('tr'));
-        const rowIndex = trs.indexOf(row);
-        const configItem = safetySurveyQuestionsConfig[rowIndex];
-        const input = row.querySelector('.survey-rate-weight');
-        if (configItem) {
-            if (configItem.type === "yes_no") {
-                input.value = configItem.values[e.target.value];
-            } else {
-                input.value = e.target.value;
-            }
-        }
         runCalculation();
     }
 });
