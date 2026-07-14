@@ -1205,7 +1205,7 @@ const bsusRateSchedule = [
   {"sec": "VI", "code": "4014", "cat": 1, "desc": "Storage of hazardous Goods listed in Category II(open) subject to warranty that goods listed in Category III, Coir waste, Coir fibre and Caddies are not stored therein.", "rate": 5.33},
   {"sec": "VI", "code": "4015", "cat": 4, "desc": "Storage of hazardous Goods listed in Category III (open) subject to warranty that Coir waste, Coir fibre and , Caddies are not stored therein.", "rate": 5.0},
   {"sec": "VI", "code": "4016", "cat": 1, "desc": "Transporter’s godowns(open) & Godowns of clearing and forwarding agents.", "rate": 0.8},
-  {"sec": "VI", "code": "4017", "cat": 1, "desc": "Storage of Coir Waste(open) ,Coir Fibre, Caddies", "rate": 11.86},
+  {"sec": "VI", "code": "4017", "cat": 1, "desc": "Storage of Coir Waste(open) ,Coir Fibre, Caddies", "rate":11.86},
   {"sec": "VI", "code": "4018", "cat": 1, "desc": "Bus Terminus", "rate": 3.12},
   {"sec": "VI", "code": "4019", "cat": 1, "desc": "Vehicles stored in open including Tractors", "rate": 1.97},
   {"sec": "VII", "code": "4008", "cat": 1, "desc": "Gas Holders/ Bullets/spheres and storages for liquified gases except for Nitrogen, Carbon dioxide and inert gases", "rate": 1.9},
@@ -1342,7 +1342,7 @@ const standardRates = [
   {"sec": "IV", "code": "2095", "cat": "2", "ho": "", "dec": "", "desc": "Granite Factories using inflammable solvents", "blus": 0.59, "sfsp": 0.59},
   {"sec": "IV", "code": "2096", "cat": "1", "ho": "", "dec": "", "desc": "Granite Factories (Others)", "blus": 0.25, "sfsp": 0.25},
   {"sec": "IV", "code": "2097", "cat": "2", "ho": "", "dec": "", "desc": "Graphite electrode Manufacturing", "blus": 1.0, "sfsp": 1.0},
-  {"sec": "IV", "code": "2098", "cat": "2", "ho": "", "desc": "Grain/seeds disintegrating/crushing/ Decorticating factories/ Dal mills.", "blus": 0.92, "sfsp": 0.92},
+  {"sec": "IV", "code": "2098", "cat": "2", "ho": "", "dec": "", "desc": "Grain/seeds disintegrating/crushing/ Decorticating factories/ Dal mills.", "blus": 0.92, "sfsp": 0.92},
   {"sec": "IV", "code": "2099", "cat": "2", "ho": "", "dec": "", "desc": "Grease / Wax Manufacturing", "blus": 1.53, "sfsp": 1.53},
   {"sec": "IV", "code": "2100", "cat": "2", "ho": "", "dec": "", "desc": "Green Houses/ Algae/ Spirulina and the like", "blus": 0.99, "sfsp": 0.99},
   {"sec": "IV", "code": "2101", "cat": "2", "ho": "", "dec": "", "desc": "Gum/Glue/Gelatine Manufacturing", "blus": 1.0, "sfsp": 1.0},
@@ -1360,7 +1360,7 @@ const standardRates = [
   {"sec": "IV", "code": "2113", "cat": "2", "ho": "", "dec": "", "desc": "Khandsari Sugar Manufacturing", "blus": 0.83, "sfsp": 0.83},
   {"sec": "IV", "code": "2114", "cat": "2", "ho": "", "dec": "", "desc": "Lac or Shellac Factories", "blus": 1.06, "sfsp": 1.06},
   {"sec": "IV", "code": "2115", "cat": "3", "ho": "", "dec": "", "desc": "Leather Cloth Factories", "blus": 2.11, "sfsp": 2.11},
-  {"sec": "IV", "code": "2116", "cat": "3", "ho": "", "dec": "", "desc": "Leather Goods Manufacturing ( incl. boot/shoe)", "blus": 1.16, "sfsp": 1.16},
+  {"sec": "IV", "code": "3", "code": "2116", "cat": "3", "ho": "", "dec": "", "desc": "Leather Goods Manufacturing ( incl. boot/shoe)", "blus": 1.16, "sfsp": 1.16},
   {"sec": "IV", "code": "2117", "cat": "2", "ho": "", "dec": "", "desc": "Lime Kiln", "blus": 0.53, "sfsp": 0.53},
   {"sec": "IV", "code": "2118", "cat": "2", "ho": "", "dec": "", "desc": "Lithographic presses", "blus": 0.94, "sfsp": 0.94},
   {"sec": "IV", "code": "2119", "cat": "2", "ho": "", "dec": "", "desc": "Liquified Gas Bottling/ Recovery Plants", "blus": 0.71, "sfsp": 0.71},
@@ -1447,7 +1447,7 @@ const standardRates = [
   {"sec": "IV", "code": "2199", "cat": "2", "ho": "", "dec": "", "desc": "Velvet Cloth Manufacturing", "blus": 1.48, "sfsp": 1.48},
   {"sec": "IV", "code": "2200", "cat": "2", "ho": "", "dec": "", "desc": "Vermicelli factories", "blus": 0.58, "sfsp": 0.58},
   {"sec": "IV", "code": "2201", "cat": "2", "ho": "", "dec": "", "desc": "Weigh Bridges", "blus": 0.8, "sfsp": 0.8},
-  {"sec": "IV", "code": "2202", "cat": "2", "ho": "", "desc": "Weaving Mills", "blus": 0.92, "sfsp": 0.92},
+  {"sec": "IV", "code": "2202", "cat": "2", "ho": "", "dec": "", "desc": "Weaving Mills", "blus": 0.92, "sfsp": 0.92},
   {"sec": "IV", "code": "2203", "cat": "3", "ho": "", "dec": "", "desc": "Wheat Threshers", "blus": 4.07, "sfsp": 4.07},
   {"sec": "IV", "code": "2204", "cat": "2", "ho": "", "dec": "", "desc": "Wood seasoning/treatment/ impregnation", "blus": 0.99, "sfsp": 0.99},
   {"sec": "IV", "code": "2205", "cat": "2", "ho": "", "dec": "", "desc": "Wool cleaning and pressing factories", "blus": 1.05, "sfsp": 1.05},
@@ -1974,7 +1974,7 @@ function runCalculation() {
     } else {
         const isManualMode = document.getElementById('enterRateManuallyToggle').value === 'yes';
         if (isManualMode) {
-            const manualRate = parseFloat(document.getElementById('manualRateValue').value) || 0;Basic premium matching
+            const manualRate = parseFloat(document.getElementById('manualRateValue').value) || 0;
             basicPrem = M * manualRate;
             basicRateText = manualRate.toFixed(3) + " per mille (Manual)";
         } else {
