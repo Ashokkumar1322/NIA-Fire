@@ -39,6 +39,18 @@
             margin-top: 0;
         }
 
+        .warning-banner {
+            background-color: #fee2e2;
+            border: 2px solid var(--danger);
+            color: #991b1b;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            font-size: 1.05rem;
+            text-align: center;
+        }
+
         .policy-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -137,6 +149,33 @@
             cursor: not-allowed;
         }
 
+        .search-flex-container {
+            display: flex;
+            gap: 8px;
+        }
+
+        .search-container {
+            position: relative;
+            flex: 1;
+        }
+
+        .btn-clear {
+            background-color: #64748b;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 0 16px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .btn-clear:hover {
+            background-color: #475569;
+        }
+
         .si-breakup-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -178,10 +217,6 @@
             border-left: 3px solid var(--primary);
             border-radius: 0 4px 4px 0;
         }
-
-        .search-container {
-            position: relative;
-        }
         
         .search-container input {
             padding-left: 32px;
@@ -189,34 +224,6 @@
             background-repeat: no-repeat;
             background-position: 8px center;
             background-size: 16px;
-        }
-
-        .autocomplete-results {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            width: 100%;
-            max-height: 220px;
-            overflow-y: auto;
-            background: #ffffff;
-            border: 1px solid var(--border);
-            border-top: none;
-            border-radius: 0 0 6px 6px;
-            z-index: 1000;
-            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
-        }
-
-        .autocomplete-item {
-            padding: 10px 12px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            border-bottom: 1px solid #f1f5f9;
-            text-align: left;
-        }
-
-        .autocomplete-item:hover {
-            background-color: #f0f9ff;
-            color: var(--primary);
         }
 
         .meta-container {
@@ -396,6 +403,9 @@
         <h1 style="font-size: 2.2rem; color: #0f172a; border-bottom: 2px solid var(--primary); padding-bottom: 10px;">NIA Fire Insc Premium Calc</h1>
     </header>
 
+    <!-- DYNAMIC POLICY RULE BANNER -->
+    <div id="tierWarningBanner" class="warning-banner hidden"></div>
+
     <!-- STEP 1: CHOOSE YOUR POLICY TYPE -->
     <h2>CHOOSE YOUR POLICY TYPE</h2>
     <div class="policy-grid">
@@ -464,7 +474,8 @@
             <!-- Side Head 1 -->
             <div class="form-group distinct-label">
                 <label for="sumInsured">1. Total Sum Insured (₹) <span style="font-size:0.75rem; color:#64748b; font-weight:normal;">(Auto-Calculated)</span></label>
-                <input type="number" id="sumInsured" readonly style="background-color: #f1f5f9; font-weight: bold; color: #0f172a;" value="10000000">
+                <!-- Changed to text to properly display auto-calculated commas -->
+                <input type="text" id="sumInsured" readonly style="background-color: #f1f5f9; font-weight: bold; color: #0f172a;" value="1,00,00,000">
             </div>
 
             <!-- REPOSITIONED: 5. Construction Type (Moved exactly below Total Sum Insured) -->
@@ -491,16 +502,7 @@
             <!-- DYNAMIC NEW SPREADSHEET MATRIX WORKING AREA (BSUS EXCLUSIVE) -->
             <div id="bsusRevampedSection" class="hidden">
                 <div class="bsus-worksheet-panel">
-                    <div class="form-group" style="margin-bottom: 14px;">
-                        <label style="font-weight: 700; color: #0369a1; font-size: 0.95rem;">Select BSUS Occupancy / Risk Schedule Index</label>
-                        <div class="search-container">
-                            <input type="text" id="bsusOccupancySearch" placeholder="Search by description or risk code (e.g. 1002, Libraries)..." autocomplete="off" style="border: 2px solid var(--primary);">
-                            <div id="bsusAutocompleteList" class="autocomplete-results hidden"></div>
-                        </div>
-                        <input type="hidden" id="selectedBsusIndex" value="">
-                    </div>
-
-                    <!-- BSUS Manual Rate Overrides Toggle and Input -->
+                    <!-- MOVE REPOSITION CHANGE 7: ENTER FLEXA RATE MANUALLY MOVED JUST ABOVE SEARCH INDEX -->
                     <div class="form-group" id="bsusManualRateOptionContainer" style="margin-bottom: 14px;">
                         <label for="bsusEnterRateManuallyToggle" style="font-weight: 600; font-size: 0.9rem; color: #0f172a;">Enter Flexa Rate Manually?</label>
                         <select id="bsusEnterRateManuallyToggle" class="bsus-select-field" style="width: 100%;">
@@ -512,6 +514,18 @@
                     <div class="form-group hidden" id="bsusManualRateInputContainer" style="margin-bottom: 14px;">
                         <label for="bsusManualRateValue" style="font-weight: 600; font-size: 0.9rem; color: #0f172a;">Custom Flexa Rate (per mille)</label>
                         <input type="number" id="bsusManualRateValue" placeholder="e.g. 0.5000" step="0.0001" style="width: 100%; border: 1px solid var(--border); padding: 8px 10px; border-radius: 6px; box-sizing: border-box;">
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 14px;">
+                        <label style="font-weight: 700; color: #0369a1; font-size: 0.95rem;">Select BSUS Occupancy / Risk Schedule Index</label>
+                        <div class="search-flex-container">
+                            <div class="search-container">
+                                <input type="text" id="bsusOccupancySearch" placeholder="Search by description or risk code (e.g. 1002, Libraries)..." autocomplete="off" style="border: 2px solid var(--primary); width: 100%;">
+                                <div id="bsusAutocompleteList" class="autocomplete-results hidden"></div>
+                            </div>
+                            <button type="button" class="btn-clear" onclick="clearSearchField('BSUS')">CLEAR</button>
+                        </div>
+                        <input type="hidden" id="selectedBsusIndex" value="">
                     </div>
 
                     <!-- Meta Tags Display Context info banner -->
@@ -546,27 +560,27 @@
                             <tr>
                                 <td class="bsus-row-heading">FLEXA RATE</td>
                                 <td id="br_rate_1" class="text-right">0.0000</td>
-                                <td id="br_prem_1" class="text-right">0.00</td>
+                                <td id="br_prem_1" class="text-right">0</td>
                             </tr>
                             <tr>
                                 <td class="bsus-row-heading">ADJUSTED FLEXA RATE DISC/LOAD</td>
                                 <td id="br_rate_2" class="text-right">0.00 %</td>
-                                <td id="br_prem_2" class="text-right">0.00</td>
+                                <td id="br_prem_2" class="text-right">0</td>
                             </tr>
                             <tr class="bsus-highlight-row">
                                 <td>NET TOTAL</td>
                                 <td id="br_rate_3" class="text-right">0.0000</td>
-                                <td id="br_prem_3" class="text-right">0.00</td>
+                                <td id="br_prem_3" class="text-right">0</td>
                             </tr>
                             <tr>
                                 <td class="bsus-row-heading">KUTCHA ADD 4 PER MILLE</td>
                                 <td id="br_rate_4" class="text-right">0.0000</td>
-                                <td id="br_prem_4" class="text-right">0.00</td>
+                                <td id="br_prem_4" class="text-right">0</td>
                             </tr>
                             <tr class="bsus-highlight-row">
                                 <td>TOTAL</td>
                                 <td id="br_rate_5" class="text-right">0.0000</td>
-                                <td id="br_prem_5" class="text-right">0.00</td>
+                                <td id="br_prem_5" class="text-right">0</td>
                             </tr>
                             <tr>
                                 <td class="bsus-row-heading">
@@ -579,32 +593,32 @@
                                     </select>
                                 </td>
                                 <td id="br_rate_8" class="text-right">0.0000</td>
-                                <td id="br_prem_8" class="text-right">0.00</td>
+                                <td id="br_prem_8" class="text-right">0</td>
                             </tr>
                             <tr>
                                 <td class="bsus-row-heading">C ADJUSTED STFI RATE</td>
                                 <td id="br_rate_9" class="text-right">0.0000</td>
-                                <td id="br_prem_9" class="text-right">0.00</td>
+                                <td id="br_prem_9" class="text-right">0</td>
                             </tr>
                             <tr>
                                 <td class="bsus-row-heading">D TERRORISM</td>
                                 <td id="br_rate_10" class="text-right">0.0000</td>
-                                <td id="br_prem_10" class="text-right">0.00</td>
+                                <td id="br_prem_10" class="text-right">0</td>
                             </tr>
                             <tr class="bsus-highlight-row" style="background-color: #f1f5f9;">
                                 <td>TOTAL A + B + C + D</td>
                                 <td id="br_rate_11" class="text-right">0.0000</td>
-                                <td id="br_prem_11" class="text-right">0.00</td>
+                                <td id="br_prem_11" class="text-right">0</td>
                             </tr>
                             <tr>
                                 <td class="bsus-row-heading">DISCRETIONARY DISCOUNT Max 10%</td>
                                 <td style="text-align: right;"><input type="number" id="bsus_discount_pct_input" class="bsus-input-field" min="0" max="10" step="0.01" value="0" style="padding: 2px; height: 24px;"> %</td>
-                                <td id="br_prem_12" class="text-right">0.00</td>
+                                <td id="br_prem_12" class="text-right">0</td>
                             </tr>
                             <tr class="bsus-highlight-row" style="background-color: #e0f2fe;">
                                 <td>NET AMOUNT</td>
                                 <td id="br_rate_13" class="text-right">0.0000</td>
-                                <td id="br_prem_13" class="text-right">0.00</td>
+                                <td id="br_prem_13" class="text-right">0</td>
                             </tr>
                             <tr>
                                 <td class="bsus-row-heading">
@@ -615,17 +629,18 @@
                                     </select>
                                 </td>
                                 <td id="br_rate_14" class="text-right">0.0000</td>
-                                <td id="br_prem_14" class="text-right">0.00</td>
+                                <td id="br_prem_14" class="text-right">0</td>
                             </tr>
                             <tr>
-                                <td class="bsus-row-heading">NET DISC/LOAD FACTOR (SAFETY SURVEY)</td>
+                                <!-- CHANGE 8: STR CONTENT STRING REPLACED SUCCESSFULLY -->
+                                <td class="bsus-row-heading">NET DISC/LOAD – Answer 9 Q’s under Good/Bad Features</td>
                                 <td id="br_survey_factor_rate" class="text-right">0.00 %</td>
-                                <td id="br_survey_factor_prem" class="text-right">0.00</td>
+                                <td id="br_survey_factor_prem" class="text-right">0</td>
                             </tr>
                             <tr class="bsus-final-row">
                                 <td>FINAL NET RATE</td>
                                 <td id="br_rate_15" class="text-right">0.0000</td>
-                                <td id="br_prem_15" class="text-right">0.00</td>
+                                <td id="br_prem_15" class="text-right">0</td>
                             </tr>
                         </tbody>
                     </table>
@@ -673,9 +688,12 @@
                 <!-- Side Head 3 -->
                 <div class="form-group id-commercial distinct-label hidden" id="occupancyContainer">
                     <label for="occupancySearch">3. Occupancy / Risk Selection (Search by Code or Keyword)</label>
-                    <div class="search-container">
-                        <input type="text" id="occupancySearch" placeholder="Type code or risk description (e.g. 2140, Paint factories)..." autocomplete="off">
-                        <div id="autocompleteResultsList" class="autocomplete-results hidden"></div>
+                    <div class="search-flex-container">
+                        <div class="search-container">
+                            <input type="text" id="occupancySearch" placeholder="Type code or risk description (e.g. 2140, Paint factories)..." autocomplete="off" style="width: 100%;">
+                            <div id="autocompleteResultsList" class="autocomplete-results hidden"></div>
+                        </div>
+                        <button type="button" class="btn-clear" onclick="clearSearchField('STANDARD')">CLEAR</button>
                     </div>
                     <input type="hidden" id="selectedOccupancyIndex" value="">
 
@@ -778,7 +796,7 @@
                 <h2>Premium Working Summary Ledger</h2>
                 <div id="visible-summary-container" style="background-color: #f8fafc; border: 1px solid var(--border); padding: 12px 10px; border-radius: 6px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; font-weight: bold; color: var(--primary);">
                     <span>TOTAL SUM INSURED</span>
-                    <span id="visible-summary-si">0.00</span>
+                    <span id="visible-summary-si">0</span>
                 </div>
                 
                 <table id="premiumTable">
@@ -793,7 +811,7 @@
                         <tr style="display: none;">
                             <td style="font-weight: bold; color: var(--primary);">TOTAL SUM INSURED</td>
                             <td>-</td>
-                            <td id="row-summary-si" class="text-right" style="font-weight: bold; color: var(--primary);">0.00</td>
+                            <td id="row-summary-si" class="text-right" style="font-weight: bold; color: var(--primary);">0</td>
                         </tr>
                         <tr id="right_row_basic">
                             <td id="lbl-basic-prem">BASIC PREMIUM</td>
@@ -1099,7 +1117,7 @@ const bsusRateSchedule = [
   {"sec": "IV", "code": "2144", "cat": 4, "desc": "Paper and Cardboard Mills (including Lamination) ", "rate": 1.25},
   {"sec": "IV", "code": "2145", "cat": 2, "desc": "Particle Board Manufacturing", "rate": 2.18},
   {"sec": "IV", "code": "2146", "cat": 1, "desc": "Pencil Manufacturing", "rate": 1.49},
-  {"sec": "IV", "code": "2147", "cat": 1, "desc": "Petroleum Coke Calcination", "rate": 0.93},
+  {"sec": "IV", "code": "2147", "cat": 2, "desc": "Petroleum Coke Calcination", "rate": 0.93},
   {"sec": "IV", "code": "2148", "cat": 3, "desc": "Plastic Goods Manufacturing(excluding Foam Plastics)/I. Using Plastic raw materials having calorific value upto 15000 btu/lb Polytetrafluoroethylene, polyvinylidene chloride/fluoride, Phenol/Urea-formaldehyde, Silicones", "rate": 1.94},
   {"sec": "IV", "code": "2149", "cat": 2, "desc": "Plywood / Wood veneering Factories/ Laminating Factories", "rate": 2.87},
   {"sec": "IV", "code": "2150", "cat": 2, "desc": "Polyester Film Manufacturing / BOPP Film Manufacturing", "rate": 0.8},
@@ -1476,7 +1494,7 @@ const standardRates = [
   {"sec": "V", "code": "3006", "cat": "1", "ho": "", "dec": "", "desc": "Electric Transmission / Distribution Lines", "blus": 0.16, "sfsp": 0.16},
   {"sec": "V", "code": "3007", "cat": "2", "ho": "", "dec": "", "desc": "Pipe lines (carrying water only)", "blus": 0.39, "sfsp": 0.39},
   {"sec": "V", "code": "3008", "cat": "2", "ho": "", "dec": "", "desc": "Pipe lines (others)", "blus": 0.39, "sfsp": 0.39},
-  {"sec": "V", "code": "3009", "cat": "2", "ho": "", "dec": "", "desc": "Pump House (Water)", "blus": 0.3, "sfsp": 0.3},
+  {"sec": "V", "code": "3009", "cat": "2", "ho": "", "desc": "Pump House (Water)", "blus": 0.3, "sfsp": 0.3},
   {"sec": "V", "code": "3010", "cat": "2", "ho": "", "dec": "", "desc": "Pump House (Others)", "blus": 1.23, "sfsp": 1.23},
   {"sec": "V", "code": "3011", "cat": "2", "ho": "", "dec": "", "desc": "Railway tracks", "blus": 0.69, "sfsp": 0.69},
   {"sec": "V", "code": "3012", "cat": "2", "ho": "", "dec": "", "desc": "Roads", "blus": 0.49, "sfsp": 0.49},
@@ -1494,80 +1512,22 @@ const standardRates = [
   {"sec": "VI", "code": "4005", "cat": "2", "ho": "", "dec": "", "desc": "Transporter’s godowns (Godowns & Silos)& Godowns of clearing and forwarding agents.", "blus": 0.72, "sfsp": 0.72},
   {"sec": "VI", "code": "4006", "cat": "3", "ho": "", "dec": "", "desc": "Storage of Coir Waste(Godowns & Silos) ,Coir Fibre, Caddies", "blus": 4.3, "sfsp": 4.3},
   {"sec": "VI", "code": "4007", "cat": "2", "ho": "", "dec": "", "desc": "Cold Storage premises", "blus": 1.07, "sfsp": 1.07},
-  {"sec": "VI", "code": "4012", "cat": "2", "ho": "", "dec": "", "desc": "Storage of Non-hazardous goods(open) subject to warranty that hazardous goods of Category I, II, III , Coir waste, Coir fibre and Caddies are not stored therein.", "blus": 1.63, "sfsp": 1.63},
-  {"sec": "VI", "code": "4013", "cat": "2", "ho": "", "dec": "", "desc": "Storage of Category I hazardous Goods(open) subject to warranty that goods listed in Category II, III, Coir waste, Coir fibre and Caddies are not stored therein.", "blus": 1.81, "sfsp": 1.81},
-  {"sec": "VI", "code": "4014", "cat": "3", "ho": "", "dec": "", "desc": "Storage of hazardous Goods listed in Category II(open) subject to warranty that goods listed in Category III, Coir waste, Coir fibre and Caddies are not stored therein.", "blus": 4.48, "sfsp": 4.48},
-  {"sec": "VI", "code": "4015", "cat": "3", "ho": "", "dec": "", "desc": "Storage of hazardous Goods listed in Category III (open) subject to warranty that Coir waste, Coir fibre and , Caddies are not stored therein.", "blus": 4.2, "sfsp": 4.2},
-  {"sec": "VI", "code": "4016", "cat": "2", "ho": "", "dec": "", "desc": "Transporter’s godowns(open) & Godowns of clearing and forwarding agents.", "blus": 0.67, "sfsp": 0.67},
-  {"sec": "VI", "code": "4017", "cat": "3", "ho": "", "dec": "", "desc": "Storage of Coir Waste(open) ,Coir Fibre, Caddies", "blus": 9.96, "sfsp": 9.96},
-  {"sec": "VI", "code": "4018", "cat": "2", "ho": "", "dec": "", "desc": "Bus Terminus", "blus": 2.62, "sfsp": 2.62},
-  {"sec": "VI", "code": "4019", "cat": "2", "ho": "", "dec": "", "desc": "Vehicles stored in open including Tractors", "blus": 2.33, "sfsp": 2.33},
+  {"sec": "VI", "code": "4012", "cat": "2", "desc": "Storage of Non-hazardous goods(open) subject to warranty that hazardous goods of Category I, II, III , Coir waste, Coir fibre and Caddies are not stored therein.", "blus": 1.63, "sfsp": 1.63},
+  {"sec": "VI", "code": "4013", "cat": "2", "desc": "Storage of Category I hazardous Goods(open) subject to warranty that goods listed in Category II, III, Coir waste, Coir fibre and Caddies are not stored therein.", "blus": 1.81, "sfsp": 1.81},
+  {"sec": "VI", "code": "4014", "cat": "3", "desc": "Storage of hazardous Goods listed in Category II(open) subject to warranty that goods listed in Category III, Coir waste, Coir fibre and Caddies are not stored therein.", "blus": 4.48, "sfsp": 4.48},
+  {"sec": "VI", "code": "4015", "cat": "3", "desc": "Storage of hazardous Goods listed in Category III (open) subject to warranty that Coir waste, Coir fibre and , Caddies are not stored therein.", "blus": 4.2, "sfsp": 4.2},
+  {"sec": "VI", "code": "4016", "cat": "2", "desc": "Transporter’s godowns(open) & Godowns of clearing and forwarding agents.", "blus": 0.67, "sfsp": 0.67},
+  {"sec": "VI", "code": "4017", "cat": "3", "desc": "Storage of Coir Waste(open) ,Coir Fibre, Caddies", "blus": 9.96, "sfsp": 9.96},
+  {"sec": "VI", "code": "4018", "cat": "2", "desc": "Bus Terminus", "blus": 2.62, "sfsp": 2.62},
+  {"sec": "VI", "code": "4019", "cat": "2", "desc": "Vehicles stored in open including Tractors", "blus": 2.33, "sfsp": 2.33},
   {"sec": "VII", "code": "4008", "cat": "2", "ho": "", "dec": "", "desc": "Gas Holders/ Bullets/spheres and storages for liquified gases except for Nitrogen, Carbon dioxide and inert gases", "blus": 2.25, "sfsp": 2.25},
   {"sec": "VII", "code": "4009", "cat": "2", "ho": "", "dec": "", "desc": "Gas Holders/Vessels for Nitrogen, Carbon dioxide and inert gases", "blus": 1.02, "sfsp": 1.02},
   {"sec": "VII", "code": "4010", "cat": "3", "ho": "", "dec": "", "desc": "Tanks containing liquids flashing at 32 OC and below", "blus": 1.41, "sfsp": 1.41},
   {"sec": "VII", "code": "4011", "cat": "2", "ho": "", "dec": "", "desc": "Tanks (others)", "blus": 0.67, "sfsp": 0.67}
 ];
 
-// Re-structured configuration mapping to support the exact automated safety modifiers business rules logic
-const safetySurveyQuestionsConfig = [
-    { text: "Building age above 30 yrs", type: "yes_no", values: { YES: 5, NO: 0 } },
-    { text: "Operational Fire Hydrant/sprinkler/water spray system/fire alarm/smoke detectors", type: "yes_no", values: { YES: -10, NO: 0 } },
-    { text: "Electrical installations - well maintained standard equipment and installations", type: "yes_no", values: { YES: -10, NO: 0 } },
-    { text: "Provision of storm water drainage system and buildings with plinth level at least 1.5 ft above ground", type: "yes_no", values: { YES: -10, NO: 0 } },
-    { text: "High Standard of security with no of security guards for 24 x 7 and CCTVs", type: "yes_no", values: { YES: -10, NO: 5 } },
-    { text: "Past 3-years claims ratio", type: "select", options: [
-        { text: "0-30%", value: -30 },
-        { text: "30-70%", value: -20 },
-        { text: "70-100%", value: 0 },
-        { text: "100-200%", value: 10 },
-        { text: "> 200%", value: 50 }
-    ] },
-    { text: "Basement in Building used for operations/storage/plant machinery installed therein", type: "yes_no", values: { YES: 5, NO: 0 } },
-    { text: "Insured premises located within 1 km dstance of a water body like seashore, lake, rivers, canal etc", type: "yes_no", values: { YES: 5, NO: 0 } },
-    { text: "Risk located in thickly populated area with no access to fire brigade vehicle", type: "yes_no", values: { YES: 10, NO: 0 } }
-];
-
-function populateSurveyQuestionsTable() {
-    const tbody = document.getElementById('bsusDynamicFeaturesTbody');
-    tbody.innerHTML = "";
-    safetySurveyQuestionsConfig.forEach((item, index) => {
-        const row = document.createElement('tr');
-        let selectHtml = "";
-        let initialValue = 0;
-        
-        if (item.type === "yes_no") {
-            selectHtml = `
-                <select class="bsus-select-field survey-toggle" style="padding: 2px 4px; font-size: 0.75rem; width: 85px;">
-                    <option value="NO" selected>NO</option>
-                    <option value="YES">YES</option>
-                </select>
-            `;
-            initialValue = item.values["NO"];
-        } else if (item.type === "select") {
-            selectHtml = `
-                <select class="bsus-select-field survey-toggle" style="padding: 2px 4px; font-size: 0.75rem; width: 85px;">
-                    ${item.options.map(opt => `<option value="${opt.value}">${opt.text}</option>`).join('')}
-                </select>
-            `;
-            initialValue = item.options[0].value;
-        }
-        
-        row.innerHTML = `
-            <td style="text-align: center; font-weight: bold; color: #475569;">${index + 1}</td>
-            <td style="color: #1e293b; font-weight: 500;">${item.text}</td>
-            <td style="text-align: center;">${selectHtml}</td>
-            <td class="text-right" style="font-weight: bold; color: #475569; padding-right: 15px;">
-                <span class="survey-rate-weight-text">${(initialValue >= 0 ? "+" : "") + initialValue.toFixed(2)} %</span>
-                <input type="hidden" class="survey-rate-weight" value="${initialValue}">
-            </td>
-        `;
-        tbody.appendChild(row);
-    });
-}
-populateSurveyQuestionsTable();
-
 // Embedded Complete 1,035 Rows Database Payload From Excel Storage Spreadsheet
-const rawHazData = "Category I|1|Aloe resin@@Category I|2|Aluminium resinate@@Category I|3|Amber@@Category I|4|Ammonium Bromide@@Category I|5|Ammonium Chloride@@Category I|6|Animal protein@@Category I|7|Ammonium Fluoride@@Category I|8|Almond oil@@Category I|9|Ammonium Sulphate@@Category I|10|Animal skin@@Category I|11|Amonia-acqueous soln. or spirits of ammonia exceeding@@Category I|12|Aluminium Chloride@@Category I|13|Anethole@@Category I|14|Anime (a resin)@@Category I|15|Animal black@@Category I|16|Aluminium paste@@Category I|17|Animal glue@@Category I|18|Anthracene@@Category I|19|Algae@@Category I|20|Antimony Pentafluoride@@Category I|21|Animal oil@@Category I|22|Antimony Pentasulfide@@Category I|23|All flammable liquids having flash point above@@Category I|24|Antimony sulphate@@Category I|25|Antimony sulphide@@Category I|26|Antimony trisulphate@@Category I|27|Antimony trisulphide@@Category I|28|Arachis oil@@Category I|29|Arecanuts@@Category I|30|Arsenic Chloride@@Category I|31|Arsenic pentasulphide@@Category I|32|Arsenic sulphide@@Category I|33|Arsenic Trisulfide@@Category I|34|Artificial edible fat@@Category I|35|Artificial horn@@Category I|36|Artificial leather@@Category I|37|Artificial Silk@@Category I|38|Artificial wool@@Category I|39|Asafoetida (gum resin)@@Category I|40|Asafoetida oil@@Category I|41|Asphalt /Asphalt sheet@@Category I|42|Asphalted paper@@Category I|43|Balata, Balsam of Peru@@Category I|44|Bamboo mats@@Category I|45|Barium Carbonate@@Category I|46|Barium Sulphide@@Category I|47|Barley@@Category I|48|Baryllium Dustor powder@@Category I|49|Bed feathers (Down)@@Category I|50|Beedi leaves@@Category I|51|Bees wax@@Category I|52|Beet sugar@@Category I|53|Beet tallow (Aldrin)@@Category I|54|Benzoin (resin)@@Category I|55|Benzoin (resinoid)@@Category I|56|Betal Nuts@@Category I|57|Birch (bark) oil@@Category I|58|Bisphenol@@Category I|59|Bitumen/Bituminised craftpaper/felt@@Category I|60|Blacks of all kinds (not otherwise Speciafically provided for)@@Category I|61|Borneo Camphor@@Category I|62|Borneol@@Category I|63|Borneo tallow@@Category I|64|Bornyl acetate@@Category I|65|Boron trichloride@@Category I|66|Boron trifluoride@@Category I|67|Bran@@Category I|68|Bran oil@@Category I|69|Butter fat@@Category I|70|Butter oil@@Category I|71|Caesium perchlorate@@Category I|72|Caffine (pure)@@Category I|73|Calcium Chloride@@Category I|74|Calcium Cyanide@@Category I|75|Calcium Oxide@@Category I|76|Calcium Sulphide@@Category I|77|Camphene@@Category I|78|Camphor@@Category I|79|Candle wax@@Category I|80|Candles@@Category I|81|Canvas cloth@@Category I|82|Capric acid@@Category I|83|Caprolactum@@Category I|84|Caprylic acid@@Category I|85|Carbazole@@Category I|86|Carbon@@Category I|87|Carbon black@@Category I|88|Carbon paper@@Category I|89|Carbon tetrachloride@@Category I|90|Carbonyl@@Category I|91|Carnauba wax@@Category I|92|Carpet@@Category I|93|Carvacrol@@Category I|94|Cashew nuts@@Category I|95|Cassia leaves@@Category I|96|Castor oil@@Category I|97|Cat-gut@@Category I|98|Caustic potash@@Category I|99|Caustic soda@@Category I|100|Cedar wood oil@@Category I|101|Cellophane@@Category I|102|Cellophane paper/tape@@Category I|103|Cellulose@@Category I|104|Cellulose acetate@@Category I|105|Cellulose acetate films@@Category I|106|Ceresin wax@@Category I|107|Chaff@@Category I|108|Chinese inset wax@@Category I|109|Chinese tallow@@Category I|110|Chinese wood oil@@Category I|111|Chip (particle) board@@Category I|112|Chloral@@Category I|113|Chloroform@@Category I|114|Chlorowax@@Category I|115|Chocolates@@Category I|116|Chopped maize@@Category I|117|Chromyl Chloride@@Category I|118|Cineol@@Category I|119|Cinnabar@@Category I|120|Citral@@Category I|121|Citric acid@@Category I|122|Citronellal@@Category I|123|Citronellol@@Category I|124|CKD Kits of Automobiles@@Category I|125|Cloth, Asphalted@@Category I|126|Coaltar and coal pitch@@Category I|127|Coaltar distillate@@Category I|128|Cocoa beans@@Category I|129|Cocoa fat@@Category I|130|Cocoa oil@@Category I|131|Coconut fat@@Category I|132|Coconut oil@@Category I|133|Cod-liver oil@@Category I|134|Coffee and substitutes@@Category I|135|Coir yarn@@Category I|136|Colamine, Colophony@@Category I|137|Complex fertilizers@@Category I|138|Copal@@Category I|139|Copper sulphide@@Category I|140|Copra@@Category I|141|Copra cake/meal@@Category I|142|Cordage@@Category I|143|Coriander oil@@Category I|144|Cork@@Category I|145|Cork wood@@Category I|146|Corn oil@@Category I|147|Cotton fibre in pressed bales@@Category I|148|Cotton oil@@Category I|149|Cotton seed oil@@Category I|150|Cotton seed/cake@@Category I|151|Creosote@@Category I|152|Creosote oil@@Category I|153|Cresidine@@Category I|154|Cresol@@Category I|155|Cresylic acid@@Category I|156|Cross Linked Polyethylene Cable@@Category I|157|XLPE@@Category I|158|Croton oil@@Category I|159|Crotonic acid@@Category I|160|Dammer resin@@Category I|161|Decahydronaphthalene@@Category I|162|Decalin@@Category I|163|Decanal@@Category I|164|Dextrin@@Category I|165|Diacetin@@Category I|166|Diallyl phthalate@@Category I|167|Diamyl phthalate@@Category I|168|Diamyl sulphide@@Category I|169|Dibromodifluromethane@@Category I|170|Dibutoxy tetraglycol@@Category I|171|Dibutyl phthalate@@Category I|172|Dibutyl sebacate@@Category I|173|Dibutyl tartrate@@Category I|174|Dichlorohydrin@@Category I|175|Dichloromethane@@Category I|176|D.D.T@@Category I|177|Dicyclo-diepoxy-carboxylate@@Category I|178|Dicyclohexylamine@@Category I|180|Diethyl malonate@@Category I|181|Diethyl oxalate@@Category I|182|Diethyl phthalate@@Category I|183|Diethyl succinate@@Category I|184|Dimethyl cynanmide@@Category I|185|Dioctyl phthalate@@Category I|186|Dried fish@@Category I|187|Dried milkpowder@@Category I|188|Dried leaves of all kinds@@Category I|189|Dyes of all kinds@@Category I|190|Earth wax@@Category I|191|Edible fat@@Category I|192|Edible oil@@Category I|193|Elemi oil@@Category I|194|Endrin@@Category I|195|Epoxy resin@@Category I|196|Ethoxy resins@@Category I|197|Ethyl sulphate@@Category I|198|Eugenol@@Category I|199|Fats@@Category I|200|Feathers and down@@Category I|201|Felt@@Category I|202|Fibrous plants@@Category I|203|Fire wood@@Category I|204|Fish guano/manure@@Category I|205|Fish oil@@Category I|206|Flax@@Category I|207|Flowers dried of all kinds@@Category I|208|Foam rubber, freon@@Category I|209|Fodder@@Category I|210|Furs@@Category I|211|Galatlith@@Category I|212|Gamboge@@Category I|213|Ganja@@Category I|214|Gases, inert and non-combustible@@Category I|215|Gedda wax@@Category I|216|Gelatine@@Category I|217|Gentac latex or vinyl pyridine latex@@Category I|218|Geranial@@Category I|219|Geraniol@@Category I|220|Geranium oil@@Category I|221|Ghee fat@@Category I|222|Glues of all kinds@@Category I|223|Glycerine@@Category I|224|Goats wool@@Category I|225|Grain meal@@Category I|226|Grass max@@Category I|227|Grass weed@@Category I|228|Grease, lubricating@@Category I|229|Groundnut oil@@Category I|230|Groundnut shelled, cake, meal,@@Category I|231|Guaiacum resin@@Category I|232|Gums@@Category I|233|Gunnies (loose)@@Category I|234|Guttapercha@@Category I|235|Hair@@Category I|236|Hazel nut oil@@Category I|237|Hempseed@@Category I|238|Hempseed oil@@Category I|239|Herbs, dried of all kinds@@Category I|240|Hides & Skin@@Category I|241|Hog fat oil@@Category I|242|Hycol@@Category I|243|Hydrogen peroxide, under@@Category I|244|Hydroquinone@@Category I|245|Hyphone@@Category I|246|lanone Beta@@Category I|247|Indian wax@@Category I|248|Indigo@@Category I|249|Insence@@Category I|250|Iron powder@@Category I|251|Iron pyrites@@Category I|252|Iron sulphides@@Category I|253|Japan tallow@@Category I|254|Javelle water@@Category I|255|Kapok@@Category I|256|Kapok oil/seed@@Category I|257|Kreolin@@Category I|258|Lactose@@Category I|259|Lamp black@@Category I|260|Lanolin@@Category I|261|Lard@@Category I|262|Lard oil@@Category I|263|Latex@@Category I|264|Lauryl Mercaptan@@Category I|265|Lavender oil@@Category I|266|Lead acetate@@Category I|267|Lead Arsemates@@Category I|268|Lead chromate@@Category I|269|Leather@@Category I|270|Leaves, dried of all kinds@@Category I|271|Lemon glass oil@@Category I|272|Lime, unslaked@@Category I|273|Lindane@@Category I|274|Linen@@Category I|275|Linoleum@@Category I|276|Linolic acid@@Category I|277|Linseed@@Category I|278|Linseed cake@@Category I|279|Linseed oil@@Category I|280|Liquor amonia@@Category I|281|Low Matalurgical Coke@@Category I|282|Magnesium@@Category I|283|Magnesium alloy@@Category I|284|Magnesium shavings@@Category I|285|Maize oil@@Category I|286|Maleic anhydride@@Category I|287|Manganese Acetate@@Category I|288|Manhaden oil@@Category I|289|Man-made fibres and clean waste in pressed bales@@Category I|290|Mannitol monolaurate@@Category I|291|Margarine@@Category I|292|Mastic@@Category I|293|Mats of all kinds(synthetic or Vegetable)@@Category I|294|Menthol@@Category I|295|Mercury Cyanide@@Category I|296|Mesitylene@@Category I|297|Methyl bromide@@Category I|298|Methyl cinnamate@@Category I|299|Middle oils@@Category I|300|Milk fat@@Category I|301|Milk of sugar (lactose)@@Category I|302|Milk powder@@Category I|303|Molasses@@Category I|304|Molasses meal@@Category I|305|Mosquito mat/coil@@Category I|306|Mowra flowers@@Category I|307|Mungo@@Category I|308|Mustard oil@@Category I|309|Mutton tallow@@Category I|310|Myrrh@@Category I|311|Naphthalene@@Category I|312|Naphthylthio@@Category I|313|Natural rubber@@Category I|314|Neat's foot fat@@Category I|315|Neat's foot oil@@Category I|316|Neohexane@@Category I|317|Nicotine acid@@Category I|318|Niobe oil@@Category I|319|Nitrogen monoxide@@Category I|320|Nitrophenol (para)@@Category I|321|Nitrous oxide@@Category I|322|Nocotinic and Nicotine preparation@@Category I|323|Nut oil@@Category I|324|Nylon@@Category I|325|Octadecanoic acid@@Category I|326|Octanoic acid@@Category I|327|Octyl acetate@@Category I|328|Oil cake@@Category I|329|Oil of bay@@Category I|330|Oil of bitter almonds@@Category I|331|Oil of Mirbane@@Category I|332|Oil of Wintergreen@@Category I|333|Oil paper@@Category I|334|Oil seed meal@@Category I|335|Oil skin@@Category I|336|Oils, animal (not otherwise specifically provided for)@@Category I|337|Oils, vegetable (not otherwise specifically provided for)@@Category I|338|Oleic acid@@Category I|339|Olein@@Category I|340|Oleum@@Category I|341|Olive oil@@Category I|342|Opium@@Category I|343|Oxalic acid@@Category I|344|Palm kernel oil@@Category I|345|Palm oil/butter/fat@@Category I|346|Palmarosa oil@@Category I|347|Palmitic acid@@Category I|348|Paper yarn@@Category I|349|Paper in any form@@Category I|350|Paper insulated lead sheathed cable (PILC)@@Category I|351|Para Amisidine@@Category I|352|Para chloro aniline@@Category I|353|Paraffin oil@@Category I|354|Paraffin wax@@Category I|355|Patent leather@@Category I|356|Peanut (shelled)@@Category I|357|Peanut oil@@Category I|358|Peat@@Category I|359|Peat dust@@Category I|360|Pectin@@Category I|361|Penicillin storage@@Category I|362|Perilla oil@@Category I|363|Petitgrain oil@@Category I|364|Petroleum coke@@Category I|365|Petroleum jelly@@Category I|366|Pharmaceutical preparations@@Category I|367|Phenoplasts@@Category I|368|Phorone@@Category I|369|Phosgene@@Category I|370|Phosphonium lodide@@Category I|371|Phthalic anhydride@@Category I|372|Pig fat@@Category I|373|Pine bark@@Category I|374|Pine Oil@@Category I|375|Pine pitch@@Category I|376|Pine tar oil@@Category I|377|Piperazine@@Category I|378|Pitch@@Category I|379|Plastic cloth@@Category I|380|Plastic of all kinds (not otherwise specifically provided for)@@Category I|381|Pogy oil (Menhaden oil)@@Category I|382|Polyacrylonitrile@@Category I|383|Polyamyl naphthalene@@Category I|384|Polyester@@Category I|385|Polyethylene@@Category I|386|Polymethacrylate@@Category I|387|Polypropylene@@Category I|388|Polyurethane, solid@@Category I|389|Polyviny acetate@@Category I|390|Polyvinyl chloride@@Category I|391|Poppy seed oil@@Category I|392|Poppy seeds@@Category I|393|Potassium chromate@@Category I|394|Potassium cyanide@@Category I|395|Potassium Xanthate@@Category I|396|Potasssium hydroxide@@Category I|397|Pulegon@@Category I|398|Pumpkin oil@@Category I|399|Pyrogallo@@Category I|400|Quinol@@Category I|401|Ramie@@Category I|402|Rape oil@@Category I|403|Red oil@@Category I|404|Reeds@@Category I|405|Resinates@@Category I|406|Resins, natural and synthetic@@Category I|407|Resorcinol@@Category I|408|Rexin cloth@@Category I|409|Rice Husk@@Category I|410|Ricinus oil@@Category I|411|Rock salt@@Category I|412|Rosewood oil@@Category I|413|Rosin@@Category I|414|Rubber@@Category I|415|Rubber goods@@Category I|416|Rugs@@Category I|417|Saccharin@@Category I|418|Saccharose@@Category I|419|Safrole@@Category I|420|Salicylic acid@@Category I|421|Sandalwood oil@@Category I|422|Sandarac@@Category I|423|Sassafras oil@@Category I|424|Sawdust@@Category I|425|Seal oil@@Category I|426|Sealing wax@@Category I|427|Seeds of all kinds@@Category I|428|Sesame oil@@Category I|429|Shale oil@@Category I|430|Shark oil@@Category I|431|Shavings, wood, paper@@Category I|432|Shea butter@@Category I|433|Sheep's wool@@Category I|434|Shellac@@Category I|435|Shoddy@@Category I|436|Silicon, Spray@@Category I|437|Silk, natural@@Category I|438|Smoke cartridges@@Category I|439|Sodium Acetate@@Category I|440|Sodium Alginate@@Category I|441|Sodium chromate@@Category I|442|Sodium Cyanide@@Category I|443|Sodium cyclamate@@Category I|444|Sodium Hexameta Phosphate@@Category I|445|Sodium Sulphide@@Category I|446|Sodium Thiosulphate@@Category I|447|Soot@@Category I|448|Sorbic acid@@Category I|449|Soya bean oil, cake@@Category I|450|Soya beans@@Category I|451|Soya oil@@Category I|452|Spermaceti@@Category I|453|Spermaceti oil@@Category I|454|Spices@@Category I|455|Sponges@@Category I|456|Sponge Iron@@Category I|457|Sponges U foam@@Category I|458|Spruce pitch@@Category I|459|Spruce seed oil@@Category I|460|Spruce wood pitch@@Category I|461|Spruce wood tar oil@@Category I|462|Stand oil@@Category I|463|Stannic chloride (anhydrous)@@Category I|464|Starch@@Category I|465|Stearic acid@@Category I|466|Stearin@@Category I|467|Steel wool (fine)@@Category I|468|Strontium oxalate@@Category I|469|Strontium sulphide@@Category I|470|Sugar@@Category I|471|Sulphur@@Category I|472|Sulphur chlorides@@Category I|473|Sulphur Dioxide@@Category I|474|Sulphur trioxide@@Category I|475|Sun Floweroils, seeds@@Category I|476|Sweet almond oil@@Category I|477|Synthetic rubber@@Category I|478|Synthetic/vegetable staple fibres Clean waste thereof pressed in bales@@Category I|479|Tall oil@@Category I|480|Tallow@@Category I|481|Tallow oil@@Category I|482|Tan bark@@Category I|483|Tar (all kinds),@@Category I|484|Tarpaulins@@Category I|485|Tarred felt/paper/rope/string/@@Category I|486|Tarred cloth@@Category I|487|Tea@@Category I|488|Tea seed oil@@Category I|489|Teal oil@@Category I|490|Tempering oil@@Category I|491|Terephthalic acid@@Category I|492|Tetra ethyl lead@@Category I|493|Timber@@Category I|494|Titanium tetrachloride@@Category I|495|Tobacco and its products@@Category I|496|Tobacco leaves@@Category I|497|Tow (oakum)@@Category I|498|Tow of all kinds@@Category I|499|Tricalcium phosphate@@Category I|500|Trichloro ethane@@Category I|501|Trichloro Ethylene@@Category I|502|Trisodium Phosphate@@Category I|503|Tung oil@@Category I|504|Turkey red oil@@Category I|505|Twine@@Category I|506|Tyres@@Category I|507|Unhewn logs@@Category I|508|Urea@@Category I|509|Uric acid@@Category I|510|Valeric acid@@Category I|511|Valum bark and/or fibres in@@Category I|512|pressed bales@@Category I|513|Vaseline@@Category I|514|Vegetable oil of all kinds@@Category I|515|Vegetables (dried)@@Category I|516|Viscose and clean waste thereof in pressed bales@@Category I|517|Vulcanised fibre@@Category I|518|Waste of Non-hazardous materials@@Category I|519|Wax candles@@Category I|520|Wax of all kinds@@Category I|521|Whale oil@@Category I|522|White Goods (such as Refrigerators Washing machines etc.)@@Category I|523|Wood@@Category I|524|Wood oil@@Category I|525|Wood pulp (loose)@@Category I|526|Wood shavings@@Category I|527|Wood wool, compressed@@Category I|528|Wood, flour@@Category I|529|Wool fat@@Category I|530|Wool, loose@@Category I|531|Xanthetic oxide@@Category I|532|Xanthogenale de potassium@@Category I|533|Xylenol@@Category I|534|o - Xylidine@@Category I|535|Ylang-Ylang oil@@Category I|536|Ziroconium Tetrachloride@@Category I|537|Other Category I Goods@@Category II|1|Accelerene@@Category II|2|Acetyl peroxide@@Category II|3|All flammable liquids having flash point between 320C and 650C (both inclusive)@@Category II|4|Aloe fibres, loose@@Category II|5|Aluminium carbide@@Category II|6|Aluminium ferrosilicon@@Category II|7|Aluminium hydride@@Category II|8|Aluminium nitrate@@Category II|9|Aluminium phosphide@@Category II|10|Aluminium powder/dust@@Category II|11|Ammonium chromate@@Category II|12|Ammonium cyanide@@Category II|13|Ammonium dichromate@@Category II|14|Ammonium persulphate@@Category II|15|Amphetamine@@Category II|16|Amyl nitrite@@Category II|17|Angelica oil@@Category II|18|Antimony pentoxide@@Category II|19|Aqua Forties (Nitric acid)@@Category II|20|Aqua regia@@Category II|21|Balsams@@Category II|22|Bamboos (whole)@@Category II|23|Barium@@Category II|24|Barium azide@@Category II|25|Barium chlorate/chlorite@@Category II|26|Barium chromate@@Category II|27|Barium dioxide@@Category II|28|Barium hydride@@Category II|29|Barium manganate@@Category II|30|Barium nitrate@@Category II|31|Barium perchlorate@@Category II|32|Barium permanganate@@Category II|33|Barium peroxide@@Category II|34|Beets, sliced, dried@@Category II|35|Benzoyl peroxide, wet@@Category II|36|Bergamot oil@@Category II|37|Bleaching powder@@Category II|38|Bran dust@@Category II|39|Bromine@@Category II|40|Bromine pentafluoride@@Category II|41|Bromine trifluoride@@Category II|42|Bromoacetone@@Category II|43|Bronze powder@@Category II|44|Butyl nitrate@@Category II|45|Cadmium nitrate@@Category II|46|Caesium peroxide@@Category II|47|Calamus oil@@Category II|48|Calcium@@Category II|49|Calcium aluminium hydride@@Category II|50|Calcium amide@@Category II|51|Calcium amonium nitrate@@Category II|52|Calcium bromate@@Category II|53|Calcium chlorate@@Category II|54|Calcium cyanamide@@Category II|55|Calcium hypochlorite@@Category II|56|Calcium nitrate@@Category II|57|Calcium perchlorate@@Category II|58|Calcium permanganate@@Category II|59|Calcium peroxide@@Category II|60|Calcium phosphide@@Category II|61|Calcium phosphite@@Category II|62|Calcium resinate@@Category II|63|Calcium silicide@@Category II|64|Camomile oil@@Category II|65|Canadian balsam@@Category II|66|Caraway oil@@Category II|67|Celluloid@@Category II|68|Cellulose nitrate silk@@Category II|69|Celluoid films@@Category II|70|Chile saltpeter@@Category II|71|Chlorates (inorganic) not otherwise specifically provided for@@Category II|72|Chlorine@@Category II|73|Chloropicrin@@Category II|74|Chlorosulphuric acid@@Category II|75|Cholorites (inorganic) not otherwise specifically provided for@@Category II|76|Chromic acid@@Category II|77|Chromic anhydride@@Category II|78|Chromic oxide@@Category II|79|Chromium trioxide@@Category II|80|Cinnamon@@Category II|81|Citronella oil@@Category II|82|Clove oil@@Category II|83|Cobalt nitrate@@Category II|84|Cobalt potassium nitrite@@Category II|85|Collodion paper@@Category II|86|Collodion silk@@Category II|87|Collodion-cotton@@Category II|88|Copper nitrate@@Category II|89|Cotton Fibres (others)@@Category II|90|Crackers@@Category II|91|Cyanogen bromide@@Category II|92|Dichloroisocynuric acid@@Category II|93|Diketene@@Category II|94|Ethyl silicate@@Category II|95|Eucalyptus oil@@Category II|96|Ferric nitrate@@Category II|97|Ferrosilicon@@Category II|98|Firelighters@@Category II|99|Fireworks@@Category II|100|Fish meal/scrap@@Category II|101|Flares@@Category II|102|Flash powder, Photographic@@Category II|103|Floor wax@@Category II|104|Fluorine@@Category II|105|Foam plastics@@Category II|106|Fuse@@Category II|107|Fuses without explosives@@Category II|108|Guano@@Category II|109|Guano and fish-meal@@Category II|110|Gunpowder detonating caps@@Category II|111|Hemp@@Category II|112|Hop oil@@Category II|113|Hops@@Category II|114|Hydrazine@@Category II|115|Hydrobromic acid@@Category II|116|Hydrochemical acid@@Category II|117|Hydrocyanic acid@@Category II|118|Hydrofluoric acid@@Category II|119|Hydrogen peroxide, 30-90%@@Category II|120|Ignition cords (fuses)@@Category II|121|lodine@@Category II|122|Irish oil@@Category II|123|Jasmine oil@@Category II|124|Juniper oil@@Category II|125|Jute in pressed bales@@Category II|126|Lavender oil@@Category II|127|Lead dioxide@@Category II|128|Lead nitrate@@Category II|129|Lead peroxide@@Category II|130|Lead tetra methyl@@Category II|131|Linalool@@Category II|132|Lignite (Coke)@@Category II|133|Liquid insecticides/pesticides/disinfectants flash point 32C to 65C@@Category II|134|Liquid insecticides/pesticides below 32c in sealed tins/bottles@@Category II|135|Lithium@@Category II|136|Lithium chlorate@@Category II|137|Lithium perchlorate@@Category II|138|Lithium peroxide@@Category II|139|Lupulin (hop meal)@@Category II|140|Magnesium chlorate@@Category II|141|Magnesium dioxide@@Category II|142|Magnesium dust, also dust of high magnesium alloys.@@Category II|143|Magnesium nitrate@@Category II|144|Magnesium perborate@@Category II|145|Magnesium perchlorate@@Category II|146|Magnesium peroxide@@Category II|147|Magnesium powder@@Category II|148|Malt germ@@Category II|149|Manganese dioxide@@Category II|150|Manganese borate@@Category II|151|Manganese green@@Category II|152|Manganese nitrate@@Category II|153|Manganese perborate@@Category II|154|Manganese perchlorate@@Category II|155|Manganese peroxide@@Category II|156|Manganese powder@@Category II|157|Marjorum oil@@Category II|158|Matches (safety/non-safety)@@Category II|159|Mercuric iodate@@Category II|160|Mercurous nitrate@@Category II|161|Neroli (oil of orange flowers)@@Category II|162|Nickel carbonyl@@Category II|163|Nickel nitrate@@Category II|164|Nickel peroxide@@Category II|165|Nickel tetracarbonyl@@Category II|166|Nickel/Nitrites of all kinds not otherwise specifically provided for@@Category II|167|Nitric acid@@Category II|168|Nitrite of soda@@Category II|169|Nitro silk@@Category II|170|Nitrocellulose film@@Category II|171|Nitrocellulose plastics@@Category II|172|Nitrocellulose silk@@Category II|173|Nitrocotton threads@@Category II|174|Nitrogen dioxide@@Category II|175|Nitrosyl chloride@@Category II|176|Oil of cinnamon@@Category II|177|Oil of thyme@@Category II|178|Orange (peel) oil@@Category II|179|Orange blossom oil@@Category II|180|Orange oil@@Category II|181|Paints, thinners and varnishes flash point 32C to 65C@@Category II|182|Paints, thinners and varnishes below 32C in sealed tins/bottles@@Category II|183|Parathion@@Category II|184|Peppermint oil@@Category II|185|Perchloric acid in aqueous solution > 70%@@Category II|186|Percussion caps (for toys)@@Category II|187|Periodic acid@@Category II|188|Phosphoric acid@@Category II|189|Phosphorous (red)@@Category II|190|Phosphorous oxychloride@@Category II|191|Phosphorous pentachloride@@Category II|192|Phosphorous pentasulphide@@Category II|193|Phosphorous sesquisulphide@@Category II|194|Phosphorous sulphide@@Category II|195|Phosphorous trichloride@@Category II|196|Phosphoryl chloride@@Category II|197|Pine tar@@Category II|198|Pinene@@Category II|199|Portugal oil (Orange peel oil)@@Category II|200|Potable spirits below 32C in sealed tins/bottles@@Category II|201|Potassium amide@@Category II|202|Potassium ammonium nitrate@@Category II|203|Potassium bromate@@Category II|204|Potassium chlorate@@Category II|205|Potassium dichromate@@Category II|206|Potassium dithionate@@Category II|207|Potassium hypochlorite@@Category II|208|Potassium hyposulphite@@Category II|209|Potassium nitrate@@Category II|210|Potassium nitrite@@Category II|211|Potassium perchlorate@@Category II|212|Potassium permanganate@@Category II|213|Potassium peroxide@@Category II|214|Potassium persulphate@@Category II|215|Potassium stontium chlorate@@Category II|216|Potassium sulphide@@Category II|217|Pressed residue from oil seeds@@Category II|218|Pyrolusite@@Category II|219|Pyrotechnical articles@@Category II|220|Rags@@Category II|221|Rockets (fire works)@@Category II|222|Root turpentine oil@@Category II|223|Rose oil@@Category II|224|Rosemary oil@@Category II|225|Rubidium@@Category II|226|Sage oil@@Category II|227|Salt petre@@Category II|228|Selenium dioxide@@Category II|229|Sesquisulphide matches@@Category II|230|Silver permanganate@@Category II|231|Silver Nitrate@@Category II|232|Silver Nitrite@@Category II|233|Smoke generators@@Category II|234|Sodamide@@Category II|235|Sodium amalgam@@Category II|236|Sodium amide@@Category II|237|Sodium borohydride@@Category II|238|Sodium chlorate@@Category II|239|Sodium chlorite@@Category II|240|Sodium Dichloro-s-Triazinetrione and Dihydrate@@Category II|241|Sodium dichromate@@Category II|242|Sodium dithionite@@Category II|243|Sodium hydrosulphide@@Category II|244|Sodium hydrosulphite@@Category II|245|Sodium hypochlorite@@Category II|246|Sodium Nitrate@@Category II|247|Sodium Nitrite@@Category II|248|Sodium nitroethane@@Category II|249|Sodium perborate@@Category II|250|Sodium perchlorate@@Category II|251|Sodium periodate@@Category II|252|Sodium permanganate@@Category II|253|Sodium peroxide@@Category II|254|Sodium persulphate@@Category II|255|Soidum hypophosphite@@Category II|256|Sparklers@@Category II|257|Spruce wood tar@@Category II|258|Staranise oil@@Category II|259|Strontium@@Category II|260|Strontium chlorate@@Category II|261|Strontium nitrate@@Category II|262|Strontium perchlorate@@Category II|263|Strontium peroxide@@Category II|264|Strontium potassium chlorate@@Category II|265|Styrax@@Category II|266|Sulphuric acid, (oleum/fuming/concentrated)@@Category II|267|Sulphuryl chloride@@Category II|268|Thallium nitrate@@Category II|269|Thermit@@Category II|270|Thionyl chloride@@Category II|271|Thorium@@Category II|272|Titanium (sponge or powder form)@@Category II|273|Trichloro-s-triazinetrione@@Category II|274|Trioxane@@Category II|275|Uranium@@Category II|276|Urea nitrate@@Category II|277|Valerian oil@@Category II|278|Vanadium tetrachloride@@Category II|279|Vermouth oil@@Category II|280|Vegetable Fibre like straw, grass, hay etc.@@Category II|281|Vinegar@@Category II|282|Viscose and clean waste thereof, loose@@Category II|283|Volume bark and/or fibres, loose@@Category II|284|Waste of materials falling under Category I@@Category II|285|Wood wool (loose)@@Category II|286|Zinc chloride@@Category II|287|Zinc dithionite@@Category II|288|Zinc hydrosulphite@@Category II|289|Zinc nitrate@@Category II|290|Zinc permanganate@@Category II|291|Zinc peroxide@@Category II|292|Zinc powder@@Category II|293|Zirconium dust powder@@Category II|294|Other Category II Goods@@Category III|1|Activated Carbon, Pyropheric@@Category III|2|All flammable liquids having a flash point below 320C@@Category III|3|Aluminium Alkyl Halides@@Category III|4|Aluminium borohydride@@Category III|5|Aluminium triethyl@@Category III|6|Aluminium trihexyl@@Category III|7|Aluminium tri-isobutyl@@Category III|8|Aluminium trimethyl@@Category III|9|Aluminium tripropyl@@Category III|10|Amatol@@Category III|11|Ammonium bromate@@Category III|12|Ammonium chlorate@@Category III|13|Ammonium Nitrate@@Category III|14|Ammonium nitrate explosives@@Category III|15|Ammonium perchlorate@@Category III|16|Ammonium permanganate@@Category III|17|Ammonium picrate@@Category III|18|Ammunitions@@Category III|19|Amorces@@Category III|20|Arsine@@Category III|21|Azides@@Category III|22|Azimethylene@@Category III|23|Azoimide@@Category III|24|Baggase@@Category III|25|Bamboos (split)@@Category III|26|Benzol peroxide (dry)@@Category III|27|Black powder@@Category III|28|Blasting powder@@Category III|29|Bromo picric acid@@Category III|30|Butyl mercaptan@@Category III|31|Butyl peracetate@@Category III|32|Butyl peroctoate (tert)@@Category III|33|Butyl peroxide (ditert)@@Category III|34|Cadmium fulminate@@Category III|35|Caesium@@Category III|36|Calcium carbide@@Category III|37|Calcium chlorite@@Category III|38|Calcium dithionate@@Category III|39|Calcium hydrite@@Category III|40|Calcium nitrate explosive@@Category III|41|Calcium, pyrophoric@@Category III|42|Cartridges@@Category III|43|Cellulose nitrate powder@@Category III|44|Charcoal@@Category III|45|Cheddite@@Category III|46|Chlorate explosive@@Category III|47|Chloratite@@Category III|48|Chloroazide@@Category III|49|Coal@@Category III|50|Coke@@Category III|51|Collodion@@Category III|52|Collodion wool@@Category III|53|Copper acetylide@@Category III|54|Copper azide@@Category III|55|Copper carbide@@Category III|56|Cordite@@Category III|57|Detonators@@Category III|58|Di (tert) butyl peroxide@@Category III|59|Diazobenzene perchlorate@@Category III|60|Diazobenzeneimide@@Category III|61|Diazo-dinitrophenol@@Category III|62|Diazo-m-nitraline perchlorate@@Category III|63|Diazonium salts@@Category III|64|Diborane@@Category III|65|Dicumyl peroxide@@Category III|66|Diglycol dinitrate@@Category III|67|Dimethyl benzyl peroxide@@Category III|68|Dinitro dihydroxy quinone@@Category III|69|Dinitro glycerine@@Category III|70|Dinitrocellulose@@Category III|71|Dinitrochlorohydrin@@Category III|72|Dinitrocresol@@Category III|73|Dinitroglycol@@Category III|74|Dinitrol@@Category III|75|Dodecanoyl Peroxide@@Category III|76|Dynamite@@Category III|77|Eau de Cologne@@Category III|78|Erythrol Tetranitrate@@Category III|79|Ethyl borate@@Category III|80|Ethylene nitrate@@Category III|81|Explosive charges@@Category III|82|Explosives@@Category III|83|Fulminates@@Category III|84|Fuse, Detonating@@Category III|85|Gases, Combustible@@Category III|86|Gelatine explosive@@Category III|87|Gelatinized nitrocellulose powders@@Category III|88|Glycerine nitrate@@Category III|89|Guanidine nitrate@@Category III|90|Guanidine perchlorate@@Category III|91|Guanylnitrosamino guanyl tetrazene@@Category III|92|Guhr-dynamite@@Category III|93|Gun cotton@@Category III|94|Gun cotton solutions@@Category III|95|Gun powder@@Category III|96|Hay@@Category III|97|Hydrazine nitrate@@Category III|98|Hydrazoic acid@@Category III|99|Hydrogen cyanide@@Category III|100|Hydrogen peroxide, 90-100%@@Category III|101|Hydrogen selenide@@Category III|102|Hydrogen sulphide@@Category III|103|Hydrolith@@Category III|104|Instant ignition cord@@Category III|105|Iron carbonyl@@Category III|106|Iron Penta Carbonyl@@Category III|107|Jute (Others)@@Category III|108|Kresylit@@Category III|109|Lead azide@@Category III|110|Lead picrate@@Category III|111|Lead styphnate@@Category III|112|Lead trinitroresorcinate@@Category III|113|Leco (Coke)@@Category III|114|Liquid insecticides/pesticides/disinfectants flash point below 32C@@Category III|115|Liquid Petroleum Gas@@Category III|116|Lithium aluminium hydride@@Category III|117|Lithium amide@@Category III|118|Lithium borohydride@@Category III|119|Lithium butyl@@Category III|120|Lithium hydride@@Category III|121|Lyddite@@Category III|122|Mannitol hexanitrate@@Category III|123|Mercuric cyanate@@Category III|124|Mercury cyanate@@Category III|125|Mercury fulminate@@Category III|126|Mining charges@@Category III|127|Mixed powder (nitrocellulose)@@Category III|128|Nitrate explosives@@Category III|129|Nitro-carbonitrate@@Category III|130|Nitrocellulose@@Category III|131|Nitrocellulose powder@@Category III|132|Nitrogeletine dynamite@@Category III|133|Nitrogen chloride@@Category III|134|Nitrogen trichloride@@Category III|135|Nitroglycerine@@Category III|136|Nitroglycerine powder@@Category III|137|Nitroguanidine@@Category III|138|Nitromannital@@Category III|139|Nitro-starch@@Category III|140|Nitro-sugar@@Category III|141|Ozonides@@Category III|142|Oils and greasy waste of cotton/viscose@@Category III|143|Paints, thinners, varnishes flash point below 32C@@Category III|144|Pantonone@@Category III|145|Peracetic acid@@Category III|146|Perchlorate explosives@@Category III|147|Perchlorates of all kinds not otherwise specifically provided for@@Category III|148|Perchloric acid > 70%@@Category III|149|Perchromates@@Category III|150|Percussion capsules@@Category III|151|Phosphides@@Category III|152|Phosphine@@Category III|153|Phosphoretted hydrogen@@Category III|154|Phosphorous (yellow or white)@@Category III|155|Picramic acid@@Category III|156|Picrates@@Category III|157|Picratol@@Category III|158|Picric acid@@Category III|159|Picryl chloride@@Category III|160|Plasticized dynamite@@Category III|161|Potassium@@Category III|162|Potassium amalgam@@Category III|163|Potassium hydride@@Category III|164|Primers (explosives)@@Category III|165|Propargyl bromide@@Category III|166|Prussic acid@@Category III|167|Raney nickel@@Category III|168|RDX@@Category III|169|Rubber cement@@Category III|170|Safety explosives@@Category III|171|Saltpetre blasting powder@@Category III|172|Silanes@@Category III|173|Silver acetylide@@Category III|174|Silver fulminate@@Category III|175|Silver picrate@@Category III|176|Sodium@@Category III|177|Sodium azide@@Category III|178|Sodium dinitro phenol@@Category III|179|Sodium hydride@@Category III|180|Sodium hydrosulphite@@Category III|181|Solein@@Category III|182|Starch nitrate@@Category III|183|Straw in pressed bales@@Category III|184|Styphnic acid@@Category III|185|Succinic peroxide@@Category III|186|Sugar nitrates@@Category III|187|Tetranitroaniline@@Category III|188|Tetranitrobenzene@@Category III|189|Tetranitronaphthalene@@Category III|190|Tetranitrophenol@@Category III|191|Titanium hydride@@Category III|192|TNT@@Category III|193|Trinitrocellulose@@Category III|194|Trinitrogylcerin@@Category III|195|Trinitronaphthalene@@Category III|196|Trinitrophenol@@Category III|197|Trinitrophenolmethylnitramine@@Category III|198|Trinitro-toluene@@Category III|199|Tripropylaluminium@@Category III|200|Urea peroxide@@Category III|201|Waste of materials falling under Cat II & III@@Category III|202|Zinc phosphide@@Category III|203|Zinc picrate@@Category III|204|Zirconium hydride@@Category III|205|Other Category III Goods";
+const rawHazData = "Category I|1|Aloe resin@@Category I|2|Aluminium resinate@@Category I|3|Amber@@Category I|4|Ammonium Bromide@@Category I|5|Ammonium Chloride@@Category I|6|Animal protein@@Category I|7|Ammonium Fluoride@@Category I|8|Almond oil@@Category I|9|Ammonium Sulphate@@Category I|10|Animal skin@@Category I|11|Amonia-acqueous soln. or spirits of ammonia exceeding@@Category I|12|Aluminium Chloride@@Category I|13|Anethole@@Category I|14|Anime (a resin)@@Category I|15|Animal black@@Category I|16|Aluminium paste@@Category I|17|Animal glue@@Category I|18|Anthracene@@Category I|19|Algae@@Category I|20|Antimony Pentafluoride@@Category I|21|Animal oil@@Category I|22|Antimony Pentasulfide@@Category I|23|All flammable liquids having flash point above@@Category I|24|Antimony sulphate@@Category I|25|Antimony sulphide@@Category I|26|Antimony trisulphate@@Category I|27|Antimony trisulphide@@Category I|28|Arachis oil@@Category I|29|Arecanuts@@Category I|30|Arsenic Chloride@@Category I|31|Arsenic pentasulphide@@Category I|32|Arsenic sulphide@@Category I|33|Arsenic Trisulfide@@Category I|34|Artificial edible fat@@Category I|35|Artificial horn@@Category I|36|Artificial leather@@Category I|37|Artificial Silk@@Category I|38|Artificial wool@@Category I|39|Asafoetida (gum resin)@@Category I|40|Asafoetida oil@@Category I|41|Asphalt /Asphalt sheet@@Category I|42|Asphalted paper@@Category I|43|Balata, Balsam of Peru@@Category I|44|Bamboo mats@@Category I|45|Barium Carbonate@@Category I|46|Barium Sulphide@@Category I|47|Barley@@Category I|48|Baryllium Dustor powder@@Category I|49|Bed feathers (Down)@@Category I|50|Beedi leaves@@Category I|51|Bees wax@@Category I|52|Beet sugar@@Category I|53|Beet tallow (Aldrin)@@Category I|54|Benzoin (resin)@@Category I|55|Benzoin (resinoid)@@Category I|56|Betal Nuts@@Category I|57|Birch (bark) oil@@Category I|58|Bisphenol@@Category I|59|Bitumen/Bituminised craftpaper/felt@@Category I|60|Blacks of all kinds (not otherwise Speciafically provided for)@@Category I|61|Borneo Camphor@@Category I|62|Borneol@@Category I|63|Borneo tallow@@Category I|64|Bornyl acetate@@Category I|65|Boron trichloride@@Category I|66|Boron trifluoride@@Category I|67|Bran@@Category I|68|Bran oil@@Category I|69|Butter fat@@Category I|70|Butter oil@@Category I|71|Caesium perchlorate@@Category I|72|Caffine (pure)@@Category I|73|Calcium Chloride@@Category I|74|Calcium Cyanide@@Category I|75|Calcium Oxide@@Category I|76|Calcium Sulphide@@Category I|77|Camphene@@Category I|78|Camphor@@Category I|79|Candle wax@@Category I|80|Candles@@Category I|81|Canvas cloth@@Category I|82|Capric acid@@Category I|83|Caprolactum@@Category I|84|Caprylic acid@@Category I|85|Carbazole@@Category I|86|Carbon@@Category I|87|Carbon black@@Category I|88|Carbon paper@@Category I|89|Carbon tetrachloride@@Category I|90|Carbonyl@@Category I|91|Carnauba wax@@Category I|92|Carpet@@Category I|93|Carvacrol@@Category I|94|Cashew nuts@@Category I|95|Cassia leaves@@Category I|96|Castor oil@@Category I|97|Cat-gut@@Category I|98|Caustic potash@@Category I|99|Caustic soda@@Category I|100|Cedar wood oil@@Category I|101|Cellophane@@Category I|102|Cellophane paper/tape@@Category I|103|Cellulose@@Category I|104|Cellulose acetate@@Category I|105|Cellulose acetate films@@Category I|106|Ceresin wax@@Category I|107|Chaff@@Category I|108|Chinese inset wax@@Category I|109|Chinese tallow@@Category I|110|Chinese wood oil@@Category I|111|Chip (particle) board@@Category I|112|Chloral@@Category I|113|Chloroform@@Category I|114|Chlorowax@@Category I|115|Chocolates@@Category I|116|Chopped maize@@Category I|117|Chromyl Chloride@@Category I|118|Cineol@@Category I|119|Cinnabar@@Category I|120|Citral@@Category I|121|Citric acid@@Category I|122|Citronellal@@Category I|123|Citronellol@@Category I|124|CKD Kits of Automobiles@@Category I|125|Cloth, Asphalted@@Category I|126|Coaltar and coal pitch@@Category I|127|Coaltar distillate@@Category I|128|Cocoa beans@@Category I|129|Cocoa fat@@Category I|130|Cocoa oil@@Category I|131|Coconut fat@@Category I|132|Coconut oil@@Category I|133|Cod-liver oil@@Category I|134|Coffee and substitutes@@Category I|135|Coir yarn@@Category I|136|Colamine, Colophony@@Category I|137|Complex fertilizers@@Category I|138|Copal@@Category I|139|Copper sulphide@@Category I|140|Copra@@Category I|141|Copra cake/meal@@Category I|142|Cordage@@Category I|143|Coriander oil@@Category I|144|Cork@@Category I|145|Cork wood@@Category I|146|Corn oil@@Category I|147|Cotton fibre in pressed bales@@Category I|148|Cotton oil@@Category I|149|Cotton seed oil@@Category I|150|Cotton seed/cake@@Category I|151|Creosote@@Category I|152|Creosote oil@@Category I|153|Cresidine@@Category I|154|Cresol@@Category I|155|Cresylic acid@@Category I|156|Cross Linked Polyethylene Cable@@Category I|157|XLPE@@Category I|158|Croton oil@@Category I|159|Crotonic acid@@Category I|160|Dammer resin@@Category I|161|Decahydronaphthalene@@Category I|162|Decalin@@Category I|163|Decanal@@Category I|164|Dextrin@@Category I|165|Diacetin@@Category I|166|Diallyl phthalate@@Category I|167|Diamyl phthalate@@Category I|168|Diamyl sulphide@@Category I|169|Dibromodifluromethane@@Category I|170|Dibutoxy tetraglycol@@Category I|171|Dibutyl phthalate@@Category I|172|Dibutyl sebacate@@Category I|173|Dibutyl tartrate@@Category I|174|Dichlorohydrin@@Category I|175|Dichloromethane@@Category I|176|D.D.T@@Category I|177|Dicyclo-diepoxy-carboxylate@@Category I|178|Dicyclohexylamine@@Category I|180|Diethyl malonate@@Category I|181|Diethyl oxalate@@Category I|182|Diethyl phthalate@@Category I|183|Diethyl succinate@@Category I|184|Dimethyl cynanmide@@Category I|185|Dioctyl phthalate@@Category I|186|Dried fish@@Category I|187|Dried milkpowder@@Category I|188|Dried leaves of all kinds@@Category I|189|Dyes of all kinds@@Category I|190|Earth wax@@Category I|191|Edible fat@@Category I|192|Edible oil@@Category I|193|Elemi oil@@Category I|194|Endrin@@Category I|195|Epoxy resin@@Category I|196|Ethoxy resins@@Category I|197|Ethyl sulphate@@Category I|198|Eugenol@@Category I|199|Fats@@Category I|200|Feathers and down@@Category I|201|Felt@@Category I|202|Fibrous plants@@Category I|203|Fire wood@@Category I|204|Fish guano/manure@@Category I|205|Fish oil@@Category I|206|Flax@@Category I|207|Flowers dried of all kinds@@Category I|208|Foam rubber, freon@@Category I|209|Fodder@@Category I|210|Furs@@Category I|211|Galatlith@@Category I|212|Gamboge@@Category I|213|Ganja@@Category I|214|Gases, inert and non-combustible@@Category I|215|Gedda wax@@Category I|216|Gelatine@@Category I|217|Gentac latex or vinyl pyridine latex@@Category I|218|Geranial@@Category I|219|Geraniol@@Category I|220|Geranium oil@@Category I|221|Ghee fat@@Category I|222|Glues of all kinds@@Category I|223|Glycerine@@Category I|224|Goats wool@@Category I|225|Grain meal@@Category I|226|Grass max@@Category I|227|Grass weed@@Category I|228|Grease, lubricating@@Category I|229|Groundnut oil@@Category I|230|Groundnut shelled, cake, meal,@@Category I|231|Guaiacum resin@@Category I|232|Gums@@Category I|233|Gunnies (loose)@@Category I|234|Guttapercha@@Category I|235|Hair@@Category I|236|Hazel nut oil@@Category I|237|Hempseed@@Category I|238|Hempseed oil@@Category I|239|Herbs, dried of all kinds@@Category I|240|Hides & Skin@@Category I|241|Hog fat oil@@Category I|242|Hycol@@Category I|243|Hydrogen peroxide, under@@Category I|244|Hydroquinone@@Category I|245|Hyphone@@Category I|246|lanone Beta@@Category I|247|Indian wax@@Category I|248|Indigo@@Category I|249|Insence@@Category I|250|Iron powder@@Category I|251|Iron pyrites@@Category I|252|Iron sulphides@@Category I|253|Japan tallow@@Category I|254|Javelle water@@Category I|255|Kapok@@Category I|256|Kapok oil/seed@@Category I|257|Kreolin@@Category I|258|Lactose@@Category I|259|Lamp black@@Category I|260|Lanolin@@Category I|261|Lard@@Category I|262|Lard oil@@Category I|263|Latex@@Category I|264|Lauryl Mercaptan@@Category I|265|Lavender oil@@Category I|266|Lead acetate@@Category I|267|Lead Arsemates@@Category I|268|Lead chromate@@Category I|269|Leather@@Category I|270|Leaves, dried of all kinds@@Category I|271|Lemon glass oil@@Category I|272|Lime, unslaked@@Category I|273|Lindane@@Category I|274|Linen@@Category I|275|Linoleum@@Category I|276|Linolic acid@@Category I|277|Linseed@@Category I|278|Linseed cake@@Category I|279|Linseed oil@@Category I|280|Liquor amonia@@Category I|281|Low Matalurgical Coke@@Category I|282|Magnesium@@Category I|283|Magnesium alloy@@Category I|284|Magnesium shavings@@Category I|285|Maize oil@@Category I|286|Maleic anhydride@@Category I|287|Manganese Acetate@@Category I|288|Manhaden oil@@Category I|289|Man-made fibres and clean waste in pressed bales@@Category I|290|Mannitol monolaurate@@Category I|291|Margarine@@Category I|292|Mastic@@Category I|293|Mats of all kinds(synthetic or Vegetable)@@Category I|294|Menthol@@Category I|295|Mercury Cyanide@@Category I|296|Mesitylene@@Category I|297|Methyl bromide@@Category I|298|Methyl cinnamate@@Category I|299|Middle oils@@Category I|300|Milk fat@@Category I|301|Milk of sugar (lactose)@@Category I|302|Milk powder@@Category I|303|Molasses@@Category I|304|Molasses meal@@Category I|305|Mosquito mat/coil@@Category I|306|Mowra flowers@@Category I|307|Mungo@@Category I|308|Mustard oil@@Category I|309|Mutton tallow@@Category I|310|Myrrh@@Category I|311|Naphthalene@@Category I|312|Naphthylthio@@Category I|313|Natural rubber@@Category I|314|Neat's foot fat@@Category I|315|Neat's foot oil@@Category I|316|Neohexane@@Category I|317|Nicotine acid@@Category I|318|Niobe oil@@Category I|319|Nitrogen monoxide@@Category I|320|Nitrophenol (para)@@Category I|321|Nitrous oxide@@Category II|1|Accelerene@@Category II|2|Acetyl peroxide@@Category II|3|All flammable liquids having a flash point between 320C and 650C (both inclusive)@@Category II|4|Aloe fibres, loose@@Category II|5|Aluminium carbide@@Category II|6|Aluminium ferrosilicon@@Category II|7|Aluminium hydride@@Category II|8|Aluminium nitrate@@Category II|9|Aluminium phosphide@@Category II|10|Aluminium powder/dust@@Category II|11|Ammonium chromate@@Category II|12|Ammonium cyanide@@Category II|13|Ammonium dichromate@@Category II|14|Ammonium persulphate@@Category II|15|Amphetamine@@Category II|16|Amyl nitrite@@Category II|17|Angelica oil@@Category II|18|Antimony pentoxide@@Category II|19|Aqua Forties (Nitric acid)@@Category II|20|Aqua regia@@Category II|21|Balsams@@Category II|22|Bamboos (whole)@@Category II|23|Barium@@Category II|24|Barium azide@@Category II|25|Barium chlorate/chlorite@@Category II|26|Barium chromate@@Category II|27|Barium dioxide@@Category II|28|Barium hydride@@Category II|29|Barium manganate@@Category II|30|Barium nitrate@@Category II|31|Barium perchlorate@@Category II|32|Barium permanganate@@Category II|33|Barium peroxide@@Category II|34|Beets, sliced, dried@@Category II|35|Benzoyl peroxide, wet@@Category II|36|Bergamot oil@@Category II|37|Bleaching powder@@Category II|38|Bran dust@@Category II|39|Bromine@@Category II|40|Bromine pentafluoride@@Category II|41|Bromine trifluoride@@Category II|42|Bromoacetone@@Category II|43|Bronze powder@@Category II|44|Butyl nitrate@@Category II|45|Cadmium nitrate@@Category II|46|Caesium peroxide@@Category II|47|Calamus oil@@Category II|48|Calcium@@Category II|49|Calcium aluminium hydride@@Category II|50|Calcium amide@@Category II|51|Calcium amonium nitrate@@Category II|52|Calcium bromate@@Category II|53|Calcium chlorate@@Category II|54|Calcium cyanamide@@Category II|55|Calcium hypochlorite@@Category II|56|Calcium nitrate@@Category II|57|Calcium perchlorate@@Category II|58|Calcium permanganate@@Category II|59|Calcium peroxide@@Category II|60|Calcium phosphide@@Category II|61|Calcium phosphite@@Category II|62|Calcium resinate@@Category II|63|Calcium silicide@@Category II|64|Camomile oil@@Category II|65|Canadian balsam@@Category II|66|Caraway oil@@Category II|67|Celluloid@@Category II|68|Cellulose nitrate silk@@Category II|69|Celluoid films@@Category II|70|Chile saltpeter@@Category II|71|Chlorates (inorganic) not otherwise specifically provided for@@Category II|72|Chlorine@@Category II|73|Chloropicrin@@Category II|74|Chlorosulphuric acid@@Category II|75|Cholorites (inorganic) not otherwise specifically provided for@@Category II|76|Chromic acid@@Category II|77|Chromic anhydride@@Category II|78|Chromic oxide@@Category II|79|Chromium trioxide@@Category II|80|Cinnamon@@Category II|81|Citronella oil@@Category II|82|Clove oil@@Category II|83|Cobalt nitrate@@Category II|84|Cobalt potassium nitrite@@Category II|85|Collodion paper@@Category II|86|Collodion silk@@Category II|87|Collodion-cotton@@Category II|88|Copper nitrate@@Category II|89|Cotton Fibres (others)@@Category II|90|Crackers@@Category II|91|Cyanogen bromide@@Category II|92|Dichloroisocynuric acid@@Category II|93|Diketene@@Category II|94|Ethyl silicate@@Category II|95|Eucalyptus oil@@Category II|96|Ferric nitrate@@Category II|97|Ferrosilicon@@Category II|98|Firelighters@@Category II|99|Fireworks@@Category II|100|Fish meal/scrap@@Category II|101|Flares@@Category II|102|Flash powder, Photographic@@Category II|103|Floor wax@@Category II|104|Fluorine@@Category II|105|Foam plastics@@Category II|106|Fuse@@Category II|107|Fuses without explosives@@Category II|108|Guano@@Category II|109|Guano and fish-meal@@Category II|110|Gunpowder detonating caps@@Category II|111|Hemp@@Category II|112|Hop oil@@Category II|113|Hops@@Category II|114|Hydrazine@@Category II|115|Hydrobromic acid@@Category II|116|Hydrochemical acid@@Category II|117|Hydrocyanic acid@@Category II|118|Hydrofluoric acid@@Category II|119|Hydrogen peroxide, 30-90%@@Category II|120|Ignition cords (fuses)@@Category II|121|lodine@@Category II|122|Irish oil@@Category II|123|Jasmine oil@@Category II|124|Juniper oil@@Category II|125|Jute in pressed bales@@Category II|126|Lavender oil@@Category II|127|Lead dioxide@@Category II|128|Lead nitrate@@Category II|129|Lead peroxide@@Category II|130|Lead tetra methyl@@Category II|131|Linalool@@Category II|132|Lignite (Coke)@@Category II|133|Liquid insecticides/pesticides/disinfectants flash point 32C to 65C@@Category II|134|Liquid insecticides/pesticides below 32c in sealed tins/bottles@@Category II|135|Lithium@@Category II|136|Lithium chlorate@@Category II|137|Lithium perchlorate@@Category II|138|Lithium peroxide@@Category II|139|Lupulin (hop meal)@@Category II|140|Magnesium chlorate@@Category II|141|Magnesium dioxide@@Category II|142|Magnesium dust, also dust of high magnesium alloys.@@Category II|143|Magnesium nitrate@@Category II|144|Magnesium perborate@@Category II|145|Magnesium perchlorate@@Category II|146|Magnesium peroxide@@Category II|147|Magnesium powder@@Category II|148|Malt germ@@Category II|149|Manganese dioxide@@Category II|150|Manganese borate@@Category II|151|Manganese green@@Category II|152|Manganese nitrate@@Category II|153|Manganese perborate@@Category II|154|Manganese perchlorate@@Category II|155|Manganese peroxide@@Category II|156|Manganese powder@@Category II|157|Marjorum oil@@Category II|158|Matches (safety/non-safety)@@Category II|159|Mercuric iodate@@Category II|160|Mercurous nitrate@@Category II|161|Neroli (oil of orange flowers)@@Category II|162|Nickel carbonyl@@Category II|163|Nickel nitrate@@Category II|164|Nickel peroxide@@Category II|165|Nickel tetracarbonyl@@Category II|166|Nickel/Nitrites of all kinds not otherwise specifically provided for@@Category II|167|Nitric acid@@Category II|168|Nitrite of soda@@Category II|169|Nitro silk@@Category II|170|Nitrocellulose film@@Category II|171|Nitrocellulose plastics@@Category II|172|Nitrocellulose silk@@Category II|173|Nitrocotton threads@@Category II|174|Nitrogen dioxide@@Category II|175|Nitrosyl chloride@@Category II|176|Oil of cinnamon@@Category II|177|Oil of thyme@@Category II|178|Orange (peel) oil@@Category II|179|Orange blossom oil@@Category II|180|Orange oil@@Category II|181|Paints, thinners and varnishes flash point 32C to 65C@@Category II|182|Paints, thinners and varnishes below 32C in sealed tins/bottles@@Category II|183|Parathion@@Category II|184|Peppermint oil@@Category II|185|Perchloric acid in aqueous solution > 70%@@Category II|186|Percussion caps (for toys)@@Category II|187|Periodic acid@@Category II|188|Phosphoric acid@@Category II|189|Phosphorous (red)@@Category II|190|Phosphorous oxychloride@@Category II|191|Phosphorous pentachloride@@Category II|192|Phosphorous pentasulphide@@Category II|193|Phosphorous sesquisulphide@@Category II|194|Phosphorous sulphide@@Category II|195|Phosphorous trichloride@@Category II|196|Phosphoryl chloride@@Category II|197|Pine tar@@Category II|198|Pinene@@Category II|199|Portugal oil (Orange peel oil)@@Category II|200|Potable spirits below 32C in sealed tins/bottles@@Category II|201|Potassium amide@@Category II|202|Potassium ammonium nitrate@@Category II|203|Potassium bromate@@Category II|204|Potassium chlorate@@Category II|205|Potassium dichromate@@Category II|206|Potassium dithionate@@Category II|207|Potassium hypochlorite@@Category II|208|Potassium hyposulphite@@Category II|209|Potassium nitrate@@Category II|210|Potassium nitrite@@Category II|211|Potassium perchlorate@@Category II|212|Potassium permanganate@@Category II|213|Potassium peroxide@@Category II|214|Potassium persulphate@@Category II|215|Potassium stontium chlorate@@Category II|216|Potassium sulphide@@Category II|217|Pressed residue from oil seeds@@Category II|218|Pyrolusite@@Category II|219|Pyrotechnical articles@@Category II|220|Rags@@Category II|221|Rockets (fire works)@@Category II|222|Root turpentine oil@@Category II|223|Rose oil@@Category II|224|Rosemary oil@@Category II|225|Rubidium@@Category II|226|Sage oil@@Category II|227|Salt petre@@Category II|228|Selenium dioxide@@Category II|229|Sesquisulphide matches@@Category II|230|Silver permanganate@@Category II|231|Silver Nitrate@@Category II|232|Silver Nitrite@@Category II|233|Smoke generators@@Category II|234|Sodamide@@Category II|235|Sodium amalgam@@Category II|236|Sodium amide@@Category II|237|Sodium borohydride@@Category II|238|Sodium chlorate@@Category II|239|Sodium chlorite@@Category II|240|Sodium Dichloro-s-Triazinetrione and Dihydrate@@Category II|241|Sodium dichromate@@Category II|242|Sodium dithionite@@Category II|243|Sodium hydrosulphide@@Category II|244|Sodium hydrosulphite@@Category II|245|Sodium hypochlorite@@Category II|246|Sodium Nitrate@@Category II|247|Sodium Nitrite@@Category II|248|Sodium nitroethane@@Category II|249|Sodium perborate@@Category II|250|Sodium perchlorate@@Category II|251|Sodium periodate@@Category II|252|Sodium permanganate@@Category II|253|Sodium peroxide@@Category II|254|Sodium persulphate@@Category II|255|Soidum hypophosphite@@Category II|256|Sparklers@@Category II|257|Spruce wood tar@@Category II|258|Staranise oil@@Category II|259|Strontium@@Category II|260|Strontium chlorate@@Category II|261|Strontium nitrate@@Category II|262|Strontium perchlorate@@Category II|263|Strontium peroxide@@Category II|264|Strontium potassium chlorate@@Category II|265|Styrax@@Category II|266|Sulphuric acid, (oleum/fuming/concentrated)@@Category II|267|Sulphuryl chloride@@Category II|268|Thallium nitrate@@Category II|269|Thermit@@Category II|270|Thionyl chloride@@Category II|271|Thorium@@Category II|272|Titanium (sponge or powder form)@@Category II|273|Trichloro-s-triazinetrione@@Category II|274|Trioxane@@Category II|275|Uranium@@Category II|276|Urea nitrate@@Category II|277|Valerian oil@@Category II|278|Vanadium tetrachloride@@Category II|279|Vermouth oil@@Category II|280|Vegetable Fibre like straw, grass, hay etc.@@Category II|281|Vinegar@@Category II|282|Viscose and clean waste thereof, loose@@Category II|283|Volume bark and/or fibres, loose@@Category II|284|Waste of materials falling under Category I@@Category II|285|Wood wool (loose)@@Category II|286|Zinc chloride@@Category II|287|Zinc dithionite@@Category II|288|Zinc hydrosulphite@@Category II|289|Zinc nitrate@@Category II|290|Zinc permanganate@@Category II|291|Zinc peroxide@@Category II|292|Zinc powder@@Category II|293|Zirconium dust powder@@Category II|294|Other Category II Goods@@Category III|1|Activated Carbon, Pyropheric@@Category III|2|All flammable liquids having a flash point below 320C@@Category III|3|Aluminium Alkyl Halides@@Category III|4|Aluminium borohydride@@Category III|5|Aluminium triethyl@@Category III|6|Aluminium trihexyl@@Category III|7|Aluminium tri-isobutyl@@Category III|8|Aluminium trimethyl@@Category III|9|Aluminium tripropyl@@Category III|10|Amatol@@Category III|11|Ammonium bromate@@Category III|12|Ammonium chlorate@@Category III|13|Ammonium Nitrate@@Category III|14|Ammonium nitrate explosives@@Category III|15|Ammonium perchlorate@@Category III|16|Ammonium permanganate@@Category III|17|Ammonium picrate@@Category III|18|Ammunitions@@Category III|19|Amorces@@Category III|20|Arsine@@Category III|21|Azides@@Category III|22|Azimethylene@@Category III|23|Azoimide@@Category III|24|Baggase@@Category III|25|Bamboos (split)@@Category III|26|Benzol peroxide (dry)@@Category III|27|Black powder@@Category III|28|Blasting powder@@Category III|29|Bromo picric acid@@Category III|30|Butyl mercaptan@@Category III|31|Butyl peracetate@@Category III|32|Butyl peroctoate (tert)@@Category III|33|Butyl peroxide (ditert)@@Category III|34|Cadmium fulminate@@Category III|35|Caesium@@Category III|36|Calcium carbide@@Category III|37|Calcium chlorite@@Category III|38|Calcium dithionate@@Category III|39|Calcium hydrite@@Category III|40|Calcium nitrate explosive@@Category III|41|Calcium, pyrophoric@@Category III|42|Cartridges@@Category III|43|Cellulose nitrate powder@@Category III|44|Charcoal@@Category III|45|Cheddite@@Category III|46|Chlorate explosive@@Category III|47|Chloratite@@Category III|48|Chloroazide@@Category III|49|Coal@@Category III|50|Coke@@Category III|51|Collodion@@Category III|52|Collodion wool@@Category III|53|Copper acetylide@@Category III|54|Copper azide@@Category III|55|Copper carbide@@Category III|56|Cordite@@Category III|57|Detonators@@Category III|58|Di (tert) butyl peroxide@@Category III|59|Diazobenzene perchlorate@@Category III|60|Diazobenzeneimide@@Category III|61|Diazo-dinitrophenol@@Category III|62|Diazo-m-nitraline perchlorate@@Category III|63|Diazonium salts@@Category III|64|Diborane@@Category III|65|Dicumyl peroxide@@Category III|66|Diglycol dinitrate@@Category III|67|Dimethyl benzyl peroxide@@Category III|68|Dinitro dihydroxy quinone@@Category III|69|Dinitro glycerine@@Category III|70|Dinitrocellulose@@Category III|71|Dinitrochlorohydrin@@Category III|72|Dinitrocresol@@Category III|73|Dinitroglycol@@Category III|74|Dinitrol@@Category III|75|Dodecanoyl Peroxide@@Category III|76|Dynamite@@Category III|77|Eau de Cologne@@Category III|78|Erythrol Tetranitrate@@Category III|79|Ethyl borate@@Category III|80|Ethylene nitrate@@Category III|81|Explosive charges@@Category III|82|Explosives@@Category III|83|Fulminates@@Category III|84|Fuse, Detonating@@Category III|85|Gases, Combustible@@Category III|86|Gelatine explosive@@Category III|87|Gelatinized nitrocellulose powders@@Category III|88|Glycerine nitrate@@Category III|89|Guanidine nitrate@@Category III|90|Guanidine perchlorate@@Category III|91|Guanylnitrosamino guanyl tetrazene@@Category III|92|Guhr-dynamite@@Category III|93|Gun cotton@@Category III|94|Gun cotton solutions@@Category III|95|Gun powder@@Category III|96|Hay@@Category III|97|Hydrazine nitrate@@Category III|98|Hydrazoic acid@@Category III|99|Hydrogen cyanide@@Category III|100|Hydrogen peroxide, 90-100%@@Category III|101|Hydrogen selenide@@Category III|102|Hydrogen sulphide@@Category III|103|Hydrolith@@Category III|104|Instant ignition cord@@Category III|105|Iron carbonyl@@Category III|106|Iron Penta Carbonyl@@Category III|107|Jute (Others)@@Category III|108|Kresylit@@Category III|109|Lead azide@@Category III|110|Lead picrate@@Category III|111|Lead styphnate@@Category III|112|Lead trinitroresorcinate@@Category III|113|Leco (Coke)@@Category III|114|Liquid insecticides/pesticides/disinfectants flash point below 32C@@Category III|115|Liquid Petroleum Gas@@Category III|116|Lithium aluminium hydride@@Category III|117|Lithium amide@@Category III|118|Lithium borohydride@@Category III|119|Lithium butyl@@Category III|120|Lithium hydride@@Category III|121|Lyddite@@Category III|122|Mannitol hexanitrate@@Category III|123|Mercuric cyanate@@Category III|124|Mercury cyanate@@Category III|125|Mercury fulminate@@Category III|126|Mining charges@@Category III|127|Mixed powder (nitrocellulose)@@Category III|128|Nitrate explosives@@Category III|129|Nitro-carbonitrate@@Category III|130|Nitrocellulose@@Category III|131|Nitrocellulose powder@@Category III|132|Nitrogeletine dynamite@@Category III|133|Nitrogen chloride@@Category III|134|Nitrogen trichloride@@Category III|135|Nitroglycerine@@Category III|136|Nitroglycerine powder@@Category III|137|Nitroguanidine@@Category III|138|Nitromannital@@Category III|139|Nitro-starch@@Category III|140|Nitro-sugar@@Category III|141|Ozonides@@Category III|142|Oils and greasy waste of cotton/viscose@@Category III|143|Paints, thinners, varnishes flash point below 32C@@Category III|144|Pantonone@@Category III|145|Peracetic acid@@Category III|146|Perchlorate explosives@@Category III|147|Perchlorates of all kinds not otherwise specifically provided for@@Category III|148|Perchloric acid > 70%@@Category III|149|Perchromates@@Category III|150|Percussion capsules@@Category III|151|Phosphides@@Category III|152|Phosphine@@Category III|153|Phosphoretted hydrogen@@Category III|154|Phosphorous (yellow or white)@@Category III|155|Picramic acid@@Category III|156|Picrates@@Category III|157|Picratol@@Category III|158|Picric acid@@Category III|159|Picryl chloride@@Category III|160|Plasticized dynamite@@Category III|161|Potassium@@Category III|162|Potassium amalgam@@Category III|163|Potassium hydride@@Category III|164|Primers (explosives)@@Category III|165|Propargyl bromide@@Category III|166|Prussic acid@@Category III|167|Raney nickel@@Category III|168|RDX@@Category III|169|Rubber cement@@Category III|170|Safety explosives@@Category III|171|Saltpetre blasting powder@@Category III|172|Silanes@@Category III|173|Silver acetylide@@Category III|174|Silver fulminate@@Category III|175|Silver picrate@@Category III|176|Sodium@@Category III|177|Sodium azide@@Category III|178|Sodium dinitro phenol@@Category III|179|Sodium hydride@@Category III|180|Sodium hydrosulphite@@Category III|181|Solein@@Category III|182|Starch nitrate@@Category III|183|Straw in pressed bales@@Category III|184|Styphnic acid@@Category III|185|Succinic peroxide@@Category III|186|Sugar nitrates@@Category III|187|Tetranitroaniline@@Category III|188|Tetranitrobenzene@@Category III|189|Tetranitronaphthalene@@Category III|190|Tetranitrophenol@@Category III|191|Titanium hydride@@Category III|192|TNT@@Category III|193|Trinitrocellulose@@Category III|194|Trinitrogylcerin@@Category III|195|Trinitronaphthalene@@Category III|196|Trinitrophenol@@Category III|197|Trinitrophenolmethylnitramine@@Category III|198|Trinitro-toluene@@Category III|199|Tripropylaluminium@@Category III|200|Urea peroxide@@Category III|201|Waste of materials falling under Cat II & III@@Category III|202|Zinc phosphide@@Category III|203|Zinc picrate@@Category III|204|Zirconium hydride@@Category III|205|Other Category III Goods";
 
 const hazardousGoodsDataset = rawHazData.split('@@').map(item => {
     const parts = item.split('|');
@@ -1791,6 +1751,30 @@ function evaluateRowVisibility() {
     }
 }
 
+// CHANGE 6: UNIFIED CLEAR MASTER HANDLER TO ERAPE SEARCH TRACKING AND METADATA LIQUIDATION
+function clearSearchField(type) {
+    if (type === 'BSUS') {
+        document.getElementById('bsusOccupancySearch').value = "";
+        document.getElementById('selectedBsusIndex').value = "";
+        document.getElementById('bsusMetaDisplay').classList.add('hidden');
+        document.getElementById('b-meta-code').innerText = "-";
+        document.getElementById('b-meta-sec').innerText = "-";
+        document.getElementById('b-meta-cat').innerText = "-";
+        document.getElementById('b-meta-rate').innerText = "-";
+    } else if (type === 'STANDARD') {
+        document.getElementById('occupancySearch').value = "";
+        document.getElementById('selectedOccupancyIndex').value = "";
+        document.getElementById('metaBox').classList.add('hidden');
+        document.getElementById('meta-rate').innerText = "-";
+        document.getElementById('meta-code').innerText = "-";
+        document.getElementById('meta-section').innerText = "-";
+        document.getElementById('meta-category').innerText = "-";
+        document.getElementById('meta-ho').innerText = "-";
+        document.getElementById('meta-declined').innerText = "-";
+    }
+    runCalculation();
+}
+
 function calculateAggregateSumInsured() {
     const building = parseFloat(document.getElementById('siBuilding').value) || 0;
     const machinery = parseFloat(document.getElementById('siPlantMachinery').value) || 0;
@@ -1802,17 +1786,67 @@ function calculateAggregateSumInsured() {
     const floating = parseFloat(document.getElementById('siStockFloating').value) || 0;
 
     const totalSum = building + machinery + stockRaw + stockProc + fff + finished + other + floating;
-    document.getElementById('sumInsured').value = totalSum;
+    
+    // CHANGE 3: APPLIED COMMA DIGIT GROUPING SEPARATOR IND-STYLE ON CORE READONLY VALUE TARGETS
+    document.getElementById('sumInsured').value = totalSum.toLocaleString('en-IN');
     
     runCalculation();
 }
 
 function runCalculation() {
-    const si = parseFloat(document.getElementById('sumInsured').value) || 0;
+    // Correctly parse the dynamic number regardless of styling separators
+    const rawSiVal = document.getElementById('sumInsured').value.toString().replace(/,/g, '');
+    const si = parseFloat(rawSiVal) || 0;
     const floatingSi = parseFloat(document.getElementById('siStockFloating').value) || 0;
     const M = si / 1000; 
 
-    const formattedSiText = si.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    // =========================================================================
+    // DYNAMIC CRITICAL ALERT WARNING MATRIX (Changes 3, 4, 5)
+    // =========================================================================
+    const warningPanel = document.getElementById('tierWarningBanner');
+    warningPanel.classList.add('hidden');
+    warningPanel.innerText = "";
+
+    if (selectedPolicyType === 'BSUS') {
+        if (si > 50000000 && si <= 500000000) {
+            warningPanel.innerText = "T.S.I > 5 Cr Choose BSUS";
+            warningPanel.classList.remove('hidden');
+        } else if (si > 500000000) {
+            warningPanel.innerText = "T.S.I > 50 Cr Choose SFSP";
+            warningPanel.classList.remove('hidden');
+        }
+    } else if (selectedPolicyType === 'BLUS') {
+        if (si < 50000000) {
+            warningPanel.innerText = "T.S.I < 5 Cr Choose BSUS";
+            warningPanel.classList.remove('hidden');
+        } else if (si > 500000000) {
+            warningPanel.innerText = "T.S.I > 50 Cr Choose SFSP";
+            warningPanel.classList.remove('hidden');
+        }
+    } else if (selectedPolicyType === 'SFSP') {
+        if (si < 50000000) {
+            warningPanel.innerText = "T.S.I < 5 Cr Choose BSUS";
+            warningPanel.classList.remove('hidden');
+        } else if (si > 50000000 && si <= 500000000) {
+            warningPanel.innerText = "T.S.I >5 Cr & <=50 Cr Choose BLUS";
+            warningPanel.classList.remove('hidden');
+        }
+    }
+
+    // =========================================================================
+    // CHANGE 1: FLOATER ACTIVATION DYNAMICALLY BLOCKS KUTCHA VALUE RULESETS
+    // =========================================================================
+    const constSelectField = document.getElementById('construction');
+    if (selectedPolicyType === 'BSUS' && document.getElementById('bsus_floater_select').value === 'yes') {
+        constSelectField.value = 'pucca';
+        constSelectField.disabled = true;
+    } else {
+        constSelectField.disabled = false;
+    }
+    evaluateRowVisibility();
+
+    // FORMAT INTEGRATION WITH COMMA PATTERNS (Change 3)
+    const formattedSiText = si.toLocaleString('en-IN');
     document.getElementById('row-summary-si').innerText = formattedSiText;
     if (document.getElementById('visible-summary-si')) {
         document.getElementById('visible-summary-si').innerText = formattedSiText;
@@ -1822,14 +1856,24 @@ function runCalculation() {
         const bsusIndexVal = document.getElementById('selectedBsusIndex').value;
         const isBsusManual = document.getElementById('bsusEnterRateManuallyToggle').value === 'yes';
         
-        if (bsusIndexVal === "" && !isBsusManual) return;
+        if (bsusIndexVal === "" && !isBsusManual) {
+            // Flush display rows to zero safely on deselection or clearance
+            const bsusRows = ['br_prem_1', 'br_prem_2', 'br_prem_3', 'br_prem_4', 'br_prem_5', 'br_prem_8', 'br_prem_9', 'br_prem_10', 'br_prem_11', 'br_prem_12', 'br_prem_13', 'br_prem_14', 'br_survey_factor_prem', 'br_prem_15', 'total-e', 'prem-gst', 'total-payable'];
+            bsusRows.forEach(id => {
+                const el = document.getElementById(id);
+                if(el) el.innerText = "0";
+            });
+            return;
+        }
         
         let category = 0;
         let section = "IV";
+        let parsedRiskCode = "";
         if (bsusIndexVal !== "") {
             const record = bsusRateSchedule[parseInt(bsusIndexVal)];
             category = record.cat;
             section = record.sec.trim();
+            parsedRiskCode = record.code ? record.code.trim() : "";
         }
 
         let catModifierWeight = 0; 
@@ -1839,7 +1883,6 @@ function runCalculation() {
         else if (category === 3) { catModifierWeight = 0.25;  flexaModLabel = "+25.00 %"; }
         else if (category === 4) { catModifierWeight = 1.60;  flexaModLabel = "+160.00 %"; }
 
-        // Row 1: FLEXA RATE (4 Decimals)
         let flexaRate = 0;
         if (isBsusManual) {
             flexaRate = parseFloat(document.getElementById('bsusManualRateValue').value) || 0;
@@ -1848,29 +1891,33 @@ function runCalculation() {
                 flexaRate = bsusRateSchedule[parseInt(bsusIndexVal)].rate;
             }
         }
-        const prem1 = M * flexaRate;
+        
+        // =========================================================================
+        // CHANGE 2 & 3: WHOLE INTEGER ROUNDING AND COMMA ASSIGNMENT FOR BSUS LEDGER
+        // =========================================================================
+        const prem1 = Math.round(M * flexaRate);
         document.getElementById('br_rate_1').innerText = flexaRate.toFixed(4);
-        document.getElementById('br_prem_1').innerText = prem1.toFixed(2);
+        document.getElementById('br_prem_1').innerText = prem1.toLocaleString('en-IN');
 
-        const prem2 = prem1 * catModifierWeight;
+        const prem2 = Math.round(prem1 * catModifierWeight);
         document.getElementById('br_rate_2').innerText = flexaModLabel;
-        document.getElementById('br_prem_2').innerText = (prem2 >= 0 ? "+" : "") + prem2.toFixed(2);
+        document.getElementById('br_prem_2').innerText = (prem2 >= 0 ? "+" : "") + prem2.toLocaleString('en-IN');
 
-        const prem3 = prem1 + prem2;
+        const prem3 = Math.round(prem1 + prem2);
         const rate3 = M > 0 ? (prem3 / M) : 0;
         document.getElementById('br_rate_3').innerText = rate3.toFixed(4);
-        document.getElementById('br_prem_3').innerText = prem3.toFixed(2);
+        document.getElementById('br_prem_3').innerText = prem3.toLocaleString('en-IN');
 
         const isKutcha = document.getElementById('construction').value === 'kutcha';
         const rate4 = isKutcha ? 4.0000 : 0.0000;
-        const prem4 = M * rate4;
+        const prem4 = Math.round(M * rate4);
         document.getElementById('br_rate_4').innerText = rate4.toFixed(4);
-        document.getElementById('br_prem_4').innerText = prem4.toFixed(2);
+        document.getElementById('br_prem_4').innerText = prem4.toLocaleString('en-IN');
 
-        const prem5 = prem3 + prem4;
+        const prem5 = Math.round(prem3 + prem4);
         const rate5 = M > 0 ? (prem5 / M) : 0;
         document.getElementById('br_rate_5').innerText = rate5.toFixed(4);
-        document.getElementById('br_prem_5').innerText = prem5.toFixed(2);
+        document.getElementById('br_prem_5').innerText = prem5.toLocaleString('en-IN');
 
         const chosenZone = document.getElementById('bsus_eq_zone_select').value;
         let baseUnadjustedEq = 0.05;
@@ -1888,12 +1935,18 @@ function runCalculation() {
         }
         
         const adjustedEqRate = baseUnadjustedEq * (1 + catModifierWeight);
-        const prem8 = M * adjustedEqRate;
+        const prem8 = Math.round(M * adjustedEqRate);
         document.getElementById('br_rate_8').innerText = adjustedEqRate.toFixed(4);
-        document.getElementById('br_prem_8').innerText = prem8.toFixed(2);
+        document.getElementById('br_prem_8').innerText = prem8.toLocaleString('en-IN');
 
+        // =========================================================================
+        // CHANGE 7: CONDITIONAL STFI TARIFF LEVEL RATING INJECTOR FOR OPEN STORAGE CODES
+        // =========================================================================
         let baseUnadjustedStfi = 0.25;
-        if (section === "III") {
+        let numericCode = parseInt(parsedRiskCode);
+        if (numericCode >= 4012 && numericCode <= 4019) {
+            baseUnadjustedStfi = 1.50;
+        } else if (section === "III") {
             baseUnadjustedStfi = 0.15;
         } else if (section === "VI") {
             baseUnadjustedStfi = 0.35;
@@ -1902,40 +1955,40 @@ function runCalculation() {
         }
         
         const adjustedStfiRate = baseUnadjustedStfi * (1 + catModifierWeight);
-        const prem9 = M * adjustedStfiRate;
+        const prem9 = Math.round(M * adjustedStfiRate);
         document.getElementById('br_rate_9').innerText = adjustedStfiRate.toFixed(4);
-        document.getElementById('br_prem_9').innerText = prem9.toFixed(2);
+        document.getElementById('br_prem_9').innerText = prem9.toLocaleString('en-IN');
 
         const isTerrorismOptedOut = document.getElementById('terrorismOptOutToggle').value === 'yes';
         const terrorismRateValue = isTerrorismOptedOut ? 0.0000 : ((section === "III") ? 0.13 : 0.21);
-        const prem10 = M * terrorismRateValue;
+        const prem10 = Math.round(M * terrorismRateValue);
         document.getElementById('br_rate_10').innerText = terrorismRateValue.toFixed(4);
-        document.getElementById('br_prem_10').innerText = prem10.toFixed(2);
+        document.getElementById('br_prem_10').innerText = prem10.toLocaleString('en-IN');
 
-        const prem11 = prem5 + prem8 + prem9 + prem10;
+        const prem11 = Math.round(prem5 + prem8 + prem9 + prem10);
         const rate11 = M > 0 ? (prem11 / M) : 0;
         document.getElementById('br_rate_11').innerText = rate11.toFixed(4);
-        document.getElementById('br_prem_11').innerText = prem11.toFixed(2);
+        document.getElementById('br_prem_11').innerText = prem11.toLocaleString('en-IN');
 
         let discMax10PctVal = parseFloat(document.getElementById('bsus_discount_pct_input').value) || 0;
         if (discMax10PctVal > 10) { discMax10PctVal = 10; document.getElementById('bsus_discount_pct_input').value = 10; }
         if (discMax10PctVal < 0) { discMax10PctVal = 0; document.getElementById('bsus_discount_pct_input').value = 0; }
         
-        const prem12 = -1 * (prem11 * (discMax10PctVal / 100));
-        document.getElementById('br_prem_12').innerText = prem12.toFixed(2);
+        const prem12 = Math.round(-1 * (prem11 * (discMax10PctVal / 100)));
+        document.getElementById('br_prem_12').innerText = prem12.toLocaleString('en-IN');
 
-        const prem13 = prem11 + prem12;
+        const prem13 = Math.round(prem11 + prem12);
         const rate13 = M > 0 ? (prem13 / M) : 0;
         document.getElementById('br_rate_13').innerText = rate13.toFixed(4);
-        document.getElementById('br_prem_13').innerText = prem13.toFixed(2);
+        document.getElementById('br_prem_13').innerText = prem13.toLocaleString('en-IN');
 
         const isFloaterActiveBSUS = document.getElementById('bsus_floater_select').value === 'yes';
-        const prem14 = isFloaterActiveBSUS ? (((floatingSi / 1000) * rate5) * 0.10) : 0;
+        const prem14 = isFloaterActiveBSUS ? Math.round(((floatingSi / 1000) * rate5) * 0.10) : 0;
         const rate14 = M > 0 ? (prem14 / M) : 0;
         document.getElementById('br_rate_14').innerText = rate14.toFixed(4);
-        document.getElementById('br_prem_14').innerText = prem14.toFixed(2);
+        document.getElementById('br_prem_14').innerText = prem14.toLocaleString('en-IN');
 
-        const subtotal_prem = prem13 + prem14;
+        const subtotal_prem = Math.round(prem13 + prem14);
         const subtotal_rate = rate13 + rate14;
 
         let dynamicFeaturesPctSum = 0;
@@ -1945,26 +1998,26 @@ function runCalculation() {
             dynamicFeaturesPctSum += weightInput;
         });
 
-        const survey_prem_mod = subtotal_prem * (dynamicFeaturesPctSum / 100);
+        const survey_prem_mod = Math.round(subtotal_prem * (dynamicFeaturesPctSum / 100));
         const survey_rate_mod = subtotal_rate * (dynamicFeaturesPctSum / 100);
 
         document.getElementById('br_survey_factor_rate').innerText = (dynamicFeaturesPctSum >= 0 ? "+" : "") + dynamicFeaturesPctSum.toFixed(4) + " %";
-        document.getElementById('br_survey_factor_prem').innerText = survey_prem_mod.toFixed(2);
+        document.getElementById('br_survey_factor_prem').innerText = survey_prem_mod.toLocaleString('en-IN');
 
-        const prem15 = subtotal_prem + survey_prem_mod;
+        const prem15 = Math.round(subtotal_prem + survey_prem_mod);
         const rate15 = subtotal_rate + survey_rate_mod;
         document.getElementById('br_rate_15').innerText = rate15.toFixed(4);
-        document.getElementById('br_prem_15').innerText = prem15.toFixed(2);
+        document.getElementById('br_prem_15').innerText = prem15.toLocaleString('en-IN');
 
-        document.getElementById('total-e').innerText = prem15.toFixed(2);
-        let gst = prem15 * 0.18;
-        document.getElementById('prem-gst').innerText = gst.toFixed(2);
-        let totalPayable = prem15 + gst;
-        document.getElementById('total-payable').innerText = totalPayable.toFixed(2);
+        document.getElementById('total-e').innerText = prem15.toLocaleString('en-IN');
+        let gst = Math.round(prem15 * 0.18);
+        document.getElementById('prem-gst').innerText = gst.toLocaleString('en-IN');
+        let totalPayable = Math.round(prem15 + gst);
+        document.getElementById('total-payable').innerText = totalPayable.toLocaleString('en-IN');
         return;
     }
 
-    // STANDARD CALCULATIONS MODES (BGR, BLUS, SFSP)
+    // STANDARD TRADITIONAL CALCULATIONS MODES (BGR, BLUS, SFSP)
     let basicPrem = 0;
     let basicRateText = "0.00";
     if (selectedPolicyType === 'BGR') {
@@ -1995,7 +2048,7 @@ function runCalculation() {
     }
 
     document.getElementById('rate-basic').innerText = basicRateText;
-    document.getElementById('prem-basic').innerText = basicPrem.toFixed(2);
+    document.getElementById('prem-basic').innerText = basicPrem.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
     let floaterPrem = 0;
     if (selectedPolicyType !== 'BGR' && document.getElementById('floaterToggle').value === 'yes') {
@@ -2012,7 +2065,7 @@ function runCalculation() {
             }
         }
         floaterPrem = ((floatingSi / 1000) * activeRate) * 0.10;
-        document.getElementById('prem-floater').innerText = floaterPrem.toFixed(2);
+        document.getElementById('prem-floater').innerText = floaterPrem.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     } else {
         document.getElementById('prem-floater').innerText = "0.00";
     }
@@ -2020,19 +2073,19 @@ function runCalculation() {
     let kutchaPrem = 0;
     if (document.getElementById('construction').value === 'kutcha') {
         kutchaPrem = M * 4;
-        document.getElementById('prem-kutcha').innerText = kutchaPrem.toFixed(2);
+        document.getElementById('prem-kutcha').innerText = kutchaPrem.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
 
     let totalA = basicPrem + floaterPrem + kutchaPrem;
-    document.getElementById('total-a').innerText = totalA.toFixed(2);
+    document.getElementById('total-a').innerText = totalA.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
     let discPct = parseFloat(document.getElementById('basicDiscountValue').value) || 0;
     let discountPrem = basicPrem * (discPct / 100);
     document.getElementById('rate-discount').innerText = discPct.toFixed(2) + "%";
-    document.getElementById('prem-discount').innerText = (discountPrem >= 0 ? "+" : "") + discountPrem.toFixed(2);
+    document.getElementById('prem-discount').innerText = (discountPrem >= 0 ? "+" : "") + discountPrem.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
     let totalB = totalA + discountPrem; 
-    document.getElementById('total-b').innerText = totalB.toFixed(2);
+    document.getElementById('total-b').innerText = totalB.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
     let eqPrem = 0;
     let stfiPrem = 0;
@@ -2043,24 +2096,24 @@ function runCalculation() {
         const eqRate = parseFloat(document.getElementById('eqZone').value) || 0;
         eqPrem = M * eqRate;
         document.getElementById('rate-eq').innerText = eqRate > 0 ? eqRate.toFixed(2) + " per mille" : "0.00";
-        document.getElementById('prem-eq').innerText = eqPrem.toFixed(2);
+        document.getElementById('prem-eq').innerText = eqPrem.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
         let stfiVal = document.getElementById('stfiToggle').value;
         let stfiRate = parseFloat(stfiVal) || 0;
         stfiPrem = M * stfiRate;
         document.getElementById('rate-stfi').innerText = stfiRate > 0 ? stfiRate.toFixed(2) + " per mille" : "0.00";
-        document.getElementById('prem-stfi').innerText = stfiPrem.toFixed(2);
+        document.getElementById('prem-stfi').innerText = stfiPrem.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
         totalC = eqPrem + stfiPrem;
-        document.getElementById('total-c').innerText = totalC.toFixed(2);
+        document.getElementById('total-c').innerText = totalC.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
         const ncDiscPct = parseFloat(document.getElementById('natcatDiscountToggle').value) || 0;
         let natcatDiscountPrem = totalC * (ncDiscPct / 100);
         document.getElementById('rate-natcat-disc').innerText = ncDiscPct.toFixed(2) + "%";
-        document.getElementById('prem-natcat-disc').innerText = "-" + natcatDiscountPrem.toFixed(2);
+        document.getElementById('prem-natcat-disc').innerText = "-" + natcatDiscountPrem.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
         totalD = totalB + totalC - natcatDiscountPrem;
-        document.getElementById('total-d').innerText = totalD.toFixed(2);
+        document.getElementById('total-d').innerText = totalD.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
 
     let terrorismPrem = 0;
@@ -2068,17 +2121,17 @@ function runCalculation() {
         const tRate = parseFloat(document.getElementById('terrorismToggle').value) || 0;
         terrorismPrem = M * tRate;
         document.getElementById('rate-terrorism').innerText = tRate > 0 ? tRate.toFixed(2) + " per mille" : "0.00";
-        document.getElementById('prem-terrorism').innerText = terrorismPrem.toFixed(2);
+        document.getElementById('prem-terrorism').innerText = terrorismPrem.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
 
     let totalE = totalD + terrorismPrem;
-    document.getElementById('total-e').innerText = totalE.toFixed(2);
+    document.getElementById('total-e').innerText = totalE.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
     let gst = totalE * 0.18;
-    document.getElementById('prem-gst').innerText = gst.toFixed(2);
+    document.getElementById('prem-gst').innerText = gst.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
     let totalPayable = totalE + gst;
-    document.getElementById('total-payable').innerText = totalPayable.toFixed(2);
+    document.getElementById('total-payable').innerText = totalPayable.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
 function exportToExcel() {
