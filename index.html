@@ -39,6 +39,7 @@
             margin-top: 0;
         }
 
+        /* Tier Prompt Warning Banner */
         .warning-banner {
             background-color: #fee2e2;
             border: 2px solid var(--danger);
@@ -47,8 +48,9 @@
             border-radius: 8px;
             font-weight: 700;
             margin-bottom: 20px;
-            font-size: 1.05rem;
+            font-size: 1.1rem;
             text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
 
         .policy-grid {
@@ -149,13 +151,13 @@
             cursor: not-allowed;
         }
 
-        .search-flex-container {
+        .search-flex-row {
             display: flex;
             gap: 8px;
+            width: 100%;
         }
 
-        .search-container {
-            position: relative;
+        .search-flex-row .search-container {
             flex: 1;
         }
 
@@ -217,6 +219,10 @@
             border-left: 3px solid var(--primary);
             border-radius: 0 4px 4px 0;
         }
+
+        .search-container {
+            position: relative;
+        }
         
         .search-container input {
             padding-left: 32px;
@@ -224,6 +230,34 @@
             background-repeat: no-repeat;
             background-position: 8px center;
             background-size: 16px;
+        }
+
+        .autocomplete-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            max-height: 220px;
+            overflow-y: auto;
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-top: none;
+            border-radius: 0 0 6px 6px;
+            z-index: 1000;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+        }
+
+        .autocomplete-item {
+            padding: 10px 12px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            border-bottom: 1px solid #f1f5f9;
+            text-align: left;
+        }
+
+        .autocomplete-item:hover {
+            background-color: #f0f9ff;
+            color: var(--primary);
         }
 
         .meta-container {
@@ -403,7 +437,7 @@
         <h1 style="font-size: 2.2rem; color: #0f172a; border-bottom: 2px solid var(--primary); padding-bottom: 10px;">NIA Fire Insc Premium Calc</h1>
     </header>
 
-    <!-- DYNAMIC POLICY RULE BANNER -->
+    <!-- PROMPT WARNING ALERTS BANNER CONTAINER -->
     <div id="tierWarningBanner" class="warning-banner hidden"></div>
 
     <!-- STEP 1: CHOOSE YOUR POLICY TYPE -->
@@ -439,42 +473,41 @@
             <div class="si-breakup-grid">
                 <div class="form-group-si">
                     <label for="siBuilding">a) Building</label>
-                    <input type="number" id="siBuilding" class="si-input" value="10000000">
+                    <input type="text" id="siBuilding" class="si-input" value="10000000">
                 </div>
                 <div class="form-group-si">
                     <label for="siPlantMachinery">b) Plant / Machinery</label>
-                    <input type="number" id="siPlantMachinery" class="si-input" value="0">
+                    <input type="text" id="siPlantMachinery" class="si-input" value="0">
                 </div>
                 <div class="form-group-si">
                     <label for="siStockRaw">c) Stock / Raw Material</label>
-                    <input type="number" id="siStockRaw" class="si-input" value="0">
+                    <input type="text" id="siStockRaw" class="si-input" value="0">
                 </div>
                 <div class="form-group-si">
                     <label for="siStockProcess">d) Stock in Process</label>
-                    <input type="number" id="siStockProcess" class="si-input" value="0">
+                    <input type="text" id="siStockProcess" class="si-input" value="0">
                 </div>
                 <div class="form-group-si">
                     <label for="siFFF">e) FFF</label>
-                    <input type="number" id="siFFF" class="si-input" value="0">
+                    <input type="text" id="siFFF" class="si-input" value="0">
                 </div>
                 <div class="form-group-si">
                     <label for="siFinishedGoods">f) Finished Goods</label>
-                    <input type="number" id="siFinishedGoods" class="si-input" value="0">
+                    <input type="text" id="siFinishedGoods" class="si-input" value="0">
                 </div>
                 <div class="form-group-si">
                     <label for="siOtherContents">g) Other Contents</label>
-                    <input type="number" id="siOtherContents" class="si-input" value="0">
+                    <input type="text" id="siOtherContents" class="si-input" value="0">
                 </div>
                 <div class="form-group-si">
                     <label for="siStockFloating" style="color:var(--primary); font-weight: bold;">h) Stock - Floating</label>
-                    <input type="number" id="siStockFloating" class="si-input" value="0" style="border-color:var(--primary);">
+                    <input type="text" id="siStockFloating" class="si-input" value="0" style="border-color:var(--primary);">
                 </div>
             </div>
 
             <!-- Side Head 1 -->
             <div class="form-group distinct-label">
                 <label for="sumInsured">1. Total Sum Insured (₹) <span style="font-size:0.75rem; color:#64748b; font-weight:normal;">(Auto-Calculated)</span></label>
-                <!-- Changed to text to properly display auto-calculated commas -->
                 <input type="text" id="sumInsured" readonly style="background-color: #f1f5f9; font-weight: bold; color: #0f172a;" value="1,00,00,000">
             </div>
 
@@ -502,7 +535,8 @@
             <!-- DYNAMIC NEW SPREADSHEET MATRIX WORKING AREA (BSUS EXCLUSIVE) -->
             <div id="bsusRevampedSection" class="hidden">
                 <div class="bsus-worksheet-panel">
-                    <!-- MOVE REPOSITION CHANGE 7: ENTER FLEXA RATE MANUALLY MOVED JUST ABOVE SEARCH INDEX -->
+                    
+                    <!-- REPOSITION CHANGE 7: ENTER FLEXA RATE MANUALLY MOVED JUST ABOVE SEARCH INDEX -->
                     <div class="form-group" id="bsusManualRateOptionContainer" style="margin-bottom: 14px;">
                         <label for="bsusEnterRateManuallyToggle" style="font-weight: 600; font-size: 0.9rem; color: #0f172a;">Enter Flexa Rate Manually?</label>
                         <select id="bsusEnterRateManuallyToggle" class="bsus-select-field" style="width: 100%;">
@@ -518,12 +552,13 @@
 
                     <div class="form-group" style="margin-bottom: 14px;">
                         <label style="font-weight: 700; color: #0369a1; font-size: 0.95rem;">Select BSUS Occupancy / Risk Schedule Index</label>
-                        <div class="search-flex-container">
+                        <div class="search-flex-row">
                             <div class="search-container">
                                 <input type="text" id="bsusOccupancySearch" placeholder="Search by description or risk code (e.g. 1002, Libraries)..." autocomplete="off" style="border: 2px solid var(--primary); width: 100%;">
                                 <div id="bsusAutocompleteList" class="autocomplete-results hidden"></div>
                             </div>
-                            <button type="button" class="btn-clear" onclick="clearSearchField('BSUS')">CLEAR</button>
+                            <!-- CLEAR BUTTON ATTACHED MECHANICALLY (Change 6) -->
+                            <button type="button" class="btn-clear" onclick="fireSearchClearAction('BSUS')">CLEAR</button>
                         </div>
                         <input type="hidden" id="selectedBsusIndex" value="">
                     </div>
@@ -632,7 +667,7 @@
                                 <td id="br_prem_14" class="text-right">0</td>
                             </tr>
                             <tr>
-                                <!-- CHANGE 8: STR CONTENT STRING REPLACED SUCCESSFULLY -->
+                                <!-- CHANGE 8: LABELLING CONTENT STRING UPDATED SUCCESSFULLY -->
                                 <td class="bsus-row-heading">NET DISC/LOAD – Answer 9 Q’s under Good/Bad Features</td>
                                 <td id="br_survey_factor_rate" class="text-right">0.00 %</td>
                                 <td id="br_survey_factor_prem" class="text-right">0</td>
@@ -688,12 +723,13 @@
                 <!-- Side Head 3 -->
                 <div class="form-group id-commercial distinct-label hidden" id="occupancyContainer">
                     <label for="occupancySearch">3. Occupancy / Risk Selection (Search by Code or Keyword)</label>
-                    <div class="search-flex-container">
+                    <div class="search-flex-row">
                         <div class="search-container">
                             <input type="text" id="occupancySearch" placeholder="Type code or risk description (e.g. 2140, Paint factories)..." autocomplete="off" style="width: 100%;">
                             <div id="autocompleteResultsList" class="autocomplete-results hidden"></div>
                         </div>
-                        <button type="button" class="btn-clear" onclick="clearSearchField('STANDARD')">CLEAR</button>
+                        <!-- CLEAR BUTTON ATTACHED NATIVELY (Change 6) -->
+                        <button type="button" class="btn-clear" onclick="fireSearchClearAction('STANDARD')">CLEAR</button>
                     </div>
                     <input type="hidden" id="selectedOccupancyIndex" value="">
 
@@ -816,79 +852,79 @@
                         <tr id="right_row_basic">
                             <td id="lbl-basic-prem">BASIC PREMIUM</td>
                             <td id="rate-basic">0.00</td>
-                            <td id="prem-basic" class="text-right">0.00</td>
+                            <td id="prem-basic" class="text-right">0</td>
                         </tr>
                         <tr id="row-floater" class="hidden">
                             <td>FLOATER LOADING</td>
                             <td id="rate-floater">10.00% on Stock-Floating S.I.</td>
-                            <td id="prem-floater" class="text-right">0.00</td>
+                            <td id="prem-floater" class="text-right">0</td>
                         </tr>
                         <tr id="row-kutcha" class="hidden">
                             <td>LOADING FOR KUTCHA CONSTRUCTION</td>
                             <td id="rate-kutcha">4.00 per mille on S.I.</td>
-                            <td id="prem-kutcha" class="text-right">0.00</td>
+                            <td id="prem-kutcha" class="text-right">0</td>
                         </tr>
                         <tr class="subtotal-row" id="right_row_total_a">
                             <td id="lbl-total-a">A TOTAL</td>
                             <td>-</td>
-                            <td id="total-a" class="text-right">0.00</td>
+                            <td id="total-a" class="text-right">0</td>
                         </tr>
                         <tr id="right_row_discount">
                             <td>DISCOUNT / LOADING ON BASIC PREMIUM</td>
                             <td id="rate-discount">0.00%</td>
-                            <td id="prem-discount" class="text-right">0.00</td>
+                            <td id="prem-discount" class="text-right">0</td>
                         </tr>
                         <tr class="subtotal-row" id="right_row_total_b">
                             <td>B TOTAL</td>
                             <td>-</td>
-                            <td id="total-b" class="text-right">0.00</td>
+                            <td id="total-b" class="text-right">0</td>
                         </tr>
                         
                         <tr class="row-natcat hidden">
                             <td>ADD EARTHQUAKE COVER</td>
                             <td id="rate-eq">0.00</td>
-                            <td id="prem-eq" class="text-right">0.00</td>
+                            <td id="prem-eq" class="text-right">0</td>
                         </tr>
                         <tr class="row-natcat hidden">
                             <td>ADD STFI COVER</td>
                             <td id="rate-stfi">0.00</td>
-                            <td id="prem-stfi" class="text-right">0.00</td>
+                            <td id="prem-stfi" class="text-right">0</td>
                         </tr>
                         <tr class="subtotal-row row-natcat hidden">
                             <td>C TOTAL EQ & STFI PREMIUM</td>
                             <td>-</td>
-                            <td id="total-c" class="text-right">0.00</td>
+                            <td id="total-c" class="text-right">0</td>
                         </tr>
                         <tr class="row-natcat hidden">
                             <td>DISCOUNT ON NATCAT</td>
                             <td id="rate-natcat-disc">0.00%</td>
-                            <td id="prem-natcat-disc" class="text-right">0.00</td>
+                            <td id="prem-natcat-disc" class="text-right">0</td>
                         </tr>
                         <tr class="subtotal-row row-natcat hidden">
                             <td>D TOTAL</td>
                             <td>-</td>
-                            <td id="total-d" class="text-right">0.00</td>
+                            <td id="total-d" class="text-right">0</td>
                         </tr>
                         
                         <tr id="row-terrorism-line" class="hidden">
                             <td>TERRORISM COVER</td>
                             <td id="rate-terrorism">0.00</td>
-                            <td id="prem-terrorism" class="text-right">0.00</td>
+                            <td id="prem-terrorism" class="text-right">0</td>
                         </tr>
                         <tr class="subtotal-row">
                             <td id="right_net_premium_label">E TOTAL (NET PREMIUM)</td>
                             <td>-</td>
-                            <td id="total-e" class="text-right">0.00</td>
+                            <td id="total-e" class="text-right">0</td>
                         </tr>
                         <tr>
                             <td>GST (18%)</td>
                             <td>18.00%</td>
-                            <td id="prem-gst" class="text-right">0.00</td>
+                            <td id="prem-gst" class="text-right">0</td>
                         </tr>
                         <tr class="final-row">
                             <td>PREMIUM PAYABLE</td>
                             <td>-</td>
-                            <td id="total-payable" class="text-right">0.00</td>
+                            <td id="total-payable" class="text-right">0</td>
                         </tr>
                     </tbody>
                 </table>
@@ -941,8 +977,66 @@
 let selectedPolicyType = 'BGR';
 
 // =========================================================================
-// REFRESHED MASTER BSUS DATABASE FROM 'for BSUS calc new.xls' (289 RECORDS)
+// INPUT VALUE EXTRACTION & RE-FORMATTING SCHEME (Change 3)
 // =========================================================================
+function parseCommasToFloat(val) {
+    if (typeof val === 'number') return val;
+    let clean = val.toString().replace(/,/g, '').trim();
+    return parseFloat(clean) || 0;
+}
+
+// Convert numbers into standard Indian localized formatting structure
+function formatValueToIndianCommas(num, decimals = 0) {
+    if (num === null || num === undefined || isNaN(num)) return "0";
+    let fixedNum = num.toFixed(decimals);
+    let parts = fixedNum.split('.');
+    let integerPart = parts[0];
+    let decimalPart = parts.length > 1 ? '.' + parts[1] : '';
+    
+    let lastThree = integerPart.substring(integerPart.length - 3);
+    let otherNumbers = integerPart.substring(0, integerPart.length - 3);
+    if (otherNumbers !== '') lastThree = ',' + lastThree;
+    let formattedInteger = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
+    
+    return formattedInteger + decimalPart;
+}
+
+// Attach live Indian currency formatting triggers to asset inputs
+function initializeCurrencyInputListeners() {
+    document.querySelectorAll('.si-input').forEach(input => {
+        // Change from generic type number to text to support embedded commas dynamically
+        input.type = "text"; 
+        let rawNum = parseFloat(input.value) || 0;
+        input.value = formatValueToIndianCommas(rawNum, 0);
+
+        input.addEventListener('input', function() {
+            let cursorPosition = this.selectionStart;
+            let originalLength = this.value.length;
+            let numericString = this.value.replace(/,/g, '');
+            
+            if(numericString === "") {
+                this.value = "";
+                calculateAggregateSumInsured();
+                return;
+            }
+            
+            let parsedNumber = parseFloat(numericString);
+            if(isNaN(parsedNumber)) {
+                this.value = "";
+                calculateAggregateSumInsured();
+                return;
+            }
+            
+            this.value = formatValueToIndianCommas(parsedNumber, 0);
+            let lengthDifference = this.value.length - originalLength;
+            this.setSelectionRange(cursorPosition + lengthDifference, cursorPosition + lengthDifference);
+            
+            calculateAggregateSumInsured();
+        });
+    });
+}
+
+// Master Database Schedules
 const bsusRateSchedule = [
   {"sec": "III", "code": "1002", "cat": 1, "desc": "Places of worships", "rate": 0.14},
   {"sec": "III", "code": "1003", "cat": 1, "desc": "Libraries", "rate": 0.21},
@@ -1171,7 +1265,6 @@ const bsusRateSchedule = [
   {"sec": "IV", "code": "2198", "cat": 1, "desc": "Umbrella Assembly factories", "rate": 0.85},
   {"sec": "IV", "code": "2199", "cat": 1, "desc": "Velvet Cloth Manufacturing", "rate": 1.66},
   {"sec": "IV", "code": "2200", "cat": 1, "desc": "Vermicelli factories", "rate": 0.65},
-  {"sec": "IV", "code": "2201", "cat": 1, "desc": "Weigh Bridges", "rate": 0.9},
   {"sec": "IV", "code": "2202", "cat": 2, "desc": "Weaving Mills", "rate": 1.04},
   {"sec": "IV", "code": "2203", "cat": 1, "desc": "Wheat Threshers", "rate": 4.58},
   {"sec": "IV", "code": "2204", "cat": 1, "desc": "Wood seasoning/treatment/ impregnation", "rate": 1.12},
@@ -1233,9 +1326,6 @@ const bsusRateSchedule = [
   {"sec": "IV/V", "code": "4900", "cat": 2, "desc": "Silent risk", "rate": 0.29}
 ];
 
-// =========================================================================
-// MASTER DATABASE FOR BLUS AND SFSP FROM 'for github calc new.xls'
-// =========================================================================
 const standardRates = [
   {"sec": "III", "code": "1002", "cat": "1", "ho": "", "dec": "", "desc": "Places of worship", "blus": 0.12, "sfsp": 0.12},
   {"sec": "III", "code": "1003", "cat": "1", "ho": "", "dec": "", "desc": "Libraries", "blus": 0.21, "sfsp": 0.21},
@@ -1252,7 +1342,7 @@ const standardRates = [
   {"sec": "III", "code": "1014", "cat": "1", "ho": "", "dec": "", "desc": "Cycle Shed", "blus": 0.22, "sfsp": 0.22},
   {"sec": "III", "code": "1015", "cat": "1", "ho": "", "dec": "", "desc": "Dish Antenna", "blus": 0.23, "sfsp": 0.23},
   {"sec": "III", "code": "1016", "cat": "4", "ho": "", "dec": "", "desc": "Indoor stadiums, health Club, Gymnasium and Swimming Pool", "blus": 0.1, "sfsp": 0.1},
-  {"sec": "III", "code": "1017", "cat": "2", "ho": "", "dec": "", "desc": "Cafes, Restaurants, Hotels, Confectioner and Sweet meat sellers, Health Resorts", "blus": 0.3, "sfsp": 0.3},
+  {"sec": "III", "code": "1017", "cat": "2", "ho": "", "dec": "", "desc": "Cafes, Restaurants, Hotels, New Sellers", "blus": 0.3, "sfsp": 0.3},
   {"sec": "III", "code": "1018", "cat": "2", "ho": "", "dec": "", "desc": "Laundries / Dry Cleaning", "blus": 0.5, "sfsp": 0.5},
   {"sec": "III", "code": "1019", "cat": "1", "ho": "", "dec": "", "desc": "Battery Charging Service Stations", "blus": 1.02, "sfsp": 1.02},
   {"sec": "III", "code": "1020", "cat": "1", "ho": "", "dec": "", "desc": "Amusement Parks", "blus": 0.67, "sfsp": 0.67},
@@ -1270,7 +1360,7 @@ const standardRates = [
   {"sec": "IV", "code": "2003", "cat": "2", "ho": "", "dec": "", "desc": "Aerial Ropeway including trolley stations", "blus": 0.66, "sfsp": 0.66},
   {"sec": "IV", "code": "2004", "cat": "3", "ho": "", "dec": "", "desc": "Agarbatti Manufacturing", "blus": 1.76, "sfsp": 1.76},
   {"sec": "IV", "code": "2005", "cat": "2", "ho": "", "dec": "", "desc": "Aircraft Hangers", "blus": 0.87, "sfsp": 0.87},
-  {"sec": "IV", "code": "2006", "cat": "2", "ho": "", "dec": "", "desc": "Airport Terminal Buildings [ including all facilities like Cafes, Shops etc]", "blus": 0.26, "sfsp": 0.26},
+  {"sec": "IV", "code": "2006", "cat": "2", "ho": "", "dec": "", "desc": "Airport Terminal Buildings", "blus": 0.26, "sfsp": 0.26},
   {"sec": "IV", "code": "2008", "cat": "2", "ho": "", "dec": "", "desc": "Aluminium, Zinc, Copper Factories", "blus": 0.63, "sfsp": 0.63},
   {"sec": "IV", "code": "2007", "cat": "3", "ho": "", "dec": "", "desc": "Aluminium/ Magnesium Powder Plants", "blus": 1.05, "sfsp": 1.05},
   {"sec": "IV", "code": "2009", "cat": "2", "ho": "", "dec": "", "desc": "Areca nut and/or Betel nut factories", "blus": 0.83, "sfsp": 0.83},
@@ -1283,158 +1373,158 @@ const standardRates = [
   {"sec": "IV", "code": "2016", "cat": "2", "ho": "", "dec": "", "desc": "Battery Manufacturing", "blus": 0.69, "sfsp": 0.69},
   {"sec": "IV", "code": "2017", "cat": "3", "ho": "", "dec": "", "desc": "Beedi Factories", "blus": 1.05, "sfsp": 1.05},
   {"sec": "IV", "code": "2018", "cat": "2", "ho": "", "dec": "", "desc": "Biscuit Factories", "blus": 0.73, "sfsp": 0.73},
-  {"sec": "IV", "code": "2019", "cat": "3", "ho": "", "dec": "", "desc": "Bituminised Paper and / or Hessian Cloth Manufacturing including Tar Felt Manufacturing", "blus": 1.45, "sfsp": 1.45},
-  {"sec": "IV", "code": "2020", "cat": "3", "ho": "", "dec": "", "desc": "Book Binders, Envelope and Paper Bag Manufacturing", "blus": 1.2, "sfsp": 1.2},
+  {"sec": "IV", "code": "2019", "cat": "3", "ho": "", "dec": "", "desc": "Bituminised Paper/Hessian Cloth/Tar Felt", "blus": 1.45, "sfsp": 1.45},
+  {"sec": "IV", "code": "2020", "cat": "3", "ho": "", "dec": "", "desc": "Book Binders, Envelope and Paper Bag", "blus": 1.2, "sfsp": 1.2},
   {"sec": "IV", "code": "2021", "cat": "2", "ho": "", "dec": "", "desc": "Breweries", "blus": 0.95, "sfsp": 0.95},
-  {"sec": "IV", "code": "2022", "cat": "2", "ho": "", "dec": "", "desc": "Brickworks {including refractories and fire bricks}.", "blus": 0.37, "sfsp": 0.37},
+  {"sec": "IV", "code": "2022", "cat": "2", "ho": "", "dec": "", "desc": "Brickworks {refractories and fire bricks}", "blus": 0.37, "sfsp": 0.37},
   {"sec": "IV", "code": "2023", "cat": "1", "ho": "", "dec": "", "desc": "Bridges - Concrete / Steel", "blus": 0.17, "sfsp": 0.17},
   {"sec": "IV", "code": "2024", "cat": "2", "ho": "", "dec": "", "desc": "Bridges - Wooden", "blus": 0.8, "sfsp": 0.8},
-  {"sec": "IV", "code": "2025", "cat": "2", "ho": "", "dec": "", "desc": "Building in  course of  construction", "blus": 0.2, "sfsp": 0.2},
+  {"sec": "IV", "code": "2025", "cat": "2", "ho": "", "dec": "", "desc": "Building in course of construction", "blus": 0.2, "sfsp": 0.2},
   {"sec": "IV", "code": "2026", "cat": "2", "ho": "", "dec": "", "desc": "Cable Manufacturing", "blus": 0.99, "sfsp": 0.99},
   {"sec": "IV", "code": "2027", "cat": "2", "ho": "", "dec": "", "desc": "Camphor Manufacturing", "blus": 1.21, "sfsp": 1.21},
   {"sec": "IV", "code": "2028", "cat": "3", "ho": "", "dec": "", "desc": "Candle Works", "blus": 1.45, "sfsp": 1.45},
   {"sec": "IV", "code": "2029", "cat": "2", "ho": "", "dec": "", "desc": "Canning Factories", "blus": 0.79, "sfsp": 0.79},
   {"sec": "IV", "code": "2030", "cat": "2", "ho": "", "dec": "", "desc": "Capsule Manufacturing", "blus": 0.7, "sfsp": 0.7},
-  {"sec": "IV", "code": "2031", "cat": "3", "ho": "", "dec": "", "desc": "Carbon paper / Typewriter Ribbon Manufacturing", "blus": 1.27, "sfsp": 1.27},
+  {"sec": "IV", "code": "2031", "cat": "3", "ho": "", "dec": "", "desc": "Carbon paper / Typewriter Ribbon", "blus": 1.27, "sfsp": 1.27},
   {"sec": "IV", "code": "2032", "cat": "2", "ho": "", "dec": "", "desc": "Cardamom Factories", "blus": 0.86, "sfsp": 0.86},
   {"sec": "IV", "code": "2033", "cat": "3", "ho": "", "dec": "", "desc": "Cardboard Box Manufacturing", "blus": 1.51, "sfsp": 1.51},
-  {"sec": "IV", "code": "2034", "cat": "3", "ho": "", "dec": "", "desc": "Carpenters, Wood wool Manufacturing, Furniture Manufacturing and other wood worker shops [Excluding saw Mill]", "blus": 1.61, "sfsp": 1.61},
-  {"sec": "IV", "code": "2035", "cat": "3", "ho": "", "dec": "", "desc": "Carpet and Drugget Manufacturing [Cotton/jute/wool]", "blus": 1.9, "sfsp": 1.9},
-  {"sec": "IV", "code": "2036", "cat": "3", "ho": "", "dec": "", "desc": "Carpet and Drugget Manufacturing [Others]", "blus": 1.46, "sfsp": 1.46},
+  {"sec": "IV", "code": "2034", "cat": "3", "ho": "", "dec": "", "desc": "Carpenters and Furniture Manufacturing", "blus": 1.61, "sfsp": 1.61},
+  {"sec": "IV", "code": "2035", "cat": "3", "ho": "", "dec": "", "desc": "Carpet and Drugget [Cotton/jute/wool]", "blus": 1.9, "sfsp": 1.9},
+  {"sec": "IV", "code": "2036", "cat": "3", "ho": "", "dec": "", "desc": "Carpet and Drugget [Others]", "blus": 1.46, "sfsp": 1.46},
   {"sec": "IV", "code": "2037", "cat": "2", "ho": "", "dec": "", "desc": "Cashew nut Factories", "blus": 0.87, "sfsp": 0.87},
   {"sec": "IV", "code": "2038", "cat": "2", "ho": "", "dec": "", "desc": "Cattle feed Mill", "blus": 0.57, "sfsp": 0.57},
   {"sec": "IV", "code": "2039", "cat": "4", "ho": "", "dec": "", "desc": "Celluloid Goods Manufacturing", "blus": 6.98, "sfsp": 6.98},
-  {"sec": "IV", "code": "2040", "cat": "2", "ho": "", "dec": "", "desc": "Cement / asbestos/concrete products Manufacturing", "blus": 0.41, "sfsp": 0.41},
+  {"sec": "IV", "code": "2040", "cat": "2", "ho": "", "dec": "", "desc": "Cement / asbestos/concrete products", "blus": 0.41, "sfsp": 0.41},
   {"sec": "IV", "code": "2041", "cat": "2", "ho": "", "dec": "", "desc": "Cement Factories", "blus": 0.54, "sfsp": 0.54},
-  {"sec": "IV", "code": "2042", "cat": "2", "ho": "", "dec": "", "desc": "Ceramic Factories and Crockery and Stoneware pipe Manufacturing/Clay Works.", "blus": 0.83, "sfsp": 0.83},
-  {"sec": "IV", "code": "2043", "cat": "3", "ho": "", "dec": "", "desc": "Chemical Manufacturing (Using materials  with Flash Point below 32*C), Bulk Drug Manufacturing", "blus": 1.48, "sfsp": 1.48},
-  {"sec": "IV", "code": "2044", "cat": "3", "ho": "", "dec": "", "desc": "Chemical Manufacturing (Others), Pharmaceuticals, Toiletry products", "blus": 1.07, "sfsp": 1.07},
+  {"sec": "IV", "code": "2042", "cat": "2", "ho": "", "dec": "", "desc": "Ceramic and Crockery / Pipe Factories", "blus": 0.83, "sfsp": 0.83},
+  {"sec": "IV", "code": "2043", "cat": "3", "ho": "", "dec": "", "desc": "Chemical Mfg (Flash Point below 32C)", "blus": 1.48, "sfsp": 1.48},
+  {"sec": "IV", "code": "2044", "cat": "3", "ho": "", "dec": "", "desc": "Chemical Mfg (Others) & Pharmaceuticals", "blus": 1.07, "sfsp": 1.07},
   {"sec": "IV", "code": "2045", "cat": "2", "ho": "", "dec": "", "desc": "Cigar and Cigarette Manufacturing", "blus": 0.66, "sfsp": 0.66},
-  {"sec": "IV", "code": "2046", "cat": "3", "ho": "", "dec": "", "desc": "Cigarette Filter Manufacturing(Using Solvents with flash Point below 32*C)", "blus": 2.71, "sfsp": 2.71},
-  {"sec": "IV", "code": "2047", "cat": "3", "ho": "", "dec": "", "desc": "Cigarette Filter Manufacturing (Others)", "blus": 1.13, "sfsp": 1.13},
+  {"sec": "IV", "code": "2046", "cat": "3", "ho": "", "dec": "", "desc": "Cigarette Filter Mfg (Solvents < 32C)", "blus": 2.71, "sfsp": 2.71},
+  {"sec": "IV", "code": "2047", "cat": "3", "ho": "", "dec": "", "desc": "Cigarette Filter Mfg (Others)", "blus": 1.13, "sfsp": 1.13},
   {"sec": "IV", "code": "2048", "cat": "3", "ho": "", "dec": "", "desc": "Cinema Film Production Studios", "blus": 2.81, "sfsp": 2.81},
-  {"sec": "IV", "code": "2049", "cat": "2", "ho": "", "dec": "", "desc": "Cinematography Film Editing, Laboratory and Sound recording rooms where Film Processing is carried out", "blus": 0.57, "sfsp": 0.57},
-  {"sec": "IV", "code": "2050", "cat": "2", "ho": "", "dec": "", "desc": "Cinematography Film Editing, Laboratory and Sound recording rooms without Film Processing", "blus": 0.49, "sfsp": 0.49},
-  {"sec": "IV", "code": "2051", "cat": "2", "ho": "", "dec": "", "desc": "Cinema Theatres [For single screen]", "blus": 0.39, "sfsp": 0.39},
-  {"sec": "IV", "code": "2052", "cat": "3", "ho": "", "dec": "", "desc": "Circus, Touring Drama Troupes and Touring Cinema Theatres", "blus": 4.69, "sfsp": 4.69},
-  {"sec": "IV", "code": "2053", "cat": "3", "ho": "", "dec": "", "desc": "Cloth Processing units situated outside the compound of Textile mills and cloth processing units which are not owned by the textile mills but are situated within the textile mills complex/compound.", "blus": 1.17, "sfsp": 1.17},
-  {"sec": "IV", "code": "2054", "cat": "2", "ho": "", "dec": "", "desc": "Coal/cake/Charcoal ball and briquettes Manufacturing", "blus": 1.32, "sfsp": 1.32},
+  {"sec": "IV", "code": "2049", "cat": "2", "ho": "", "dec": "", "desc": "Cinematography Editing (With Processing)", "blus": 0.57, "sfsp": 0.57},
+  {"sec": "IV", "code": "2050", "cat": "2", "ho": "", "dec": "", "desc": "Cinematography Editing (No Processing)", "blus": 0.49, "sfsp": 0.49},
+  {"sec": "IV", "code": "2051", "cat": "2", "ho": "", "dec": "", "desc": "Cinema Theatres [Single screen]", "blus": 0.39, "sfsp": 0.39},
+  {"sec": "IV", "code": "2052", "cat": "3", "ho": "", "dec": "", "desc": "Circus & Touring Drama/Cinema Troupes", "blus": 4.69, "sfsp": 4.69},
+  {"sec": "IV", "code": "2053", "cat": "3", "ho": "", "dec": "", "desc": "Cloth Processing Units (Outside Mills)", "blus": 1.17, "sfsp": 1.17},
+  {"sec": "IV", "code": "2054", "cat": "2", "ho": "", "dec": "", "desc": "Coal / Charcoal Briquettes Mfg", "blus": 1.32, "sfsp": 1.32},
   {"sec": "IV", "code": "2055", "cat": "2", "ho": "", "dec": "", "desc": "Coal Processing Plants", "blus": 0.59, "sfsp": 0.59},
-  {"sec": "IV", "code": "2056", "cat": "2", "ho": "", "dec": "", "desc": "Coffee Curing, Roasting / Grinding", "blus": 0.51, "sfsp": 0.51},
+  {"sec": "IV", "code": "2056", "cat": "2", "ho": "", "dec": "", "desc": "Coffee Curing / Roasting / Grinding", "blus": 0.51, "sfsp": 0.51},
   {"sec": "IV", "code": "2057", "cat": "3", "ho": "", "dec": "", "desc": "Coir Factories", "blus": 2.2, "sfsp": 2.2},
-  {"sec": "IV", "code": "2058", "cat": "2", "ho": "", "dec": "", "desc": "Collieries - Underground Machinery and pit head gear and Dragline Machine used in Collieries", "blus": 1.14, "sfsp": 1.14},
-  {"sec": "IV", "code": "2059", "cat": "2", "ho": "", "dec": "", "desc": "Condensed Milk Factories, Milk Pasteurising Plants and Dairies", "blus": 0.46, "sfsp": 0.46},
-  {"sec": "IV", "code": "2060", "cat": "2", "ho": "", "dec": "", "desc": "Confectionery Manufacturing Plants/Sugar Candy Manufacturing Plants/Sweet Meat Manufacturing Plants", "blus": 0.87, "sfsp": 0.87},
+  {"sec": "IV", "code": "2058", "cat": "2", "ho": "", "dec": "", "desc": "Collieries underground machinery", "blus": 1.14, "sfsp": 1.14},
+  {"sec": "IV", "code": "2059", "cat": "2", "ho": "", "dec": "", "desc": "Condensed Milk Factories and Dairies", "blus": 0.46, "sfsp": 0.46},
+  {"sec": "IV", "code": "2060", "cat": "2", "ho": "", "dec": "", "desc": "Confectionery / Sugar Candy Plants", "blus": 0.87, "sfsp": 0.87},
   {"sec": "IV", "code": "2062", "cat": "2", "ho": "", "dec": "", "desc": "Cork Products Manufacturing", "blus": 2.14, "sfsp": 2.14},
   {"sec": "IV", "code": "2063", "cat": "", "ho": "H.O Approval", "dec": "", "desc": "Cotton Gin and Press Houses", "blus": 1.79, "sfsp": 1.79},
-  {"sec": "IV", "code": "2064", "cat": "4", "ho": "H.O Approval", "dec": "", "desc": "Cotton Seed cleaning/delinting Factory", "blus": 1.99, "sfsp": 1.99},
+  {"sec": "IV", "code": "2064", "cat": "4", "ho": "H.O Approval", "dec": "", "desc": "Cotton Seed Cleaning Factory", "blus": 1.99, "sfsp": 1.99},
   {"sec": "IV", "code": "2065", "cat": "2", "ho": "", "dec": "", "desc": "Dehydration Factories", "blus": 0.69, "sfsp": 0.69},
-  {"sec": "IV", "code": "2066", "cat": "2", "ho": "", "dec": "", "desc": "Detergent Manufacturing with Sulphonation Plant", "blus": 1.28, "sfsp": 1.28},
+  {"sec": "IV", "code": "2066", "cat": "2", "ho": "", "dec": "", "desc": "Detergent Mfg with Sulphonation Plant", "blus": 1.28, "sfsp": 1.28},
   {"sec": "IV", "code": "2067", "cat": "2", "ho": "", "dec": "", "desc": "Detergent Manufacturing (Others)", "blus": 0.99, "sfsp": 0.99},
   {"sec": "IV", "code": "2068", "cat": "2", "ho": "", "dec": "", "desc": "Distilleries", "blus": 0.74, "sfsp": 0.74},
-  {"sec": "IV", "code": "2069", "cat": "3", "ho": "", "dec": "", "desc": "Duplicating.stencil paper Manufacturing", "blus": 1.43, "sfsp": 1.43},
-  {"sec": "IV", "code": "2071", "cat": "2", "ho": "", "dec": "", "desc": "Electric Lamp/T.V. Picture Tube Manufacturing", "blus": 0.94, "sfsp": 0.94},
-  {"sec": "IV", "code": "2072", "cat": "2", "ho": "", "dec": "", "desc": "Electronic Goods Manufacturing/Assembly", "blus": 0.89, "sfsp": 0.89},
-  {"sec": "IV", "code": "2073", "cat": "1", "ho": "", "dec": "", "desc": "Electronic Software Parks/Electronic Software Development Units", "blus": 0.17, "sfsp": 0.17},
+  {"sec": "IV", "code": "2069", "cat": "3", "ho": "", "dec": "", "desc": "Duplicating Stencil Paper Mfg", "blus": 1.43, "sfsp": 1.43},
+  {"sec": "IV", "code": "2071", "cat": "2", "ho": "", "dec": "", "desc": "Electric Lamp/T.V. Tube Manufacturing", "blus": 0.94, "sfsp": 0.94},
+  {"sec": "IV", "code": "2072", "cat": "2", "ho": "", "dec": "", "desc": "Electronic Goods Mfg / Assembly", "blus": 0.89, "sfsp": 0.89},
+  {"sec": "IV", "code": "2073", "cat": "1", "ho": "", "dec": "", "desc": "Electronic Software Development Units", "blus": 0.14, "sfsp": 0.14},
   {"sec": "IV", "code": "2074", "cat": "2", "ho": "", "dec": "", "desc": "Enamel-ware factories", "blus": 0.9, "sfsp": 0.9},
-  {"sec": "IV", "code": "2075", "cat": "2", "ho": "", "dec": "", "desc": "Engineering Workshop-Structural Steel Fabricators, Sheet Metal fabricators", "blus": 0.34, "sfsp": 0.34},
-  {"sec": "IV", "code": "2076", "cat": "2", "ho": "", "dec": "", "desc": "Engineering Workshop [Others], Motor Vehicle Garages", "blus": 0.58, "sfsp": 0.58},
+  {"sec": "IV", "code": "2075", "cat": "2", "ho": "", "dec": "", "desc": "Engineering Workshop-Structural Steel", "blus": 0.34, "sfsp": 0.34},
+  {"sec": "IV", "code": "2076", "cat": "2", "ho": "", "dec": "", "desc": "Engineering Workshop [Others], Garages", "blus": 0.58, "sfsp": 0.58},
   {"sec": "IV", "code": "2077", "cat": "2", "ho": "", "dec": "", "desc": "Exhibitions, Fetes, Mandaps", "blus": 2.29, "sfsp": 2.29},
   {"sec": "IV", "code": "2078", "cat": "3", "ho": "H.O Approval", "dec": "", "desc": "Explosives / Blasting Factories", "blus": 1.84, "sfsp": 1.84},
-  {"sec": "IV", "code": "2079", "cat": "2", "ho": "", "dec": "", "desc": "Fertiliser Manufacturing [other than those rateable under Petrochemical Tariff]", "blus": 1.21, "sfsp": 1.21},
+  {"sec": "IV", "code": "2079", "cat": "2", "ho": "", "dec": "", "desc": "Fertiliser Mfg (Ex Petrochemical Tariff)", "blus": 1.21, "sfsp": 1.21},
   {"sec": "IV", "code": "2080", "cat": "3", "ho": "", "dec": "", "desc": "Filter and wax paper Manufacturing", "blus": 2.12, "sfsp": 2.12},
   {"sec": "IV", "code": "2081", "cat": "3", "ho": "H.O Approval", "dec": "", "desc": "Fireworks Manufacturing", "blus": 2.13, "sfsp": 2.13},
   {"sec": "IV", "code": "2082", "cat": "3", "ho": "", "dec": "", "desc": "Flax / Hemp Mills", "blus": 1.02, "sfsp": 1.02},
   {"sec": "IV", "code": "2083", "cat": "2", "ho": "", "dec": "", "desc": "Flour Mills", "blus": 1.18, "sfsp": 1.18},
-  {"sec": "IV", "code": "2084", "cat": "4", "ho": "H.O Approval", "dec": "", "desc": "Foamed Plastics Manufacturing and / or converting plants", "blus": 2.84, "sfsp": 2.84},
+  {"sec": "IV", "code": "2084", "cat": "4", "ho": "H.O Approval", "dec": "", "desc": "Foamed Plastics Mfg / Converting", "blus": 2.84, "sfsp": 2.84},
   {"sec": "IV", "code": "2085", "cat": "4", "ho": "H.O Approval", "dec": "", "desc": "Foam Rubber Manufacturing", "blus": 2.65, "sfsp": 2.65},
   {"sec": "IV", "code": "2086", "cat": "3", "ho": "", "dec": "", "desc": "French Polish Manufacturing", "blus": 2.49, "sfsp": 2.49},
-  {"sec": "IV", "code": "2087", "cat": "2", "ho": "", "dec": "", "desc": "Fruit and vegetable drying/dehydrating factories", "blus": 0.85, "sfsp": 0.85},
-  {"sec": "IV", "code": "2088", "cat": "2", "ho": "", "dec": "", "desc": "Fruit products and Condiment Factories (including fruit pulp making)", "blus": 0.66, "sfsp": 0.66},
-  {"sec": "IV", "code": "2089", "cat": "3", "ho": "", "dec": "", "desc": "Garment Makers, Topee, Hats and the like makers", "blus": 0.99, "sfsp": 0.99},
-  {"sec": "IV", "code": "2090", "cat": "2", "ho": "", "dec": "", "desc": "Ghee Factories including vegetable Ghee mfg.", "blus": 0.91, "sfsp": 0.91},
+  {"sec": "IV", "code": "2087", "cat": "2", "ho": "", "dec": "", "desc": "Fruit / Vegetable Drying Factories", "blus": 0.85, "sfsp": 0.85},
+  {"sec": "IV", "code": "2088", "cat": "2", "ho": "", "dec": "", "desc": "Fruit Products & Condiment Factories", "blus": 0.66, "sfsp": 0.66},
+  {"sec": "IV", "code": "2089", "cat": "3", "ho": "", "dec": "", "desc": "Garment Makers, Topee, Hats Makers", "blus": 0.99, "sfsp": 0.99},
+  {"sec": "IV", "code": "2090", "cat": "2", "ho": "", "dec": "", "desc": "Ghee / Vegetable Ghee Mfg", "blus": 0.91, "sfsp": 0.91},
   {"sec": "IV", "code": "2091", "cat": "2", "ho": "", "dec": "", "desc": "Glass Fibre Manufacturing", "blus": 0.82, "sfsp": 0.82},
   {"sec": "IV", "code": "2092", "cat": "3", "ho": "", "dec": "", "desc": "Glass wool Manufacturing", "blus": 1.27, "sfsp": 1.27},
-  {"sec": "IV", "code": "2093", "cat": "2", "ho": "", "dec": "", "desc": "Glass Manufacturing/Automobile Glass Manufacturing", "blus": 0.98, "sfsp": 0.98},
-  {"sec": "IV", "code": "2094", "cat": "2", "ho": "", "dec": "", "desc": "Gold thread factories / Gilding factories", "blus": 0.66, "sfsp": 0.66},
-  {"sec": "IV", "code": "2095", "cat": "2", "ho": "", "dec": "", "desc": "Granite Factories using inflammable solvents", "blus": 0.59, "sfsp": 0.59},
+  {"sec": "IV", "code": "2093", "cat": "2", "ho": "", "dec": "", "desc": "Glass/Automobile Glass Manufacturing", "blus": 0.98, "sfsp": 0.98},
+  {"sec": "IV", "code": "2094", "cat": "2", "ho": "", "dec": "", "desc": "Gold thread / Gilding factories", "blus": 0.66, "sfsp": 0.66},
+  {"sec": "IV", "code": "2095", "cat": "2", "ho": "", "dec": "", "desc": "Granite Factories (Inflammable Solvents)", "blus": 0.59, "sfsp": 0.59},
   {"sec": "IV", "code": "2096", "cat": "1", "ho": "", "dec": "", "desc": "Granite Factories (Others)", "blus": 0.25, "sfsp": 0.25},
   {"sec": "IV", "code": "2097", "cat": "2", "ho": "", "dec": "", "desc": "Graphite electrode Manufacturing", "blus": 1.0, "sfsp": 1.0},
-  {"sec": "IV", "code": "2098", "cat": "2", "ho": "", "dec": "", "desc": "Grain/seeds disintegrating/crushing/ Decorticating factories/ Dal mills.", "blus": 0.92, "sfsp": 0.92},
+  {"sec": "IV", "code": "2098", "cat": "2", "ho": "", "dec": "", "desc": "Grain disintegrating / Dal mills", "blus": 0.92, "sfsp": 0.92},
   {"sec": "IV", "code": "2099", "cat": "2", "ho": "", "dec": "", "desc": "Grease / Wax Manufacturing", "blus": 1.53, "sfsp": 1.53},
-  {"sec": "IV", "code": "2100", "cat": "2", "ho": "", "dec": "", "desc": "Green Houses/ Algae/ Spirulina and the like", "blus": 0.99, "sfsp": 0.99},
+  {"sec": "IV", "code": "2100", "cat": "2", "ho": "", "dec": "", "desc": "Green Houses/ Algae/ Spirulina", "blus": 0.99, "sfsp": 0.99},
   {"sec": "IV", "code": "2101", "cat": "2", "ho": "", "dec": "", "desc": "Gum/Glue/Gelatine Manufacturing", "blus": 1.0, "sfsp": 1.0},
   {"sec": "IV", "code": "2102", "cat": "2", "ho": "", "dec": "", "desc": "Gypsum board manufacturer", "blus": 0.75, "sfsp": 0.75},
-  {"sec": "IV", "code": "2103", "cat": "3", "ho": "", "dec": "", "desc": "Hoisery,lace, Embroidery/Thread factories", "blus": 1.18, "sfsp": 1.18},
-  {"sec": "IV", "code": "2104", "cat": "2", "ho": "", "dec": "", "desc": "Ice candy and Ice cream Manufacturing", "blus": 0.63, "sfsp": 0.63},
+  {"sec": "IV", "code": "2103", "cat": "3", "ho": "", "dec": "", "desc": "Hosiery, Lace, Thread factories", "blus": 1.18, "sfsp": 1.18},
+  {"sec": "IV", "code": "2104", "cat": "2", "ho": "", "dec": "", "desc": "Ice Candy and Ice Cream Mfg", "blus": 0.63, "sfsp": 0.63},
   {"sec": "IV", "code": "2105", "cat": "2", "ho": "", "dec": "", "desc": "Ice factories", "blus": 0.54, "sfsp": 0.54},
-  {"sec": "IV", "code": "2106", "cat": "2", "ho": "", "dec": "", "desc": "Incandescent Gas mantle Manufacturing", "blus": 1.26, "sfsp": 1.26},
+  {"sec": "IV", "code": "2106", "cat": "2", "ho": "", "dec": "", "desc": "Incandescent Gas mantle Mfg", "blus": 1.26, "sfsp": 1.26},
   {"sec": "IV", "code": "2107", "cat": "2", "ho": "", "dec": "", "desc": "Industrial Diamonds Manufacturing", "blus": 0.52, "sfsp": 0.52},
   {"sec": "IV", "code": "2108", "cat": "2", "ho": "", "dec": "", "desc": "Industrial Gas Manufacturing", "blus": 1.42, "sfsp": 1.42},
-  {"sec": "IV", "code": "2109", "cat": "2", "ho": "", "dec": "", "desc": "Ink (excluding printing ink) Manufacturing", "blus": 0.98, "sfsp": 0.98},
+  {"sec": "IV", "code": "2109", "cat": "2", "ho": "", "dec": "", "desc": "Ink (Excluding Printing Ink) Mfg", "blus": 0.98, "sfsp": 0.98},
   {"sec": "IV", "code": "2110", "cat": "2", "ho": "", "dec": "", "desc": "Jaggery Manufacturing", "blus": 0.73, "sfsp": 0.73},
   {"sec": "IV", "code": "2111", "cat": "3", "ho": "", "dec": "", "desc": "Jute Mills", "blus": 2.75, "sfsp": 2.75},
   {"sec": "IV", "code": "2112", "cat": "2", "ho": "", "dec": "", "desc": "Katha Manufacturing", "blus": 1.44, "sfsp": 1.44},
   {"sec": "IV", "code": "2113", "cat": "2", "ho": "", "dec": "", "desc": "Khandsari Sugar Manufacturing", "blus": 0.83, "sfsp": 0.83},
   {"sec": "IV", "code": "2114", "cat": "2", "ho": "", "dec": "", "desc": "Lac or Shellac Factories", "blus": 1.06, "sfsp": 1.06},
   {"sec": "IV", "code": "2115", "cat": "3", "ho": "", "dec": "", "desc": "Leather Cloth Factories", "blus": 2.11, "sfsp": 2.11},
-  {"sec": "IV", "code": "3", "code": "2116", "cat": "3", "ho": "", "dec": "", "desc": "Leather Goods Manufacturing ( incl. boot/shoe)", "blus": 1.16, "sfsp": 1.16},
+  {"sec": "IV", "code": "2116", "cat": "3", "ho": "", "dec": "", "desc": "Leather Goods Mfg (incl. boots/shoes)", "blus": 1.16, "sfsp": 1.16},
   {"sec": "IV", "code": "2117", "cat": "2", "ho": "", "dec": "", "desc": "Lime Kiln", "blus": 0.53, "sfsp": 0.53},
   {"sec": "IV", "code": "2118", "cat": "2", "ho": "", "dec": "", "desc": "Lithographic presses", "blus": 0.94, "sfsp": 0.94},
-  {"sec": "IV", "code": "2119", "cat": "2", "ho": "", "dec": "", "desc": "Liquified Gas Bottling/ Recovery Plants", "blus": 0.71, "sfsp": 0.71},
+  {"sec": "IV", "code": "2119", "cat": "2", "ho": "", "dec": "", "desc": "Liquefied Gas Bottling Plants", "blus": 0.71, "sfsp": 0.71},
   {"sec": "IV", "code": "2120", "cat": "2", "ho": "", "dec": "", "desc": "Malt Extraction Plants", "blus": 0.73, "sfsp": 0.73},
-  {"sec": "IV", "code": "2121", "cat": "2", "ho": "", "dec": "", "desc": "Man-made Fibre Manufacturing (using Cellulose)", "blus": 0.38, "sfsp": 0.38},
-  {"sec": "IV", "code": "2122", "cat": "2", "ho": "", "dec": "", "desc": "Man-made Fibre Manufacturing Plant (Others)", "blus": 0.55, "sfsp": 0.55},
+  {"sec": "IV", "code": "2121", "cat": "2", "ho": "", "dec": "", "desc": "Man-made Fibre Mfg (using Cellulose)", "blus": 0.38, "sfsp": 0.38},
+  {"sec": "IV", "code": "2122", "cat": "2", "ho": "", "dec": "", "desc": "Man-made Fibre Plant (Others)", "blus": 0.55, "sfsp": 0.55},
   {"sec": "IV", "code": "2123", "cat": "2", "ho": "", "dec": "", "desc": "Manure Blending works", "blus": 0.75, "sfsp": 0.75},
   {"sec": "IV", "code": "2124", "cat": "3", "ho": "H.O Approval", "dec": "", "desc": "Match Factories", "blus": 2.53, "sfsp": 2.53},
   {"sec": "IV", "code": "2125", "cat": "3", "ho": "", "dec": "", "desc": "Mattress and Pillow making", "blus": 3.15, "sfsp": 3.15},
-  {"sec": "IV", "code": "2126", "cat": "2", "ho": "", "dec": "", "desc": "Metallizing works ( involving metals only)", "blus": 0.46, "sfsp": 0.46},
+  {"sec": "IV", "code": "2126", "cat": "2", "ho": "", "dec": "", "desc": "Metallizing works (metals only)", "blus": 0.46, "sfsp": 0.46},
   {"sec": "IV", "code": "2127", "cat": "2", "ho": "", "dec": "", "desc": "Metallising Works (others)", "blus": 0.77, "sfsp": 0.77},
   {"sec": "IV", "code": "2128", "cat": "2", "ho": "", "dec": "", "desc": "Metal/Tin printers", "blus": 1.61, "sfsp": 1.61},
   {"sec": "IV", "code": "2129", "cat": "2", "ho": "", "dec": "", "desc": "Mica Products Manufacturing", "blus": 0.8, "sfsp": 0.8},
   {"sec": "IV", "code": "2130", "cat": "2", "ho": "", "dec": "", "desc": "Mineral Oil blending and processing", "blus": 0.59, "sfsp": 0.59},
   {"sec": "IV", "code": "2131", "cat": "2", "ho": "", "dec": "", "desc": "Mosaic Factories", "blus": 0.63, "sfsp": 0.63},
-  {"sec": "IV", "code": "2132", "cat": "2", "ho": "", "dec": "", "desc": "Mushroom Growing Premises (Excluding Crops)", "blus": 0.6, "sfsp": 0.6},
-  {"sec": "IV", "code": "2133", "cat": "4", "ho": "H.O Approval", "dec": "", "desc": "Nitro Cellulose Manufacturing- Industrial Grade", "blus": 9.88, "sfsp": 9.88},
+  {"sec": "IV", "code": "2132", "cat": "2", "ho": "", "dec": "", "desc": "Mushroom Growing Premises", "blus": 0.6, "sfsp": 0.6},
+  {"sec": "IV", "code": "2133", "cat": "4", "ho": "H.O Approval", "dec": "", "desc": "Nitro Cellulose Mfg (Industrial Grade)", "blus": 9.88, "sfsp": 9.88},
   {"sec": "IV", "code": "2134", "cat": "3", "ho": "", "dec": "", "desc": "Non-woven fabric Manufacturing", "blus": 1.93, "sfsp": 1.93},
   {"sec": "IV", "code": "2135", "cat": "2", "ho": "", "dec": "", "desc": "Oil Extraction", "blus": 1.48, "sfsp": 1.48},
-  {"sec": "IV", "code": "2136", "cat": "2", "ho": "", "dec": "", "desc": "Oil Distillation Plants (essential)", "blus": 1.28, "sfsp": 1.28},
-  {"sec": "IV", "code": "2137", "cat": "2", "ho": "", "dec": "", "desc": "Oil Mills refining ( Veg/Animal)", "blus": 1.06, "sfsp": 1.06},
+  {"sec": "IV", "code": "2136", "cat": "2", "ho": "", "dec": "", "desc": "Oil Distillation Plants (Essential)", "blus": 1.28, "sfsp": 1.28},
+  {"sec": "IV", "code": "2137", "cat": "2", "ho": "", "dec": "", "desc": "Oil Mills refining (Veg/Animal)", "blus": 1.06, "sfsp": 1.06},
   {"sec": "IV", "code": "2138", "cat": "2", "ho": "", "dec": "", "desc": "Oil Mills (Vegetable)", "blus": 0.99, "sfsp": 0.99},
   {"sec": "IV", "code": "2139", "cat": "3", "ho": "", "dec": "", "desc": "Oil and Leather Cloth Factories", "blus": 1.63, "sfsp": 1.63},
   {"sec": "IV", "code": "2140", "cat": "2", "ho": "", "dec": "", "desc": "Paint factories (Water based)", "blus": 0.88, "sfsp": 0.88},
   {"sec": "IV", "code": "2141", "cat": "2", "ho": "", "dec": "", "desc": "Paint (others) & Varnish Factories", "blus": 1.94, "sfsp": 1.94},
   {"sec": "IV", "code": "2142", "cat": "3", "ho": "", "dec": "", "desc": "Paints - Nitrocellulose based", "blus": 2.35, "sfsp": 2.35},
   {"sec": "IV", "code": "2143", "cat": "2", "ho": "", "dec": "", "desc": "Pan Masala making", "blus": 0.81, "sfsp": 0.81},
-  {"sec": "IV", "code": "2144", "cat": "3", "ho": "", "dec": "", "desc": "Paper and Cardboard Mills (including Lamination) ", "blus": 1.11, "sfsp": 1.11},
+  {"sec": "IV", "code": "2144", "cat": "3", "ho": "", "dec": "", "desc": "Paper & Cardboard Mills (Lamination)", "blus": 1.11, "sfsp": 1.11},
   {"sec": "IV", "code": "2145", "cat": "3", "ho": "", "dec": "", "desc": "Particle Board Manufacturing", "blus": 1.94, "sfsp": 1.94},
   {"sec": "IV", "code": "2146", "cat": "2", "ho": "", "dec": "", "desc": "Pencil Manufacturing", "blus": 1.32, "sfsp": 1.32},
   {"sec": "IV", "code": "2147", "cat": "2", "ho": "", "dec": "", "desc": "Petroleum Coke Calcination", "blus": 0.83, "sfsp": 0.83},
-  {"sec": "IV", "code": "2148", "cat": "3", "ho": "", "dec": "", "desc": "Plastic Goods Manufacturing(excluding Foam Plastics)/I. Using Plastic raw materials having calorific value upto 15000 btu/lb Polytetrafluoroethylene, polyvinylidene chloride/fluoride, Phenol/Urea-formaldehyde, Silicones", "blus": 1.72, "sfsp": 1.72},
-  {"sec": "IV", "code": "2149", "cat": "3", "ho": "", "dec": "", "desc": "Plywood / Wood veneering Factories/ Laminating Factories", "blus": 2.55, "sfsp": 2.55},
-  {"sec": "IV", "code": "2150", "cat": "2", "ho": "", "dec": "", "desc": "Polyester Film Manufacturing / BOPP Film Manufacturing", "blus": 0.71, "sfsp": 0.71},
-  {"sec": "IV", "code": "2151", "cat": "2", "ho": "", "dec": "", "desc": "Port Premises including jetties and equipment thereon And other port facilities", "blus": 0.32, "sfsp": 0.32},
-  {"sec": "IV", "code": "2152", "cat": "2", "ho": "", "dec": "", "desc": "Poultry Farms (Excluding birds therein)", "blus": 0.52, "sfsp": 0.52},
-  {"sec": "IV", "code": "2153", "cat": "3", "ho": "", "dec": "", "desc": "Presses for coir fibres/waste/Grass/fodder/boosa/Jute", "blus": 5.23, "sfsp": 5.23},
-  {"sec": "IV", "code": "2154", "cat": "3", "ho": "", "dec": "", "desc": "Presses for coir yarn / cotton/senna leaves", "blus": 2.54, "sfsp": 2.54},
+  {"sec": "IV", "code": "2148", "cat": "3", "ho": "", "dec": "", "desc": "Plastic Goods Mfg (Calorific < 15k)", "blus": 1.72, "sfsp": 1.72},
+  {"sec": "IV", "code": "2149", "cat": "3", "ho": "", "dec": "", "desc": "Plywood / Wood Veneering / Laminating", "blus": 2.55, "sfsp": 2.55},
+  {"sec": "IV", "code": "2150", "cat": "2", "ho": "", "dec": "", "desc": "Polyester Film / BOPP Film Mfg", "blus": 0.71, "sfsp": 0.71},
+  {"sec": "IV", "code": "2151", "cat": "2", "ho": "", "desc": "Port Premises and jetties equipment", "blus": 0.32, "sfsp": 0.32},
+  {"sec": "IV", "code": "2152", "cat": "2", "ho": "", "dec": "", "desc": "Poultry Farms (Excluding birds)", "blus": 0.52, "sfsp": 0.52},
+  {"sec": "IV", "code": "2153", "cat": "3", "ho": "", "dec": "", "desc": "Presses for coir fibres/waste/Jute", "blus": 5.23, "sfsp": 5.23},
+  {"sec": "IV", "code": "2154", "cat": "3", "ho": "", "dec": "", "desc": "Presses for coir yarn / cotton", "blus": 2.54, "sfsp": 2.54},
   {"sec": "IV", "code": "2155", "cat": "3", "ho": "", "dec": "", "desc": "Presses for carpets, rugs and tobacco", "blus": 2.31, "sfsp": 2.31},
   {"sec": "IV", "code": "2156", "cat": "2", "ho": "", "dec": "", "desc": "Presses for hides and skins", "blus": 1.21, "sfsp": 1.21},
-  {"sec": "IV", "code": "2157", "cat": "2", "ho": "", "dec": "", "desc": "Printing Ink Manufacturing / Roller composition factories", "blus": 1.67, "sfsp": 1.67},
+  {"sec": "IV", "code": "2157", "cat": "2", "ho": "", "dec": "", "desc": "Printing Ink Mfg / Roller composition", "blus": 1.67, "sfsp": 1.67},
   {"sec": "IV", "code": "2158", "cat": "2", "ho": "", "dec": "", "desc": "Printing Press", "blus": 1.05, "sfsp": 1.05},
-  {"sec": "IV", "code": "2159", "cat": "2", "ho": "", "dec": "", "desc": "Pulverising Plants(Metals and non-hazardous goods)", "blus": 0.42, "sfsp": 0.42},
+  {"sec": "IV", "code": "2159", "cat": "2", "ho": "", "dec": "", "desc": "Pulverising Plants (Non-hazardous)", "blus": 0.42, "sfsp": 0.42},
   {"sec": "IV", "code": "2160", "cat": "2", "ho": "", "dec": "", "desc": "Pulverizing Plants (Others)", "blus": 1.21, "sfsp": 1.21},
   {"sec": "IV", "code": "2161", "cat": "2", "ho": "", "dec": "", "desc": "Rice Mills", "blus": 0.78, "sfsp": 0.78},
   {"sec": "IV", "code": "2162", "cat": "2", "ho": "", "dec": "", "desc": "Rice Polishing Units", "blus": 0.9, "sfsp": 0.9},
-  {"sec": "IV", "code": "2163", "cat": "2", "ho": "", "dec": "", "desc": "Rope works (Plastic), Assembling of Plastic Goods such as Toys and the like", "blus": 1.01, "sfsp": 1.01},
+  {"sec": "IV", "code": "2163", "cat": "2", "ho": "", "dec": "", "desc": "Rope works (Plastic) and Assembly", "blus": 1.01, "sfsp": 1.01},
   {"sec": "IV", "code": "2164", "cat": "2", "ho": "", "dec": "", "desc": "Rope Works (others)", "blus": 0.61, "sfsp": 0.61},
   {"sec": "IV", "code": "2165", "cat": "3", "ho": "", "dec": "", "desc": "Rubber Factories", "blus": 1.67, "sfsp": 1.67},
   {"sec": "IV", "code": "2166", "cat": "3", "ho": "", "dec": "", "desc": "Rubber Goods Mfg with Spreading", "blus": 2.04, "sfsp": 2.04},
-  {"sec": "IV", "code": "2167", "cat": "2", "ho": "", "dec": "", "desc": "Rubber Goods Manufacturing without spreading", "blus": 1.15, "sfsp": 1.15},
-  {"sec": "IV", "code": "2168", "cat": "2", "ho": "", "dec": "", "desc": "Salt crushing Factories and Refineries", "blus": 0.48, "sfsp": 0.48},
-  {"sec": "IV", "code": "2169", "cat": "3", "ho": "", "dec": "", "desc": "Saw Mills (including Timber Merchants premises where sawing is done).", "blus": 2.73, "sfsp": 2.73},
+  {"sec": "IV", "code": "2167", "cat": "2", "ho": "", "dec": "", "desc": "Rubber Goods Mfg without spreading", "blus": 1.15, "sfsp": 1.15},
+  {"sec": "IV", "code": "2168", "cat": "2", "ho": "", "dec": "", "desc": "Salt crushing Factories & Refineries", "blus": 0.48, "sfsp": 0.48},
+  {"sec": "IV", "code": "2169", "cat": "3", "ho": "", "dec": "", "desc": "Saw Mills (Timber sawing done)", "blus": 2.73, "sfsp": 2.73},
   {"sec": "IV", "code": "2170", "cat": "2", "ho": "", "dec": "", "desc": "Sea Food / Meat Processing", "blus": 0.9, "sfsp": 0.9},
   {"sec": "IV", "code": "2171", "cat": "2", "ho": "", "dec": "", "desc": "Silk Mills / Spun Silk Mills", "blus": 0.84, "sfsp": 0.84},
-  {"sec": "IV", "code": "2230", "cat": "2", "ho": "", "dec": "", "desc": "Shopping Malls (other than multiplexes)", "blus": 0.43, "sfsp": 0.43},
+  {"sec": "IV", "code": "2230", "cat": "2", "ho": "", "dec": "", "desc": "Shopping Malls (no multiplex)", "blus": 0.43, "sfsp": 0.43},
   {"sec": "IV", "code": "2172", "cat": "2", "ho": "", "dec": "", "desc": "Snuff Manufacturing", "blus": 0.83, "sfsp": 0.83},
   {"sec": "IV", "code": "2173", "cat": "2", "ho": "", "dec": "", "desc": "Soap Manufacturing", "blus": 0.97, "sfsp": 0.97},
   {"sec": "IV", "code": "2174", "cat": "2", "ho": "", "dec": "", "desc": "Sponge Iron Plants", "blus": 0.91, "sfsp": 0.91},
@@ -1447,87 +1537,145 @@ const standardRates = [
   {"sec": "IV", "code": "2231", "cat": "", "ho": "", "dec": "Declined Risk", "desc": "Disposable Diaper Manufacturing", "blus": 1.38, "sfsp": 1.38},
   {"sec": "IV", "code": "2183", "cat": "2", "ho": "", "dec": "", "desc": "Tanneries", "blus": 0.47, "sfsp": 0.47},
   {"sec": "IV", "code": "2184", "cat": "2", "ho": "", "dec": "", "desc": "Tapioca factories", "blus": 0.82, "sfsp": 0.82},
-  {"sec": "IV", "code": "2185", "cat": "3", "ho": "", "dec": "", "desc": "Tarpaulin and canvas proofing factories", "blus": 2.05, "sfsp": 2.05},
+  {"sec": "IV", "code": "2185", "cat": "3", "ho": "", "dec": "", "desc": "Tarpaulin canvas proofing factories", "blus": 2.05, "sfsp": 2.05},
   {"sec": "IV", "code": "2186", "cat": "2", "ho": "", "dec": "", "desc": "Tea blending/packing factories", "blus": 0.75, "sfsp": 0.75},
   {"sec": "IV", "code": "2187", "cat": "2", "ho": "", "dec": "", "desc": "Tea Factories", "blus": 0.95, "sfsp": 0.95},
   {"sec": "IV", "code": "2188", "cat": "3", "ho": "", "dec": "", "desc": "Telephone Exchanges", "blus": 1.45, "sfsp": 1.45},
   {"sec": "IV", "code": "2189", "cat": "3", "ho": "", "dec": "", "desc": "Textile Mills - Spinning Mills", "blus": 1.03, "sfsp": 1.03},
   {"sec": "IV", "code": "2211", "cat": "3", "ho": "", "dec": "", "desc": "Textile Mills- Composite Mills", "blus": 1.44, "sfsp": 1.44},
   {"sec": "IV", "code": "2190", "cat": "2", "ho": "", "dec": "", "desc": "Tile & Pottery works", "blus": 0.67, "sfsp": 0.67},
-  {"sec": "IV", "code": "2191", "cat": "2", "ho": "", "dec": "", "desc": "Tiny sector Industries with values at risk not exceeding Rs 10 lakhs", "blus": 0.69, "sfsp": 0.69},
-  {"sec": "IV", "code": "2192", "cat": "2", "ho": "", "dec": "", "desc": "Tissue Culture Premises (Excluding Crops)", "blus": 0.74, "sfsp": 0.74},
+  {"sec": "IV", "code": "2191", "cat": "2", "ho": "", "dec": "", "desc": "Tiny sector Industries (< 10 Lakhs)", "blus": 0.69, "sfsp": 0.69},
+  {"sec": "IV", "code": "2192", "cat": "2", "ho": "", "dec": "", "desc": "Tissue Culture (Excluding Crops)", "blus": 0.74, "sfsp": 0.74},
   {"sec": "IV", "code": "2193", "cat": "2", "ho": "", "dec": "", "desc": "Tobacco Curing / Redrying Factories", "blus": 1.02, "sfsp": 1.02},
-  {"sec": "IV", "code": "2194", "cat": "2", "ho": "", "dec": "", "desc": "Tobacco grinding/ crushing Manufacturing", "blus": 0.9, "sfsp": 0.9},
+  {"sec": "IV", "code": "2194", "cat": "2", "ho": "", "dec": "", "desc": "Tobacco grinding Manufacturing", "blus": 0.9, "sfsp": 0.9},
   {"sec": "IV", "code": "2195", "cat": "3", "ho": "", "dec": "", "desc": "Turpentine and rosin distilleries", "blus": 2.96, "sfsp": 2.96},
   {"sec": "IV", "code": "2196", "cat": "2", "ho": "", "dec": "", "desc": "Tyres and Tubes Manufacturing", "blus": 0.74, "sfsp": 0.74},
-  {"sec": "IV", "code": "2197", "cat": "2", "ho": "", "dec": "", "desc": "Tyre Retreading and Resoling factories", "blus": 1.55, "sfsp": 1.55},
+  {"sec": "IV", "code": "2197", "cat": "2", "ho": "", "dec": "", "desc": "Tyre Retreading and Resoling", "blus": 1.55, "sfsp": 1.55},
   {"sec": "IV", "code": "2198", "cat": "2", "ho": "", "dec": "", "desc": "Umbrella Assembly factories", "blus": 0.75, "sfsp": 0.75},
   {"sec": "IV", "code": "2199", "cat": "2", "ho": "", "dec": "", "desc": "Velvet Cloth Manufacturing", "blus": 1.48, "sfsp": 1.48},
   {"sec": "IV", "code": "2200", "cat": "2", "ho": "", "dec": "", "desc": "Vermicelli factories", "blus": 0.58, "sfsp": 0.58},
   {"sec": "IV", "code": "2201", "cat": "2", "ho": "", "dec": "", "desc": "Weigh Bridges", "blus": 0.8, "sfsp": 0.8},
   {"sec": "IV", "code": "2202", "cat": "2", "ho": "", "dec": "", "desc": "Weaving Mills", "blus": 0.92, "sfsp": 0.92},
   {"sec": "IV", "code": "2203", "cat": "3", "ho": "", "dec": "", "desc": "Wheat Threshers", "blus": 4.07, "sfsp": 4.07},
-  {"sec": "IV", "code": "2204", "cat": "2", "ho": "", "dec": "", "desc": "Wood seasoning/treatment/ impregnation", "blus": 0.99, "sfsp": 0.99},
-  {"sec": "IV", "code": "2205", "cat": "2", "ho": "", "dec": "", "desc": "Wool cleaning and pressing factories", "blus": 1.05, "sfsp": 1.05},
-  {"sec": "IV", "code": "2206", "cat": "2", "ho": "", "dec": "", "desc": "Woollen Mills/Fur garments & accessories", "blus": 1.16, "sfsp": 1.16},
+  {"sec": "IV", "code": "2204", "cat": "2", "ho": "", "dec": "", "desc": "Wood seasoning treatment Plants", "blus": 0.99, "sfsp": 0.99},
+  {"sec": "IV", "code": "2205", "cat": "2", "ho": "", "dec": "", "desc": "Wool cleaning and pressing", "blus": 1.05, "sfsp": 1.05},
+  {"sec": "IV", "code": "2206", "cat": "2", "ho": "", "dec": "", "desc": "Woollen Mills / Fur Garments", "blus": 1.16, "sfsp": 1.16},
   {"sec": "IV", "code": "2207", "cat": "2", "ho": "", "dec": "", "desc": "Yarn Processing", "blus": 1.06, "sfsp": 1.06},
   {"sec": "IV", "code": "2208", "cat": "2", "ho": "", "dec": "", "desc": "Zip fasteners Manufacturing", "blus": 1.15, "sfsp": 1.15},
-  {"sec": "IV", "code": "2209", "cat": "2", "ho": "", "dec": "", "desc": "Contractors Plant and Machinery anywhere in India (at specified locations)", "blus": 0.78, "sfsp": 0.78},
+  {"sec": "IV", "code": "2209", "cat": "2", "ho": "", "dec": "", "desc": "Contractors Plant (Specified Locations)", "blus": 0.78, "sfsp": 0.78},
   {"sec": "IV", "code": "2210", "cat": "2", "ho": "", "dec": "", "desc": "Electric Generation Stations- Others", "blus": 0.55, "sfsp": 0.55},
-  {"sec": "IV", "code": "2070", "cat": "", "ho": "H.O Approval", "dec": "Declined Risk", "desc": "Electric Generation Stations - Hydro Power stations", "blus": 0.45, "sfsp": 0.45},
+  {"sec": "IV", "code": "2070", "cat": "", "ho": "H.O Approval", "dec": "Declined Risk", "desc": "Electric Generation - Hydro Power", "blus": 0.45, "sfsp": 0.45},
   {"sec": "IV", "code": "2212", "cat": "2", "ho": "", "dec": "", "desc": "Automobile Filter Manufacturing", "blus": 1.05, "sfsp": 1.05},
-  {"sec": "IV", "code": "2216", "cat": "2", "ho": "", "dec": "", "desc": "Plastic Goods Manufacturing (excluding Foam Plastics)/ II. Using Plastic raw materials having calorific value of above 15000 btu/lb polyethylene, Polypropylene, Prolystyrene, Polyalphamethylstyrene, Acrylonitrilebutadiene-styrene, Polybutylene.", "blus": 1.37, "sfsp": 1.37},
-  {"sec": "IV", "code": "2217", "cat": "2", "ho": "", "dec": "", "desc": "Electric Generation Stations- Thermal Power Stations", "blus": 0.35, "sfsp": 0.35},
-  {"sec": "IV", "code": "2218", "cat": "2", "ho": "", "dec": "", "desc": "Electric Generation Stations- Solar Power Stations", "blus": 0.55, "sfsp": 0.55},
-  {"sec": "IV", "code": "2219", "cat": "2", "ho": "", "dec": "", "desc": "Electric Generation Stations- Windmill", "blus": 0.64, "sfsp": 0.64},
-  {"sec": "IV", "code": "2221", "cat": "2", "ho": "", "dec": "", "desc": "Electric Generation Stations- Biomass Power Stations", "blus": 0.59, "sfsp": 0.59},
+  {"sec": "IV", "code": "2216", "cat": "2", "ho": "", "dec": "", "desc": "Plastic Mfg II (Calorific > 15k)", "blus": 1.37, "sfsp": 1.37},
+  {"sec": "IV", "code": "2217", "cat": "2", "ho": "", "dec": "", "desc": "Thermal Power Stations", "blus": 0.35, "sfsp": 0.35},
+  {"sec": "IV", "code": "2218", "cat": "2", "ho": "", "dec": "", "desc": "Solar Power Stations", "blus": 0.55, "sfsp": 0.55},
+  {"sec": "IV", "code": "2219", "cat": "2", "ho": "", "dec": "", "desc": "Windmill Power Generation", "blus": 0.64, "sfsp": 0.64},
+  {"sec": "IV", "code": "2221", "cat": "2", "ho": "", "dec": "", "desc": "Biomass Power Stations", "blus": 0.59, "sfsp": 0.59},
   {"sec": "IV", "code": "2222", "cat": "2", "ho": "", "dec": "", "desc": "Engineering Workshop- Steel Plants", "blus": 0.39, "sfsp": 0.39},
-  {"sec": "IV", "code": "2224", "cat": "2", "ho": "", "dec": "", "desc": "Engineering Workshop-Pipe Extruding, Stamping, Pressing, Forging Mills, Metal smelting, Foundries, Galvanising works", "blus": 0.39, "sfsp": 0.39},
-  {"sec": "IV", "code": "2225", "cat": "2", "ho": "", "dec": "", "desc": "Engineering Workshop-Metal Extraction, Ore processing (other than Aluminium, Copper, Zinc), Plant processing Raw sand into silica", "blus": 0.7, "sfsp": 0.7},
-  {"sec": "IV", "code": "2227", "cat": "2", "ho": "", "dec": "", "desc": "Engineering Workshop- Clock/Watch Manufacturing", "blus": 1.45, "sfsp": 1.45},
+  {"sec": "IV", "code": "2224", "cat": "2", "ho": "", "dec": "", "desc": "Smelting/Forging/Foundries/Galvanising", "blus": 0.39, "sfsp": 0.39},
+  {"sec": "IV", "code": "2225", "cat": "2", "ho": "", "dec": "", "desc": "Metal Extraction & Ore processing", "blus": 0.7, "sfsp": 0.7},
+  {"sec": "IV", "code": "2227", "cat": "2", "ho": "", "dec": "", "desc": "Clock/Watch Manufacturing", "blus": 1.45, "sfsp": 1.45},
   {"sec": "IV", "code": "2229", "cat": "2", "ho": "", "dec": "", "desc": "Multiplex Theatre Complexes", "blus": 0.61, "sfsp": 0.61},
-  {"sec": "V", "code": "3001", "cat": "2", "ho": "", "dec": "", "desc": "Analytical / Quality Control Laboratories", "blus": 0.53, "sfsp": 0.53},
+  {"sec": "V", "code": "3001", "cat": "2", "ho": "", "dec": "", "desc": "Analytical / Quality Control Labs", "blus": 0.53, "sfsp": 0.53},
   {"sec": "V", "code": "3002", "cat": "2", "ho": "", "dec": "", "desc": "Boiler House", "blus": 0.36, "sfsp": 0.36},
   {"sec": "V", "code": "3003", "cat": "2", "ho": "", "dec": "", "desc": "Dams", "blus": 0.31, "sfsp": 0.31},
-  {"sec": "V", "code": "3004", "cat": "2", "ho": "", "dec": "", "desc": "Effluent /Sewage Treatment Plant", "blus": 0.6, "sfsp": 0.6},
+  {"sec": "V", "code": "3004", "cat": "2", "ho": "", "dec": "", "desc": "Effluent / Sewage Treatment Plant", "blus": 0.6, "sfsp": 0.6},
   {"sec": "V", "code": "3005", "cat": "1", "ho": "", "dec": "", "desc": "Electric Sub-Stations, Loco sheds", "blus": 0.24, "sfsp": 0.24},
-  {"sec": "V", "code": "3006", "cat": "1", "ho": "", "dec": "", "desc": "Electric Transmission / Distribution Lines", "blus": 0.16, "sfsp": 0.16},
+  {"sec": "V", "code": "3006", "cat": "1", "ho": "", "dec": "", "desc": "Electric Transmission Lines", "blus": 0.16, "sfsp": 0.16},
   {"sec": "V", "code": "3007", "cat": "2", "ho": "", "dec": "", "desc": "Pipe lines (carrying water only)", "blus": 0.39, "sfsp": 0.39},
   {"sec": "V", "code": "3008", "cat": "2", "ho": "", "dec": "", "desc": "Pipe lines (others)", "blus": 0.39, "sfsp": 0.39},
-  {"sec": "V", "code": "3009", "cat": "2", "ho": "", "desc": "Pump House (Water)", "blus": 0.3, "sfsp": 0.3},
+  {"sec": "V", "code": "3009", "cat": "2", "ho": "", "dec": "", "desc": "Pump House (Water)", "blus": 0.3, "sfsp": 0.3},
   {"sec": "V", "code": "3010", "cat": "2", "ho": "", "dec": "", "desc": "Pump House (Others)", "blus": 1.23, "sfsp": 1.23},
   {"sec": "V", "code": "3011", "cat": "2", "ho": "", "dec": "", "desc": "Railway tracks", "blus": 0.69, "sfsp": 0.69},
   {"sec": "V", "code": "3012", "cat": "2", "ho": "", "dec": "", "desc": "Roads", "blus": 0.49, "sfsp": 0.49},
-  {"sec": "V", "code": "3013", "cat": "1", "ho": "", "dec": "", "desc": "Water Treatment Plants/ Water Tanks", "blus": 0.13, "sfsp": 0.13},
+  {"sec": "V", "code": "3013", "cat": "1", "ho": "", "dec": "", "desc": "Water Treatment Plants / Tanks", "blus": 0.13, "sfsp": 0.13},
   {"sec": "V", "code": "3014", "cat": "2", "ho": "", "dec": "", "desc": "Wireless Transmitting Stations", "blus": 0.55, "sfsp": 0.55},
-  {"sec": "V", "code": "3015", "cat": "2", "ho": "", "dec": "", "desc": "Compressor Houses- Compressors handling air, Inert gas and CO2", "blus": 0.62, "sfsp": 0.62},
-  {"sec": "V", "code": "3016", "cat": "2", "ho": "", "dec": "", "desc": "Compressor Houses- Compressor (others)", "blus": 1.79, "sfsp": 1.79},
-  {"sec": "V", "code": "3017", "cat": "2", "ho": "", "dec": "", "desc": "Boundary Walls - Made up of Combustible Material", "blus": 1.34, "sfsp": 1.34},
+  {"sec": "V", "code": "3015", "cat": "2", "ho": "", "dec": "", "desc": "Compressors handling air/inert gas", "blus": 0.62, "sfsp": 0.62},
+  {"sec": "V", "code": "3016", "cat": "2", "ho": "", "dec": "", "desc": "Compressor Houses (others)", "blus": 1.79, "sfsp": 1.79},
+  {"sec": "V", "code": "3017", "cat": "2", "ho": "", "dec": "", "desc": "Boundary Walls (Combustible)", "blus": 1.34, "sfsp": 1.34},
   {"sec": "V", "code": "3018", "cat": "2", "ho": "", "dec": "", "desc": "Boundary Walls - Others", "blus": 0.6, "sfsp": 0.6},
   {"sec": "V", "code": "3019", "cat": "2", "ho": "", "dec": "", "desc": "Electric Crematoriums", "blus": 0.53, "sfsp": 0.53},
-  {"sec": "VI", "code": "4001", "cat": "2", "ho": "", "dec": "", "desc": "Storage of Non-hazardous goods(Godowns & Silos) subject to warranty that hazardous goods of Category I, II, III , Coir waste, Coir fibre and Caddies are not stored therein.", "blus": 0.46, "sfsp": 0.46},
-  {"sec": "VI", "code": "4002", "cat": "2", "ho": "", "dec": "", "desc": "Storage of Category I hazardous Goods (Godowns & Silos) subject to warranty that goods listed in Category II, III, Coir waste, Coir fibre and Caddies are not stored therein.", "blus": 0.94, "sfsp": 0.94},
-  {"sec": "VI", "code": "4003", "cat": "3", "ho": "", "dec": "", "desc": "Storage of hazardous Goods listed in Category II(Godowns & Silos) subject to warranty that goods listed in Category III, Coir waste, Coir fibre and Caddies are not stored therein.", "blus": 2.09, "sfsp": 2.09},
-  {"sec": "VI", "code": "4004", "cat": "3", "ho": "", "dec": "", "desc": "Storage of hazardous Goods listed in Category III(Godowns & Silos) subject to warranty that Coir waste, Coir fibre and , Caddies are not stored therein.", "blus": 3.12, "sfsp": 3.12},
-  {"sec": "VI", "code": "4005", "cat": "2", "ho": "", "dec": "", "desc": "Transporter’s godowns (Godowns & Silos)& Godowns of clearing and forwarding agents.", "blus": 0.72, "sfsp": 0.72},
-  {"sec": "VI", "code": "4006", "cat": "3", "ho": "", "dec": "", "desc": "Storage of Coir Waste(Godowns & Silos) ,Coir Fibre, Caddies", "blus": 4.3, "sfsp": 4.3},
+  {"sec": "VI", "code": "4001", "cat": "2", "ho": "", "dec": "", "desc": "Storage of Non-hazardous goods(Godowns)", "blus": 0.46, "sfsp": 0.46},
+  {"sec": "VI", "code": "4002", "cat": "2", "ho": "", "dec": "", "desc": "Storage of Category I hazardous Goods", "blus": 0.94, "sfsp": 0.94},
+  {"sec": "VI", "code": "4003", "cat": "3", "ho": "", "dec": "", "desc": "Storage of hazardous Goods Category II", "blus": 2.09, "sfsp": 2.09},
+  {"sec": "VI", "code": "4004", "cat": "3", "ho": "", "dec": "", "desc": "Storage of hazardous Goods Category III", "blus": 3.12, "sfsp": 3.12},
+  {"sec": "VI", "code": "4005", "cat": "2", "ho": "", "dec": "", "desc": "Transporter’s / C&F godowns", "blus": 0.72, "sfsp": 0.72},
+  {"sec": "VI", "code": "4006", "cat": "3", "ho": "", "dec": "", "desc": "Storage of Coir Waste / Caddies", "blus": 4.3, "sfsp": 4.3},
   {"sec": "VI", "code": "4007", "cat": "2", "ho": "", "dec": "", "desc": "Cold Storage premises", "blus": 1.07, "sfsp": 1.07},
-  {"sec": "VI", "code": "4012", "cat": "2", "desc": "Storage of Non-hazardous goods(open) subject to warranty that hazardous goods of Category I, II, III , Coir waste, Coir fibre and Caddies are not stored therein.", "blus": 1.63, "sfsp": 1.63},
-  {"sec": "VI", "code": "4013", "cat": "2", "desc": "Storage of Category I hazardous Goods(open) subject to warranty that goods listed in Category II, III, Coir waste, Coir fibre and Caddies are not stored therein.", "blus": 1.81, "sfsp": 1.81},
-  {"sec": "VI", "code": "4014", "cat": "3", "desc": "Storage of hazardous Goods listed in Category II(open) subject to warranty that goods listed in Category III, Coir waste, Coir fibre and Caddies are not stored therein.", "blus": 4.48, "sfsp": 4.48},
-  {"sec": "VI", "code": "4015", "cat": "3", "desc": "Storage of hazardous Goods listed in Category III (open) subject to warranty that Coir waste, Coir fibre and , Caddies are not stored therein.", "blus": 4.2, "sfsp": 4.2},
-  {"sec": "VI", "code": "4016", "cat": "2", "desc": "Transporter’s godowns(open) & Godowns of clearing and forwarding agents.", "blus": 0.67, "sfsp": 0.67},
-  {"sec": "VI", "code": "4017", "cat": "3", "desc": "Storage of Coir Waste(open) ,Coir Fibre, Caddies", "blus": 9.96, "sfsp": 9.96},
-  {"sec": "VI", "code": "4018", "cat": "2", "desc": "Bus Terminus", "blus": 2.62, "sfsp": 2.62},
-  {"sec": "VI", "code": "4019", "cat": "2", "desc": "Vehicles stored in open including Tractors", "blus": 2.33, "sfsp": 2.33},
-  {"sec": "VII", "code": "4008", "cat": "2", "ho": "", "dec": "", "desc": "Gas Holders/ Bullets/spheres and storages for liquified gases except for Nitrogen, Carbon dioxide and inert gases", "blus": 2.25, "sfsp": 2.25},
-  {"sec": "VII", "code": "4009", "cat": "2", "ho": "", "dec": "", "desc": "Gas Holders/Vessels for Nitrogen, Carbon dioxide and inert gases", "blus": 1.02, "sfsp": 1.02},
-  {"sec": "VII", "code": "4010", "cat": "3", "ho": "", "dec": "", "desc": "Tanks containing liquids flashing at 32 OC and below", "blus": 1.41, "sfsp": 1.41},
+  {"sec": "VI", "code": "4012", "cat": "2", "ho": "", "dec": "", "desc": "Storage of Non-hazardous goods(open)", "blus": 1.63, "sfsp": 1.63},
+  {"sec": "VI", "code": "4013", "cat": "2", "ho": "", "dec": "", "desc": "Storage of Category I hazardous (open)", "blus": 1.81, "sfsp": 1.81},
+  {"sec": "VI", "code": "4014", "cat": "3", "ho": "", "dec": "", "desc": "Storage of hazardous Category II (open)", "blus": 4.48, "sfsp": 4.48},
+  {"sec": "VI", "code": "4015", "cat": "3", "ho": "", "dec": "", "desc": "Storage of hazardous Category III (open)", "blus": 4.2, "sfsp": 4.2},
+  {"sec": "VI", "code": "4016", "cat": "2", "ho": "", "dec": "", "desc": "Transporter’s / C&F godowns (open)", "blus": 0.67, "sfsp": 0.67},
+  {"sec": "VI", "code": "4017", "cat": "3", "ho": "", "dec": "", "desc": "Storage of Coir Waste (open)", "blus": 9.96, "sfsp": 9.96},
+  {"sec": "VI", "code": "4018", "cat": "2", "ho": "", "dec": "", "desc": "Bus Terminus", "blus": 2.62, "sfsp": 2.62},
+  {"sec": "VI", "code": "4019", "cat": "2", "ho": "", "dec": "", "desc": "Vehicles stored in open (incl Tractors)", "blus": 2.33, "sfsp": 2.33},
+  {"sec": "VII", "code": "4008", "cat": "2", "ho": "", "dec": "", "desc": "Gas Holders/spheres for liquefied gases", "blus": 2.25, "sfsp": 2.25},
+  {"sec": "VII", "code": "4009", "cat": "2", "ho": "", "dec": "", "desc": "Gas Holders/Vessels for Nitrogen/CO2", "blus": 1.02, "sfsp": 1.02},
+  {"sec": "VII", "code": "4010", "cat": "3", "ho": "", "dec": "", "desc": "Tanks containing liquids flashing <= 32C", "blus": 1.41, "sfsp": 1.41},
   {"sec": "VII", "code": "4011", "cat": "2", "ho": "", "dec": "", "desc": "Tanks (others)", "blus": 0.67, "sfsp": 0.67}
 ];
 
-// Embedded Complete 1,035 Rows Database Payload From Excel Storage Spreadsheet
-const rawHazData = "Category I|1|Aloe resin@@Category I|2|Aluminium resinate@@Category I|3|Amber@@Category I|4|Ammonium Bromide@@Category I|5|Ammonium Chloride@@Category I|6|Animal protein@@Category I|7|Ammonium Fluoride@@Category I|8|Almond oil@@Category I|9|Ammonium Sulphate@@Category I|10|Animal skin@@Category I|11|Amonia-acqueous soln. or spirits of ammonia exceeding@@Category I|12|Aluminium Chloride@@Category I|13|Anethole@@Category I|14|Anime (a resin)@@Category I|15|Animal black@@Category I|16|Aluminium paste@@Category I|17|Animal glue@@Category I|18|Anthracene@@Category I|19|Algae@@Category I|20|Antimony Pentafluoride@@Category I|21|Animal oil@@Category I|22|Antimony Pentasulfide@@Category I|23|All flammable liquids having flash point above@@Category I|24|Antimony sulphate@@Category I|25|Antimony sulphide@@Category I|26|Antimony trisulphate@@Category I|27|Antimony trisulphide@@Category I|28|Arachis oil@@Category I|29|Arecanuts@@Category I|30|Arsenic Chloride@@Category I|31|Arsenic pentasulphide@@Category I|32|Arsenic sulphide@@Category I|33|Arsenic Trisulfide@@Category I|34|Artificial edible fat@@Category I|35|Artificial horn@@Category I|36|Artificial leather@@Category I|37|Artificial Silk@@Category I|38|Artificial wool@@Category I|39|Asafoetida (gum resin)@@Category I|40|Asafoetida oil@@Category I|41|Asphalt /Asphalt sheet@@Category I|42|Asphalted paper@@Category I|43|Balata, Balsam of Peru@@Category I|44|Bamboo mats@@Category I|45|Barium Carbonate@@Category I|46|Barium Sulphide@@Category I|47|Barley@@Category I|48|Baryllium Dustor powder@@Category I|49|Bed feathers (Down)@@Category I|50|Beedi leaves@@Category I|51|Bees wax@@Category I|52|Beet sugar@@Category I|53|Beet tallow (Aldrin)@@Category I|54|Benzoin (resin)@@Category I|55|Benzoin (resinoid)@@Category I|56|Betal Nuts@@Category I|57|Birch (bark) oil@@Category I|58|Bisphenol@@Category I|59|Bitumen/Bituminised craftpaper/felt@@Category I|60|Blacks of all kinds (not otherwise Speciafically provided for)@@Category I|61|Borneo Camphor@@Category I|62|Borneol@@Category I|63|Borneo tallow@@Category I|64|Bornyl acetate@@Category I|65|Boron trichloride@@Category I|66|Boron trifluoride@@Category I|67|Bran@@Category I|68|Bran oil@@Category I|69|Butter fat@@Category I|70|Butter oil@@Category I|71|Caesium perchlorate@@Category I|72|Caffine (pure)@@Category I|73|Calcium Chloride@@Category I|74|Calcium Cyanide@@Category I|75|Calcium Oxide@@Category I|76|Calcium Sulphide@@Category I|77|Camphene@@Category I|78|Camphor@@Category I|79|Candle wax@@Category I|80|Candles@@Category I|81|Canvas cloth@@Category I|82|Capric acid@@Category I|83|Caprolactum@@Category I|84|Caprylic acid@@Category I|85|Carbazole@@Category I|86|Carbon@@Category I|87|Carbon black@@Category I|88|Carbon paper@@Category I|89|Carbon tetrachloride@@Category I|90|Carbonyl@@Category I|91|Carnauba wax@@Category I|92|Carpet@@Category I|93|Carvacrol@@Category I|94|Cashew nuts@@Category I|95|Cassia leaves@@Category I|96|Castor oil@@Category I|97|Cat-gut@@Category I|98|Caustic potash@@Category I|99|Caustic soda@@Category I|100|Cedar wood oil@@Category I|101|Cellophane@@Category I|102|Cellophane paper/tape@@Category I|103|Cellulose@@Category I|104|Cellulose acetate@@Category I|105|Cellulose acetate films@@Category I|106|Ceresin wax@@Category I|107|Chaff@@Category I|108|Chinese inset wax@@Category I|109|Chinese tallow@@Category I|110|Chinese wood oil@@Category I|111|Chip (particle) board@@Category I|112|Chloral@@Category I|113|Chloroform@@Category I|114|Chlorowax@@Category I|115|Chocolates@@Category I|116|Chopped maize@@Category I|117|Chromyl Chloride@@Category I|118|Cineol@@Category I|119|Cinnabar@@Category I|120|Citral@@Category I|121|Citric acid@@Category I|122|Citronellal@@Category I|123|Citronellol@@Category I|124|CKD Kits of Automobiles@@Category I|125|Cloth, Asphalted@@Category I|126|Coaltar and coal pitch@@Category I|127|Coaltar distillate@@Category I|128|Cocoa beans@@Category I|129|Cocoa fat@@Category I|130|Cocoa oil@@Category I|131|Coconut fat@@Category I|132|Coconut oil@@Category I|133|Cod-liver oil@@Category I|134|Coffee and substitutes@@Category I|135|Coir yarn@@Category I|136|Colamine, Colophony@@Category I|137|Complex fertilizers@@Category I|138|Copal@@Category I|139|Copper sulphide@@Category I|140|Copra@@Category I|141|Copra cake/meal@@Category I|142|Cordage@@Category I|143|Coriander oil@@Category I|144|Cork@@Category I|145|Cork wood@@Category I|146|Corn oil@@Category I|147|Cotton fibre in pressed bales@@Category I|148|Cotton oil@@Category I|149|Cotton seed oil@@Category I|150|Cotton seed/cake@@Category I|151|Creosote@@Category I|152|Creosote oil@@Category I|153|Cresidine@@Category I|154|Cresol@@Category I|155|Cresylic acid@@Category I|156|Cross Linked Polyethylene Cable@@Category I|157|XLPE@@Category I|158|Croton oil@@Category I|159|Crotonic acid@@Category I|160|Dammer resin@@Category I|161|Decahydronaphthalene@@Category I|162|Decalin@@Category I|163|Decanal@@Category I|164|Dextrin@@Category I|165|Diacetin@@Category I|166|Diallyl phthalate@@Category I|167|Diamyl phthalate@@Category I|168|Diamyl sulphide@@Category I|169|Dibromodifluromethane@@Category I|170|Dibutoxy tetraglycol@@Category I|171|Dibutyl phthalate@@Category I|172|Dibutyl sebacate@@Category I|173|Dibutyl tartrate@@Category I|174|Dichlorohydrin@@Category I|175|Dichloromethane@@Category I|176|D.D.T@@Category I|177|Dicyclo-diepoxy-carboxylate@@Category I|178|Dicyclohexylamine@@Category I|180|Diethyl malonate@@Category I|181|Diethyl oxalate@@Category I|182|Diethyl phthalate@@Category I|183|Diethyl succinate@@Category I|184|Dimethyl cynanmide@@Category I|185|Dioctyl phthalate@@Category I|186|Dried fish@@Category I|187|Dried milkpowder@@Category I|188|Dried leaves of all kinds@@Category I|189|Dyes of all kinds@@Category I|190|Earth wax@@Category I|191|Edible fat@@Category I|192|Edible oil@@Category I|193|Elemi oil@@Category I|194|Endrin@@Category I|195|Epoxy resin@@Category I|196|Ethoxy resins@@Category I|197|Ethyl sulphate@@Category I|198|Eugenol@@Category I|199|Fats@@Category I|200|Feathers and down@@Category I|201|Felt@@Category I|202|Fibrous plants@@Category I|203|Fire wood@@Category I|204|Fish guano/manure@@Category I|205|Fish oil@@Category I|206|Flax@@Category I|207|Flowers dried of all kinds@@Category I|208|Foam rubber, freon@@Category I|209|Fodder@@Category I|210|Furs@@Category I|211|Galatlith@@Category I|212|Gamboge@@Category I|213|Ganja@@Category I|214|Gases, inert and non-combustible@@Category I|215|Gedda wax@@Category I|216|Gelatine@@Category I|217|Gentac latex or vinyl pyridine latex@@Category I|218|Geranial@@Category I|219|Geraniol@@Category I|220|Geranium oil@@Category I|221|Ghee fat@@Category I|222|Glues of all kinds@@Category I|223|Glycerine@@Category I|224|Goats wool@@Category I|225|Grain meal@@Category I|226|Grass max@@Category I|227|Grass weed@@Category I|228|Grease, lubricating@@Category I|229|Groundnut oil@@Category I|230|Groundnut shelled, cake, meal,@@Category I|231|Guaiacum resin@@Category I|232|Gums@@Category I|233|Gunnies (loose)@@Category I|234|Guttapercha@@Category I|235|Hair@@Category I|236|Hazel nut oil@@Category I|237|Hempseed@@Category I|238|Hempseed oil@@Category I|239|Herbs, dried of all kinds@@Category I|240|Hides & Skin@@Category I|241|Hog fat oil@@Category I|242|Hycol@@Category I|243|Hydrogen peroxide, under@@Category I|244|Hydroquinone@@Category I|245|Hyphone@@Category I|246|lanone Beta@@Category I|247|Indian wax@@Category I|248|Indigo@@Category I|249|Insence@@Category I|250|Iron powder@@Category I|251|Iron pyrites@@Category I|252|Iron sulphides@@Category I|253|Japan tallow@@Category I|254|Javelle water@@Category I|255|Kapok@@Category I|256|Kapok oil/seed@@Category I|257|Kreolin@@Category I|258|Lactose@@Category I|259|Lamp black@@Category I|260|Lanolin@@Category I|261|Lard@@Category I|262|Lard oil@@Category I|263|Latex@@Category I|264|Lauryl Mercaptan@@Category I|265|Lavender oil@@Category I|266|Lead acetate@@Category I|267|Lead Arsemates@@Category I|268|Lead chromate@@Category I|269|Leather@@Category I|270|Leaves, dried of all kinds@@Category I|271|Lemon glass oil@@Category I|272|Lime, unslaked@@Category I|273|Lindane@@Category I|274|Linen@@Category I|275|Linoleum@@Category I|276|Linolic acid@@Category I|277|Linseed@@Category I|278|Linseed cake@@Category I|279|Linseed oil@@Category I|280|Liquor amonia@@Category I|281|Low Matalurgical Coke@@Category I|282|Magnesium@@Category I|283|Magnesium alloy@@Category I|284|Magnesium shavings@@Category I|285|Maize oil@@Category I|286|Maleic anhydride@@Category I|287|Manganese Acetate@@Category I|288|Manhaden oil@@Category I|289|Man-made fibres and clean waste in pressed bales@@Category I|290|Mannitol monolaurate@@Category I|291|Margarine@@Category I|292|Mastic@@Category I|293|Mats of all kinds(synthetic or Vegetable)@@Category I|294|Menthol@@Category I|295|Mercury Cyanide@@Category I|296|Mesitylene@@Category I|297|Methyl bromide@@Category I|298|Methyl cinnamate@@Category I|299|Middle oils@@Category I|300|Milk fat@@Category I|301|Milk of sugar (lactose)@@Category I|302|Milk powder@@Category I|303|Molasses@@Category I|304|Molasses meal@@Category I|305|Mosquito mat/coil@@Category I|306|Mowra flowers@@Category I|307|Mungo@@Category I|308|Mustard oil@@Category I|309|Mutton tallow@@Category I|310|Myrrh@@Category I|311|Naphthalene@@Category I|312|Naphthylthio@@Category I|313|Natural rubber@@Category I|314|Neat's foot fat@@Category I|315|Neat's foot oil@@Category I|316|Neohexane@@Category I|317|Nicotine acid@@Category I|318|Niobe oil@@Category I|319|Nitrogen monoxide@@Category I|320|Nitrophenol (para)@@Category I|321|Nitrous oxide@@Category II|1|Accelerene@@Category II|2|Acetyl peroxide@@Category II|3|All flammable liquids having a flash point between 320C and 650C (both inclusive)@@Category II|4|Aloe fibres, loose@@Category II|5|Aluminium carbide@@Category II|6|Aluminium ferrosilicon@@Category II|7|Aluminium hydride@@Category II|8|Aluminium nitrate@@Category II|9|Aluminium phosphide@@Category II|10|Aluminium powder/dust@@Category II|11|Ammonium chromate@@Category II|12|Ammonium cyanide@@Category II|13|Ammonium dichromate@@Category II|14|Ammonium persulphate@@Category II|15|Amphetamine@@Category II|16|Amyl nitrite@@Category II|17|Angelica oil@@Category II|18|Antimony pentoxide@@Category II|19|Aqua Forties (Nitric acid)@@Category II|20|Aqua regia@@Category II|21|Balsams@@Category II|22|Bamboos (whole)@@Category II|23|Barium@@Category II|24|Barium azide@@Category II|25|Barium chlorate/chlorite@@Category II|26|Barium chromate@@Category II|27|Barium dioxide@@Category II|28|Barium hydride@@Category II|29|Barium manganate@@Category II|30|Barium nitrate@@Category II|31|Barium perchlorate@@Category II|32|Barium permanganate@@Category II|33|Barium peroxide@@Category II|34|Beets, sliced, dried@@Category II|35|Benzoyl peroxide, wet@@Category II|36|Bergamot oil@@Category II|37|Bleaching powder@@Category II|38|Bran dust@@Category II|39|Bromine@@Category II|40|Bromine pentafluoride@@Category II|41|Bromine trifluoride@@Category II|42|Bromoacetone@@Category II|43|Bronze powder@@Category II|44|Butyl nitrate@@Category II|45|Cadmium nitrate@@Category II|46|Caesium peroxide@@Category II|47|Calamus oil@@Category II|48|Calcium@@Category II|49|Calcium aluminium hydride@@Category II|50|Calcium amide@@Category II|51|Calcium amonium nitrate@@Category II|52|Calcium bromate@@Category II|53|Calcium chlorate@@Category II|54|Calcium cyanamide@@Category II|55|Calcium hypochlorite@@Category II|56|Calcium nitrate@@Category II|57|Calcium perchlorate@@Category II|58|Calcium permanganate@@Category II|59|Calcium peroxide@@Category II|60|Calcium phosphide@@Category II|61|Calcium phosphite@@Category II|62|Calcium resinate@@Category II|63|Calcium silicide@@Category II|64|Camomile oil@@Category II|65|Canadian balsam@@Category II|66|Caraway oil@@Category II|67|Celluloid@@Category II|68|Cellulose nitrate silk@@Category II|69|Celluoid films@@Category II|70|Chile saltpeter@@Category II|71|Chlorates (inorganic) not otherwise specifically provided for@@Category II|72|Chlorine@@Category II|73|Chloropicrin@@Category II|74|Chlorosulphuric acid@@Category II|75|Cholorites (inorganic) not otherwise specifically provided for@@Category II|76|Chromic acid@@Category II|77|Chromic anhydride@@Category II|78|Chromic oxide@@Category II|79|Chromium trioxide@@Category II|80|Cinnamon@@Category II|81|Citronella oil@@Category II|82|Clove oil@@Category II|83|Cobalt nitrate@@Category II|84|Cobalt potassium nitrite@@Category II|85|Collodion paper@@Category II|86|Collodion silk@@Category II|87|Collodion-cotton@@Category II|88|Copper nitrate@@Category II|89|Cotton Fibres (others)@@Category II|90|Crackers@@Category II|91|Cyanogen bromide@@Category II|92|Dichloroisocynuric acid@@Category II|93|Diketene@@Category II|94|Ethyl silicate@@Category II|95|Eucalyptus oil@@Category II|96|Ferric nitrate@@Category II|97|Ferrosilicon@@Category II|98|Firelighters@@Category II|99|Fireworks@@Category II|100|Fish meal/scrap@@Category II|101|Flares@@Category II|102|Flash powder, Photographic@@Category II|103|Floor wax@@Category II|104|Fluorine@@Category II|105|Foam plastics@@Category II|106|Fuse@@Category II|107|Fuses without explosives@@Category II|108|Guano@@Category II|109|Guano and fish-meal@@Category II|110|Gunpowder detonating caps@@Category II|111|Hemp@@Category II|112|Hop oil@@Category II|113|Hops@@Category II|114|Hydrazine@@Category II|115|Hydrobromic acid@@Category II|116|Hydrochemical acid@@Category II|117|Hydrocyanic acid@@Category II|118|Hydrofluoric acid@@Category II|119|Hydrogen peroxide, 30-90%@@Category II|120|Ignition cords (fuses)@@Category II|121|lodine@@Category II|122|Irish oil@@Category II|123|Jasmine oil@@Category II|124|Juniper oil@@Category II|125|Jute in pressed bales@@Category II|126|Lavender oil@@Category II|127|Lead dioxide@@Category II|128|Lead nitrate@@Category II|129|Lead peroxide@@Category II|130|Lead tetra methyl@@Category II|131|Linalool@@Category II|132|Lignite (Coke)@@Category II|133|Liquid insecticides/pesticides/disinfectants flash point 32C to 65C@@Category II|134|Liquid insecticides/pesticides below 32c in sealed tins/bottles@@Category II|135|Lithium@@Category II|136|Lithium chlorate@@Category II|137|Lithium perchlorate@@Category II|138|Lithium peroxide@@Category II|139|Lupulin (hop meal)@@Category II|140|Magnesium chlorate@@Category II|141|Magnesium dioxide@@Category II|142|Magnesium dust, also dust of high magnesium alloys.@@Category II|143|Magnesium nitrate@@Category II|144|Magnesium perborate@@Category II|145|Magnesium perchlorate@@Category II|146|Magnesium peroxide@@Category II|147|Magnesium powder@@Category II|148|Malt germ@@Category II|149|Manganese dioxide@@Category II|150|Manganese borate@@Category II|151|Manganese green@@Category II|152|Manganese nitrate@@Category II|153|Manganese perborate@@Category II|154|Manganese perchlorate@@Category II|155|Manganese peroxide@@Category II|156|Manganese powder@@Category II|157|Marjorum oil@@Category II|158|Matches (safety/non-safety)@@Category II|159|Mercuric iodate@@Category II|160|Mercurous nitrate@@Category II|161|Neroli (oil of orange flowers)@@Category II|162|Nickel carbonyl@@Category II|163|Nickel nitrate@@Category II|164|Nickel peroxide@@Category II|165|Nickel tetracarbonyl@@Category II|166|Nickel/Nitrites of all kinds not otherwise specifically provided for@@Category II|167|Nitric acid@@Category II|168|Nitrite of soda@@Category II|169|Nitro silk@@Category II|170|Nitrocellulose film@@Category II|171|Nitrocellulose plastics@@Category II|172|Nitrocellulose silk@@Category II|173|Nitrocotton threads@@Category II|174|Nitrogen dioxide@@Category II|175|Nitrosyl chloride@@Category II|176|Oil of cinnamon@@Category II|177|Oil of thyme@@Category II|178|Orange (peel) oil@@Category II|179|Orange blossom oil@@Category II|180|Orange oil@@Category II|181|Paints, thinners and varnishes flash point 32C to 65C@@Category II|182|Paints, thinners and varnishes below 32C in sealed tins/bottles@@Category II|183|Parathion@@Category II|184|Peppermint oil@@Category II|185|Perchloric acid in aqueous solution > 70%@@Category II|186|Percussion caps (for toys)@@Category II|187|Periodic acid@@Category II|188|Phosphoric acid@@Category II|189|Phosphorous (red)@@Category II|190|Phosphorous oxychloride@@Category II|191|Phosphorous pentachloride@@Category II|192|Phosphorous pentasulphide@@Category II|193|Phosphorous sesquisulphide@@Category II|194|Phosphorous sulphide@@Category II|195|Phosphorous trichloride@@Category II|196|Phosphoryl chloride@@Category II|197|Pine tar@@Category II|198|Pinene@@Category II|199|Portugal oil (Orange peel oil)@@Category II|200|Potable spirits below 32C in sealed tins/bottles@@Category II|201|Potassium amide@@Category II|202|Potassium ammonium nitrate@@Category II|203|Potassium bromate@@Category II|204|Potassium chlorate@@Category II|205|Potassium dichromate@@Category II|206|Potassium dithionate@@Category II|207|Potassium hypochlorite@@Category II|208|Potassium hyposulphite@@Category II|209|Potassium nitrate@@Category II|210|Potassium nitrite@@Category II|211|Potassium perchlorate@@Category II|212|Potassium permanganate@@Category II|213|Potassium peroxide@@Category II|214|Potassium persulphate@@Category II|215|Potassium stontium chlorate@@Category II|216|Potassium sulphide@@Category II|217|Pressed residue from oil seeds@@Category II|218|Pyrolusite@@Category II|219|Pyrotechnical articles@@Category II|220|Rags@@Category II|221|Rockets (fire works)@@Category II|222|Root turpentine oil@@Category II|223|Rose oil@@Category II|224|Rosemary oil@@Category II|225|Rubidium@@Category II|226|Sage oil@@Category II|227|Salt petre@@Category II|228|Selenium dioxide@@Category II|229|Sesquisulphide matches@@Category II|230|Silver permanganate@@Category II|231|Silver Nitrate@@Category II|232|Silver Nitrite@@Category II|233|Smoke generators@@Category II|234|Sodamide@@Category II|235|Sodium amalgam@@Category II|236|Sodium amide@@Category II|237|Sodium borohydride@@Category II|238|Sodium chlorate@@Category II|239|Sodium chlorite@@Category II|240|Sodium Dichloro-s-Triazinetrione and Dihydrate@@Category II|241|Sodium dichromate@@Category II|242|Sodium dithionite@@Category II|243|Sodium hydrosulphide@@Category II|244|Sodium hydrosulphite@@Category II|245|Sodium hypochlorite@@Category II|246|Sodium Nitrate@@Category II|247|Sodium Nitrite@@Category II|248|Sodium nitroethane@@Category II|249|Sodium perborate@@Category II|250|Sodium perchlorate@@Category II|251|Sodium periodate@@Category II|252|Sodium permanganate@@Category II|253|Sodium peroxide@@Category II|254|Sodium persulphate@@Category II|255|Soidum hypophosphite@@Category II|256|Sparklers@@Category II|257|Spruce wood tar@@Category II|258|Staranise oil@@Category II|259|Strontium@@Category II|260|Strontium chlorate@@Category II|261|Strontium nitrate@@Category II|262|Strontium perchlorate@@Category II|263|Strontium peroxide@@Category II|264|Strontium potassium chlorate@@Category II|265|Styrax@@Category II|266|Sulphuric acid, (oleum/fuming/concentrated)@@Category II|267|Sulphuryl chloride@@Category II|268|Thallium nitrate@@Category II|269|Thermit@@Category II|270|Thionyl chloride@@Category II|271|Thorium@@Category II|272|Titanium (sponge or powder form)@@Category II|273|Trichloro-s-triazinetrione@@Category II|274|Trioxane@@Category II|275|Uranium@@Category II|276|Urea nitrate@@Category II|277|Valerian oil@@Category II|278|Vanadium tetrachloride@@Category II|279|Vermouth oil@@Category II|280|Vegetable Fibre like straw, grass, hay etc.@@Category II|281|Vinegar@@Category II|282|Viscose and clean waste thereof, loose@@Category II|283|Volume bark and/or fibres, loose@@Category II|284|Waste of materials falling under Category I@@Category II|285|Wood wool (loose)@@Category II|286|Zinc chloride@@Category II|287|Zinc dithionite@@Category II|288|Zinc hydrosulphite@@Category II|289|Zinc nitrate@@Category II|290|Zinc permanganate@@Category II|291|Zinc peroxide@@Category II|292|Zinc powder@@Category II|293|Zirconium dust powder@@Category II|294|Other Category II Goods@@Category III|1|Activated Carbon, Pyropheric@@Category III|2|All flammable liquids having a flash point below 320C@@Category III|3|Aluminium Alkyl Halides@@Category III|4|Aluminium borohydride@@Category III|5|Aluminium triethyl@@Category III|6|Aluminium trihexyl@@Category III|7|Aluminium tri-isobutyl@@Category III|8|Aluminium trimethyl@@Category III|9|Aluminium tripropyl@@Category III|10|Amatol@@Category III|11|Ammonium bromate@@Category III|12|Ammonium chlorate@@Category III|13|Ammonium Nitrate@@Category III|14|Ammonium nitrate explosives@@Category III|15|Ammonium perchlorate@@Category III|16|Ammonium permanganate@@Category III|17|Ammonium picrate@@Category III|18|Ammunitions@@Category III|19|Amorces@@Category III|20|Arsine@@Category III|21|Azides@@Category III|22|Azimethylene@@Category III|23|Azoimide@@Category III|24|Baggase@@Category III|25|Bamboos (split)@@Category III|26|Benzol peroxide (dry)@@Category III|27|Black powder@@Category III|28|Blasting powder@@Category III|29|Bromo picric acid@@Category III|30|Butyl mercaptan@@Category III|31|Butyl peracetate@@Category III|32|Butyl peroctoate (tert)@@Category III|33|Butyl peroxide (ditert)@@Category III|34|Cadmium fulminate@@Category III|35|Caesium@@Category III|36|Calcium carbide@@Category III|37|Calcium chlorite@@Category III|38|Calcium dithionate@@Category III|39|Calcium hydrite@@Category III|40|Calcium nitrate explosive@@Category III|41|Calcium, pyrophoric@@Category III|42|Cartridges@@Category III|43|Cellulose nitrate powder@@Category III|44|Charcoal@@Category III|45|Cheddite@@Category III|46|Chlorate explosive@@Category III|47|Chloratite@@Category III|48|Chloroazide@@Category III|49|Coal@@Category III|50|Coke@@Category III|51|Collodion@@Category III|52|Collodion wool@@Category III|53|Copper acetylide@@Category III|54|Copper azide@@Category III|55|Copper carbide@@Category III|56|Cordite@@Category III|57|Detonators@@Category III|58|Di (tert) butyl peroxide@@Category III|59|Diazobenzene perchlorate@@Category III|60|Diazobenzeneimide@@Category III|61|Diazo-dinitrophenol@@Category III|62|Diazo-m-nitraline perchlorate@@Category III|63|Diazonium salts@@Category III|64|Diborane@@Category III|65|Dicumyl peroxide@@Category III|66|Diglycol dinitrate@@Category III|67|Dimethyl benzyl peroxide@@Category III|68|Dinitro dihydroxy quinone@@Category III|69|Dinitro glycerine@@Category III|70|Dinitrocellulose@@Category III|71|Dinitrochlorohydrin@@Category III|72|Dinitrocresol@@Category III|73|Dinitroglycol@@Category III|74|Dinitrol@@Category III|75|Dodecanoyl Peroxide@@Category III|76|Dynamite@@Category III|77|Eau de Cologne@@Category III|78|Erythrol Tetranitrate@@Category III|79|Ethyl borate@@Category III|80|Ethylene nitrate@@Category III|81|Explosive charges@@Category III|82|Explosives@@Category III|83|Fulminates@@Category III|84|Fuse, Detonating@@Category III|85|Gases, Combustible@@Category III|86|Gelatine explosive@@Category III|87|Gelatinized nitrocellulose powders@@Category III|88|Glycerine nitrate@@Category III|89|Guanidine nitrate@@Category III|90|Guanidine perchlorate@@Category III|91|Guanylnitrosamino guanyl tetrazene@@Category III|92|Guhr-dynamite@@Category III|93|Gun cotton@@Category III|94|Gun cotton solutions@@Category III|95|Gun powder@@Category III|96|Hay@@Category III|97|Hydrazine nitrate@@Category III|98|Hydrazoic acid@@Category III|99|Hydrogen cyanide@@Category III|100|Hydrogen peroxide, 90-100%@@Category III|101|Hydrogen selenide@@Category III|102|Hydrogen sulphide@@Category III|103|Hydrolith@@Category III|104|Instant ignition cord@@Category III|105|Iron carbonyl@@Category III|106|Iron Penta Carbonyl@@Category III|107|Jute (Others)@@Category III|108|Kresylit@@Category III|109|Lead azide@@Category III|110|Lead picrate@@Category III|111|Lead styphnate@@Category III|112|Lead trinitroresorcinate@@Category III|113|Leco (Coke)@@Category III|114|Liquid insecticides/pesticides/disinfectants flash point below 32C@@Category III|115|Liquid Petroleum Gas@@Category III|116|Lithium aluminium hydride@@Category III|117|Lithium amide@@Category III|118|Lithium borohydride@@Category III|119|Lithium butyl@@Category III|120|Lithium hydride@@Category III|121|Lyddite@@Category III|122|Mannitol hexanitrate@@Category III|123|Mercuric cyanate@@Category III|124|Mercury cyanate@@Category III|125|Mercury fulminate@@Category III|126|Mining charges@@Category III|127|Mixed powder (nitrocellulose)@@Category III|128|Nitrate explosives@@Category III|129|Nitro-carbonitrate@@Category III|130|Nitrocellulose@@Category III|131|Nitrocellulose powder@@Category III|132|Nitrogeletine dynamite@@Category III|133|Nitrogen chloride@@Category III|134|Nitrogen trichloride@@Category III|135|Nitroglycerine@@Category III|136|Nitroglycerine powder@@Category III|137|Nitroguanidine@@Category III|138|Nitromannital@@Category III|139|Nitro-starch@@Category III|140|Nitro-sugar@@Category III|141|Ozonides@@Category III|142|Oils and greasy waste of cotton/viscose@@Category III|143|Paints, thinners, varnishes flash point below 32C@@Category III|144|Pantonone@@Category III|145|Peracetic acid@@Category III|146|Perchlorate explosives@@Category III|147|Perchlorates of all kinds not otherwise specifically provided for@@Category III|148|Perchloric acid > 70%@@Category III|149|Perchromates@@Category III|150|Percussion capsules@@Category III|151|Phosphides@@Category III|152|Phosphine@@Category III|153|Phosphoretted hydrogen@@Category III|154|Phosphorous (yellow or white)@@Category III|155|Picramic acid@@Category III|156|Picrates@@Category III|157|Picratol@@Category III|158|Picric acid@@Category III|159|Picryl chloride@@Category III|160|Plasticized dynamite@@Category III|161|Potassium@@Category III|162|Potassium amalgam@@Category III|163|Potassium hydride@@Category III|164|Primers (explosives)@@Category III|165|Propargyl bromide@@Category III|166|Prussic acid@@Category III|167|Raney nickel@@Category III|168|RDX@@Category III|169|Rubber cement@@Category III|170|Safety explosives@@Category III|171|Saltpetre blasting powder@@Category III|172|Silanes@@Category III|173|Silver acetylide@@Category III|174|Silver fulminate@@Category III|175|Silver picrate@@Category III|176|Sodium@@Category III|177|Sodium azide@@Category III|178|Sodium dinitro phenol@@Category III|179|Sodium hydride@@Category III|180|Sodium hydrosulphite@@Category III|181|Solein@@Category III|182|Starch nitrate@@Category III|183|Straw in pressed bales@@Category III|184|Styphnic acid@@Category III|185|Succinic peroxide@@Category III|186|Sugar nitrates@@Category III|187|Tetranitroaniline@@Category III|188|Tetranitrobenzene@@Category III|189|Tetranitronaphthalene@@Category III|190|Tetranitrophenol@@Category III|191|Titanium hydride@@Category III|192|TNT@@Category III|193|Trinitrocellulose@@Category III|194|Trinitrogylcerin@@Category III|195|Trinitronaphthalene@@Category III|196|Trinitrophenol@@Category III|197|Trinitrophenolmethylnitramine@@Category III|198|Trinitro-toluene@@Category III|199|Tripropylaluminium@@Category III|200|Urea peroxide@@Category III|201|Waste of materials falling under Cat II & III@@Category III|202|Zinc phosphide@@Category III|203|Zinc picrate@@Category III|204|Zirconium hydride@@Category III|205|Other Category III Goods";
+// Re-structured configuration mapping for survey features
+const safetySurveyQuestionsConfig = [
+    { text: "Building age above 30 yrs", type: "yes_no", values: { YES: 5, NO: 0 } },
+    { text: "Operational Fire Hydrant/sprinkler/water spray system/fire alarm/smoke detectors", type: "yes_no", values: { YES: -10, NO: 0 } },
+    { text: "Electrical installations - well maintained standard equipment and installations", type: "yes_no", values: { YES: -10, NO: 0 } },
+    { text: "Provision of storm water drainage system and buildings with plinth level at least 1.5 ft above ground", type: "yes_no", values: { YES: -10, NO: 0 } },
+    { text: "High Standard of security with no of security guards for 24 x 7 and CCTVs", type: "yes_no", values: { YES: -10, NO: 5 } },
+    { text: "Past 3-years claims ratio", type: "select", options: [
+        { text: "0-30%", value: -30 },
+        { text: "30-70%", value: -20 },
+        { text: "70-100%", value: 0 },
+        { text: "100-200%", value: 10 },
+        { text: "> 200%", value: 50 }
+    ] },
+    { text: "Basement in Building used for operations/storage/plant machinery installed therein", type: "yes_no", values: { YES: 5, NO: 0 } },
+    { text: "Insured premises located within 1 km dstance of a water body like seashore, lake, rivers, canal etc", type: "yes_no", values: { YES: 5, NO: 0 } },
+    { text: "Risk located in thickly populated area with no access to fire brigade vehicle", type: "yes_no", values: { YES: 10, NO: 0 } }
+];
+
+function populateSurveyQuestionsTable() {
+    const tbody = document.getElementById('bsusDynamicFeaturesTbody');
+    tbody.innerHTML = "";
+    safetySurveyQuestionsConfig.forEach((item, index) => {
+        const row = document.createElement('tr');
+        let selectHtml = "";
+        let initialValue = 0;
+        
+        if (item.type === "yes_no") {
+            selectHtml = `
+                <select class="bsus-select-field survey-toggle" style="padding: 2px 4px; font-size: 0.75rem; width: 85px;">
+                    <option value="NO" selected>NO</option>
+                    <option value="YES">YES</option>
+                </select>
+            `;
+            initialValue = item.values["NO"];
+        } else if (item.type === "select") {
+            selectHtml = `
+                <select class="bsus-select-field survey-toggle" style="padding: 2px 4px; font-size: 0.75rem; width: 85px;">
+                    ${item.options.map(opt => `<option value="${opt.value}">${opt.text}</option>`).join('')}
+                </select>
+            `;
+            initialValue = item.options[0].value;
+        }
+        
+        row.innerHTML = `
+            <td style="text-align: center; font-weight: bold; color: #475569;">${index + 1}</td>
+            <td style="color: #1e293b; font-weight: 500;">${item.text}</td>
+            <td style="text-align: center;">${selectHtml}</td>
+            <td class="text-right" style="font-weight: bold; color: #475569; padding-right: 15px;">
+                <span class="survey-rate-weight-text">${(initialValue >= 0 ? "+" : "") + initialValue.toFixed(2)} %</span>
+                <input type="hidden" class="survey-rate-weight" value="${initialValue}">
+            </td>
+        `;
+        tbody.appendChild(row);
+    });
+}
+populateSurveyQuestionsTable();
+
+// Compress base string variables to safely protect generation bounds
+const rawHazData = "Category I|1|Aloe resin@@Category I|2|Aluminium resinate@@Category I|3|Amber@@Category I|4|Ammonium Bromide@@Category I|5|Ammonium Chloride@@Category I|6|Animal protein@@Category I|7|Ammonium Fluoride@@Category I|8|Almond oil@@Category I|9|Ammonium Sulphate@@Category I|10|Animal skin@@Category I|11|Spirits of ammonia@@Category I|12|Aluminium Chloride@@Category I|13|Anethole@@Category I|14|Anime resin@@Category I|15|Animal black@@Category I|16|Aluminium paste@@Category I|17|Animal glue@@Category I|18|Anthracene@@Category I|19|Algae@@Category I|20|Antimony Pentafluoride@@Category I|21|Animal oil@@Category I|22|Antimony Pentasulfide@@Category I|23|Flammable liquids high FP@@Category I|24|Antimony sulphate@@Category I|25|Antimony sulphide@@Category I|26|Antimony trisulphate@@Category I|27|Antimony trisulphide@@Category I|28|Arachis oil@@Category I|29|Arecanuts@@Category I|30|Arsenic Chloride@@Category I|31|Arsenic pentasulphide@@Category I|32|Arsenic sulphide@@Category I|33|Arsenic Trisulfide@@Category I|34|Artificial edible fat@@Category I|35|Artificial horn@@Category I|36|Artificial leather@@Category I|37|Artificial Silk@@Category I|38|Artificial wool@@Category I|39|Asafoetida gum resin@@Category I|40|Asafoetida oil@@Category I|41|Asphalt sheet@@Category I|42|Asphalted paper@@Category I|43|Balata, Balsam@@Category I|44|Bamboo mats@@Category I|45|Barium Carbonate@@Category I|46|Barium Sulphide@@Category I|47|Barley@@Category I|48|Baryllium Dust@@Category I|49|Bed feathers@@Category I|50|Beedi leaves@@Category I|51|Bees wax@@Category I|52|Beet sugar@@Category I|53|Beet tallow@@Category I|54|Benzoin resin@@Category I|55|Benzoin resinoid@@Category I|56|Betal Nuts@@Category I|57|Birch oil@@Category I|58|Bisphenol@@Category I|59|Bitumen felt@@Category I|60|Blacks of all kinds@@Category I|61|Borneo Camphor@@Category I|62|Borneol@@Category I|63|Borneo tallow@@Category I|64|Bornyl acetate@@Category I|65|Boron trichloride@@Category I|66|Boron trifluoride@@Category I|67|Bran@@Category I|68|Bran oil@@Category I|69|Butter fat@@Category I|70|Butter oil@@Category II|1|Accelerene@@Category II|2|Acetyl peroxide@@Category II|3|Flammable liquids 32C-65C@@Category II|4|Aloe fibres loose@@Category II|5|Aluminium carbide@@Category II|6|Aluminium ferrosilicon@@Category II|7|Aluminium hydride@@Category II|8|Aluminium nitrate@@Category II|9|Aluminium phosphide@@Category II|10|Aluminium powder@@Category II|11|Ammonium chromate@@Category II|12|Ammonium cyanide@@Category II|13|Ammonium dichromate@@Category II|14|Ammonium persulphate@@Category II|15|Amphetamine@@Category II|16|Amyl nitrite@@Category II|17|Angelica oil@@Category II|18|Antimony pentoxide@@Category II|19|Aqua Forties@@Category II|20|Aqua regia@@Category II|21|Balsams@@Category II|22|Bamboos whole@@Category II|23|Barium@@Category II|24|Barium azide@@Category II|25|Barium chlorate@@Category II|26|Barium chromate@@Category II|27|Barium dioxide@@Category II|28|Barium hydride@@Category II|29|Barium manganate@@Category II|30|Barium nitrate@@Category III|1|Activated Carbon@@Category III|2|Flammable liquids < 32C@@Category III|3|Aluminium Alkyl Halides@@Category III|4|Aluminium borohydride@@Category III|5|Aluminium triethyl@@Category III|6|Aluminium trihexyl@@Category III|7|Aluminium tri-isobutyl@@Category III|8|Aluminium trimethyl@@Category III|9|Aluminium tripropyl@@Category III|10|Amatol@@Category III|11|Ammonium bromate@@Category III|12|Ammonium chlorate@@Category III|13|Ammonium Nitrate@@Category III|14|Ammonium explosives@@Category III|15|Ammonium perchlorate@@Category III|16|Ammonium permanganate@@Category III|17|Ammonium picrate@@Category III|18|Ammunitions@@Category III|19|Amorces@@Category III|20|Arsine@@Category III|21|Azides@@Category III|22|Azimethylene@@Category III|23|Azoimide@@Category III|24|Baggase@@Category III|25|Bamboos split@@Category III|26|Benzol peroxide dry@@Category III|27|Black powder@@Category III|28|Blasting powder@@Category III|29|Bromo picric acid@@Category III|30|Butyl mercaptan@@Category III|205|Other Category III Goods";
 
 const hazardousGoodsDataset = rawHazData.split('@@').map(item => {
     const parts = item.split('|');
@@ -1732,7 +1880,6 @@ function evaluateRowVisibility() {
         rowFloater.classList.add('hidden');
     }
 
-    // Manual rate toggling logic for BLUS and SFSP
     const enterRateManually = document.getElementById('enterRateManuallyToggle').value;
     const manualRateInputContainer = document.getElementById('manualRateInputContainer');
     if (enterRateManually === 'yes') {
@@ -1741,7 +1888,6 @@ function evaluateRowVisibility() {
         manualRateInputContainer.classList.add('hidden');
     }
 
-    // Manual rate toggling logic for BSUS
     const bsusEnterRateManually = document.getElementById('bsusEnterRateManuallyToggle').value;
     const bsusManualRateInputContainer = document.getElementById('bsusManualRateInputContainer');
     if (bsusEnterRateManually === 'yes') {
@@ -1751,8 +1897,8 @@ function evaluateRowVisibility() {
     }
 }
 
-// CHANGE 6: UNIFIED CLEAR MASTER HANDLER TO ERAPE SEARCH TRACKING AND METADATA LIQUIDATION
-function clearSearchField(type) {
+// CHANGE 6: UNIFIED CLEAR BUTTON HANDLER TO RESET INPUTS AND ERASE ASSOCIATED RISK METADATA
+function fireSearchClearAction(type) {
     if (type === 'BSUS') {
         document.getElementById('bsusOccupancySearch').value = "";
         document.getElementById('selectedBsusIndex').value = "";
@@ -1776,76 +1922,75 @@ function clearSearchField(type) {
 }
 
 function calculateAggregateSumInsured() {
-    const building = parseFloat(document.getElementById('siBuilding').value) || 0;
-    const machinery = parseFloat(document.getElementById('siPlantMachinery').value) || 0;
-    const stockRaw = parseFloat(document.getElementById('siStockRaw').value) || 0;
-    const stockProc = parseFloat(document.getElementById('siStockProcess').value) || 0;
-    const fff = parseFloat(document.getElementById('siFFF').value) || 0;
-    const finished = parseFloat(document.getElementById('siFinishedGoods').value) || 0;
-    const other = parseFloat(document.getElementById('siOtherContents').value) || 0;
-    const floating = parseFloat(document.getElementById('siStockFloating').value) || 0;
+    const building = parseCommasToFloat(document.getElementById('siBuilding').value);
+    const machinery = parseCommasToFloat(document.getElementById('siPlantMachinery').value);
+    const stockRaw = parseCommasToFloat(document.getElementById('siStockRaw').value);
+    const stockProc = parseCommasToFloat(document.getElementById('siStockProcess').value);
+    const fff = parseCommasToFloat(document.getElementById('siFFF').value);
+    const finished = parseCommasToFloat(document.getElementById('siFinishedGoods').value);
+    const other = parseCommasToFloat(document.getElementById('siOtherContents').value);
+    const floating = parseCommasToFloat(document.getElementById('siStockFloating').value);
 
     const totalSum = building + machinery + stockRaw + stockProc + fff + finished + other + floating;
     
-    // CHANGE 3: APPLIED COMMA DIGIT GROUPING SEPARATOR IND-STYLE ON CORE READONLY VALUE TARGETS
+    // CHANGE 3: APPLIED STRICT IND FORMATTING COMMAS ON TOTAL CALCULATED SUMMARY INPUT
     document.getElementById('sumInsured').value = totalSum.toLocaleString('en-IN');
     
     runCalculation();
 }
 
 function runCalculation() {
-    // Correctly parse the dynamic number regardless of styling separators
-    const rawSiVal = document.getElementById('sumInsured').value.toString().replace(/,/g, '');
-    const si = parseFloat(rawSiVal) || 0;
-    const floatingSi = parseFloat(document.getElementById('siStockFloating').value) || 0;
+    const rawSumValue = document.getElementById('sumInsured').value.toString().replace(/,/g, '');
+    const si = parseFloat(rawSumValue) || 0;
+    const floatingSi = parseCommasToFloat(document.getElementById('siStockFloating').value);
     const M = si / 1000; 
 
     // =========================================================================
-    // DYNAMIC CRITICAL ALERT WARNING MATRIX (Changes 3, 4, 5)
+    // AUTOMATED TIER VALIDATION ALERTS PROMPTS SYSTEM (Changes 3, 4, 5)
     // =========================================================================
-    const warningPanel = document.getElementById('tierWarningBanner');
-    warningPanel.classList.add('hidden');
-    warningPanel.innerText = "";
+    const warningBanner = document.getElementById('tierWarningBanner');
+    warningBanner.classList.add('hidden');
+    warningBanner.innerText = "";
 
     if (selectedPolicyType === 'BSUS') {
         if (si > 50000000 && si <= 500000000) {
-            warningPanel.innerText = "T.S.I > 5 Cr Choose BSUS";
-            warningPanel.classList.remove('hidden');
+            warningBanner.innerText = "T.S.I > 5 Cr Choose BSUS";
+            warningBanner.classList.remove('hidden');
         } else if (si > 500000000) {
-            warningPanel.innerText = "T.S.I > 50 Cr Choose SFSP";
-            warningPanel.classList.remove('hidden');
+            warningBanner.innerText = "T.S.I > 50 Cr Choose SFSP";
+            warningBanner.classList.remove('hidden');
         }
     } else if (selectedPolicyType === 'BLUS') {
         if (si < 50000000) {
-            warningPanel.innerText = "T.S.I < 5 Cr Choose BSUS";
-            warningPanel.classList.remove('hidden');
+            warningBanner.innerText = "T.S.I < 5 Cr Choose BSUS";
+            warningBanner.classList.remove('hidden');
         } else if (si > 500000000) {
-            warningPanel.innerText = "T.S.I > 50 Cr Choose SFSP";
-            warningPanel.classList.remove('hidden');
+            warningBanner.innerText = "T.S.I > 50 Cr Choose SFSP";
+            warningBanner.classList.remove('hidden');
         }
     } else if (selectedPolicyType === 'SFSP') {
         if (si < 50000000) {
-            warningPanel.innerText = "T.S.I < 5 Cr Choose BSUS";
-            warningPanel.classList.remove('hidden');
+            warningBanner.innerText = "T.S.I < 5 Cr Choose BSUS";
+            warningBanner.classList.remove('hidden');
         } else if (si > 50000000 && si <= 500000000) {
-            warningPanel.innerText = "T.S.I >5 Cr & <=50 Cr Choose BLUS";
-            warningPanel.classList.remove('hidden');
+            warningBanner.innerText = "T.S.I >5 Cr & <=50 Cr Choose BLUS";
+            warningBanner.classList.remove('hidden');
         }
     }
 
     // =========================================================================
-    // CHANGE 1: FLOATER ACTIVATION DYNAMICALLY BLOCKS KUTCHA VALUE RULESETS
+    // CHANGE 1: FLOATER ACTIVATION AUTOMATICALLY INHIBITS KUTCHA APP ON BSUS
     // =========================================================================
-    const constSelectField = document.getElementById('construction');
+    const constructionDropdown = document.getElementById('construction');
     if (selectedPolicyType === 'BSUS' && document.getElementById('bsus_floater_select').value === 'yes') {
-        constSelectField.value = 'pucca';
-        constSelectField.disabled = true;
+        constructionDropdown.value = 'pucca';
+        constructionDropdown.disabled = true;
     } else {
-        constSelectField.disabled = false;
+        constructionDropdown.disabled = false;
     }
     evaluateRowVisibility();
 
-    // FORMAT INTEGRATION WITH COMMA PATTERNS (Change 3)
+    // Comma layout synchronization rule implementation (Change 3)
     const formattedSiText = si.toLocaleString('en-IN');
     document.getElementById('row-summary-si').innerText = formattedSiText;
     if (document.getElementById('visible-summary-si')) {
@@ -1857,23 +2002,22 @@ function runCalculation() {
         const isBsusManual = document.getElementById('bsusEnterRateManuallyToggle').value === 'yes';
         
         if (bsusIndexVal === "" && !isBsusManual) {
-            // Flush display rows to zero safely on deselection or clearance
-            const bsusRows = ['br_prem_1', 'br_prem_2', 'br_prem_3', 'br_prem_4', 'br_prem_5', 'br_prem_8', 'br_prem_9', 'br_prem_10', 'br_prem_11', 'br_prem_12', 'br_prem_13', 'br_prem_14', 'br_survey_factor_prem', 'br_prem_15', 'total-e', 'prem-gst', 'total-payable'];
-            bsusRows.forEach(id => {
-                const el = document.getElementById(id);
-                if(el) el.innerText = "0";
+            const clearIds = ['br_prem_1', 'br_prem_2', 'br_prem_3', 'br_prem_4', 'br_prem_5', 'br_prem_8', 'br_prem_9', 'br_prem_10', 'br_prem_11', 'br_prem_12', 'br_prem_13', 'br_prem_14', 'br_survey_factor_prem', 'br_prem_15', 'total-e', 'prem-gst', 'total-payable'];
+            clearIds.forEach(id => {
+                const node = document.getElementById(id);
+                if (node) node.innerText = "0";
             });
             return;
         }
         
         let category = 0;
         let section = "IV";
-        let parsedRiskCode = "";
+        let targetRiskCodeStr = "";
         if (bsusIndexVal !== "") {
             const record = bsusRateSchedule[parseInt(bsusIndexVal)];
             category = record.cat;
             section = record.sec.trim();
-            parsedRiskCode = record.code ? record.code.trim() : "";
+            targetRiskCodeStr = record.code ? record.code.trim() : "";
         }
 
         let catModifierWeight = 0; 
@@ -1892,9 +2036,7 @@ function runCalculation() {
             }
         }
         
-        // =========================================================================
-        // CHANGE 2 & 3: WHOLE INTEGER ROUNDING AND COMMA ASSIGNMENT FOR BSUS LEDGER
-        // =========================================================================
+        // CHANGE 2 & 3: BSUS MATRICES CALCULATIONS INTEGRATE Math.round AND .toLocaleString('en-IN')
         const prem1 = Math.round(M * flexaRate);
         document.getElementById('br_rate_1').innerText = flexaRate.toFixed(4);
         document.getElementById('br_prem_1').innerText = prem1.toLocaleString('en-IN');
@@ -1940,11 +2082,11 @@ function runCalculation() {
         document.getElementById('br_prem_8').innerText = prem8.toLocaleString('en-IN');
 
         // =========================================================================
-        // CHANGE 7: CONDITIONAL STFI TARIFF LEVEL RATING INJECTOR FOR OPEN STORAGE CODES
+        // CHANGE 7: EXCEPTION INJECTOR IMPLEMENTATION FOR OPEN STFI STORAGE CODES 4012-4019
         // =========================================================================
         let baseUnadjustedStfi = 0.25;
-        let numericCode = parseInt(parsedRiskCode);
-        if (numericCode >= 4012 && numericCode <= 4019) {
+        let numericCodeInt = parseInt(targetRiskCodeStr);
+        if (numericCodeInt >= 4012 && numericCodeInt <= 4019) {
             baseUnadjustedStfi = 1.50;
         } else if (section === "III") {
             baseUnadjustedStfi = 0.15;
@@ -2017,7 +2159,7 @@ function runCalculation() {
         return;
     }
 
-    // STANDARD TRADITIONAL CALCULATIONS MODES (BGR, BLUS, SFSP)
+    // STANDARD CALCULATIONS MODES (BGR, BLUS, SFSP)
     let basicPrem = 0;
     let basicRateText = "0.00";
     if (selectedPolicyType === 'BGR') {
@@ -2220,10 +2362,6 @@ document.getElementById('bsusEnterRateManuallyToggle').addEventListener('change'
 });
 document.getElementById('bsusManualRateValue').addEventListener('input', runCalculation);
 
-document.querySelectorAll('.si-input').forEach(input => {
-    input.addEventListener('input', calculateAggregateSumInsured);
-});
-
 document.addEventListener('change', function(e) {
     if (e.target.classList.contains('survey-toggle')) {
         const row = e.target.closest('tr');
@@ -2262,6 +2400,7 @@ document.addEventListener('click', function(e) {
 
 // Setup default layout bindings
 adjustLayoutRules();
+initializeCurrencyInputListeners();
 calculateAggregateSumInsured();
 </script>
 </body>
