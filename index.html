@@ -6,426 +6,65 @@
     <title>NIA Fire Insc Premium Calc</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
-        :root {
-            --primary: #0284c7;
-            --primary-hover: #0369a1;
-            --bg: #f8fafc;
-            --card-bg: #ffffff;
-            --text: #1e293b;
-            --border: #e2e8f0;
-            --accent: #f59e0b;
-            --danger: #ef4444;
-            --success: #22c55e;
-            --distinct-bg: #f1f5f9;
-            --distinct-border: #cbd5e1;
-        }
-
-        body {
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            margin: 0;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        h1, h2, h3 {
-            color: #0f172a;
-            margin-top: 0;
-        }
-
-        .warning-banner {
-            background-color: #fee2e2;
-            border: 2px solid var(--danger);
-            color: #991b1b;
-            padding: 12px 16px;
-            border-radius: 8px;
-            font-weight: 700;
-            margin-bottom: 20px;
-            font-size: 1.1rem;
-            text-align: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-
-        .policy-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-
-        .policy-card {
-            background: var(--card-bg);
-            border: 2px solid var(--border);
-            border-radius: 8px;
-            padding: 15px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .policy-card:hover {
-            border-color: var(--primary);
-            transform: translateY(-2px);
-        }
-
-        .policy-card.active {
-            border-color: var(--primary);
-            background-color: #f0f9ff;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
-
-        .policy-card h3 {
-            margin: 0 0 8px 0;
-            font-size: 1.1rem;
-        }
-
-        .policy-card p {
-            margin: 0;
-            font-size: 0.85rem;
-            color: #64748b;
-        }
-
-        .workspace {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-        }
-
-        @media (max-width: 992px) {
-            .workspace {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .panel {
-            background: var(--card-bg);
-            padding: 20px;
-            border-radius: 8px;
-            border: 1px solid var(--border);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-        }
-
-        .form-group {
-            margin-bottom: 18px;
-            position: relative;
-        }
-
-        .form-group.distinct-label label,
-        .distinct-label-heading {
-            display: block;
-            margin-bottom: 6px;
-            font-weight: 700;
-            font-size: 0.95rem;
-            background-color: var(--distinct-bg);
-            border-left: 4px solid var(--primary);
-            padding: 6px 10px;
-            border-radius: 0 4px 4px 0;
-            color: #0f172a;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 6px;
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
-
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 10px 12px;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            box-sizing: border-box;
-            font-size: 0.9rem;
-        }
-
-        .form-group input:disabled, .form-group select:disabled {
-            background-color: #f1f5f9;
-            color: #94a3b8;
-            cursor: not-allowed;
-        }
-
-        .search-flex-row {
-            display: flex;
-            gap: 8px;
-            width: 100%;
-        }
-
-        .search-flex-row .search-container {
-            flex: 1;
-        }
-
-        .btn-clear {
-            background-color: #64748b;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            padding: 0 16px;
-            font-size: 0.85rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.2s ease;
-            white-space: nowrap;
-        }
-
-        .btn-clear:hover {
-            background-color: #475569;
-        }
-
-        .si-breakup-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            background-color: #f8fafc;
-            padding: 14px;
-            border: 1px dashed var(--border);
-            border-radius: 8px;
-            margin-bottom: 12px;
-        }
-
-        .form-group-si {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .form-group-si label {
-            font-size: 0.8rem;
-            font-weight: bold;
-            color: #475569;
-            margin-bottom: 4px;
-        }
-
-        .form-group-si input {
-            padding: 8px 10px;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            font-size: 0.85rem;
-        }
-
-        .help-text {
-            font-size: 0.8rem;
-            color: #64748b;
-            margin-top: 6px;
-            display: block;
-            line-height: 1.4;
-            background-color: #f1f5f9;
-            padding: 8px 12px;
-            border-left: 3px solid var(--primary);
-            border-radius: 0 4px 4px 0;
-        }
-
-        .search-container {
-            position: relative;
-        }
-        
-        .search-container input {
-            padding-left: 32px;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: 8px center;
-            background-size: 16px;
-        }
-
-        .autocomplete-results {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            width: 100%;
-            max-height: 220px;
-            overflow-y: auto;
-            background: #ffffff;
-            border: 1px solid var(--border);
-            border-top: none;
-            border-radius: 0 0 6px 6px;
-            z-index: 1000;
-            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
-        }
-
-        .autocomplete-item {
-            padding: 10px 12px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            border-bottom: 1px solid #f1f5f9;
-            text-align: left;
-        }
-
-        .autocomplete-item:hover {
-            background-color: #f0f9ff;
-            color: var(--primary);
-        }
-
-        .meta-container {
-            background-color: #f8fafc;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            padding: 14px;
-            margin-top: 14px;
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            font-size: 0.85rem;
-        }
-
-        .meta-item {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .meta-label {
-            font-weight: bold;
-            color: #64748b;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            margin-bottom: 2px;
-        }
-
-        .meta-value {
-            color: #0f172a;
-            font-weight: 600;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.9rem;
-        }
-
-        th, td {
-            padding: 12px 10px;
-            text-align: left;
-            border-bottom: 1px solid var(--border);
-        }
-
-        th {
-            background-color: #f1f5f9;
-            font-weight: 600;
-        }
-
-        .subtotal-row {
-            background-color: #f8fafc;
-            font-weight: bold;
-        }
-
-        .final-row {
-            background-color: #e0f2fe;
-            font-weight: bold;
-            font-size: 1.05rem;
-            border-top: 2px dashed var(--primary);
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        .text-right {
-            text-align: right !important;
-        }
-
-        .btn-container {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .btn {
-            flex: 1;
-            padding: 10px 15px;
-            font-size: 0.9rem;
-            font-weight: bold;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            transition: background-color 0.2s ease;
-        }
-
-        .btn-excel {
-            background-color: #16a34a;
-            color: white;
-        }
-
-        .btn-excel:hover {
-            background-color: #15803d;
-        }
-
-        .btn-pdf {
-            background-color: #ea580c;
-            color: white;
-        }
-
-        .btn-pdf:hover {
-            background-color: #c2410c;
-        }
-
-        .bsus-worksheet-panel {
-            background-color: #ffffff;
-            border: 2px solid var(--primary);
-            border-radius: 8px;
-            padding: 16px;
-            margin-top: 15px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-        }
-
-        .bsus-table-layout {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.82rem;
-            margin-bottom: 20px;
-        }
-
-        .bsus-table-layout th, .bsus-table-layout td {
-            padding: 8px 10px;
-            border: 1px solid var(--border);
-        }
-
-        .bsus-table-layout th {
-            background-color: #e0f2fe;
-            color: #0369a1;
-            font-weight: bold;
-        }
-
-        .bsus-row-heading {
-            font-weight: 600;
-            color: #0f172a;
-        }
-
-        .bsus-input-field {
-            width: 90px;
-            padding: 5px 8px;
-            border: 1px solid var(--distinct-border);
-            border-radius: 4px;
-            text-align: right;
-            font-size: 0.82rem;
-        }
-
-        .bsus-select-field {
-            width: 100%;
-            padding: 5px 8px;
-            border: 1px solid var(--distinct-border);
-            border-radius: 4px;
-            font-size: 0.82rem;
-            background-color: #fff;
-        }
-
-        .bsus-highlight-row {
-            background-color: #f8fafc;
-            font-weight: bold;
-        }
-
-        .bsus-final-row {
-            background-color: #f0fdf4;
-            font-weight: bold;
-            color: #166534;
-            border: 2px dashed #22c55e;
-        }
+        :root { --primary: #0284c7; --primary-hover: #0369a1; --bg: #f8fafc; --card-bg: #ffffff; --text: #1e293b; --border: #e2e8f0; --accent: #f59e0b; --danger: #ef4444; --success: #22c55e; --distinct-bg: #f1f5f9; --distinct-border: #cbd5e1; }
+        body { font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 20px; }
+        .container { max-width: 1400px; margin: 0 auto; }
+        h1, h2, h3 { color: #0f172a; margin-top: 0; }
+        .warning-banner { background-color: #fee2e2; border: 2px solid var(--danger); color: #991b1b; padding: 12px 16px; border-radius: 8px; font-weight: 700; margin-bottom: 20px; font-size: 1.1rem; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .policy-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-bottom: 30px; }
+        .policy-card { background: var(--card-bg); border: 2px solid var(--border); border-radius: 8px; padding: 15px; cursor: pointer; transition: all 0.2s ease; }
+        .policy-card:hover { border-color: var(--primary); transform: translateY(-2px); }
+        .policy-card.active { border-color: var(--primary); background-color: #f0f9ff; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+        .policy-card h3 { margin: 0 0 8px 0; font-size: 1.1rem; }
+        .policy-card p { margin: 0; font-size: 0.85rem; color: #64748b; }
+        .workspace { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        @media (max-width: 992px) { .workspace { grid-template-columns: 1fr; } }
+        .panel { background: var(--card-bg); padding: 20px; border-radius: 8px; border: 1px solid var(--border); box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .form-group { margin-bottom: 18px; position: relative; }
+        .form-group.distinct-label label, .distinct-label-heading { display: block; margin-bottom: 6px; font-weight: 700; font-size: 0.95rem; background-color: var(--distinct-bg); border-left: 4px solid var(--primary); padding: 6px 10px; border-radius: 0 4px 4px 0; color: #0f172a; }
+        .form-group label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 0.9rem; }
+        .form-group input, .form-group select { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 6px; box-sizing: border-box; font-size: 0.9rem; }
+        .form-group input:disabled, .form-group select:disabled { background-color: #f1f5f9; color: #94a3b8; cursor: not-allowed; }
+        .search-flex-row { display: flex; gap: 8px; width: 100%; }
+        .search-flex-row .search-container { flex: 1; }
+        .btn-clear { background-color: #64748b; color: white; border: none; border-radius: 6px; padding: 0 16px; font-size: 0.85rem; font-weight: bold; cursor: pointer; transition: background-color 0.2s ease; white-space: nowrap; }
+        .btn-clear:hover { background-color: #475569; }
+        .si-breakup-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; background-color: #f8fafc; padding: 14px; border: 1px dashed var(--border); border-radius: 8px; margin-bottom: 12px; }
+        .form-group-si { display: flex; flex-direction: column; }
+        .form-group-si label { font-size: 0.8rem; font-weight: bold; color: #475569; margin-bottom: 4px; }
+        .form-group-si input { padding: 8px 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 0.85rem; }
+        .help-text { font-size: 0.8rem; color: #64748b; margin-top: 6px; display: block; line-height: 1.4; background-color: #f1f5f9; padding: 8px 12px; border-left: 3px solid var(--primary); border-radius: 0 4px 4px 0; }
+        .search-container { position: relative; }
+        .search-container input { padding-left: 32px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: 8px center; background-size: 16px; }
+        .autocomplete-results { position: absolute; top: 100%; left: 0; width: 100%; max-height: 220px; overflow-y: auto; background: #ffffff; border: 1px solid var(--border); border-top: none; border-radius: 0 0 6px 6px; z-index: 1000; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        .autocomplete-item { padding: 10px 12px; cursor: pointer; font-size: 0.85rem; border-bottom: 1px solid #f1f5f9; text-align: left; }
+        .autocomplete-item:hover { background-color: #f0f9ff; color: var(--primary); }
+        .meta-container { background-color: #f8fafc; border: 1px solid var(--border); border-radius: 6px; padding: 14px; margin-top: 14px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; font-size: 0.85rem; }
+        .meta-item { display: flex; flex-direction: column; }
+        .meta-label { font-weight: bold; color: #64748b; font-size: 0.75rem; text-transform: uppercase; margin-bottom: 2px; }
+        .meta-value { color: #0f172a; font-weight: 600; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+        th, td { padding: 12px 10px; text-align: left; border-bottom: 1px solid var(--border); }
+        th { background-color: #f1f5f9; font-weight: 600; }
+        .subtotal-row { background-color: #f8fafc; font-weight: bold; }
+        .final-row { background-color: #e0f2fe; font-weight: bold; font-size: 1.05rem; border-top: 2px dashed var(--primary); }
+        .hidden { display: none !important; }
+        .text-right { text-align: right !important; }
+        .btn-container { display: flex; gap: 10px; margin-top: 20px; }
+        .btn { flex: 1; padding: 10px 15px; font-size: 0.9rem; font-weight: bold; border: none; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: background-color 0.2s ease; }
+        .btn-excel { background-color: #16a34a; color: white; }
+        .btn-excel:hover { background-color: #15803d; }
+        .btn-pdf { background-color: #ea580c; color: white; }
+        .btn-pdf:hover { background-color: #c2410c; }
+        .bsus-worksheet-panel { background-color: #ffffff; border: 2px solid var(--primary); border-radius: 8px; padding: 16px; margin-top: 15px; margin-bottom: 20px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
+        .bsus-table-layout { width: 100%; border-collapse: collapse; font-size: 0.82rem; margin-bottom: 20px; }
+        .bsus-table-layout th, .bsus-table-layout td { padding: 8px 10px; border: 1px solid var(--border); }
+        .bsus-table-layout th { background-color: #e0f2fe; color: #0369a1; font-weight: bold; }
+        .bsus-row-heading { font-weight: 600; color: #0f172a; }
+        .bsus-input-field { width: 90px; padding: 5px 8px; border: 1px solid var(--distinct-border); border-radius: 4px; text-align: right; font-size: 0.82rem; }
+        .bsus-select-field { width: 100%; padding: 5px 8px; border: 1px solid var(--distinct-border); border-radius: 4px; font-size: 0.82rem; background-color: #fff; }
+        .bsus-highlight-row { background-color: #f8fafc; font-weight: bold; }
+        .bsus-final-row { background-color: #f0fdf4; font-weight: bold; color: #166534; border: 2px dashed #22c55e; }
     </style>
 </head>
 <body>
@@ -435,10 +74,8 @@
         <h1 style="font-size: 2.2rem; color: #0f172a; border-bottom: 2px solid var(--primary); padding-bottom: 10px;">NIA Fire Insc Premium Calc</h1>
     </header>
 
-    <!-- PROMPT WARNING ALERTS BANNER CONTAINER -->
     <div id="tierWarningBanner" class="warning-banner hidden"></div>
 
-    <!-- STEP 1: CHOOSE YOUR POLICY TYPE -->
     <h2>CHOOSE YOUR POLICY TYPE</h2>
     <div class="policy-grid">
         <div class="policy-card active" onclick="selectPolicy('BGR', this)">
@@ -459,57 +96,27 @@
         </div>
     </div>
 
-    <!-- MAIN CALCULATOR WORKSPACE -->
     <div class="workspace" id="workspace">
-        
-        <!-- LEFT: INPUT PARAMETERS -->
         <div class="panel">
             <h2>Risk & Value Details</h2>
             
-            <!-- Breakup of Sum Insured -->
             <label class="distinct-label-heading">Asset Value Breakup (₹)</label>
             <div class="si-breakup-grid">
-                <div class="form-group-si">
-                    <label for="siBuilding">a) Building</label>
-                    <input type="text" id="siBuilding" class="si-input" value="10000000">
-                </div>
-                <div class="form-group-si">
-                    <label for="siPlantMachinery">b) Plant / Machinery</label>
-                    <input type="text" id="siPlantMachinery" class="si-input" value="0">
-                </div>
-                <div class="form-group-si">
-                    <label for="siStockRaw">c) Stock / Raw Material</label>
-                    <input type="text" id="siStockRaw" class="si-input" value="0">
-                </div>
-                <div class="form-group-si">
-                    <label for="siStockProcess">d) Stock in Process</label>
-                    <input type="text" id="siStockProcess" class="si-input" value="0">
-                </div>
-                <div class="form-group-si">
-                    <label for="siFFF">e) FFF</label>
-                    <input type="text" id="siFFF" class="si-input" value="0">
-                </div>
-                <div class="form-group-si">
-                    <label for="siFinishedGoods">f) Finished Goods</label>
-                    <input type="text" id="siFinishedGoods" class="si-input" value="0">
-                </div>
-                <div class="form-group-si">
-                    <label for="siOtherContents">g) Other Contents</label>
-                    <input type="text" id="siOtherContents" class="si-input" value="0">
-                </div>
-                <div class="form-group-si">
-                    <label for="siStockFloating" style="color:var(--primary); font-weight: bold;">h) Stock - Floating</label>
-                    <input type="text" id="siStockFloating" class="si-input" value="0" style="border-color:var(--primary);">
-                </div>
+                <div class="form-group-si"><label for="siBuilding">a) Building</label><input type="text" id="siBuilding" class="si-input" value="10000000"></div>
+                <div class="form-group-si"><label for="siPlantMachinery">b) Plant / Machinery</label><input type="text" id="siPlantMachinery" class="si-input" value="0"></div>
+                <div class="form-group-si"><label for="siStockRaw">c) Stock / Raw Material</label><input type="text" id="siStockRaw" class="si-input" value="0"></div>
+                <div class="form-group-si"><label for="siStockProcess">d) Stock in Process</label><input type="text" id="siStockProcess" class="si-input" value="0"></div>
+                <div class="form-group-si"><label for="siFFF">e) FFF</label><input type="text" id="siFFF" class="si-input" value="0"></div>
+                <div class="form-group-si"><label for="siFinishedGoods">f) Finished Goods</label><input type="text" id="siFinishedGoods" class="si-input" value="0"></div>
+                <div class="form-group-si"><label for="siOtherContents">g) Other Contents</label><input type="text" id="siOtherContents" class="si-input" value="0"></div>
+                <div class="form-group-si"><label for="siStockFloating" style="color:var(--primary); font-weight: bold;">h) Stock - Floating</label><input type="text" id="siStockFloating" class="si-input" value="0" style="border-color:var(--primary);"></div>
             </div>
 
-            <!-- Side Head 1 -->
             <div class="form-group distinct-label">
                 <label for="sumInsured">1. Total Sum Insured (₹) <span style="font-size:0.75rem; color:#64748b; font-weight:normal;">(Auto-Calculated)</span></label>
                 <input type="text" id="sumInsured" readonly style="background-color: #f1f5f9; font-weight: bold; color: #0f172a;" value="1,00,00,000">
             </div>
 
-            <!-- REPOSITIONED: Construction Type -->
             <div class="form-group distinct-label" id="constructionContainer">
                 <label for="construction" id="label-construction">2. Construction Type</label>
                 <select id="construction">
@@ -521,7 +128,6 @@
                 </span>
             </div>
 
-            <!-- NEW FIELD: Terrorism Opt-Out Control -->
             <div class="form-group distinct-label" id="terrorismOptOutContainer">
                 <label for="terrorismOptOutToggle">Opting out of Terrorism Cover (Flexi) ?</label>
                 <select id="terrorismOptOutToggle">
@@ -530,10 +136,8 @@
                 </select>
             </div>
 
-            <!-- DYNAMIC NEW SPREADSHEET MATRIX WORKING AREA (BSUS EXCLUSIVE) -->
             <div id="bsusRevampedSection" class="hidden">
                 <div class="bsus-worksheet-panel">
-                    
                     <div class="form-group" id="bsusManualRateOptionContainer" style="margin-bottom: 14px;">
                         <label for="bsusEnterRateManuallyToggle" style="font-weight: 600; font-size: 0.9rem; color: #0f172a;">Enter Flexa Rate Manually?</label>
                         <select id="bsusEnterRateManuallyToggle" class="bsus-select-field" style="width: 100%;">
@@ -560,22 +164,10 @@
                     </div>
 
                     <div id="bsusMetaDisplay" class="meta-container hidden" style="margin-bottom: 14px; background-color: #f0f9ff; border-color: #bae6fd;">
-                        <div class="meta-item">
-                            <span class="meta-label">Selected Risk Code</span>
-                            <span id="b-meta-code" class="meta-value" style="color: var(--primary);">-</span>
-                        </div>
-                        <div class="meta-item">
-                            <span class="meta-label">Tariff Schedule Section</span>
-                            <span id="b-meta-sec" class="meta-value">-</span>
-                        </div>
-                        <div class="meta-item">
-                            <span class="meta-label">Assigned Category</span>
-                            <span id="b-meta-cat" class="meta-value" style="color: var(--accent); font-size: 1rem;">-</span>
-                        </div>
-                        <div class="meta-item">
-                            <span class="meta-label">Base Flexa Coefficient</span>
-                            <span id="b-meta-rate" class="meta-value">-</span>
-                        </div>
+                        <div class="meta-item"><span class="meta-label">Selected Risk Code</span><span id="b-meta-code" class="meta-value" style="color: var(--primary);">-</span></div>
+                        <div class="meta-item"><span class="meta-label">Tariff Schedule Section</span><span id="b-meta-sec" class="meta-value">-</span></div>
+                        <div class="meta-item"><span class="meta-label">Assigned Category</span><span id="b-meta-cat" class="meta-value" style="color: var(--accent); font-size: 1rem;">-</span></div>
+                        <div class="meta-item"><span class="meta-label">Base Flexa Coefficient</span><span id="b-meta-rate" class="meta-value">-</span></div>
                     </div>
 
                     <table class="bsus-table-layout">
@@ -587,90 +179,34 @@
                             </tr>
                         </thead>
                         <tbody>
+                            <tr><td class="bsus-row-heading">FLEXA RATE</td><td id="br_rate_1" class="text-right">0.0000</td><td id="br_prem_1" class="text-right">0</td></tr>
+                            <tr><td class="bsus-row-heading">ADJUSTED FLEXA RATE DISC/LOAD</td><td id="br_rate_2" class="text-right">0.00 %</td><td id="br_prem_2" class="text-right">0</td></tr>
+                            <tr class="bsus-highlight-row"><td>NET TOTAL</td><td id="br_rate_3" class="text-right">0.0000</td><td id="br_prem_3" class="text-right">0</td></tr>
+                            <tr><td class="bsus-row-heading">KUTCHA ADD 4 PER MILLE</td><td id="br_rate_4" class="text-right">0.0000</td><td id="br_prem_4" class="text-right">0</td></tr>
+                            <tr class="bsus-highlight-row"><td>TOTAL</td><td id="br_rate_5" class="text-right">0.0000</td><td id="br_prem_5" class="text-right">0</td></tr>
                             <tr>
-                                <td class="bsus-row-heading">FLEXA RATE</td>
-                                <td id="br_rate_1" class="text-right">0.0000</td>
-                                <td id="br_prem_1" class="text-right">0</td>
-                            </tr>
-                            <tr>
-                                <td class="bsus-row-heading">ADJUSTED FLEXA RATE DISC/LOAD</td>
-                                <td id="br_rate_2" class="text-right">0.00 %</td>
-                                <td id="br_prem_2" class="text-right">0</td>
-                            </tr>
-                            <tr class="bsus-highlight-row">
-                                <td>NET TOTAL</td>
-                                <td id="br_rate_3" class="text-right">0.0000</td>
-                                <td id="br_prem_3" class="text-right">0</td>
-                            </tr>
-                            <tr>
-                                <td class="bsus-row-heading">KUTCHA ADD 4 PER MILLE</td>
-                                <td id="br_rate_4" class="text-right">0.0000</td>
-                                <td id="br_prem_4" class="text-right">0</td>
-                            </tr>
-                            <tr class="bsus-highlight-row">
-                                <td>TOTAL</td>
-                                <td id="br_rate_5" class="text-right">0.0000</td>
-                                <td id="br_prem_5" class="text-right">0</td>
-                            </tr>
-                            <tr>
-                                <td class="bsus-row-heading">
-                                    B ADJUSTED EQ RATE 
+                                <td class="bsus-row-heading">B ADJUSTED EQ RATE 
                                     <select id="bsus_eq_zone_select" class="bsus-select-field" style="padding: 2px 4px; font-size: 0.78rem; width: 90px; margin: 0; display: inline-block; margin-left: 10px;">
-                                        <option value="ZONE_I">Zone I</option>
-                                        <option value="ZONE_II">Zone II</option>
-                                        <option value="ZONE_III">Zone III</option>
-                                        <option value="ZONE_IV" selected>Zone IV</option>
+                                        <option value="ZONE_I">Zone I</option><option value="ZONE_II">Zone II</option><option value="ZONE_III">Zone III</option><option value="ZONE_IV" selected>Zone IV</option>
                                     </select>
                                 </td>
-                                <td id="br_rate_8" class="text-right">0.0000</td>
-                                <td id="br_prem_8" class="text-right">0</td>
+                                <td id="br_rate_8" class="text-right">0.0000</td><td id="br_prem_8" class="text-right">0</td>
                             </tr>
+                            <tr><td class="bsus-row-heading">C ADJUSTED STFI RATE</td><td id="br_rate_9" class="text-right">0.0000</td><td id="br_prem_9" class="text-right">0</td></tr>
+                            <tr><td class="bsus-row-heading">D TERRORISM</td><td id="br_rate_10" class="text-right">0.0000</td><td id="br_prem_10" class="text-right">0</td></tr>
+                            <tr class="bsus-highlight-row" style="background-color: #f1f5f9;"><td>TOTAL A + B + C + D</td><td id="br_rate_11" class="text-right">0.0000</td><td id="br_prem_11" class="text-right">0</td></tr>
+                            <tr><td class="bsus-row-heading">DISCRETIONARY DISCOUNT Max 10%</td><td style="text-align: right;"><input type="number" id="bsus_discount_pct_input" class="bsus-input-field" min="0" max="10" step="0.01" value="0" style="padding: 2px; height: 24px;"> %</td><td id="br_prem_12" class="text-right">0</td></tr>
+                            <tr class="bsus-highlight-row" style="background-color: #e0f2fe;"><td>NET AMOUNT</td><td id="br_rate_13" class="text-right">0.0000</td><td id="br_prem_13" class="text-right">0</td></tr>
                             <tr>
-                                <td class="bsus-row-heading">C ADJUSTED STFI RATE</td>
-                                <td id="br_rate_9" class="text-right">0.0000</td>
-                                <td id="br_prem_9" class="text-right">0</td>
-                            </tr>
-                            <tr>
-                                <td class="bsus-row-heading">D TERRORISM</td>
-                                <td id="br_rate_10" class="text-right">0.0000</td>
-                                <td id="br_prem_10" class="text-right">0</td>
-                            </tr>
-                            <tr class="bsus-highlight-row" style="background-color: #f1f5f9;">
-                                <td>TOTAL A + B + C + D</td>
-                                <td id="br_rate_11" class="text-right">0.0000</td>
-                                <td id="br_prem_11" class="text-right">0</td>
-                            </tr>
-                            <tr>
-                                <td class="bsus-row-heading">DISCRETIONARY DISCOUNT Max 10%</td>
-                                <td style="text-align: right;"><input type="number" id="bsus_discount_pct_input" class="bsus-input-field" min="0" max="10" step="0.01" value="0" style="padding: 2px; height: 24px;"> %</td>
-                                <td id="br_prem_12" class="text-right">0</td>
-                            </tr>
-                            <tr class="bsus-highlight-row" style="background-color: #e0f2fe;">
-                                <td>NET AMOUNT</td>
-                                <td id="br_rate_13" class="text-right">0.0000</td>
-                                <td id="br_prem_13" class="text-right">0</td>
-                            </tr>
-                            <tr>
-                                <td class="bsus-row-heading">
-                                    FLOATER EXTRA 10%
+                                <td class="bsus-row-heading">FLOATER EXTRA 10%
                                     <select id="bsus_floater_select" class="bsus-select-field" style="padding: 2px; font-size: 0.75rem; width: 75px; display: inline-block; margin-left: 10px;">
-                                        <option value="no" selected>NO</option>
-                                        <option value="yes">YES</option>
+                                        <option value="no" selected>NO</option><option value="yes">YES</option>
                                     </select>
                                 </td>
-                                <td id="br_rate_14" class="text-right">0.0000</td>
-                                <td id="br_prem_14" class="text-right">0</td>
+                                <td id="br_rate_14" class="text-right">0.0000</td><td id="br_prem_14" class="text-right">0</td>
                             </tr>
-                            <tr>
-                                <td class="bsus-row-heading">NET DISC/LOAD – Answer 9 Q’s under Good/Bad Features</td>
-                                <td id="br_survey_factor_rate" class="text-right">0.00 %</td>
-                                <td id="br_survey_factor_prem" class="text-right">0</td>
-                            </tr>
-                            <tr class="bsus-final-row">
-                                <td>FINAL NET RATE</td>
-                                <td id="br_rate_15" class="text-right">0.0000</td>
-                                <td id="br_prem_15" class="text-right">0</td>
-                            </tr>
+                            <tr><td class="bsus-row-heading">NET DISC/LOAD – Answer 9 Q’s under Good/Bad Features</td><td id="br_survey_factor_rate" class="text-right">0.00 %</td><td id="br_survey_factor_prem" class="text-right">0</td></tr>
+                            <tr class="bsus-final-row"><td>FINAL NET RATE</td><td id="br_rate_15" class="text-right">0.0000</td><td id="br_prem_15" class="text-right">0</td></tr>
                         </tbody>
                     </table>
 
@@ -689,9 +225,7 @@
                 </div>
             </div>
 
-            <!-- CONTAINER WRAPPER PANELS HOUSING DYNAMIC STANDARDS -->
             <div id="standardCommercialControlsContainer">
-                <!-- BGR Rate Options Dropdown (Visible ONLY for BGR) -->
                 <div class="form-group distinct-label" id="bgrRateContainer">
                     <label for="bgrRateOption" id="label-bgrRateOption">3. BGR Basic Rate Option</label>
                     <select id="bgrRateOption">
@@ -700,7 +234,6 @@
                     </select>
                 </div>
 
-                <!-- Side Head 2 -->
                 <div class="form-group id-commercial distinct-label hidden" id="manualRateOptionContainer">
                     <label for="enterRateManuallyToggle">2. Enter Rate Manually?</label>
                     <select id="enterRateManuallyToggle">
@@ -714,7 +247,6 @@
                     <input type="number" id="manualRateValue" placeholder="e.g. 0.75" step="0.001" value="">
                 </div>
 
-                <!-- Side Head 3 -->
                 <div class="form-group id-commercial distinct-label hidden" id="occupancyContainer">
                     <label for="occupancySearch">3. Occupancy / Risk Selection (Search by Code or Keyword)</label>
                     <div class="search-flex-row">
@@ -725,37 +257,17 @@
                         <button type="button" class="btn-clear" onclick="fireSearchClearAction('STANDARD')">CLEAR</button>
                     </div>
                     <input type="hidden" id="selectedOccupancyIndex" value="">
-
-                    <!-- Metadata Display Box -->
+                    
                     <div id="metaBox" class="meta-container hidden" style="grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 14px;">
-                        <div class="meta-item">
-                            <span class="meta-label">RATE</span>
-                            <span id="meta-rate" class="meta-value">-</span>
-                        </div>
-                        <div class="meta-item">
-                            <span class="meta-label">RISK CODE</span>
-                            <span id="meta-code" class="meta-value">-</span>
-                        </div>
-                        <div class="meta-item">
-                            <span class="meta-label">SECTION</span>
-                            <span id="meta-section" class="meta-value">-</span>
-                        </div>
-                        <div class="meta-item">
-                            <span class="meta-label">CATEGORY</span>
-                            <span id="meta-category" class="meta-value">-</span>
-                        </div>
-                        <div class="meta-item">
-                            <span class="meta-label">H.O APPROVAL IF ANY</span>
-                            <span id="meta-ho" class="meta-value" style="color: var(--danger); font-weight: bold;">-</span>
-                        </div>
-                        <div class="meta-item">
-                            <span class="meta-label">DECLINED RISK IF ANY</span>
-                            <span id="meta-declined" class="meta-value" style="color: var(--danger); font-weight: bold;">-</span>
-                        </div>
+                        <div class="meta-item"><span class="meta-label">RATE</span><span id="meta-rate" class="meta-value">-</span></div>
+                        <div class="meta-item"><span class="meta-label">RISK CODE</span><span id="meta-code" class="meta-value">-</span></div>
+                        <div class="meta-item"><span class="meta-label">SECTION</span><span id="meta-section" class="meta-value">-</span></div>
+                        <div class="meta-item"><span class="meta-label">CATEGORY</span><span id="meta-category" class="meta-value">-</span></div>
+                        <div class="meta-item"><span class="meta-label">H.O APPROVAL IF ANY</span><span id="meta-ho" class="meta-value" style="color: var(--danger); font-weight: bold;">-</span></div>
+                        <div class="meta-item"><span class="meta-label">DECLINED RISK IF ANY</span><span id="meta-declined" class="meta-value" style="color: var(--danger); font-weight: bold;">-</span></div>
                     </div>
                 </div>
 
-                <!-- Side Head 4 -->
                 <div class="form-group id-commercial distinct-label hidden" id="floaterContainer">
                     <label for="floaterToggle">4. Floater Policy Option</label>
                     <select id="floaterToggle">
@@ -766,17 +278,15 @@
             </div>
 
             <div id="standardCommercialControlsContainer2">
-                <!-- Side Head 6 / 4 -->
                 <div class="form-group distinct-label" id="basicDiscountContainer">
                     <label for="basicDiscountValue" id="label-basicDiscountValue">4. Discount (-) or Loading (+) on Basic Premium (%)</label>
                     <input type="number" id="basicDiscountValue" placeholder="e.g. -10 for 10% discount, +5 for loading" value="0" step="0.01">
                 </div>
 
-                <!-- Side Head 7 -->
                 <div id="eqCoverContainer" class="form-group id-commercial distinct-label hidden">
                     <label for="eqZone">7. Earthquake (EQ) Cover Zone</label>
                     <select id="eqZone">
-                        <option value="0" id="opt-eq-exclude">Exclude Earthquake Cover</option>
+                        <option value="0">Exclude Earthquake Cover</option>
                         <option value="0.05">Zone I @ 0.05 per mille</option>
                         <option value="0.10">Zone II @ 0.10 per mille</option>
                         <option value="0.25">Zone III @ 0.25 per mille</option>
@@ -784,11 +294,10 @@
                     </select>
                 </div>
 
-                <!-- Side Head 8 -->
                 <div id="stfiCoverContainer" class="form-group id-commercial hidden distinct-label">
                     <label for="stfiToggle">8. STFI Cover Option</label>
                     <select id="stfiToggle">
-                        <option value="0" id="opt-stfi-exclude">Exclude STFI Cover</option>
+                        <option value="0">Exclude STFI Cover</option>
                         <option value="0.22">SECTION III NON INDUSTRIAL @ 0.22 per mille</option>
                         <option value="0.37" selected>SECTION IV, V, VII @ 0.37 per mille</option>
                         <option value="0.52">SECTION VI NOT STORED IN OPEN @ 0.52 per mille</option>
@@ -796,7 +305,6 @@
                     </select>
                 </div>
 
-                <!-- Side Head 9 -->
                 <div id="natcatDiscountContainer" class="form-group id-commercial hidden distinct-label">
                     <label for="natcatDiscountToggle">9. Discount on NATCAT Premium (%)</label>
                     <select id="natcatDiscountToggle">
@@ -807,11 +315,10 @@
                     </select>
                 </div>
 
-                <!-- Side Head 10 -->
                 <div id="terrorismContainer" class="form-group id-commercial hidden distinct-label">
                     <label for="terrorismToggle">10. Terrorism Cover Options</label>
                     <select id="terrorismToggle">
-                        <option value="0" id="opt-terr-exclude">Exclude Terrorism Cover</option>
+                        <option value="0">Exclude Terrorism Cover</option>
                         <option value="0.13">NON INDUSTRIAL @ 0.13 per mille</option>
                         <option value="0.21" selected>INDUSTRIAL @ 0.21 per mille</option>
                     </select>
@@ -819,7 +326,6 @@
             </div>
         </div>
 
-        <!-- RIGHT: PREMIUM WORKING WORKSHEET SUMMARY LEDGER -->
         <div>
             <div id="premiumWorkingPanel" class="panel">
                 <h2>Premium Working Summary Ledger</h2>
@@ -830,123 +336,44 @@
                 
                 <table id="premiumTable">
                     <thead>
-                        <tr>
-                            <th>Line Item Description</th>
-                            <th>Rate / Basis</th>
-                            <th class="text-right">Premium (₹)</th>
-                        </tr>
+                        <tr><th>Line Item Description</th><th>Rate / Basis</th><th class="text-right">Premium (₹)</th></tr>
                     </thead>
                     <tbody>
-                        <tr style="display: none;">
-                            <td style="font-weight: bold; color: var(--primary);">TOTAL SUM INSURED</td>
-                            <td>-</td>
-                            <td id="row-summary-si" class="text-right" style="font-weight: bold; color: var(--primary);">0</td>
-                        </tr>
-                        <tr id="right_row_basic">
-                            <td id="lbl-basic-prem">BASIC PREMIUM</td>
-                            <td id="rate-basic">0.00</td>
-                            <td id="prem-basic" class="text-right">0</td>
-                        </tr>
-                        <tr id="row-floater" class="hidden">
-                            <td>FLOATER LOADING</td>
-                            <td id="rate-floater">10.00% on Stock-Floating S.I.</td>
-                            <td id="prem-floater" class="text-right">0</td>
-                        </tr>
-                        <tr id="row-kutcha" class="hidden">
-                            <td>LOADING FOR KUTCHA CONSTRUCTION</td>
-                            <td id="rate-kutcha">4.00 per mille on S.I.</td>
-                            <td id="prem-kutcha" class="text-right">0</td>
-                        </tr>
-                        <tr class="subtotal-row" id="right_row_total_a">
-                            <td id="lbl-total-a">A TOTAL</td>
-                            <td>-</td>
-                            <td id="total-a" class="text-right">0</td>
-                        </tr>
-                        <tr id="right_row_discount">
-                            <td>DISCOUNT / LOADING ON BASIC PREMIUM</td>
-                            <td id="rate-discount">0.00%</td>
-                            <td id="prem-discount" class="text-right">0</td>
-                        </tr>
-                        <tr class="subtotal-row" id="right_row_total_b">
-                            <td>B TOTAL</td>
-                            <td>-</td>
-                            <td id="total-b" class="text-right">0</td>
-                        </tr>
-                        
-                        <tr class="row-natcat hidden">
-                            <td>ADD EARTHQUAKE COVER</td>
-                            <td id="rate-eq">0.00</td>
-                            <td id="prem-eq" class="text-right">0</td>
-                        </tr>
-                        <tr class="row-natcat hidden">
-                            <td>ADD STFI COVER</td>
-                            <td id="rate-stfi">0.00</td>
-                            <td id="prem-stfi" class="text-right">0</td>
-                        </tr>
-                        <tr class="subtotal-row row-natcat hidden">
-                            <td>C TOTAL EQ & STFI PREMIUM</td>
-                            <td>-</td>
-                            <td id="total-c" class="text-right">0</td>
-                        </tr>
-                        <tr class="row-natcat hidden">
-                            <td>DISCOUNT ON NATCAT</td>
-                            <td id="rate-natcat-disc">0.00%</td>
-                            <td id="prem-natcat-disc" class="text-right">0</td>
-                        </tr>
-                        <tr class="subtotal-row row-natcat hidden">
-                            <td>D TOTAL</td>
-                            <td>-</td>
-                            <td id="total-d" class="text-right">0</td>
-                        </tr>
-                        
-                        <tr id="row-terrorism-line" class="hidden">
-                            <td>TERRORISM COVER</td>
-                            <td id="rate-terrorism">0.00</td>
-                            <td id="prem-terrorism" class="text-right">0</td>
-                        </tr>
-                        <tr class="subtotal-row">
-                            <td id="right_net_premium_label">E TOTAL (NET PREMIUM)</td>
-                            <td>-</td>
-                            <td id="total-e" class="text-right">0</td>
-                        </tr>
-                        <tr>
-                            <td>GST (18%)</td>
-                            <td>18.00%</td>
-                            <td id="prem-gst" class="text-right">0</td>
-                        </tr>
-                        <tr class="final-row">
-                            <td>PREMIUM PAYABLE</td>
-                            <td>-</td>
-                            <td id="total-payable" class="text-right">0</td>
-                        </tr>
+                        <tr style="display: none;"><td style="font-weight: bold; color: var(--primary);">TOTAL SUM INSURED</td><td>-</td><td id="row-summary-si" class="text-right" style="font-weight: bold; color: var(--primary);">0</td></tr>
+                        <tr id="right_row_basic"><td id="lbl-basic-prem">BASIC PREMIUM</td><td id="rate-basic">0.00</td><td id="prem-basic" class="text-right">0</td></tr>
+                        <tr id="row-floater" class="hidden"><td>FLOATER LOADING</td><td id="rate-floater">10.00% on Stock-Floating S.I.</td><td id="prem-floater" class="text-right">0</td></tr>
+                        <tr id="row-kutcha" class="hidden"><td>LOADING FOR KUTCHA CONSTRUCTION</td><td id="rate-kutcha">4.00 per mille on S.I.</td><td id="prem-kutcha" class="text-right">0</td></tr>
+                        <tr class="subtotal-row" id="right_row_total_a"><td id="lbl-total-a">A TOTAL</td><td>-</td><td id="total-a" class="text-right">0</td></tr>
+                        <tr id="right_row_discount"><td>DISCOUNT / LOADING ON BASIC PREMIUM</td><td id="rate-discount">0.00%</td><td id="prem-discount" class="text-right">0</td></tr>
+                        <tr class="subtotal-row" id="right_row_total_b"><td>B TOTAL</td><td>-</td><td id="total-b" class="text-right">0</td></tr>
+                        <tr class="row-natcat hidden"><td>ADD EARTHQUAKE COVER</td><td id="rate-eq">0.00</td><td id="prem-eq" class="text-right">0</td></tr>
+                        <tr class="row-natcat hidden"><td>ADD STFI COVER</td><td id="rate-stfi">0.00</td><td id="prem-stfi" class="text-right">0</td></tr>
+                        <tr class="subtotal-row row-natcat hidden"><td>C TOTAL EQ & STFI PREMIUM</td><td>-</td><td id="total-c" class="text-right">0</td></tr>
+                        <tr class="row-natcat hidden"><td>DISCOUNT ON NATCAT</td><td id="rate-natcat-disc">0.00%</td><td id="prem-natcat-disc" class="text-right">0</td></tr>
+                        <tr class="subtotal-row row-natcat hidden"><td>D TOTAL</td><td>-</td><td id="total-d" class="text-right">0</td></tr>
+                        <tr id="row-terrorism-line" class="hidden"><td>TERRORISM COVER</td><td id="rate-terrorism">0.00</td><td id="prem-terrorism" class="text-right">0</td></tr>
+                        <tr class="subtotal-row"><td id="right_net_premium_label">E TOTAL (NET PREMIUM)</td><td>-</td><td id="total-e" class="text-right">0</td></tr>
+                        <tr><td>GST (18%)</td><td>18.00%</td><td id="prem-gst" class="text-right">0</td></tr>
+                        <tr class="final-row"><td>PREMIUM PAYABLE</td><td>-</td><td id="total-payable" class="text-right">0</td></tr>
                     </tbody>
                 </table>
             </div>
 
             <div class="btn-container">
-                <button class="btn btn-excel" onclick="exportToExcel()">
-                    <svg style="width:16px;height:16px" fill="currentColor" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
-                    Download as Excel
-                </button>
-                <button class="btn btn-pdf" onclick="exportToPDF()">
-                    <svg style="width:16px;height:16px" fill="currentColor" viewBox="0 0 24 24"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></svg>
-                    Download as PDF
-                </button>
+                <button class="btn btn-excel" onclick="exportToExcel()"><svg style="width:16px;height:16px" fill="currentColor" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg> Download as Excel</button>
+                <button class="btn btn-pdf" onclick="exportToPDF()"><svg style="width:16px;height:16px" fill="currentColor" viewBox="0 0 24 24"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></svg> Download as PDF</button>
             </div>
         </div>
     </div>
 
-    <!-- HAZARDOUS MATERIALS DIALOG LIST -->
     <div class="panel" id="hazardousMaterialsPanel" style="margin-top: 30px;">
         <h2 style="font-size: 1.2rem; color: #0f172a; border-bottom: 2px solid var(--accent); padding-bottom: 8px; margin-bottom: 12px;">Storage Risk outside compound of Indus/Mfg risks- List of Hazardous Materials and Goods and Categorisation</h2>
-        
         <div style="font-size: 0.78rem; color: #475569; line-height: 1.5; background-color: #f1f5f9; padding: 12px; border-radius: 6px; margin-bottom: 16px; border-left: 4px solid var(--accent);">
             <p style="margin: 0 0 6px 0;"><strong>CATEGORY-I</strong> Solid which are moderately or slightly combustible, Flammable liquids having flashpoints above 65 C, Inert and non combustible gases, Highly toxic materials, waste of non hazardous materials</p>
             <p style="margin: 0 0 6px 0;"><strong>CATEGORY-II</strong> Pyrotechnic materials, Flammable liquids having flash point above 32 C up to 65 C, Moderate Oxidising Agents and Oxygen, Materials which evolve combustible gases in contact with water, Waste of Category I materials.</p>
             <p style="margin: 0;"><strong>CATEGORY-III</strong> Explosives, Materials which are self ignitable, Flammable liquids having flash point up to 32 C, Strong Oxiding Agents, Combustible gases, Waste of category II & III materials.</p>
         </div>
 
-        <!-- NEW CATEGORY SELECTOR AND SEARCH -->
         <div class="search-flex-row" style="margin-bottom: 14px;">
             <div style="width: 250px;">
                 <select id="hazardousCategorySelect" style="width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 6px; font-weight: bold; color: var(--primary);">
@@ -977,38 +404,28 @@
 </div>
 
 <script>
-// Global layout trackers
 let selectedPolicyType = 'BGR';
 
-// =========================================================================
-// INPUT VALUE EXTRACTION & RE-FORMATTING SCHEME
-// =========================================================================
 function parseCommasToFloat(val) {
     if (typeof val === 'number') return val;
     let clean = val.toString().replace(/,/g, '').trim();
     return parseFloat(clean) || 0;
 }
 
-// Convert numbers into standard Indian localized formatting structure
 function formatValueToIndianCommas(num, decimals = 0) {
     if (num === null || num === undefined || isNaN(num)) return "0";
     let fixedNum = num.toFixed(decimals);
     let parts = fixedNum.split('.');
     let integerPart = parts[0];
     let decimalPart = parts.length > 1 ? '.' + parts[1] : '';
-    
     let lastThree = integerPart.substring(integerPart.length - 3);
     let otherNumbers = integerPart.substring(0, integerPart.length - 3);
     if (otherNumbers !== '') lastThree = ',' + lastThree;
-    let formattedInteger = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
-    
-    return formattedInteger + decimalPart;
+    return otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree + decimalPart;
 }
 
-// Attach live Indian currency formatting triggers to asset inputs
 function initializeCurrencyInputListeners() {
     document.querySelectorAll('.si-input').forEach(input => {
-        // Change from generic type number to text to support embedded commas dynamically
         input.type = "text"; 
         let rawNum = parseFloat(input.value) || 0;
         input.value = formatValueToIndianCommas(rawNum, 0);
@@ -1017,30 +434,17 @@ function initializeCurrencyInputListeners() {
             let cursorPosition = this.selectionStart;
             let originalLength = this.value.length;
             let numericString = this.value.replace(/,/g, '');
-            
-            if(numericString === "") {
-                this.value = "";
-                calculateAggregateSumInsured();
-                return;
-            }
-            
+            if(numericString === "") { this.value = ""; calculateAggregateSumInsured(); return; }
             let parsedNumber = parseFloat(numericString);
-            if(isNaN(parsedNumber)) {
-                this.value = "";
-                calculateAggregateSumInsured();
-                return;
-            }
-            
+            if(isNaN(parsedNumber)) { this.value = ""; calculateAggregateSumInsured(); return; }
             this.value = formatValueToIndianCommas(parsedNumber, 0);
             let lengthDifference = this.value.length - originalLength;
             this.setSelectionRange(cursorPosition + lengthDifference, cursorPosition + lengthDifference);
-            
             calculateAggregateSumInsured();
         });
     });
 }
 
-// Master Database Schedules
 const bsusRateSchedule = [
   {"sec": "III", "code": "1002", "cat": 1, "desc": "Places of worships", "rate": 0.14},
   {"sec": "III", "code": "1003", "cat": 1, "desc": "Libraries", "rate": 0.21},
@@ -1237,7 +641,7 @@ const bsusRateSchedule = [
   {"sec": "IV", "code": "2166", "cat": 4, "desc": "Rubber Goods Mfg with Spreading", "rate": 2.3},
   {"sec": "IV", "code": "2167", "cat": 1, "desc": "Rubber Goods Manufacturing without spreading", "rate": 1.29},
   {"sec": "IV", "code": "2168", "cat": 1, "desc": "Salt crushing Factories and Refineries", "rate": 0.54},
-  {"sec": "IV", "code": "2169", "cat": 1, "desc": "Saw Mills (including Timber Merchants premises where sawing is done).", "rate": 3.07},
+  {"sec": "IV", "code": "2169", "cat": 3, "desc": "Saw Mills (including Timber Merchants premises where sawing is done).", "rate": 3.07},
   {"sec": "IV", "code": "2170", "cat": 1, "desc": "Sea Food / Meat Processing", "rate": 1.01},
   {"sec": "IV", "code": "2171", "cat": 4, "desc": "Silk Mills / Spun Silk Mills", "rate": 0.95},
   {"sec": "IV", "code": "2230", "cat": 1, "desc": "Shopping Malls (other than multiplexes)", "rate": 0.49},
@@ -1249,7 +653,7 @@ const bsusRateSchedule = [
   {"sec": "IV", "code": "2177", "cat": 1, "desc": "Starch Factories", "rate": 0.71},
   {"sec": "IV", "code": "2178", "cat": 1, "desc": "Stone quarries", "rate": 0.27},
   {"sec": "IV", "code": "2180", "cat": 1, "desc": "Sugar factories", "rate": 0.57},
-  {"sec": "IV", "code": "2181", "cat": 1, "desc": "Surgical Cotton Manufacturing", "rate": 3.07},
+  {"sec": "IV", "code": "2181", "cat": 3, "desc": "Surgical Cotton Manufacturing", "rate": 3.07},
   {"sec": "IV", "code": "2183", "cat": 4, "desc": "Tanneries", "rate": 0.53},
   {"sec": "IV", "code": "2184", "cat": 1, "desc": "Tapioca factories", "rate": 0.92},
   {"sec": "IV", "code": "2185", "cat": 1, "desc": "Tarpaulin and canvas proofing factories", "rate": 2.31},
@@ -1620,6 +1024,169 @@ const standardRates = [
   {"sec": "VII", "code": "4011", "cat": "2", "ho": "", "dec": "", "desc": "Tanks (others)", "blus": 0.67, "sfsp": 0.67}
 ];
 
+const safetySurveyQuestionsConfig = [
+    { text: "Building age above 30 yrs", type: "yes_no", values: { YES: 5, NO: 0 } },
+    { text: "Operational Fire Hydrant/sprinkler/water spray system/fire alarm/smoke detectors", type: "yes_no", values: { YES: -10, NO: 0 } },
+    { text: "Electrical installations - well maintained standard equipment and installations", type: "yes_no", values: { YES: -10, NO: 0 } },
+    { text: "Provision of storm water drainage system and buildings with plinth level at least 1.5 ft above ground", type: "yes_no", values: { YES: -10, NO: 0 } },
+    { text: "High Standard of security with no of security guards for 24 x 7 and CCTVs", type: "yes_no", values: { YES: -10, NO: 5 } },
+    { text: "Past 3-years claims ratio", type: "select", options: [
+        { text: "0-30%", value: -30 }, { text: "30-70%", value: -20 }, { text: "70-100%", value: 0 }, { text: "100-200%", value: 10 }, { text: "> 200%", value: 50 }
+    ] },
+    { text: "Basement in Building used for operations/storage/plant machinery installed therein", type: "yes_no", values: { YES: 5, NO: 0 } },
+    { text: "Insured premises located within 1 km dstance of a water body like seashore, lake, rivers, canal etc", type: "yes_no", values: { YES: 5, NO: 0 } },
+    { text: "Risk located in thickly populated area with no access to fire brigade vehicle", type: "yes_no", values: { YES: 10, NO: 0 } }
+];
+
+function populateSurveyQuestionsTable() {
+    const tbody = document.getElementById('bsusDynamicFeaturesTbody');
+    tbody.innerHTML = "";
+    safetySurveyQuestionsConfig.forEach((item, index) => {
+        const row = document.createElement('tr');
+        let selectHtml = "";
+        let initialValue = 0;
+        if (item.type === "yes_no") {
+            selectHtml = `<select class="bsus-select-field survey-toggle" style="padding: 2px 4px; font-size: 0.75rem; width: 85px;"><option value="NO" selected>NO</option><option value="YES">YES</option></select>`;
+            initialValue = item.values["NO"];
+        } else if (item.type === "select") {
+            selectHtml = `<select class="bsus-select-field survey-toggle" style="padding: 2px 4px; font-size: 0.75rem; width: 85px;">${item.options.map(opt => `<option value="${opt.value}">${opt.text}</option>`).join('')}</select>`;
+            initialValue = item.options[0].value;
+        }
+        row.innerHTML = `
+            <td style="text-align: center; font-weight: bold; color: #475569;">${index + 1}</td>
+            <td style="color: #1e293b; font-weight: 500;">${item.text}</td>
+            <td style="text-align: center;">${selectHtml}</td>
+            <td class="text-right" style="font-weight: bold; color: #475569; padding-right: 15px;">
+                <span class="survey-rate-weight-text">${(initialValue >= 0 ? "+" : "") + initialValue.toFixed(2)} %</span>
+                <input type="hidden" class="survey-rate-weight" value="${initialValue}">
+            </td>
+        `;
+        tbody.appendChild(row);
+    });
+}
+populateSurveyQuestionsTable();
+
+const cat1_items = ['Aloe resin', 'Aluminium resinate', 'Amber', 'Ammonium Bromide', 'Ammonium Chloride', 'Animal protein', 'Ammonium Fluoride', 'Almond oil', 'Ammonium Sulphate', 'Animal skin', 'Amonia-acqueous soln. or spirits of ammonia exceeding 10%', 'Aluminium Chloride', 'Anethole', 'Anime (a resin)', 'Animal black', 'Aluminium paste', 'Animal glue', 'Anthracene', 'Algae', 'Antimony Pentafluoride', 'Animal oil', 'Antimony Pentasulfide', 'All flammable liquids having flash point above 65C', 'Antimony sulphate', 'Antimony sulphide', 'Antimony trisulphate', 'Antimony trisulphide', 'Arachis oil', 'Arecanuts', 'Arsenic Chloride', 'Arsenic pentasulphide', 'Arsenic sulphide', 'Arsenic Trisulfide', 'Artificial edible fat', 'Artificial horn', 'Artificial leather', 'Artificial Silk', 'Artificial wool', 'Asafoetida gum resin', 'Asafoetida oil', 'Asphalt sheet', 'Asphalted paper', 'Balata, Balsam', 'Bamboo mats', 'Barium Carbonate', 'Barium Sulphide', 'Barley', 'Baryllium Dust', 'Bed feathers', 'Beedi leaves', 'Bees wax', 'Beet sugar', 'Beet tallow', 'Benzoin resin', 'Benzoin resinoid', 'Betal Nuts', 'Birch oil', 'Bisphenol', 'Bitumen felt', 'Blacks of all kinds', 'Borneo Camphor', 'Borneol', 'Borneo tallow', 'Bornyl acetate', 'Boron trichloride', 'Boron trifluoride', 'Bran', 'Bran oil', 'Butter fat', 'Butter oil', 'Bacon', 'Bakelite', 'Baking powder', 'Balata', 'Cable joints(compound)', 'Cakes', 'Calcium ammonium nitrate', 'Calcium fluoride', 'Calcium tungstate', 'Calcium oxide (quick lime)', 'Calcium propyonate', 'Calf hair', 'Calf skin', 'Calomel', 'Candelilla wax', 'Candi', 'Canes', 'Cane seatings', 'Cantharides', 'Canvas', 'Capoc', 'Caranday wax', 'Caraway', 'Cardamom', 'Carnuba wax', 'Carob', 'Carpets', 'Carrageen', 'Cascarilla', 'Cashew', 'Cashew husk', 'Cashew Kernel', 'Cashew shell', 'Cashew nut shell oil', 'Cassia', 'Cassia bark', 'Cassia oil', 'Castor oil', 'Castor seed', 'Cedar wood oil', 'Cellulose plastics', 'Cellulose', 'Cellulose acetate', 'Cement', 'Cereals', 'Ceresin wax', 'Cevadialla', 'Chamomile', 'Cheese', 'Chewing tobacco', 'Chilies', 'Chirata', 'Chloracetic acid', 'Chlorine', 'Chlorine dioxide', 'Chlorine trifluoride', 'Chromic acid', 'Chromium Fluoride', 'Chrysophenine', 'Cigarettes', 'Cigars', 'Cinnamon', 'Cinnamon oil', 'Citronella oil', 'Clove', 'Clove oil', 'Coal (incl. Anthracite)', 'Coal powder', 'Coal briquettes', 'Coal blocks', 'Coal cakes', 'Coal gas', 'Coal tar', 'Coal tar oil', 'Cobalt Fluoride', 'Cobolt resinate', 'Coca (beans, butter, paste & powder)', 'Cocculus indicus', 'Cochineal', 'Coconut oil', 'Coconut shell', 'Coffee', 'Coir (yarn and fibre)', 'Coir mattress', 'Colocynth', 'Colophony', 'Condensates(gas)', 'Coniferous wood', 'Copaiba', 'Copal', 'Copra', 'Coriander', 'Cork', 'Corn', 'Corn oil', 'Corosive sublimate', 'Cotton (fully pressed)', 'Cotton seed', 'Cotton seed oil', 'Coumarone', 'Cresol', 'Cresylic acid', 'Croton oil', 'Cubebs', 'Cumin', 'Cumin oil', 'Cutch', 'Dammar', 'Danine', 'Dates', 'Detergents', 'Dextrin', 'Di-ammonium phosphate', 'Dicalcium phosphate', 'Dimethyl aniline', 'Disinfectant liquids(fl pt abv 65 C)', 'Disinfectant solids', 'Dragon blood', 'Driers (excluding metallic)', 'Driers (metallic)', 'Drugs', 'Drying oils', 'Dyes', 'Ebonite', 'Ebonite powder', 'Edible fats', 'Eels grass', 'Elemi', 'Ergot', 'Eucalyptus oil', 'Essparto grass', 'Fats', 'Feathers', 'Felt', 'Felt-bituminized', 'Fennel seed', 'Fenugreck seed', 'Fertilizers(except salt petre/am nitrate)', 'Fibres', 'Figs', 'Fir wood', 'Fish guano', 'Fish meal', 'Fish oil', 'Flame retardants', 'Flexible plastics', 'Flock', 'Flooring waxes', 'Flour', 'Fluorine', 'Fluorosulfonic acid', 'Fodder', 'Fodder yeast', 'Food stuffs', 'Foot wear', 'Formaldehyde', 'Formic acid', 'Frankineence', 'Fullers earth', 'Fusel oil', 'Galbanum', 'Gall nut', 'Gambier', 'Gamboge', 'Garlic', 'Gas (inert, non-combustible)', 'Gelatin', 'Ghee', 'Ginger', 'Glacial acetic acid', 'Glass wool', 'Glue', 'Glycerine', 'Goat hair', 'Goat skin', 'Grains', 'Gramophones', 'Graphite', 'Grasses', 'Greases', 'Groats', 'Guaiac', 'Guano', 'Guar seed', 'Guaiacum', 'Gum arabic', 'Gum resin', 'Gums', 'Gunny bags', 'Gur', 'Gurjan', 'Gutta-percha', 'Hair', 'Hard boards', 'Hay', 'Hazelnut', 'Hemp', 'Hemp seed', 'Herbs', 'Hessian', 'Hides', 'Hoofs', 'Hops', 'Horns', 'Horse hair', 'Hyacinth', 'Hydrazine', 'Hydrobromic acid', 'Hydrochloric acid', 'Hydrocyanic acid', 'Hydrofluoric acid', 'Hydrofluorosilicic acid', 'Hydrogen', 'Hydrogen chloride', 'Hydrogen fluoride', 'Incandescent mantles', 'Incense', 'Indian corn', 'India rubber', 'Indigo', 'Indigo carmine', 'Inks', 'Insecticide liquids(fl pt abv 65 C)', 'Insecticide solids', 'Iodine', 'Iodine monochloride', 'Iron Chloride', 'Iron penta-carbonyl', 'Ixtle', 'Jaggery', 'Jalap', 'Jowar', 'Jute', 'Kangaroo hair', 'Kapur', 'Kapoc', 'Kaurie', 'Kernel oil', 'Khandsari', 'Kino', 'Lac', 'Lanolin', 'Lard', 'Lard oil', 'Lauric acid', 'Lavender oil', 'Lead Chloride', 'Leather', 'Leather (artificial)', 'Leather cloth', 'Lemon grass oil', 'Lignite', 'Linoleum', 'Linseed', 'Linseed oil', 'Liquorice', 'Loofa', 'Lycopodium', 'Mace', 'Machine belting', 'Machine oil', 'Maize', 'Maize oil', 'Malt', 'Mandioca', 'Manila', 'Manna', 'Margarine', 'Marjoram', 'Marmalade', 'Mastic', 'Mats', 'Mawah', 'Meal', 'Mercuric chloride', 'Methyl bromide', 'Milk powder', 'Milo', 'Mineral oil', 'Mineral wax', 'Molasses', 'Monkey hair', 'Mowrah', 'Mowrah oil', 'Muriatic acid', 'Muriate of potash', 'Mustard oil', 'Mustard seed', 'Myrobalan', 'Myrrh', 'Naphthalene', 'Neat\'s-foot oil', 'Niger seed', 'Niger seed oil', 'Night soil', 'Nitric acid', 'Nitrogine dioxide', 'Nitro-chalk', 'Non-combustible gases', 'Non-hazardous materials(wastes/sweepng)', 'Nux-vomica', 'Nylon', 'Oakum', 'Oats', 'Oil cake', 'Oiled cloth', 'Oiled paper', 'Oils', 'Oleo resin', 'Oleo stearine', 'Olibanum', 'Olive oil', 'Olives', 'Onion', 'Opium', 'Opoponax', 'Orris root', 'Other Category I Goods', 'Paints (fl pt abv 65 C)', 'Palm kernels', 'Palm oil', 'Palmyra', 'Panela', 'Paper', 'Paraffin wax', 'Parchment', 'Paste board', 'Patchouli oil', 'Peanut', 'Peanut oil', 'Peanut wax', 'Pellitory', 'Pepper', 'Peppermint', 'Peppermint oil', 'Peru balsam', 'Pesticide liquids(fl pt abv 65 C)', 'Pesticide solids', 'Phosgene', 'Phosphoric acid', 'Phosphorous trichloride', 'Piassava', 'Pimento', 'Pine oil', 'Pitch', 'Pith', 'Piviac', 'Plastics', 'Plywood', 'Polishes', 'Polishing waxes', 'Polyvinyl plastics', 'Poppy seed', 'Poppy seed oil', 'Porcelain powder', 'Potassium cyanide', 'Potassium difluoride', 'Potassium fluoride', 'Potassium hydroxide', 'Poultry food', 'Printed wastes', 'Printers ink', 'Propyonic acid', 'PVC', 'Pyrites', 'Quassia', 'Quebracho', 'Quercitron', 'Rags', 'Rape seed', 'Rape seed oil', 'Rattan', 'Rayon', 'Red squill', 'Resinates', 'Resins', 'Resinoids', 'Rice', 'Rice bran', 'Rice flour', 'Ricinus oil', 'Rosin', 'Rosin oil', 'Rubber', 'Rubber substitutes', 'Rushes', 'Rye', 'Saffron', 'Sago', 'Sandal wood oil', 'Sandarac', 'Sarsaparilla', 'Savin', 'Seal oil', 'Sealing wax', 'Seaweed', 'Seeds', 'Senega', 'Senna', 'Sesame seed', 'Sesame seed oil', 'Shark oil', 'Sheep skin', 'Shellac', 'Shoddy', 'Shoe polishes', 'Shoes', 'Silk', 'Silver cyanide', 'Sisal', 'Skins', 'Slag', 'Smut', 'Snuff', 'Soap', 'Soap nut', 'Soap nut powder', 'Soap weed', 'Sodium azide', 'Sodium chlorite', 'Sodium cyanide', 'Sodium dichromate', 'Sodium difluoride', 'Sodium fluoride', 'Sodium hydride', 'Sodium hydrosulphite', 'Sodium hydroxide', 'Sodium nitrate', 'Sodium nitrite', 'Sodium peroxide', 'Sodium persulphate', 'Sodium phosphide', 'Soya beans', 'Soya bean oil', 'Soya bean wax', 'Spermaceti', 'Sperm oil', 'Spices', 'Squill', 'Starch', 'Stearic acid', 'Stearine', 'Stick lac', 'Stillingia', 'Stramonium', 'Straw', 'Strontium', 'Strontium chlorate', 'Strontium dioxide', 'Strontium nitrate', 'Strontium peroxide', 'Strontium phosphide', 'Styrene', 'Styrene resins', 'Suet', 'Sugar', 'Sulphonic acids', 'Sulphur', 'Sulphur chlorides', 'Sulphur dioxide', 'Sunflower seed', 'Sunflower seed oil', 'Superphosphates', 'Sweeping(non-hazardous materials)', 'Synthetic resins', 'Synthetic wax', 'Tacamahac', 'Talc', 'Tallow', 'Tallow oil', 'Tamarind', 'Tanning extracts', 'Tapioca', 'Tar', 'Tar oil', 'Tarpaulins', 'Tartaric acid', 'Tea', 'Teaseed oil', 'Terylene', 'Tetroxide', 'Textiles', 'Thinners(fl pt abv 65 C)', 'Thioruacil', 'Thiourea', 'Thyme', 'Tinctures', 'Titanium tetrachloride', 'Tobacco', 'Toilet preparations', 'Tolu', 'Tow', 'Tragacanth', 'Train oil', 'Tung oil', 'Turnip seed', 'Turpentine', 'Turpentine oil', 'Twine', 'Unvulcanized rubber', 'Uranium', 'Urea', 'Valerian', 'Valex', 'Varnish', 'Vaseline', 'Vats', 'Veneer', 'Vinyl plastics', 'Vulcanized rubber', 'Wadding', 'Walnut oil', 'Walnuts', 'Waste paper', 'Wastes(non-hazardous materials)', 'Waxes', 'Whale oil', 'Wheat', 'Wheat bran', 'Wheat flour', 'Wood', 'Wood flour', 'Wood pulp', 'Wood tar', 'Wool', 'Wool fat', 'Wool grease', 'Woollen goods', 'Xylene', 'Yarn', 'Yeast', 'Zanzibar copal', 'Zinc', 'Zinc chloride', 'Zinc resinate'];
+
+const cat2_items = ['Accelerene', 'Acetyl peroxide', 'All flammable liquids having flash point between 320C and 650C (both inclusive)', 'Aloe fibres, loose', 'Aluminium carbide', 'Aluminium ferrosilicon', 'Aluminium hydride', 'Aluminium nitrate', 'Aluminium phosphide', 'Aluminium powder/dust', 'Ammonium chromate', 'Ammonium cyanide', 'Ammonium dichromate', 'Ammonium persulphate', 'Amphetamine', 'Amyl nitrite', 'Angelica oil', 'Antimony pentoxide', 'Aqua Forties (Nitric acid)', 'Aqua regia', 'Balsams', 'Bamboos (whole)', 'Barium', 'Barium azide', 'Barium chlorate/chlorite', 'Barium chromate', 'Barium dioxide', 'Barium hydride', 'Barium manganate', 'Barium nitrate', 'Barium perchlorate', 'Barium permanganate', 'Barium peroxide', 'Barium phosphide', 'Batteries', 'Bengal lights', 'Benzene hexachloride', 'Benzol peroxide(wet)', 'Benzol sulphonic acid', 'Bismuthic acid', 'Bismuth Pentafluoride', 'Bleaching powders', 'Brimstone', 'Bromine', 'Bromine cyanide', 'Bromine Pentafluoride', 'Bromine trifluoride', 'Butyl peroxide', 'Calcium', 'Calcium azide', 'Calcium carbide', 'Calcium chlorate', 'Calcium chlorite', 'Calcium cyanamide', 'Calcium hydride', 'Calcium hypochlorite', 'Calcium manganate', 'Calcium nitrate', 'Calcium perchlorate', 'Calcium permanganate', 'Calcium peroxide', 'Calcium phosphide', 'Calcium silicide', 'Camphene', 'Camphor', 'Camphor oil', 'Caoutchouc', 'Cap lamps', 'Carbon', 'Carbon black', 'Carbon disulphide', 'Caustic potash', 'Caustic soda', 'Cellodion', 'Celluloid', 'Cellulose nitrate', 'Cerium', 'Cerium hydride', 'Cerium nitrate', 'Cerium perchlorate', 'Cesium nitrate', 'Chloric acid', 'Chlorine dioxide', 'Chromic acid', 'Chromic anhydride', 'Chromium oxychloride', 'Chromium trioxide', 'Cleaning Liquids/powders', 'Cobalt nitrate', 'Cobalt resinate', 'Coloured fires', 'Copper nitrate', 'Copper phosphide', 'Corrosive sublimate', 'Cotton (loose)', 'Cotton (waste)', 'Cotton seed (ground)', 'Crotonic acid', 'Didymium nitrate', 'Diethyl aluminium chloride', 'Diethyl p-nitrophenyl', 'Dimethoxy strychnine', 'Dimethyl hexane', 'Dinitrotoluene', 'Diphenyl', 'Disinfectant liquids(fl pt 32 C to 65 C)', 'Erbium nitrate', 'Exotherinic material', 'Ferric nitrate', 'Ferro silicon', 'Ferro silicon aluminium', 'Fibres (loose)', 'Filings (metal)', 'Fire works', 'Flash powders', 'Flash light paper', 'Fluid for checking flaws in cast iron', 'Grasses (loose)', 'Guinea pepper', 'Hemp (loose)', 'Hexamine', 'Hydrides', 'Hydrobromic acid', 'Hydrogen', 'Hydrogen cyanide', 'Hydrogen peroxide', 'Hydrogen phosphide', 'Hydrogen sulphide', 'Hydroquinone', 'Hypochloric acid', 'Igniting tape', 'Illuminating powders', 'Illuminating gas', 'Insecticide liquids(fl pt 32 C to 65 C)', 'Iron mass', 'Iron nitrate', 'Iron oxide', 'Iron penta-carbonyl', 'Iron powder', 'Iron sponge', 'Iron sulphide', 'Iron turnings', 'Isoprene', 'Jute (loose)', 'Kerosene', 'Lamp black', 'Lead azide', 'Lead chlorite', 'Lead dioxide', 'Lead nitrate', 'Lead perchlorate', 'Lead peroxide', 'Lightening powders', 'Lime (unslacked)', 'Liquid insecticides/pesticides/disinfectants flash point 32C to 65C', 'Liquid insecticides/pesticides below 32c in sealed tins/bottles', 'Lithium', 'Lithium aluminium hydride', 'Lithium amide', 'Lithium borohydride', 'Lithium hydride', 'Lithium peroxide', 'Lithium silicon', 'Macassar oil', 'Magnesium', 'Magnesium alloys', 'Magnesium aluminium phosphide', 'Magnesium bromate', 'Magnesium chlorate', 'Magnesium hydride', 'Magnesium nitrate', 'Magnesium perchlorate', 'Magnesium peroxide', 'Magnesium phosphide', 'Magnesium powder/dust', 'Manganese', 'Manganese dioxide', 'Manganese nitrate', 'Matches', 'Metal ashes/dust/filings/powders/turnings', 'Methane', 'Methyl acrylate', 'Methyl pentadiene', 'Motor spirit', 'Napalm', 'Neodymium nitrate', 'Nickel nitrate', 'Nirate of soda', 'Nitric acid', 'Nitro benzene', 'Nitro carbo nitrate', 'Nitrocellulose', 'Nitrogen dioxide', 'Nitrogen tetroxide', 'Nonane', 'Other Category II Goods', 'Oxygen', 'Paints, thinners and varnishes flash point 32C to 65C', 'Paints, thinners and varnishes below 32C in sealed tins/bottles', 'Palladium', 'Para toulidine', 'Para toulidine sulphonic acid', 'Paris white', 'Peat', 'Pentasulhpide', 'Peracetic acid', 'Perchloric acid', 'Performic acid', 'Permanganic acid', 'Permonosulphuric acid', 'Peroxides', 'Pesticide liquids(fl pt 32 C to 65 C)', 'Phosphides', 'Phosphine', 'Phosphoric acid', 'Phosphorous (amorphous or red)', 'Phosphorous pentachloride', 'Phosphorous pentasulphide', 'Phosphorous sesquisulphide', 'Phosphorous tribromide', 'Photographic films', 'Pinene', 'Plastics (cellular)', 'Polonium', 'Potable spirits below 32C in sealed tins/bottles', 'Potassium', 'Potassium amide', 'Potassium borohydride', 'Potassium bromate', 'Potassium chlorate', 'Potassium chlorite', 'Potassium chromate', 'Potassium dichromate', 'Potassium hydride', 'Potassium manganate', 'Potassium nitrate', 'Potassium perchlorate', 'Potassium periodate', 'Potassium permanganate', 'Potassium peroxide', 'Potassium phosphide', 'Potassium sulphide', 'Praseodymium nitrate', 'Propionic acid', 'Propylene', 'Pyridine', 'Pyrophoric materials', 'Pyrotechnic materials', 'Quick lime', 'Rubidium', 'Salt petre', 'Samarium nitrate', 'Saw dust', 'Shavings (wood)', 'Silicon powder', 'Silver nitrate', 'Silver picrate', 'Smoke bombs/candles', 'Sodium', 'Sodium aluminate', 'Sodium aluminium hydride', 'Sodium amide', 'Sodium borohydride', 'Sodium bromate', 'Sodium chlorate', 'Sodium chlorite', 'Sodium chromate', 'Sodium dichromate', 'Sodium hydride', 'Sodium hydrosulphite', 'Sodium manganate', 'Sodium nitrate', 'Sodium perchlorate', 'Sodium periodate', 'Sodium permanganate', 'Sodium peroxide', 'Sodium phosphide', 'Sodium picrate', 'Sodium potassium alloy', 'Sodium sulphide', 'Sparklers', 'Squibs', 'Stearic acid', 'Strontium', 'Strontium chlorate', 'Strontium nitrate', 'Strontium perchlorate', 'Strontium peroxide', 'Strontium phosphide', 'Sulphur', 'Tars', 'Tetranitro-methane', 'Thallium', 'Thallium nitrate', 'Thinners(fl pt 32 C to 65 C)', 'Thorium', 'Thorium nitrate', 'Tin powder', 'Titanium', 'Titanium hydride', 'Titanium powder/dust', 'Toulidine', 'Tow', 'Turpentine', 'Uranium', 'Uranium hydride', 'Uranium nitrate', 'Urea nitrate', 'Waste of Category I materials', 'Waste paper (loose)', 'Wood flour', 'Wood powder', 'Wood shavings', 'Xylonite', 'Yttrium nitrate', 'Zinc ashes/dust/filings/powder/turnings', 'Zinc bromate', 'Zinc chlorate', 'Zinc ethyl', 'Zinc nitrate', 'Zinc permanganate', 'Zinc peroxide', 'Zirconium', 'Zirconium hydride', 'Zirconium nitrate', 'Zirconium picrate', 'Zirconium powder'];
+
+const cat3_items = ['Activated Carbon, Pyropheric', 'All flammable liquids having a flash point below 320C', 'Aluminium Alkyl Halides', 'Aluminium borohydride', 'Aluminium triethyl', 'Aluminium trihexyl', 'Aluminium tri-isobutyl', 'Aluminium trimethyl', 'Aluminium tripropyl', 'Amatol', 'Ammonium bromate', 'Ammonium chlorate', 'Ammonium Nitrate', 'Ammonium nitrate explosives', 'Ammonium perchlorate', 'Ammonium permanganate', 'Ammonium picrate', 'Ammunitions', 'Amorces', 'Arsine', 'Azides', 'Azimethylene', 'Azoimide', 'Baggase', 'Bamboos (split)', 'Benzol peroxide (dry)', 'Black powder', 'Blasting powder', 'Bromo picric acid', 'Butyl mercaptan', 'Calcium perchlorate', 'Carbon Disulphide', 'Carbon monoxide', 'Cartridges', 'Cheddite', 'Chloric acid', 'Chlorine dioxide', 'Chromic acid', 'Chromic anhydride', 'Chromium oxychloride', 'Chromium trioxide', 'Coal gas', 'Coloured fires', 'Combustible gases', 'Cordite', 'Cosavyl', 'Cotton (waste)', 'Cumene', 'Decaborane', 'Detonators', 'Diborane', 'Diethyl aluminium chloride', 'Diethyl ether', 'Diethyl p-nitrophenyl', 'Dimethyl ether', 'Dimethoxy strychnine', 'Dimethyl hexane', 'Dinitro benzene', 'Dinitrotoluene', 'Dioxane', 'Disinfectant liquids(fl pt blw 32 C)', 'Divinyl ether', 'Dynamite', 'Ethane', 'Ether', 'Ethyl mercaptan', 'Ethylene', 'Ethyl nitrate', 'Ethyl nitrite', 'Exothermic materials', 'Explosives', 'Fire works', 'Flash powders', 'Flash light paper', 'Fluorine', 'Fulminates', 'Gelatine (explosive)', 'Guncotton', 'Gun powder', 'Hydrazine', 'Hydrazoic acid', 'Hydrogen', 'Hydrogen cyanide', 'Hydrogen peroxide (in 50% or above)', 'Hydrogen phosphide', 'Hydrogen sulphide', 'Hypochloric acid', 'Igniting tape', 'Illuminating gas', 'Illuminating powders', 'Insecticide liquids(fl pt blw 32 C)', 'Iron mass', 'Iron sponge', 'Isopropyl ether', 'Isoprene', 'Lead azide', 'Lightening powders', 'Liquid insecticides/pesticides/disinfectants flash point below 32C', 'L.P.G.', 'Magnesium powder/dust', 'Matches', 'Melinite', 'Methane', 'Methyl ether', 'Methyl formate', 'Natural gas', 'Nitro carbo nitrate', 'Nitro cellulose', 'Nitrogen dioxide', 'Nitrogen tetroxide', 'Nitro glycerine', 'Nitro mannite', 'Nitrosoguanidine', 'Nitrosostarch', 'Nitrous oxide', 'Paints, thinners, varnishes flash point below 32C', 'Pentaborane', 'Pentane', 'Pentanitroaniline', 'Peracetic acid', 'Perchloric acid', 'Performic acid', 'Permanganic acid', 'Permonosulphuric acid', 'Peroxides', 'Pesticide liquids(fl pt blw 32 C)', 'Phosphine', 'Phosphoric acid', 'Phosphorous (yellow or white)', 'Phosphorous pentachloride', 'Phosphorous pentasulphide', 'Phosphorous sesquisulphide', 'Phosphorous tribromide', 'Picric acid', 'Potassium', 'Potassium chlorite', 'Potassium perchlorate', 'Potassium peroxide', 'Propane', 'Pyrophoric materials', 'Pyrotechnic materials', 'RDX', 'Roburite', 'Securite', 'Silane', 'Silver azide', 'Silver styphnate', 'Smoke bombs/candles', 'Sodium', 'Sodium chlorate', 'Sodium chlorite', 'Sodium nitrate', 'Sodium perchlorate', 'Sodium peroxide', 'Sodium picrate', 'Sodium potassium alloy', 'Sparklers', 'Squibs', 'Styphnic acid', 'Tetranitroaniline', 'Tetranitro-methane', 'Tetrazene', 'Thinners(fl pt blw 32 C)', 'Titanium powder/dust', 'TNT', 'Tonite', 'Trinitrotoluene', 'Trinitrobenzene', 'Trinitrobenzoic acid', 'Trinitrocresol', 'Waste of materials falling under Cat II & III', 'Zinc phosphide', 'Zinc picrate', 'Zirconium hydride', 'Other Category III Goods'];
+
+function renderHazardousGoodsTable() {
+    const tbody = document.getElementById('hazardousGoodsTableBody');
+    tbody.innerHTML = "";
+    const filterText = document.getElementById('hazardousGoodsSearchInput').value.toLowerCase().trim();
+    const catSelect = document.getElementById('hazardousCategorySelect').value;
+    let itemsToRender = [];
+    
+    if (catSelect === "" || catSelect === "cat1") {
+        cat1_items.forEach((desc, index) => itemsToRender.push({ cat: "Category I", sl: index + 1, desc: desc, badgeColor: "var(--primary)" }));
+    }
+    if (catSelect === "" || catSelect === "cat2") {
+        cat2_items.forEach((desc, index) => itemsToRender.push({ cat: "Category II", sl: index + 1, desc: desc, badgeColor: "var(--accent)" }));
+    }
+    if (catSelect === "" || catSelect === "cat3") {
+        cat3_items.forEach((desc, index) => itemsToRender.push({ cat: "Category III", sl: index + 1, desc: desc, badgeColor: "var(--danger)" }));
+    }
+    
+    itemsToRender.forEach(item => {
+        if (item.desc.toLowerCase().includes(filterText) || item.cat.toLowerCase().includes(filterText) || item.sl.toString() === filterText) {
+            const row = document.createElement('tr');
+            row.innerHTML = `<td style="padding: 10px; border-bottom: 1px solid var(--border); font-weight: bold; color: ${item.badgeColor};">${item.cat}</td>
+                <td style="padding: 10px; border-bottom: 1px solid var(--border); text-align: center;">${item.sl}</td>
+                <td style="padding: 10px; border-bottom: 1px solid var(--border);">${item.desc}</td>`;
+            tbody.appendChild(row);
+        }
+    });
+}
+
+function filterBsusAutocomplete(query) {
+    const listContainer = document.getElementById('bsusAutocompleteList');
+    const searchVal = query.toLowerCase().trim();
+    if (searchVal === "") { listContainer.classList.add('hidden'); return; }
+    listContainer.innerHTML = '';
+    let matchCount = 0;
+    bsusRateSchedule.forEach((item, index) => {
+        if (item.desc.toLowerCase().includes(searchVal) || item.code.toLowerCase().includes(searchVal)) {
+            matchCount++;
+            let div = document.createElement('div');
+            div.className = 'autocomplete-item';
+            div.innerHTML = `<strong>[Code ${item.code}]</strong> ${item.desc}`;
+            div.addEventListener('mousedown', (e) => {
+                e.preventDefault();
+                document.getElementById('selectedBsusIndex').value = index;
+                document.getElementById('bsusOccupancySearch').value = `[Code ${item.code}] ${item.desc}`;
+                listContainer.classList.add('hidden');
+                document.getElementById('b-meta-code').innerText = item.code;
+                document.getElementById('b-meta-sec').innerText = item.sec;
+                document.getElementById('b-meta-cat').innerText = item.cat;
+                document.getElementById('b-meta-rate').innerText = item.rate.toFixed(4);
+                document.getElementById('bsusMetaDisplay').classList.remove('hidden');
+                runCalculation();
+            });
+            listContainer.appendChild(div);
+        }
+    });
+    if (matchCount > 0) listContainer.classList.remove('hidden');
+}
+
+function handleAutocompleteSearch(query) {
+    const listContainer = document.getElementById('autocompleteResultsList');
+    const searchVal = query.toLowerCase().trim();
+    if (searchVal === "") { listContainer.classList.add('hidden'); return; }
+    listContainer.innerHTML = '';
+    let matchCount = 0;
+    
+    standardRates.forEach((item, index) => {
+        if (item.desc.toLowerCase().includes(searchVal) || item.code.toLowerCase().includes(searchVal)) {
+            matchCount++;
+            let div = document.createElement('div');
+            div.className = 'autocomplete-item';
+            const activeRate = selectedPolicyType === 'SFSP' ? item.sfsp : item.blus;
+            div.innerHTML = `<strong>[Code: ${item.code} | Sec: ${item.sec} | Rate: ${activeRate.toFixed(3)}]</strong> ${item.desc}`;
+            div.addEventListener('mousedown', (e) => {
+                e.preventDefault(); 
+                selectStandardOccupancy(index);
+            });
+            listContainer.appendChild(div);
+        }
+    });
+    
+    if (matchCount > 0) {
+        listContainer.classList.remove('hidden');
+    } else {
+        let div = document.createElement('div');
+        div.className = 'autocomplete-item';
+        div.innerText = "-- No Matching Risks Found --";
+        listContainer.appendChild(div);
+        listContainer.classList.remove('hidden');
+    }
+}
+
+function selectStandardOccupancy(index) {
+    const record = standardRates[index];
+    document.getElementById('selectedOccupancyIndex').value = index;
+    document.getElementById('occupancySearch').value = `[Code ${record.code}] ${record.desc}`;
+    document.getElementById('autocompleteResultsList').classList.add('hidden');
+    document.getElementById('enterRateManuallyToggle').value = "no";
+    const activeRate = selectedPolicyType === 'SFSP' ? record.sfsp : record.blus;
+    document.getElementById('meta-rate').innerText = activeRate.toFixed(3);
+    document.getElementById('meta-code').innerText = record.code;
+    document.getElementById('meta-section').innerText = record.sec;
+    document.getElementById('meta-category').innerText = record.cat || "None";
+    document.getElementById('meta-ho').innerText = record.ho || "None";
+    document.getElementById('meta-declined').innerText = record.dec || "None";
+    document.getElementById('metaBox').classList.remove('hidden');
+    runCalculation();
+}
+
+function selectPolicy(type, cardElement) {
+    selectedPolicyType = type;
+    document.querySelectorAll('.policy-card').forEach(card => card.classList.remove('active'));
+    cardElement.classList.add('active');
+    adjustLayoutRules();
+}
+
 function adjustLayoutRules() {
     const stdControls1 = document.getElementById('standardCommercialControlsContainer');
     const stdControls2 = document.getElementById('standardCommercialControlsContainer2');
@@ -1630,7 +1197,6 @@ function adjustLayoutRules() {
     const rowTerrorismLine = document.getElementById('row-terrorism-line');
     const hazPanel = document.getElementById('hazardousMaterialsPanel');
 
-    // Rule: Handle conditional elements based on Policy Type
     const floatingInput = document.getElementById('siStockFloating');
     const terrorismOptOutContainer = document.getElementById('terrorismOptOutContainer');
     const labelConstruction = document.getElementById('label-construction');
@@ -1639,37 +1205,26 @@ function adjustLayoutRules() {
 
     if (selectedPolicyType === 'BGR') {
         hazPanel.classList.add('hidden');
-        
-        // (a) Disable 'Stock - Floating' for BGR
         floatingInput.disabled = true;
-        if(floatingInput.value !== "0") {
+        if(floatingInput.value !== "0" && floatingInput.value !== "") {
             floatingInput.value = "0";
             calculateAggregateSumInsured();
         }
-
-        // (b) Hide 'Opting out of Terrorism' for BGR
-        terrorismOptOutContainer.classList.add('hidden');
-
-        // (c) Renumber BGR labels
-        labelConstruction.innerText = "2. Construction Type";
-        labelBgrRate.innerText = "3. BGR Basic Rate Option";
-        labelDiscount.innerText = "4. Discount (-) or Loading (+) on Basic Premium (%)";
-
+        if (terrorismOptOutContainer) terrorismOptOutContainer.classList.add('hidden');
+        if(labelConstruction) labelConstruction.innerHTML = "2. Construction Type";
+        if(labelBgrRate) labelBgrRate.innerHTML = "3. BGR Basic Rate Option";
+        if(labelDiscount) labelDiscount.innerHTML = "4. Discount (-) or Loading (+) on Basic Premium (%)";
     } else {
         hazPanel.classList.remove('hidden');
-        
         floatingInput.disabled = false;
-        
-        // Re-number logic for standard labels when not BGR
-        labelConstruction.innerText = "5. Construction Type";
-        labelBgrRate.innerText = "BGR Basic Rate Option";
-        labelDiscount.innerText = "6. Discount (-) or Loading (+) on Basic Premium (%)";
+        if(labelConstruction) labelConstruction.innerHTML = "5. Construction Type";
+        if(labelBgrRate) labelBgrRate.innerHTML = "BGR Basic Rate Option";
+        if(labelDiscount) labelDiscount.innerHTML = "6. Discount (-) or Loading (+) on Basic Premium (%)";
 
-        if(selectedPolicyType === 'BSUS') {
-            terrorismOptOutContainer.classList.remove('hidden');
+        if (selectedPolicyType === 'BSUS') {
+            if (terrorismOptOutContainer) terrorismOptOutContainer.classList.remove('hidden');
         } else {
-            // BLUS and SFSP have their own terrorism dropdown, so hide this Flexi Opt Out version
-            terrorismOptOutContainer.classList.add('hidden'); 
+            if (terrorismOptOutContainer) terrorismOptOutContainer.classList.add('hidden'); 
         }
     }
 
@@ -1677,7 +1232,6 @@ function adjustLayoutRules() {
         stdControls1.classList.add('hidden');
         stdControls2.classList.add('hidden');
         bsusSection.classList.remove('hidden');
-
         document.getElementById('right_row_basic').classList.add('hidden');
         document.getElementById('right_row_total_a').classList.add('hidden');
         document.getElementById('right_row_discount').classList.add('hidden');
@@ -1689,7 +1243,6 @@ function adjustLayoutRules() {
         stdControls1.classList.remove('hidden');
         stdControls2.classList.remove('hidden');
         bsusSection.classList.add('hidden');
-
         document.getElementById('right_row_basic').classList.remove('hidden');
         document.getElementById('right_row_total_a').classList.remove('hidden');
         document.getElementById('right_row_discount').classList.remove('hidden');
@@ -1709,43 +1262,24 @@ function adjustLayoutRules() {
         }
     }
 
-    // Dropdown exclusions logic (e, f, g, h, i, j, k)
-    const optEqExclude = document.getElementById('opt-eq-exclude');
-    const optStfiExclude = document.getElementById('opt-stfi-exclude');
-    const optTerrExclude = document.getElementById('opt-terr-exclude');
     const eqZone = document.getElementById('eqZone');
     const stfiToggle = document.getElementById('stfiToggle');
     const terrToggle = document.getElementById('terrorismToggle');
 
-    // Rule e, g, i: Remove Exclude Earthquake for BLUS & SFSP
-    if (selectedPolicyType === 'BLUS' || selectedPolicyType === 'SFSP') {
-        optEqExclude.style.display = 'none';
-        optEqExclude.disabled = true;
-        if (eqZone.value === "0") eqZone.value = "0.50"; 
-    } else {
-        optEqExclude.style.display = '';
-        optEqExclude.disabled = false;
-    }
+    Array.from(eqZone.options).forEach(opt => {
+        if(opt.value === "0") opt.style.display = (selectedPolicyType === 'BLUS' || selectedPolicyType === 'SFSP') ? 'none' : '';
+    });
+    if((selectedPolicyType === 'BLUS' || selectedPolicyType === 'SFSP') && eqZone.value === "0") eqZone.value = "0.50";
 
-    // Rule f, h, j: Remove Exclude STFI for BLUS & SFSP
-    if (selectedPolicyType === 'BLUS' || selectedPolicyType === 'SFSP') {
-        optStfiExclude.style.display = 'none';
-        optStfiExclude.disabled = true;
-        if (stfiToggle.value === "0") stfiToggle.value = "0.37";
-    } else {
-        optStfiExclude.style.display = '';
-        optStfiExclude.disabled = false;
-    }
+    Array.from(stfiToggle.options).forEach(opt => {
+        if(opt.value === "0") opt.style.display = (selectedPolicyType === 'BLUS' || selectedPolicyType === 'SFSP') ? 'none' : '';
+    });
+    if((selectedPolicyType === 'BLUS' || selectedPolicyType === 'SFSP') && stfiToggle.value === "0") stfiToggle.value = "0.37";
 
-    // Rule k: Remove Exclude Terrorism for SFSP
-    if (selectedPolicyType === 'SFSP') {
-        optTerrExclude.style.display = 'none';
-        optTerrExclude.disabled = true;
-        if (terrToggle.value === "0") terrToggle.value = "0.21";
-    } else {
-        optTerrExclude.style.display = '';
-        optTerrExclude.disabled = false;
-    }
+    Array.from(terrToggle.options).forEach(opt => {
+        if(opt.value === "0") opt.style.display = (selectedPolicyType === 'SFSP') ? 'none' : '';
+    });
+    if(selectedPolicyType === 'SFSP' && terrToggle.value === "0") terrToggle.value = "0.21";
 
     evaluateRowVisibility();
     runCalculation();
@@ -1755,7 +1289,6 @@ function evaluateRowVisibility() {
     const constType = document.getElementById('construction').value;
     const rowKutcha = document.getElementById('row-kutcha');
     const kutchaHelp = document.getElementById('kutchaHelpText');
-    
     if (constType === 'kutcha') {
         if (selectedPolicyType !== 'BSUS') rowKutcha.classList.remove('hidden');
         kutchaHelp.classList.remove('hidden');
@@ -1763,7 +1296,6 @@ function evaluateRowVisibility() {
         rowKutcha.classList.add('hidden');
         kutchaHelp.classList.add('hidden');
     }
-
     const rowFloater = document.getElementById('row-floater');
     const floaterVal = document.getElementById('floaterToggle').value;
     if (selectedPolicyType !== 'BGR' && selectedPolicyType !== 'BSUS' && floaterVal === 'yes') {
@@ -1771,7 +1303,6 @@ function evaluateRowVisibility() {
     } else {
         rowFloater.classList.add('hidden');
     }
-
     const enterRateManually = document.getElementById('enterRateManuallyToggle').value;
     const manualRateInputContainer = document.getElementById('manualRateInputContainer');
     if (enterRateManually === 'yes') {
@@ -1779,7 +1310,6 @@ function evaluateRowVisibility() {
     } else {
         manualRateInputContainer.classList.add('hidden');
     }
-
     const bsusEnterRateManually = document.getElementById('bsusEnterRateManuallyToggle').value;
     const bsusManualRateInputContainer = document.getElementById('bsusManualRateInputContainer');
     if (bsusEnterRateManually === 'yes') {
@@ -1821,11 +1351,8 @@ function calculateAggregateSumInsured() {
     const finished = parseCommasToFloat(document.getElementById('siFinishedGoods').value);
     const other = parseCommasToFloat(document.getElementById('siOtherContents').value);
     const floating = parseCommasToFloat(document.getElementById('siStockFloating').value);
-
     const totalSum = building + machinery + stockRaw + stockProc + fff + finished + other + floating;
-    
     document.getElementById('sumInsured').value = totalSum.toLocaleString('en-IN');
-    
     runCalculation();
 }
 
@@ -1876,9 +1403,7 @@ function runCalculation() {
 
     const formattedSiText = si.toLocaleString('en-IN');
     document.getElementById('row-summary-si').innerText = formattedSiText;
-    if (document.getElementById('visible-summary-si')) {
-        document.getElementById('visible-summary-si').innerText = formattedSiText;
-    }
+    if (document.getElementById('visible-summary-si')) document.getElementById('visible-summary-si').innerText = formattedSiText;
 
     if (selectedPolicyType === 'BSUS') {
         const bsusIndexVal = document.getElementById('selectedBsusIndex').value;
@@ -1886,38 +1411,25 @@ function runCalculation() {
         
         if (bsusIndexVal === "" && !isBsusManual) {
             const clearIds = ['br_prem_1', 'br_prem_2', 'br_prem_3', 'br_prem_4', 'br_prem_5', 'br_prem_8', 'br_prem_9', 'br_prem_10', 'br_prem_11', 'br_prem_12', 'br_prem_13', 'br_prem_14', 'br_survey_factor_prem', 'br_prem_15', 'total-e', 'prem-gst', 'total-payable'];
-            clearIds.forEach(id => {
-                const node = document.getElementById(id);
-                if (node) node.innerText = "0";
-            });
+            clearIds.forEach(id => { const node = document.getElementById(id); if (node) node.innerText = "0"; });
             return;
         }
         
-        let category = 0;
-        let section = "IV";
-        let targetRiskCodeStr = "";
+        let category = 0; let section = "IV"; let targetRiskCodeStr = "";
         if (bsusIndexVal !== "") {
             const record = bsusRateSchedule[parseInt(bsusIndexVal)];
-            category = record.cat;
-            section = record.sec.trim();
-            targetRiskCodeStr = record.code ? record.code.trim() : "";
+            category = record.cat; section = record.sec.trim(); targetRiskCodeStr = record.code ? record.code.trim() : "";
         }
 
-        let catModifierWeight = 0; 
-        let flexaModLabel = "0.00 %";
+        let catModifierWeight = 0; let flexaModLabel = "0.00 %";
         if (category === 1) { catModifierWeight = -0.25; flexaModLabel = "-25.00 %"; }
         else if (category === 2) { catModifierWeight = -0.10; flexaModLabel = "-10.00 %"; }
         else if (category === 3) { catModifierWeight = 0.25;  flexaModLabel = "+25.00 %"; }
         else if (category === 4) { catModifierWeight = 1.60;  flexaModLabel = "+160.00 %"; }
 
         let flexaRate = 0;
-        if (isBsusManual) {
-            flexaRate = parseFloat(document.getElementById('bsusManualRateValue').value) || 0;
-        } else {
-            if (bsusIndexVal !== "") {
-                flexaRate = bsusRateSchedule[parseInt(bsusIndexVal)].rate;
-            }
-        }
+        if (isBsusManual) flexaRate = parseFloat(document.getElementById('bsusManualRateValue').value) || 0;
+        else if (bsusIndexVal !== "") flexaRate = bsusRateSchedule[parseInt(bsusIndexVal)].rate;
         
         const prem1 = Math.round(M * flexaRate);
         document.getElementById('br_rate_1').innerText = flexaRate.toFixed(4);
@@ -1945,17 +1457,14 @@ function runCalculation() {
 
         const chosenZone = document.getElementById('bsus_eq_zone_select').value;
         let baseUnadjustedEq = 0.05;
-        
         if (section === "III") {
             if (chosenZone === "ZONE_I") baseUnadjustedEq = 0.25;
             else if (chosenZone === "ZONE_II") baseUnadjustedEq = 0.15;
             else if (chosenZone === "ZONE_III") baseUnadjustedEq = 0.10;
-            else if (chosenZone === "ZONE_IV") baseUnadjustedEq = 0.05;
         } else {
             if (chosenZone === "ZONE_I") baseUnadjustedEq = 0.50;
             else if (chosenZone === "ZONE_II") baseUnadjustedEq = 0.25;
             else if (chosenZone === "ZONE_III") baseUnadjustedEq = 0.10;
-            else if (chosenZone === "ZONE_IV") baseUnadjustedEq = 0.05;
         }
         
         const adjustedEqRate = baseUnadjustedEq * (1 + catModifierWeight);
@@ -1965,15 +1474,9 @@ function runCalculation() {
 
         let baseUnadjustedStfi = 0.25;
         let numericCodeInt = parseInt(targetRiskCodeStr);
-        if (numericCodeInt >= 4012 && numericCodeInt <= 4019) {
-            baseUnadjustedStfi = 1.50;
-        } else if (section === "III") {
-            baseUnadjustedStfi = 0.15;
-        } else if (section === "VI") {
-            baseUnadjustedStfi = 0.35;
-        } else {
-            baseUnadjustedStfi = 0.25;
-        }
+        if (numericCodeInt >= 4012 && numericCodeInt <= 4019) baseUnadjustedStfi = 1.50;
+        else if (section === "III") baseUnadjustedStfi = 0.15;
+        else if (section === "VI") baseUnadjustedStfi = 0.35;
         
         const adjustedStfiRate = baseUnadjustedStfi * (1 + catModifierWeight);
         const prem9 = Math.round(M * adjustedStfiRate);
@@ -2013,10 +1516,8 @@ function runCalculation() {
         const subtotal_rate = rate13 + rate14;
 
         let dynamicFeaturesPctSum = 0;
-        const featureRows = document.querySelectorAll('#bsusDynamicFeaturesTbody tr');
-        featureRows.forEach(row => {
-            const weightInput = parseFloat(row.querySelector('.survey-rate-weight').value) || 0;
-            dynamicFeaturesPctSum += weightInput;
+        document.querySelectorAll('#bsusDynamicFeaturesTbody tr').forEach(row => {
+            dynamicFeaturesPctSum += parseFloat(row.querySelector('.survey-rate-weight').value) || 0;
         });
 
         const survey_prem_mod = Math.round(subtotal_prem * (dynamicFeaturesPctSum / 100));
@@ -2033,21 +1534,17 @@ function runCalculation() {
         document.getElementById('total-e').innerText = prem15.toLocaleString('en-IN');
         let gst = Math.round(prem15 * 0.18);
         document.getElementById('prem-gst').innerText = gst.toLocaleString('en-IN');
-        let totalPayable = Math.round(prem15 + gst);
-        document.getElementById('total-payable').innerText = totalPayable.toLocaleString('en-IN');
+        document.getElementById('total-payable').innerText = Math.round(prem15 + gst).toLocaleString('en-IN');
         return;
     }
 
-    // STANDARD CALCULATIONS MODES (BGR, BLUS, SFSP)
-    let basicPrem = 0;
-    let basicRateText = "0.00";
+    let basicPrem = 0; let basicRateText = "0.00";
     if (selectedPolicyType === 'BGR') {
         const perMilleRate = parseFloat(document.getElementById('bgrRateOption').value);
         basicPrem = M * perMilleRate;
         basicRateText = perMilleRate.toFixed(2) + " per mille";
     } else {
-        const isManualMode = document.getElementById('enterRateManuallyToggle').value === 'yes';
-        if (isManualMode) {
+        if (document.getElementById('enterRateManuallyToggle').value === 'yes') {
             const manualRate = parseFloat(document.getElementById('manualRateValue').value) || 0;
             basicPrem = M * manualRate;
             basicRateText = manualRate.toFixed(3) + " per mille (Manual)";
@@ -2055,15 +1552,10 @@ function runCalculation() {
             const occIndex = document.getElementById('selectedOccupancyIndex').value;
             if (occIndex !== "" && occIndex !== null) {
                 const record = standardRates[occIndex];
-                let commRatePerMille = 0;
-                if (selectedPolicyType === 'BLUS') commRatePerMille = record.blus;
-                if (selectedPolicyType === 'SFSP') commRatePerMille = record.sfsp;
+                let commRatePerMille = selectedPolicyType === 'BLUS' ? record.blus : record.sfsp;
                 basicPrem = M * commRatePerMille;
                 basicRateText = commRatePerMille.toFixed(3) + " per mille";
-                
-                if (document.getElementById('meta-rate')) {
-                    document.getElementById('meta-rate').innerText = commRatePerMille.toFixed(3);
-                }
+                if (document.getElementById('meta-rate')) document.getElementById('meta-rate').innerText = commRatePerMille.toFixed(3);
             }
         }
     }
@@ -2074,15 +1566,13 @@ function runCalculation() {
     let floaterPrem = 0;
     if (selectedPolicyType !== 'BGR' && document.getElementById('floaterToggle').value === 'yes') {
         let activeRate = 0;
-        const isManualMode = document.getElementById('enterRateManuallyToggle').value === 'yes';
-        if (isManualMode) {
+        if (document.getElementById('enterRateManuallyToggle').value === 'yes') {
             activeRate = parseFloat(document.getElementById('manualRateValue').value) || 0;
         } else {
             const occIndex = document.getElementById('selectedOccupancyIndex').value;
             if (occIndex !== "") {
                 const record = standardRates[occIndex];
-                if (selectedPolicyType === 'BLUS') activeRate = record.blus;
-                if (selectedPolicyType === 'SFSP') activeRate = record.sfsp;
+                activeRate = selectedPolicyType === 'BLUS' ? record.blus : record.sfsp;
             }
         }
         floaterPrem = ((floatingSi / 1000) * activeRate) * 0.10;
@@ -2108,10 +1598,7 @@ function runCalculation() {
     let totalB = totalA + discountPrem; 
     document.getElementById('total-b').innerText = totalB.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-    let eqPrem = 0;
-    let stfiPrem = 0;
-    let totalC = 0;
-    let totalD = totalB;
+    let eqPrem = 0; let stfiPrem = 0; let totalC = 0; let totalD = totalB;
 
     if (selectedPolicyType !== 'BGR') {
         const eqRate = parseFloat(document.getElementById('eqZone').value) || 0;
@@ -2119,8 +1606,7 @@ function runCalculation() {
         document.getElementById('rate-eq').innerText = eqRate > 0 ? eqRate.toFixed(2) + " per mille" : "0.00";
         document.getElementById('prem-eq').innerText = eqPrem.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-        let stfiVal = document.getElementById('stfiToggle').value;
-        let stfiRate = parseFloat(stfiVal) || 0;
+        let stfiRate = parseFloat(document.getElementById('stfiToggle').value) || 0;
         stfiPrem = M * stfiRate;
         document.getElementById('rate-stfi').innerText = stfiRate > 0 ? stfiRate.toFixed(2) + " per mille" : "0.00";
         document.getElementById('prem-stfi').innerText = stfiPrem.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -2150,98 +1636,57 @@ function runCalculation() {
 
     let gst = totalE * 0.18;
     document.getElementById('prem-gst').innerText = gst.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-
-    let totalPayable = totalE + gst;
-    document.getElementById('total-payable').innerText = totalPayable.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    document.getElementById('total-payable').innerText = (totalE + gst).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
 function exportToExcel() {
     let csvContent = "data:text/csv;charset=utf-8,";
     if (selectedPolicyType === 'BSUS') {
-        csvContent += "BSUS REVAMPED SPREADSHEET MATRIX WORKING LOG\n";
-        csvContent += "Line Item Description,Rate / Parameter Factor,Computed Premium (₹)\n";
-        const rows = document.querySelectorAll('#bsusRevampedSection table:first-of-type tbody tr');
-        rows.forEach(row => {
+        csvContent += "BSUS REVAMPED SPREADSHEET MATRIX WORKING LOG\nLine Item Description,Rate / Parameter Factor,Computed Premium (₹)\n";
+        document.querySelectorAll('#bsusRevampedSection table:first-of-type tbody tr').forEach(row => {
             const cols = row.querySelectorAll('td');
             if (cols.length >= 3) {
-                const desc = cols[0].innerText;
-                const selectEl = cols[1].querySelector('select');
-                const inputEl = cols[1].querySelector('input');
-                let rateBasis = cols[1].innerText;
-                if (selectEl) rateBasis = selectEl.value;
-                if (inputEl) rateBasis = inputEl.value + "%";
-                const premVal = cols[2].innerText.replace(/,/g, '');
-                csvContent += `"${desc}","${rateBasis}","${premVal}"\n`;
+                let rateBasis = cols[1].querySelector('select') ? cols[1].querySelector('select').value : (cols[1].querySelector('input') ? cols[1].querySelector('input').value + "%" : cols[1].innerText);
+                csvContent += `"${cols[0].innerText}","${rateBasis}","${cols[2].innerText.replace(/,/g, '')}"\n`;
             }
         });
     } else {
-        const table = document.getElementById('premiumTable');
         csvContent += "Line Item Description,Rate / Basis,Premium (INR)\n";
-        const rows = table.querySelectorAll('tbody tr');
-        rows.forEach(row => {
+        document.querySelectorAll('#premiumTable tbody tr').forEach(row => {
             if (!row.classList.contains('hidden')) {
                 const cols = row.querySelectorAll('td');
-                if (cols.length >= 3) {
-                    const lineDesc = cols[0].innerText;
-                    const rateBasis = cols[1].innerText.replace(/,/g, '');
-                    const premiumVal = cols[2].innerText.replace(/,/g, '');
-                    csvContent += `"${lineDesc}","${rateBasis}","${premiumVal}"\n`;
-                }
+                if (cols.length >= 3) csvContent += `"${cols[0].innerText}","${cols[1].innerText.replace(/,/g, '')}","${cols[2].innerText.replace(/,/g, '')}"\n`;
             }
         });
     }
-    const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
+    link.setAttribute("href", encodeURI(csvContent));
     link.setAttribute("download", `Fire_Insurance_Premium_Working_${selectedPolicyType}.csv`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    document.body.appendChild(link); link.click(); document.body.removeChild(link);
 }
 
 function exportToPDF() {
     const targetElement = selectedPolicyType === 'BSUS' ? document.getElementById('workspace') : document.getElementById('premiumWorkingPanel');
-    const opt = {
-        margin:       10,
-        filename:     `Premium_Working_Statement_${selectedPolicyType}.pdf`,
-        image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, useCORS: true, scrollY: 0, scrollX: 0 },
-        jsPDF:        { unit: 'mm', format: 'a4', orientation: selectedPolicyType === 'BSUS' ? 'landscape' : 'portrait' },
-        pagebreak:    { mode: ['avoid-all', 'css'] }
-    };
-    html2pdf().set(opt).from(targetElement).save();
+    html2pdf().set({
+        margin: 10, filename: `Premium_Working_Statement_${selectedPolicyType}.pdf`,
+        image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2, useCORS: true, scrollY: 0, scrollX: 0 },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: selectedPolicyType === 'BSUS' ? 'landscape' : 'portrait' },
+        pagebreak: { mode: ['avoid-all', 'css'] }
+    }).from(targetElement).save();
 }
 
-// Global Event Triggers Mapping
-document.getElementById('bsusOccupancySearch').addEventListener('input', function() {
-    filterBsusAutocomplete(this.value);
-});
-document.getElementById('occupancySearch').addEventListener('input', function() {
-    handleAutocompleteSearch(this.value);
-});
-document.getElementById('hazardousGoodsSearchInput').addEventListener('input', function() {
-    renderHazardousGoodsTable();
-});
-document.getElementById('hazardousCategorySelect').addEventListener('change', function() {
-    renderHazardousGoodsTable();
-});
-
+document.getElementById('bsusOccupancySearch').addEventListener('input', function() { filterBsusAutocomplete(this.value); });
+document.getElementById('occupancySearch').addEventListener('input', function() { handleAutocompleteSearch(this.value); });
+document.getElementById('hazardousGoodsSearchInput').addEventListener('input', renderHazardousGoodsTable);
+document.getElementById('hazardousCategorySelect').addEventListener('change', renderHazardousGoodsTable);
 document.getElementById('bsus_eq_zone_select').addEventListener('change', runCalculation);
 document.getElementById('bsus_discount_pct_input').addEventListener('input', runCalculation);
 document.getElementById('bsus_floater_select').addEventListener('change', runCalculation);
 document.getElementById('terrorismOptOutToggle').addEventListener('change', runCalculation);
 document.getElementById('construction').addEventListener('change', runCalculation);
-
-document.getElementById('enterRateManuallyToggle').addEventListener('change', function() {
-    evaluateRowVisibility();
-    runCalculation();
-});
+document.getElementById('enterRateManuallyToggle').addEventListener('change', function() { evaluateRowVisibility(); runCalculation(); });
 document.getElementById('manualRateValue').addEventListener('input', runCalculation);
-
-document.getElementById('bsusEnterRateManuallyToggle').addEventListener('change', function() {
-    evaluateRowVisibility();
-    runCalculation();
-});
+document.getElementById('bsusEnterRateManuallyToggle').addEventListener('change', function() { evaluateRowVisibility(); runCalculation(); });
 document.getElementById('bsusManualRateValue').addEventListener('input', runCalculation);
 
 document.getElementById('bgrRateOption').addEventListener('change', runCalculation);
@@ -2250,35 +1695,18 @@ document.getElementById('eqZone').addEventListener('change', runCalculation);
 document.getElementById('stfiToggle').addEventListener('change', runCalculation);
 document.getElementById('natcatDiscountToggle').addEventListener('change', runCalculation);
 document.getElementById('terrorismToggle').addEventListener('change', runCalculation);
-document.getElementById('floaterToggle').addEventListener('change', function() {
-    evaluateRowVisibility();
-    runCalculation();
-});
+document.getElementById('floaterToggle').addEventListener('change', function() { evaluateRowVisibility(); runCalculation(); });
 
 document.addEventListener('change', function(e) {
     if (e.target.classList.contains('survey-toggle')) {
         const row = e.target.closest('tr');
-        const trs = Array.from(row.parentNode.querySelectorAll('tr'));
-        const rowIndex = trs.indexOf(row);
-        const configItem = safetySurveyQuestionsConfig[rowIndex];
-        const input = row.querySelector('.survey-rate-weight');
-        const displayText = row.querySelector('.survey-rate-weight-text');
+        const configItem = safetySurveyQuestionsConfig[Array.from(row.parentNode.querySelectorAll('tr')).indexOf(row)];
         if (configItem) {
-            let val = 0;
-            if (configItem.type === "yes_no") {
-                val = configItem.values[e.target.value];
-            } else {
-                val = parseFloat(e.target.value) || 0;
-            }
-            input.value = val;
-            displayText.innerText = (val >= 0 ? "+" : "") + val.toFixed(2) + " %";
-            if (val < 0) {
-                displayText.style.color = "var(--success)";
-            } else if (val > 0) {
-                displayText.style.color = "var(--danger)";
-            } else {
-                displayText.style.color = "#475569";
-            }
+            let val = configItem.type === "yes_no" ? configItem.values[e.target.value] : parseFloat(e.target.value) || 0;
+            row.querySelector('.survey-rate-weight').value = val;
+            let display = row.querySelector('.survey-rate-weight-text');
+            display.innerText = (val >= 0 ? "+" : "") + val.toFixed(2) + " %";
+            display.style.color = val < 0 ? "var(--success)" : (val > 0 ? "var(--danger)" : "#475569");
         }
         runCalculation();
     }
@@ -2291,11 +1719,10 @@ document.addEventListener('click', function(e) {
     }
 });
 
-// Setup default layout bindings
 adjustLayoutRules();
 initializeCurrencyInputListeners();
 calculateAggregateSumInsured();
-renderHazardousGoodsTable(); // Initial render for the table
+renderHazardousGoodsTable();
 </script>
 </body>
 </html>
