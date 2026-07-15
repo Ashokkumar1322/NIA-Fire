@@ -509,9 +509,9 @@
                 <input type="text" id="sumInsured" readonly style="background-color: #f1f5f9; font-weight: bold; color: #0f172a;" value="1,00,00,000">
             </div>
 
-            <!-- REPOSITIONED: 5. Construction Type (Moved exactly below Total Sum Insured) -->
+            <!-- REPOSITIONED: Construction Type -->
             <div class="form-group distinct-label" id="constructionContainer">
-                <label for="construction">5. Construction Type</label>
+                <label for="construction" id="label-construction">2. Construction Type</label>
                 <select id="construction">
                     <option value="pucca">Pucca (RCC / First Class Construction)</option>
                     <option value="kutcha">Kutcha (See definition below)</option>
@@ -534,7 +534,6 @@
             <div id="bsusRevampedSection" class="hidden">
                 <div class="bsus-worksheet-panel">
                     
-                    <!-- REPOSITION CHANGE 7: ENTER FLEXA RATE MANUALLY MOVED JUST ABOVE SEARCH INDEX -->
                     <div class="form-group" id="bsusManualRateOptionContainer" style="margin-bottom: 14px;">
                         <label for="bsusEnterRateManuallyToggle" style="font-weight: 600; font-size: 0.9rem; color: #0f172a;">Enter Flexa Rate Manually?</label>
                         <select id="bsusEnterRateManuallyToggle" class="bsus-select-field" style="width: 100%;">
@@ -555,13 +554,11 @@
                                 <input type="text" id="bsusOccupancySearch" placeholder="Search by description or risk code (e.g. 1002, Libraries)..." autocomplete="off" style="border: 2px solid var(--primary); width: 100%;">
                                 <div id="bsusAutocompleteList" class="autocomplete-results hidden"></div>
                             </div>
-                            <!-- CLEAR BUTTON ATTACHED MECHANICALLY (Change 6) -->
                             <button type="button" class="btn-clear" onclick="fireSearchClearAction('BSUS')">CLEAR</button>
                         </div>
                         <input type="hidden" id="selectedBsusIndex" value="">
                     </div>
 
-                    <!-- Meta Tags Display Context info banner -->
                     <div id="bsusMetaDisplay" class="meta-container hidden" style="margin-bottom: 14px; background-color: #f0f9ff; border-color: #bae6fd;">
                         <div class="meta-item">
                             <span class="meta-label">Selected Risk Code</span>
@@ -665,7 +662,6 @@
                                 <td id="br_prem_14" class="text-right">0</td>
                             </tr>
                             <tr>
-                                <!-- CHANGE 8: LABELLING CONTENT STRING UPDATED SUCCESSFULLY -->
                                 <td class="bsus-row-heading">NET DISC/LOAD – Answer 9 Q’s under Good/Bad Features</td>
                                 <td id="br_survey_factor_rate" class="text-right">0.00 %</td>
                                 <td id="br_survey_factor_prem" class="text-right">0</td>
@@ -696,8 +692,8 @@
             <!-- CONTAINER WRAPPER PANELS HOUSING DYNAMIC STANDARDS -->
             <div id="standardCommercialControlsContainer">
                 <!-- BGR Rate Options Dropdown (Visible ONLY for BGR) -->
-                <div class="form-group" id="bgrRateContainer">
-                    <label for="bgrRateOption">BGR Basic Rate Option</label>
+                <div class="form-group distinct-label" id="bgrRateContainer">
+                    <label for="bgrRateOption" id="label-bgrRateOption">3. BGR Basic Rate Option</label>
                     <select id="bgrRateOption">
                         <option value="0.06">Without terrorism @ 0.06 per mille (Incl of EQ, STFI)</option>
                         <option value="0.11" selected>With terrorism @ 0.11 per mille (Incl of EQ, STFI)</option>
@@ -726,7 +722,6 @@
                             <input type="text" id="occupancySearch" placeholder="Type code or risk description (e.g. 2140, Paint factories)..." autocomplete="off" style="width: 100%;">
                             <div id="autocompleteResultsList" class="autocomplete-results hidden"></div>
                         </div>
-                        <!-- CLEAR BUTTON ATTACHED NATIVELY (Change 6) -->
                         <button type="button" class="btn-clear" onclick="fireSearchClearAction('STANDARD')">CLEAR</button>
                     </div>
                     <input type="hidden" id="selectedOccupancyIndex" value="">
@@ -771,9 +766,9 @@
             </div>
 
             <div id="standardCommercialControlsContainer2">
-                <!-- Side Head 6 -->
+                <!-- Side Head 6 / 4 -->
                 <div class="form-group distinct-label" id="basicDiscountContainer">
-                    <label for="basicDiscountValue">6. Discount (-) or Loading (+) on Basic Premium (%)</label>
+                    <label for="basicDiscountValue" id="label-basicDiscountValue">4. Discount (-) or Loading (+) on Basic Premium (%)</label>
                     <input type="number" id="basicDiscountValue" placeholder="e.g. -10 for 10% discount, +5 for loading" value="0" step="0.01">
                 </div>
 
@@ -781,7 +776,7 @@
                 <div id="eqCoverContainer" class="form-group id-commercial distinct-label hidden">
                     <label for="eqZone">7. Earthquake (EQ) Cover Zone</label>
                     <select id="eqZone">
-                        <option value="0">Exclude Earthquake Cover</option>
+                        <option value="0" id="opt-eq-exclude">Exclude Earthquake Cover</option>
                         <option value="0.05">Zone I @ 0.05 per mille</option>
                         <option value="0.10">Zone II @ 0.10 per mille</option>
                         <option value="0.25">Zone III @ 0.25 per mille</option>
@@ -793,7 +788,7 @@
                 <div id="stfiCoverContainer" class="form-group id-commercial hidden distinct-label">
                     <label for="stfiToggle">8. STFI Cover Option</label>
                     <select id="stfiToggle">
-                        <option value="0">Exclude STFI Cover</option>
+                        <option value="0" id="opt-stfi-exclude">Exclude STFI Cover</option>
                         <option value="0.22">SECTION III NON INDUSTRIAL @ 0.22 per mille</option>
                         <option value="0.37" selected>SECTION IV, V, VII @ 0.37 per mille</option>
                         <option value="0.52">SECTION VI NOT STORED IN OPEN @ 0.52 per mille</option>
@@ -816,7 +811,7 @@
                 <div id="terrorismContainer" class="form-group id-commercial hidden distinct-label">
                     <label for="terrorismToggle">10. Terrorism Cover Options</label>
                     <select id="terrorismToggle">
-                        <option value="0">Exclude Terrorism Cover</option>
+                        <option value="0" id="opt-terr-exclude">Exclude Terrorism Cover</option>
                         <option value="0.13">NON INDUSTRIAL @ 0.13 per mille</option>
                         <option value="0.21" selected>INDUSTRIAL @ 0.21 per mille</option>
                     </select>
@@ -986,7 +981,7 @@
 let selectedPolicyType = 'BGR';
 
 // =========================================================================
-// INPUT VALUE EXTRACTION & RE-FORMATTING SCHEME (Change 3)
+// INPUT VALUE EXTRACTION & RE-FORMATTING SCHEME
 // =========================================================================
 function parseCommasToFloat(val) {
     if (typeof val === 'number') return val;
@@ -1212,7 +1207,7 @@ const bsusRateSchedule = [
   {"sec": "IV", "code": "2136", "cat": 1, "desc": "Oil Distillation Plants (essential)", "rate": 1.44},
   {"sec": "IV", "code": "2137", "cat": 4, "desc": "Oil Mills refining ( Veg/Animal)", "rate": 1.19},
   {"sec": "IV", "code": "2138", "cat": 1, "desc": "Oil Mills (Vegetable)", "rate": 1.11},
-  {"sec": "IV", "code": "2139", "cat": 1, "desc": "Oil and Leather Cloth Factories", "rate": 1.83},
+  {"sec": "IV", "code": "2139", "cat": 3, "desc": "Oil and Leather Cloth Factories", "rate": 1.63},
   {"sec": "IV", "code": "2140", "cat": 1, "desc": "Paint factories (Water based)", "rate": 0.99},
   {"sec": "IV", "code": "2141", "cat": 3, "desc": "Paint (others) & Varnish Factories", "rate": 2.18},
   {"sec": "IV", "code": "2142", "cat": 4, "desc": "Paints - Nitrocellulose based", "rate": 2.65},
@@ -1553,7 +1548,7 @@ const standardRates = [
   {"sec": "IV", "code": "2189", "cat": "3", "ho": "", "dec": "", "desc": "Textile Mills - Spinning Mills", "blus": 1.03, "sfsp": 1.03},
   {"sec": "IV", "code": "2211", "cat": "3", "ho": "", "dec": "", "desc": "Textile Mills- Composite Mills", "blus": 1.44, "sfsp": 1.44},
   {"sec": "IV", "code": "2190", "cat": "2", "ho": "", "dec": "", "desc": "Tile & Pottery works", "blus": 0.67, "sfsp": 0.67},
-  {"sec": "IV", "code": "2191", "cat": "2", "ho": "", "dec": "", "desc": "Tiny sector Industries (< 10 Lakhs)", "blus": 0.69, "sfsp": 0.69},
+  {"sec": "IV", "code": "2191", "cat": "3", "ho": "", "dec": "", "desc": "Tiny sector Industries (< 10 Lakhs)", "blus": 0.69, "sfsp": 0.69},
   {"sec": "IV", "code": "2192", "cat": "2", "ho": "", "dec": "", "desc": "Tissue Culture (Excluding Crops)", "blus": 0.74, "sfsp": 0.74},
   {"sec": "IV", "code": "2193", "cat": "2", "ho": "", "dec": "", "desc": "Tobacco Curing / Redrying Factories", "blus": 1.02, "sfsp": 1.02},
   {"sec": "IV", "code": "2194", "cat": "2", "ho": "", "dec": "", "desc": "Tobacco grinding Manufacturing", "blus": 0.9, "sfsp": 0.9},
@@ -1625,1318 +1620,6 @@ const standardRates = [
   {"sec": "VII", "code": "4011", "cat": "2", "ho": "", "dec": "", "desc": "Tanks (others)", "blus": 0.67, "sfsp": 0.67}
 ];
 
-const safetySurveyQuestionsConfig = [
-    { text: "Building age above 30 yrs", type: "yes_no", values: { YES: 5, NO: 0 } },
-    { text: "Operational Fire Hydrant/sprinkler/water spray system/fire alarm/smoke detectors", type: "yes_no", values: { YES: -10, NO: 0 } },
-    { text: "Electrical installations - well maintained standard equipment and installations", type: "yes_no", values: { YES: -10, NO: 0 } },
-    { text: "Provision of storm water drainage system and buildings with plinth level at least 1.5 ft above ground", type: "yes_no", values: { YES: -10, NO: 0 } },
-    { text: "High Standard of security with no of security guards for 24 x 7 and CCTVs", type: "yes_no", values: { YES: -10, NO: 5 } },
-    { text: "Past 3-years claims ratio", type: "select", options: [
-        { text: "0-30%", value: -30 },
-        { text: "30-70%", value: -20 },
-        { text: "70-100%", value: 0 },
-        { text: "100-200%", value: 10 },
-        { text: "> 200%", value: 50 }
-    ] },
-    { text: "Basement in Building used for operations/storage/plant machinery installed therein", type: "yes_no", values: { YES: 5, NO: 0 } },
-    { text: "Insured premises located within 1 km dstance of a water body like seashore, lake, rivers, canal etc", type: "yes_no", values: { YES: 5, NO: 0 } },
-    { text: "Risk located in thickly populated area with no access to fire brigade vehicle", type: "yes_no", values: { YES: 10, NO: 0 } }
-];
-
-function populateSurveyQuestionsTable() {
-    const tbody = document.getElementById('bsusDynamicFeaturesTbody');
-    tbody.innerHTML = "";
-    safetySurveyQuestionsConfig.forEach((item, index) => {
-        const row = document.createElement('tr');
-        let selectHtml = "";
-        let initialValue = 0;
-        
-        if (item.type === "yes_no") {
-            selectHtml = `
-                <select class="bsus-select-field survey-toggle" style="padding: 2px 4px; font-size: 0.75rem; width: 85px;">
-                    <option value="NO" selected>NO</option>
-                    <option value="YES">YES</option>
-                </select>
-            `;
-            initialValue = item.values["NO"];
-        } else if (item.type === "select") {
-            selectHtml = `
-                <select class="bsus-select-field survey-toggle" style="padding: 2px 4px; font-size: 0.75rem; width: 85px;">
-                    ${item.options.map(opt => `<option value="${opt.value}">${opt.text}</option>`).join('')}
-                </select>
-            `;
-            initialValue = item.options[0].value;
-        }
-        
-        row.innerHTML = `
-            <td style="text-align: center; font-weight: bold; color: #475569;">${index + 1}</td>
-            <td style="color: #1e293b; font-weight: 500;">${item.text}</td>
-            <td style="text-align: center;">${selectHtml}</td>
-            <td class="text-right" style="font-weight: bold; color: #475569; padding-right: 15px;">
-                <span class="survey-rate-weight-text">${(initialValue >= 0 ? "+" : "") + initialValue.toFixed(2)} %</span>
-                <input type="hidden" class="survey-rate-weight" value="${initialValue}">
-            </td>
-        `;
-        tbody.appendChild(row);
-    });
-}
-populateSurveyQuestionsTable();
-
-// NEW CLEAN SEPARATED DATA ARRAYS TO PREVENT BROWSER FREEZING
-const cat1_items = [
-    'Aloe resin',
-    'Aluminium resinate',
-    'Amber',
-    'Ammonium Bromide',
-    'Ammonium Chloride',
-    'Animal protein',
-    'Ammonium Fluoride',
-    'Almond oil',
-    'Ammonium Sulphate',
-    'Animal skin',
-    'Amonia-acqueous soln. or spirits of ammonia exceeding 10%',
-    'Aluminium Chloride',
-    'Anethole',
-    'Anime (a resin)',
-    'Animal black',
-    'Aluminium paste',
-    'Animal glue',
-    'Anthracene',
-    'Algae',
-    'Antimony Pentafluoride',
-    'Animal oil',
-    'Antimony Pentasulfide',
-    'All flammable liquids having flash point above 65C',
-    'Antimony sulphate',
-    'Antimony sulphide',
-    'Antimony trisulphate',
-    'Antimony trisulphide',
-    'Arachis oil',
-    'Arecanuts',
-    'Arsenic Chloride',
-    'Arsenic pentasulphide',
-    'Arsenic sulphide',
-    'Arsenic Trisulfide',
-    'Artificial edible fat',
-    'Artificial horn',
-    'Artificial leather',
-    'Artificial Silk',
-    'Artificial wool',
-    'Asafoetida gum resin',
-    'Asafoetida oil',
-    'Asphalt sheet',
-    'Asphalted paper',
-    'Balata, Balsam',
-    'Bamboo mats',
-    'Barium Carbonate',
-    'Barium Sulphide',
-    'Barley',
-    'Baryllium Dust',
-    'Bed feathers',
-    'Beedi leaves',
-    'Bees wax',
-    'Beet sugar',
-    'Beet tallow',
-    'Benzoin resin',
-    'Benzoin resinoid',
-    'Betal Nuts',
-    'Birch oil',
-    'Bisphenol',
-    'Bitumen felt',
-    'Blacks of all kinds',
-    'Borneo Camphor',
-    'Borneol',
-    'Borneo tallow',
-    'Bornyl acetate',
-    'Boron trichloride',
-    'Boron trifluoride',
-    'Bran',
-    'Bran oil',
-    'Butter fat',
-    'Butter oil',
-    'Bacon',
-    'Bakelite',
-    'Baking powder',
-    'Balata',
-    'Cable joints(compound)',
-    'Cakes',
-    'Calcium ammonium nitrate',
-    'Calcium fluoride',
-    'Calcium tungstate',
-    'Calcium oxide (quick lime)',
-    'Calcium propyonate',
-    'Calf hair',
-    'Calf skin',
-    'Calomel',
-    'Candelilla wax',
-    'Candi',
-    'Canes',
-    'Cane seatings',
-    'Cantharides',
-    'Canvas',
-    'Capoc',
-    'Caranday wax',
-    'Caraway',
-    'Cardamom',
-    'Carnuba wax',
-    'Carob',
-    'Carpets',
-    'Carrageen',
-    'Cascarilla',
-    'Cashew',
-    'Cashew husk',
-    'Cashew Kernel',
-    'Cashew shell',
-    'Cashew nut shell oil',
-    'Cassia',
-    'Cassia bark',
-    'Cassia oil',
-    'Castor oil',
-    'Castor seed',
-    'Cedar wood oil',
-    'Cellulose plastics',
-    'Cellulose',
-    'Cellulose acetate',
-    'Cement',
-    'Cereals',
-    'Ceresin wax',
-    'Cevadialla',
-    'Chamomile',
-    'Cheese',
-    'Chewing tobacco',
-    'Chilies',
-    'Chirata',
-    'Chloracetic acid',
-    'Chlorine',
-    'Chlorine dioxide',
-    'Chlorine trifluoride',
-    'Chromic acid',
-    'Chromium Fluoride',
-    'Chrysophenine',
-    'Cigarettes',
-    'Cigars',
-    'Cinnamon',
-    'Cinnamon oil',
-    'Citronella oil',
-    'Clove',
-    'Clove oil',
-    'Coal (incl. Anthracite)',
-    'Coal powder',
-    'Coal briquettes',
-    'Coal blocks',
-    'Coal cakes',
-    'Coal gas',
-    'Coal tar',
-    'Coal tar oil',
-    'Cobalt Fluoride',
-    'Cobolt resinate',
-    'Coca (beans, butter, paste & powder)',
-    'Cocculus indicus',
-    'Cochineal',
-    'Coconut oil',
-    'Coconut shell',
-    'Coffee',
-    'Coir (yarn and fibre)',
-    'Coir mattress',
-    'Colocynth',
-    'Colophony',
-    'Condensates(gas)',
-    'Coniferous wood',
-    'Copaiba',
-    'Copal',
-    'Copra',
-    'Coriander',
-    'Cork',
-    'Corn',
-    'Corn oil',
-    'Corosive sublimate',
-    'Cotton (fully pressed)',
-    'Cotton seed',
-    'Cotton seed oil',
-    'Coumarone',
-    'Cresol',
-    'Cresylic acid',
-    'Croton oil',
-    'Cubebs',
-    'Cumin',
-    'Cumin oil',
-    'Cutch',
-    'Dammar',
-    'Danine',
-    'Dates',
-    'Detergents',
-    'Dextrin',
-    'Di-ammonium phosphate',
-    'Dicalcium phosphate',
-    'Dimethyl aniline',
-    'Disinfectant liquids(fl pt abv 65 C)',
-    'Disinfectant solids',
-    'Dragon blood',
-    'Driers (excluding metallic)',
-    'Driers (metallic)',
-    'Drugs',
-    'Drying oils',
-    'Dyes',
-    'Ebonite',
-    'Ebonite powder',
-    'Edible fats',
-    'Eels grass',
-    'Elemi',
-    'Ergot',
-    'Eucalyptus oil',
-    'Essparto grass',
-    'Fats',
-    'Feathers',
-    'Felt',
-    'Felt-bituminized',
-    'Fennel seed',
-    'Fenugreck seed',
-    'Fertilizers(except salt petre/am nitrate)',
-    'Fibres',
-    'Figs',
-    'Fir wood',
-    'Fish guano',
-    'Fish meal',
-    'Fish oil',
-    'Flame retardants',
-    'Flexible plastics',
-    'Flock',
-    'Flooring waxes',
-    'Flour',
-    'Fluorine',
-    'Fluorosulfonic acid',
-    'Fodder',
-    'Fodder yeast',
-    'Food stuffs',
-    'Foot wear',
-    'Formaldehyde',
-    'Formic acid',
-    'Frankineence',
-    'Fullers earth',
-    'Fusel oil',
-    'Galbanum',
-    'Gall nut',
-    'Gambier',
-    'Gamboge',
-    'Garlic',
-    'Gas (inert, non-combustible)',
-    'Gelatin',
-    'Ghee',
-    'Ginger',
-    'Glacial acetic acid',
-    'Glass wool',
-    'Glue',
-    'Glycerine',
-    'Goat hair',
-    'Goat skin',
-    'Grains',
-    'Gramophones',
-    'Graphite',
-    'Grasses',
-    'Greases',
-    'Groats',
-    'Guaiac',
-    'Guano',
-    'Guar seed',
-    'Guaiacum',
-    'Gum arabic',
-    'Gum resin',
-    'Gums',
-    'Gunny bags',
-    'Gur',
-    'Gurjan',
-    'Gutta-percha',
-    'Hair',
-    'Hard boards',
-    'Hay',
-    'Hazelnut',
-    'Hemp',
-    'Hemp seed',
-    'Herbs',
-    'Hessian',
-    'Hides',
-    'Hoofs',
-    'Hops',
-    'Horns',
-    'Horse hair',
-    'Hyacinth',
-    'Hydrazine',
-    'Hydrobromic acid',
-    'Hydrochloric acid',
-    'Hydrocyanic acid',
-    'Hydrofluoric acid',
-    'Hydrofluorosilicic acid',
-    'Hydrogen',
-    'Hydrogen chloride',
-    'Hydrogen fluoride',
-    'Incandescent mantles',
-    'Incense',
-    'Indian corn',
-    'India rubber',
-    'Indigo',
-    'Indigo carmine',
-    'Inks',
-    'Insecticide liquids(fl pt abv 65 C)',
-    'Insecticide solids',
-    'Iodine',
-    'Iodine monochloride',
-    'Iron Chloride',
-    'Iron penta-carbonyl',
-    'Ixtle',
-    'Jaggery',
-    'Jalap',
-    'Jowar',
-    'Jute',
-    'Kangaroo hair',
-    'Kapur',
-    'Kapoc',
-    'Kaurie',
-    'Kernel oil',
-    'Khandsari',
-    'Kino',
-    'Lac',
-    'Lanolin',
-    'Lard',
-    'Lard oil',
-    'Lauric acid',
-    'Lavender oil',
-    'Lead Chloride',
-    'Leather',
-    'Leather (artificial)',
-    'Leather cloth',
-    'Lemon grass oil',
-    'Lignite',
-    'Linoleum',
-    'Linseed',
-    'Linseed oil',
-    'Liquorice',
-    'Loofa',
-    'Lycopodium',
-    'Mace',
-    'Machine belting',
-    'Machine oil',
-    'Maize',
-    'Maize oil',
-    'Malt',
-    'Mandioca',
-    'Manila',
-    'Manna',
-    'Margarine',
-    'Marjoram',
-    'Marmalade',
-    'Mastic',
-    'Mats',
-    'Mawah',
-    'Meal',
-    'Mercuric chloride',
-    'Methyl bromide',
-    'Milk powder',
-    'Milo',
-    'Mineral oil',
-    'Mineral wax',
-    'Molasses',
-    'Monkey hair',
-    'Mowrah',
-    'Mowrah oil',
-    'Muriatic acid',
-    'Muriate of potash',
-    'Mustard oil',
-    'Mustard seed',
-    'Myrobalan',
-    'Myrrh',
-    'Naphthalene',
-    'Neat\'s-foot oil',
-    'Niger seed',
-    'Niger seed oil',
-    'Night soil',
-    'Nitric acid',
-    'Nitrogine dioxide',
-    'Nitro-chalk',
-    'Non-combustible gases',
-    'Non-hazardous materials(wastes/sweepng)',
-    'Nux-vomica',
-    'Nylon',
-    'Oakum',
-    'Oats',
-    'Oil cake',
-    'Oiled cloth',
-    'Oiled paper',
-    'Oils',
-    'Oleo resin',
-    'Oleo stearine',
-    'Olibanum',
-    'Olive oil',
-    'Olives',
-    'Onion',
-    'Opium',
-    'Opoponax',
-    'Orris root',
-    'Other Category I Goods',
-    'Paints (fl pt abv 65 C)',
-    'Palm kernels',
-    'Palm oil',
-    'Palmyra',
-    'Panela',
-    'Paper',
-    'Paraffin wax',
-    'Parchment',
-    'Paste board',
-    'Patchouli oil',
-    'Peanut',
-    'Peanut oil',
-    'Peanut wax',
-    'Pellitory',
-    'Pepper',
-    'Peppermint',
-    'Peppermint oil',
-    'Peru balsam',
-    'Pesticide liquids(fl pt abv 65 C)',
-    'Pesticide solids',
-    'Phosgene',
-    'Phosphoric acid',
-    'Phosphorous trichloride',
-    'Piassava',
-    'Pimento',
-    'Pine oil',
-    'Pitch',
-    'Pith',
-    'Piviac',
-    'Plastics',
-    'Plywood',
-    'Polishes',
-    'Polishing waxes',
-    'Polyvinyl plastics',
-    'Poppy seed',
-    'Poppy seed oil',
-    'Porcelain powder',
-    'Potassium cyanide',
-    'Potassium difluoride',
-    'Potassium fluoride',
-    'Potassium hydroxide',
-    'Poultry food',
-    'Printed wastes',
-    'Printers ink',
-    'Propyonic acid',
-    'PVC',
-    'Pyrites',
-    'Quassia',
-    'Quebracho',
-    'Quercitron',
-    'Rags',
-    'Rape seed',
-    'Rape seed oil',
-    'Rattan',
-    'Rayon',
-    'Red squill',
-    'Resinates',
-    'Resins',
-    'Resinoids',
-    'Rice',
-    'Rice bran',
-    'Rice flour',
-    'Ricinus oil',
-    'Rosin',
-    'Rosin oil',
-    'Rubber',
-    'Rubber substitutes',
-    'Rushes',
-    'Rye',
-    'Saffron',
-    'Sago',
-    'Sandal wood oil',
-    'Sandarac',
-    'Sarsaparilla',
-    'Savin',
-    'Seal oil',
-    'Sealing wax',
-    'Seaweed',
-    'Seeds',
-    'Senega',
-    'Senna',
-    'Sesame seed',
-    'Sesame seed oil',
-    'Shark oil',
-    'Sheep skin',
-    'Shellac',
-    'Shoddy',
-    'Shoe polishes',
-    'Shoes',
-    'Silk',
-    'Silver cyanide',
-    'Sisal',
-    'Skins',
-    'Slag',
-    'Smut',
-    'Snuff',
-    'Soap',
-    'Soap nut',
-    'Soap nut powder',
-    'Soap weed',
-    'Sodium azide',
-    'Sodium chlorite',
-    'Sodium cyanide',
-    'Sodium dichromate',
-    'Sodium difluoride',
-    'Sodium fluoride',
-    'Sodium hydride',
-    'Sodium hydrosulphite',
-    'Sodium hydroxide',
-    'Sodium nitrate',
-    'Sodium nitrite',
-    'Sodium peroxide',
-    'Sodium persulphate',
-    'Sodium phosphide',
-    'Soya beans',
-    'Soya bean oil',
-    'Soya bean wax',
-    'Spermaceti',
-    'Sperm oil',
-    'Spices',
-    'Squill',
-    'Starch',
-    'Stearic acid',
-    'Stearine',
-    'Stick lac',
-    'Stillingia',
-    'Stramonium',
-    'Straw',
-    'Strontium',
-    'Strontium chlorate',
-    'Strontium dioxide',
-    'Strontium nitrate',
-    'Strontium peroxide',
-    'Strontium phosphide',
-    'Styrene',
-    'Styrene resins',
-    'Suet',
-    'Sugar',
-    'Sulphonic acids',
-    'Sulphur',
-    'Sulphur chlorides',
-    'Sulphur dioxide',
-    'Sunflower seed',
-    'Sunflower seed oil',
-    'Superphosphates',
-    'Sweeping(non-hazardous materials)',
-    'Synthetic resins',
-    'Synthetic wax',
-    'Tacamahac',
-    'Talc',
-    'Tallow',
-    'Tallow oil',
-    'Tamarind',
-    'Tanning extracts',
-    'Tapioca',
-    'Tar',
-    'Tar oil',
-    'Tarpaulins',
-    'Tartaric acid',
-    'Tea',
-    'Teaseed oil',
-    'Terylene',
-    'Tetroxide',
-    'Textiles',
-    'Thinners(fl pt abv 65 C)',
-    'Thioruacil',
-    'Thiourea',
-    'Thyme',
-    'Tinctures',
-    'Titanium tetrachloride',
-    'Tobacco',
-    'Toilet preparations',
-    'Tolu',
-    'Tow',
-    'Tragacanth',
-    'Train oil',
-    'Tung oil',
-    'Turnip seed',
-    'Turpentine',
-    'Turpentine oil',
-    'Twine',
-    'Unvulcanized rubber',
-    'Uranium',
-    'Urea',
-    'Valerian',
-    'Valex',
-    'Varnish',
-    'Vaseline',
-    'Vats',
-    'Veneer',
-    'Vinyl plastics',
-    'Vulcanized rubber',
-    'Wadding',
-    'Walnut oil',
-    'Walnuts',
-    'Waste paper',
-    'Wastes(non-hazardous materials)',
-    'Waxes',
-    'Whale oil',
-    'Wheat',
-    'Wheat bran',
-    'Wheat flour',
-    'Wood',
-    'Wood flour',
-    'Wood pulp',
-    'Wood tar',
-    'Wool',
-    'Wool fat',
-    'Wool grease',
-    'Woollen goods',
-    'Xylene',
-    'Yarn',
-    'Yeast',
-    'Zanzibar copal',
-    'Zinc',
-    'Zinc chloride',
-    'Zinc resinate'
-];
-
-const cat2_items = [
-    'Accelerene',
-    'Acetyl peroxide',
-    'All flammable liquids having flash point between 320C and 650C (both inclusive)',
-    'Aloe fibres, loose',
-    'Aluminium carbide',
-    'Aluminium ferrosilicon',
-    'Aluminium hydride',
-    'Aluminium nitrate',
-    'Aluminium phosphide',
-    'Aluminium powder/dust',
-    'Ammonium chromate',
-    'Ammonium cyanide',
-    'Ammonium dichromate',
-    'Ammonium persulphate',
-    'Amphetamine',
-    'Amyl nitrite',
-    'Angelica oil',
-    'Antimony pentoxide',
-    'Aqua Forties (Nitric acid)',
-    'Aqua regia',
-    'Balsams',
-    'Bamboos (whole)',
-    'Barium',
-    'Barium azide',
-    'Barium chlorate/chlorite',
-    'Barium chromate',
-    'Barium dioxide',
-    'Barium hydride',
-    'Barium manganate',
-    'Barium nitrate',
-    'Barium perchlorate',
-    'Barium permanganate',
-    'Barium peroxide',
-    'Barium phosphide',
-    'Batteries',
-    'Bengal lights',
-    'Benzene hexachloride',
-    'Benzol peroxide(wet)',
-    'Benzol sulphonic acid',
-    'Bismuthic acid',
-    'Bismuth Pentafluoride',
-    'Bleaching powders',
-    'Brimstone',
-    'Bromine',
-    'Bromine cyanide',
-    'Bromine Pentafluoride',
-    'Bromine trifluoride',
-    'Butyl peroxide',
-    'Calcium',
-    'Calcium azide',
-    'Calcium carbide',
-    'Calcium chlorate',
-    'Calcium chlorite',
-    'Calcium cyanamide',
-    'Calcium hydride',
-    'Calcium hypochlorite',
-    'Calcium manganate',
-    'Calcium nitrate',
-    'Calcium perchlorate',
-    'Calcium permanganate',
-    'Calcium peroxide',
-    'Calcium phosphide',
-    'Calcium silicide',
-    'Camphene',
-    'Camphor',
-    'Camphor oil',
-    'Caoutchouc',
-    'Cap lamps',
-    'Carbon',
-    'Carbon black',
-    'Carbon disulphide',
-    'Caustic potash',
-    'Caustic soda',
-    'Cellodion',
-    'Celluloid',
-    'Cellulose nitrate',
-    'Cerium',
-    'Cerium hydride',
-    'Cerium nitrate',
-    'Cerium perchlorate',
-    'Cesium nitrate',
-    'Chloric acid',
-    'Chlorine dioxide',
-    'Chromic acid',
-    'Chromic anhydride',
-    'Chromium oxychloride',
-    'Chromium trioxide',
-    'Cleaning Liquids/powders',
-    'Cobalt nitrate',
-    'Cobalt resinate',
-    'Coloured fires',
-    'Copper nitrate',
-    'Copper phosphide',
-    'Corrosive sublimate',
-    'Cotton (loose)',
-    'Cotton (waste)',
-    'Cotton seed (ground)',
-    'Crotonic acid',
-    'Didymium nitrate',
-    'Diethyl aluminium chloride',
-    'Diethyl p-nitrophenyl',
-    'Dimethoxy strychnine',
-    'Dimethyl hexane',
-    'Dinitrotoluene',
-    'Diphenyl',
-    'Disinfectant liquids(fl pt 32 C to 65 C)',
-    'Erbium nitrate',
-    'Exotherinic material',
-    'Ferric nitrate',
-    'Ferro silicon',
-    'Ferro silicon aluminium',
-    'Fibres (loose)',
-    'Filings (metal)',
-    'Fire works',
-    'Flash powders',
-    'Flash light paper',
-    'Fluid for checking flaws in cast iron',
-    'Grasses (loose)',
-    'Guinea pepper',
-    'Hemp (loose)',
-    'Hexamine',
-    'Hydrides',
-    'Hydrobromic acid',
-    'Hydrogen',
-    'Hydrogen cyanide',
-    'Hydrogen peroxide',
-    'Hydrogen phosphide',
-    'Hydrogen sulphide',
-    'Hydroquinone',
-    'Hypochloric acid',
-    'Igniting tape',
-    'Illuminating powders',
-    'Illuminating gas',
-    'Insecticide liquids(fl pt 32 C to 65 C)',
-    'Iron mass',
-    'Iron nitrate',
-    'Iron oxide',
-    'Iron penta-carbonyl',
-    'Iron powder',
-    'Iron sponge',
-    'Iron sulphide',
-    'Iron turnings',
-    'Isoprene',
-    'Jute (loose)',
-    'Kerosene',
-    'Lamp black',
-    'Lead azide',
-    'Lead chlorite',
-    'Lead dioxide',
-    'Lead nitrate',
-    'Lead perchlorate',
-    'Lead peroxide',
-    'Lightening powders',
-    'Lime (unslacked)',
-    'Liquid insecticides/pesticides/disinfectants flash point 32C to 65C',
-    'Liquid insecticides/pesticides below 32c in sealed tins/bottles',
-    'Lithium',
-    'Lithium aluminium hydride',
-    'Lithium amide',
-    'Lithium borohydride',
-    'Lithium hydride',
-    'Lithium peroxide',
-    'Lithium silicon',
-    'Macassar oil',
-    'Magnesium',
-    'Magnesium alloys',
-    'Magnesium aluminium phosphide',
-    'Magnesium bromate',
-    'Magnesium chlorate',
-    'Magnesium hydride',
-    'Magnesium nitrate',
-    'Magnesium perchlorate',
-    'Magnesium peroxide',
-    'Magnesium phosphide',
-    'Magnesium powder/dust',
-    'Manganese',
-    'Manganese dioxide',
-    'Manganese nitrate',
-    'Matches',
-    'Metal ashes/dust/filings/powders/turnings',
-    'Methane',
-    'Methyl acrylate',
-    'Methyl pentadiene',
-    'Motor spirit',
-    'Napalm',
-    'Neodymium nitrate',
-    'Nickel nitrate',
-    'Nirate of soda',
-    'Nitric acid',
-    'Nitro benzene',
-    'Nitro carbo nitrate',
-    'Nitrocellulose',
-    'Nitrogen dioxide',
-    'Nitrogen tetroxide',
-    'Nonane',
-    'Other Category II Goods',
-    'Oxygen',
-    'Paints, thinners and varnishes flash point 32C to 65C',
-    'Paints, thinners and varnishes below 32C in sealed tins/bottles',
-    'Palladium',
-    'Para toulidine',
-    'Para toulidine sulphonic acid',
-    'Paris white',
-    'Peat',
-    'Pentasulhpide',
-    'Peracetic acid',
-    'Perchloric acid',
-    'Performic acid',
-    'Permanganic acid',
-    'Permonosulphuric acid',
-    'Peroxides',
-    'Pesticide liquids(fl pt 32 C to 65 C)',
-    'Phosphides',
-    'Phosphine',
-    'Phosphoric acid',
-    'Phosphorous (amorphous or red)',
-    'Phosphorous pentachloride',
-    'Phosphorous pentasulphide',
-    'Phosphorous sesquisulphide',
-    'Phosphorous tribromide',
-    'Photographic films',
-    'Pinene',
-    'Plastics (cellular)',
-    'Polonium',
-    'Potable spirits below 32C in sealed tins/bottles',
-    'Potassium',
-    'Potassium amide',
-    'Potassium borohydride',
-    'Potassium bromate',
-    'Potassium chlorate',
-    'Potassium chlorite',
-    'Potassium chromate',
-    'Potassium dichromate',
-    'Potassium hydride',
-    'Potassium manganate',
-    'Potassium nitrate',
-    'Potassium perchlorate',
-    'Potassium periodate',
-    'Potassium permanganate',
-    'Potassium peroxide',
-    'Potassium phosphide',
-    'Potassium sulphide',
-    'Praseodymium nitrate',
-    'Propionic acid',
-    'Propylene',
-    'Pyridine',
-    'Pyrophoric materials',
-    'Pyrotechnic materials',
-    'Quick lime',
-    'Rubidium',
-    'Salt petre',
-    'Samarium nitrate',
-    'Saw dust',
-    'Shavings (wood)',
-    'Silicon powder',
-    'Silver nitrate',
-    'Silver picrate',
-    'Smoke bombs/candles',
-    'Sodium',
-    'Sodium aluminate',
-    'Sodium aluminium hydride',
-    'Sodium amide',
-    'Sodium borohydride',
-    'Sodium bromate',
-    'Sodium chlorate',
-    'Sodium chlorite',
-    'Sodium chromate',
-    'Sodium dichromate',
-    'Sodium hydride',
-    'Sodium hydrosulphite',
-    'Sodium manganate',
-    'Sodium nitrate',
-    'Sodium perchlorate',
-    'Sodium periodate',
-    'Sodium permanganate',
-    'Sodium peroxide',
-    'Sodium phosphide',
-    'Sodium picrate',
-    'Sodium potassium alloy',
-    'Sodium sulphide',
-    'Sparklers',
-    'Squibs',
-    'Stearic acid',
-    'Strontium',
-    'Strontium chlorate',
-    'Strontium nitrate',
-    'Strontium perchlorate',
-    'Strontium peroxide',
-    'Strontium phosphide',
-    'Sulphur',
-    'Tars',
-    'Tetranitro-methane',
-    'Thallium',
-    'Thallium nitrate',
-    'Thinners(fl pt 32 C to 65 C)',
-    'Thorium',
-    'Thorium nitrate',
-    'Tin powder',
-    'Titanium',
-    'Titanium hydride',
-    'Titanium powder/dust',
-    'Toulidine',
-    'Tow',
-    'Turpentine',
-    'Uranium',
-    'Uranium hydride',
-    'Uranium nitrate',
-    'Urea nitrate',
-    'Waste of Category I materials',
-    'Waste paper (loose)',
-    'Wood flour',
-    'Wood powder',
-    'Wood shavings',
-    'Xylonite',
-    'Yttrium nitrate',
-    'Zinc ashes/dust/filings/powder/turnings',
-    'Zinc bromate',
-    'Zinc chlorate',
-    'Zinc ethyl',
-    'Zinc nitrate',
-    'Zinc permanganate',
-    'Zinc peroxide',
-    'Zirconium',
-    'Zirconium hydride',
-    'Zirconium nitrate',
-    'Zirconium picrate',
-    'Zirconium powder'
-];
-
-const cat3_items = [
-    'Activated Carbon, Pyropheric',
-    'All flammable liquids having a flash point below 320C',
-    'Aluminium Alkyl Halides',
-    'Aluminium borohydride',
-    'Aluminium triethyl',
-    'Aluminium trihexyl',
-    'Aluminium tri-isobutyl',
-    'Aluminium trimethyl',
-    'Aluminium tripropyl',
-    'Amatol',
-    'Ammonium bromate',
-    'Ammonium chlorate',
-    'Ammonium Nitrate',
-    'Ammonium nitrate explosives',
-    'Ammonium perchlorate',
-    'Ammonium permanganate',
-    'Ammonium picrate',
-    'Ammunitions',
-    'Amorces',
-    'Arsine',
-    'Azides',
-    'Azimethylene',
-    'Azoimide',
-    'Baggase',
-    'Bamboos (split)',
-    'Benzol peroxide (dry)',
-    'Black powder',
-    'Blasting powder',
-    'Bromo picric acid',
-    'Butyl mercaptan',
-    'Calcium perchlorate',
-    'Carbon Disulphide',
-    'Carbon monoxide',
-    'Cartridges',
-    'Cheddite',
-    'Chloric acid',
-    'Chlorine dioxide',
-    'Chromic acid',
-    'Chromic anhydride',
-    'Chromium oxychloride',
-    'Chromium trioxide',
-    'Coal gas',
-    'Coloured fires',
-    'Combustible gases',
-    'Cordite',
-    'Cosavyl',
-    'Cotton (waste)',
-    'Cumene',
-    'Decaborane',
-    'Detonators',
-    'Diborane',
-    'Diethyl aluminium chloride',
-    'Diethyl ether',
-    'Diethyl p-nitrophenyl',
-    'Dimethyl ether',
-    'Dimethoxy strychnine',
-    'Dimethyl hexane',
-    'Dinitro benzene',
-    'Dinitrotoluene',
-    'Dioxane',
-    'Disinfectant liquids(fl pt blw 32 C)',
-    'Divinyl ether',
-    'Dynamite',
-    'Ethane',
-    'Ether',
-    'Ethyl mercaptan',
-    'Ethylene',
-    'Ethyl nitrate',
-    'Ethyl nitrite',
-    'Exothermic materials',
-    'Explosives',
-    'Fire works',
-    'Flash powders',
-    'Flash light paper',
-    'Fluorine',
-    'Fulminates',
-    'Gelatine (explosive)',
-    'Guncotton',
-    'Gun powder',
-    'Hydrazine',
-    'Hydrazoic acid',
-    'Hydrogen',
-    'Hydrogen cyanide',
-    'Hydrogen peroxide (in 50% or above)',
-    'Hydrogen phosphide',
-    'Hydrogen sulphide',
-    'Hypochloric acid',
-    'Igniting tape',
-    'Illuminating gas',
-    'Illuminating powders',
-    'Insecticide liquids(fl pt blw 32 C)',
-    'Iron mass',
-    'Iron sponge',
-    'Isopropyl ether',
-    'Isoprene',
-    'Lead azide',
-    'Lightening powders',
-    'Liquid insecticides/pesticides/disinfectants flash point below 32C',
-    'L.P.G.',
-    'Magnesium powder/dust',
-    'Matches',
-    'Melinite',
-    'Methane',
-    'Methyl ether',
-    'Methyl formate',
-    'Natural gas',
-    'Nitro carbo nitrate',
-    'Nitro cellulose',
-    'Nitrogen dioxide',
-    'Nitrogen tetroxide',
-    'Nitro glycerine',
-    'Nitro mannite',
-    'Nitrosoguanidine',
-    'Nitrosostarch',
-    'Nitrous oxide',
-    'Paints, thinners, varnishes flash point below 32C',
-    'Pentaborane',
-    'Pentane',
-    'Pentanitroaniline',
-    'Peracetic acid',
-    'Perchloric acid',
-    'Performic acid',
-    'Permanganic acid',
-    'Permonosulphuric acid',
-    'Peroxides',
-    'Pesticide liquids(fl pt blw 32 C)',
-    'Phosphine',
-    'Phosphoric acid',
-    'Phosphorous (yellow or white)',
-    'Phosphorous pentachloride',
-    'Phosphorous pentasulphide',
-    'Phosphorous sesquisulphide',
-    'Phosphorous tribromide',
-    'Picric acid',
-    'Potassium',
-    'Potassium chlorite',
-    'Potassium perchlorate',
-    'Potassium peroxide',
-    'Propane',
-    'Pyrophoric materials',
-    'Pyrotechnic materials',
-    'RDX',
-    'Roburite',
-    'Securite',
-    'Silane',
-    'Silver azide',
-    'Silver styphnate',
-    'Smoke bombs/candles',
-    'Sodium',
-    'Sodium chlorate',
-    'Sodium chlorite',
-    'Sodium nitrate',
-    'Sodium perchlorate',
-    'Sodium peroxide',
-    'Sodium picrate',
-    'Sodium potassium alloy',
-    'Sparklers',
-    'Squibs',
-    'Styphnic acid',
-    'Tetranitroaniline',
-    'Tetranitro-methane',
-    'Tetrazene',
-    'Thinners(fl pt blw 32 C)',
-    'Titanium powder/dust',
-    'TNT',
-    'Tonite',
-    'Trinitrotoluene',
-    'Trinitrobenzene',
-    'Trinitrobenzoic acid',
-    'Trinitrocresol',
-    'Waste of materials falling under Cat II & III',
-    'Zinc phosphide',
-    'Zinc picrate',
-    'Zirconium hydride',
-    'Other Category III Goods'
-];
-
-function renderHazardousGoodsTable() {
-    const tbody = document.getElementById('hazardousGoodsTableBody');
-    tbody.innerHTML = "";
-    
-    const filterText = document.getElementById('hazardousGoodsSearchInput').value.toLowerCase().trim();
-    const catSelect = document.getElementById('hazardousCategorySelect').value;
-    
-    let itemsToRender = [];
-    
-    if (catSelect === "" || catSelect === "cat1") {
-        cat1_items.forEach((desc, index) => {
-            itemsToRender.push({ cat: "Category I", sl: index + 1, desc: desc, badgeColor: "var(--primary)" });
-        });
-    }
-    if (catSelect === "" || catSelect === "cat2") {
-        cat2_items.forEach((desc, index) => {
-            itemsToRender.push({ cat: "Category II", sl: index + 1, desc: desc, badgeColor: "var(--accent)" });
-        });
-    }
-    if (catSelect === "" || catSelect === "cat3") {
-        cat3_items.forEach((desc, index) => {
-            itemsToRender.push({ cat: "Category III", sl: index + 1, desc: desc, badgeColor: "var(--danger)" });
-        });
-    }
-    
-    itemsToRender.forEach(item => {
-        if (item.desc.toLowerCase().includes(filterText) || item.cat.toLowerCase().includes(filterText) || item.sl.toString() === filterText) {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td style="padding: 10px; border-bottom: 1px solid var(--border); font-weight: bold; color: ${item.badgeColor};">${item.cat}</td>
-                <td style="padding: 10px; border-bottom: 1px solid var(--border); text-align: center;">${item.sl}</td>
-                <td style="padding: 10px; border-bottom: 1px solid var(--border);">${item.desc}</td>
-            `;
-            tbody.appendChild(row);
-        }
-    });
-}
-
-function filterBsusAutocomplete(query) {
-    const listContainer = document.getElementById('bsusAutocompleteList');
-    const searchVal = query.toLowerCase().trim();
-    if (searchVal === "") {
-        listContainer.classList.add('hidden');
-        return;
-    }
-    listContainer.innerHTML = '';
-    let matchCount = 0;
-    bsusRateSchedule.forEach((item, index) => {
-        if (item.desc.toLowerCase().includes(searchVal) || item.code.toLowerCase().includes(searchVal)) {
-            matchCount++;
-            let div = document.createElement('div');
-            div.className = 'autocomplete-item';
-            div.innerHTML = `<strong>[Code ${item.code}]</strong> ${item.desc}`;
-            div.addEventListener('mousedown', (e) => {
-                e.preventDefault();
-                document.getElementById('selectedBsusIndex').value = index;
-                document.getElementById('bsusOccupancySearch').value = `[Code ${item.code}] ${item.desc}`;
-                listContainer.classList.add('hidden');
-                
-                document.getElementById('b-meta-code').innerText = item.code;
-                document.getElementById('b-meta-sec').innerText = item.sec;
-                document.getElementById('b-meta-cat').innerText = item.cat;
-                document.getElementById('b-meta-rate').innerText = item.rate.toFixed(4);
-                document.getElementById('bsusMetaDisplay').classList.remove('hidden');
-                
-                runCalculation();
-            });
-            listContainer.appendChild(div);
-        }
-    });
-    if (matchCount > 0) listContainer.classList.remove('hidden');
-}
-
-function handleAutocompleteSearch(query) {
-    const listContainer = document.getElementById('autocompleteResultsList');
-    const searchVal = query.toLowerCase().trim();
-    if (searchVal === "") {
-        listContainer.classList.add('hidden');
-        return;
-    }
-    listContainer.innerHTML = '';
-    let matchCount = 0;
-    
-    standardRates.forEach((item, index) => {
-        if (item.desc.toLowerCase().includes(searchVal) || item.code.toLowerCase().includes(searchVal)) {
-            matchCount++;
-            let div = document.createElement('div');
-            div.className = 'autocomplete-item';
-            
-            const activeRate = selectedPolicyType === 'SFSP' ? item.sfsp : item.blus;
-            div.innerHTML = `<strong>[Code: ${item.code} | Sec: ${item.sec} | Rate: ${activeRate.toFixed(3)}]</strong> ${item.desc}`;
-            
-            div.addEventListener('mousedown', (e) => {
-                e.preventDefault(); 
-                selectStandardOccupancy(index);
-            });
-            listContainer.appendChild(div);
-        }
-    });
-    
-    if (matchCount > 0) {
-        listContainer.classList.remove('hidden');
-    } else {
-        let div = document.createElement('div');
-        div.className = 'autocomplete-item';
-        div.innerText = "-- No Matching Risks Found --";
-        listContainer.appendChild(div);
-        listContainer.classList.remove('hidden');
-    }
-}
-
-function selectStandardOccupancy(index) {
-    const record = standardRates[index];
-    document.getElementById('selectedOccupancyIndex').value = index;
-    document.getElementById('occupancySearch').value = `[Code ${record.code}] ${record.desc}`;
-    document.getElementById('autocompleteResultsList').classList.add('hidden');
-    document.getElementById('enterRateManuallyToggle').value = "no";
-    
-    const activeRate = selectedPolicyType === 'SFSP' ? record.sfsp : record.blus;
-    document.getElementById('meta-rate').innerText = activeRate.toFixed(3);
-    document.getElementById('meta-code').innerText = record.code;
-    document.getElementById('meta-section').innerText = record.sec;
-    document.getElementById('meta-category').innerText = record.cat || "None";
-    
-    document.getElementById('meta-ho').innerText = record.ho || "None";
-    document.getElementById('meta-declined').innerText = record.dec || "None";
-    
-    document.getElementById('metaBox').classList.remove('hidden');
-    runCalculation();
-}
-
-function selectPolicy(type, cardElement) {
-    selectedPolicyType = type;
-    document.querySelectorAll('.policy-card').forEach(card => card.classList.remove('active'));
-    cardElement.classList.add('active');
-    adjustLayoutRules();
-}
-
 function adjustLayoutRules() {
     const stdControls1 = document.getElementById('standardCommercialControlsContainer');
     const stdControls2 = document.getElementById('standardCommercialControlsContainer2');
@@ -2947,10 +1630,47 @@ function adjustLayoutRules() {
     const rowTerrorismLine = document.getElementById('row-terrorism-line');
     const hazPanel = document.getElementById('hazardousMaterialsPanel');
 
+    // Rule: Handle conditional elements based on Policy Type
+    const floatingInput = document.getElementById('siStockFloating');
+    const terrorismOptOutContainer = document.getElementById('terrorismOptOutContainer');
+    const labelConstruction = document.getElementById('label-construction');
+    const labelBgrRate = document.getElementById('label-bgrRateOption');
+    const labelDiscount = document.getElementById('label-basicDiscountValue');
+
     if (selectedPolicyType === 'BGR') {
         hazPanel.classList.add('hidden');
+        
+        // (a) Disable 'Stock - Floating' for BGR
+        floatingInput.disabled = true;
+        if(floatingInput.value !== "0") {
+            floatingInput.value = "0";
+            calculateAggregateSumInsured();
+        }
+
+        // (b) Hide 'Opting out of Terrorism' for BGR
+        terrorismOptOutContainer.classList.add('hidden');
+
+        // (c) Renumber BGR labels
+        labelConstruction.innerText = "2. Construction Type";
+        labelBgrRate.innerText = "3. BGR Basic Rate Option";
+        labelDiscount.innerText = "4. Discount (-) or Loading (+) on Basic Premium (%)";
+
     } else {
         hazPanel.classList.remove('hidden');
+        
+        floatingInput.disabled = false;
+        
+        // Re-number logic for standard labels when not BGR
+        labelConstruction.innerText = "5. Construction Type";
+        labelBgrRate.innerText = "BGR Basic Rate Option";
+        labelDiscount.innerText = "6. Discount (-) or Loading (+) on Basic Premium (%)";
+
+        if(selectedPolicyType === 'BSUS') {
+            terrorismOptOutContainer.classList.remove('hidden');
+        } else {
+            // BLUS and SFSP have their own terrorism dropdown, so hide this Flexi Opt Out version
+            terrorismOptOutContainer.classList.add('hidden'); 
+        }
     }
 
     if (selectedPolicyType === 'BSUS') {
@@ -2988,6 +1708,45 @@ function adjustLayoutRules() {
             natcatRows.forEach(row => row.classList.remove('hidden'));
         }
     }
+
+    // Dropdown exclusions logic (e, f, g, h, i, j, k)
+    const optEqExclude = document.getElementById('opt-eq-exclude');
+    const optStfiExclude = document.getElementById('opt-stfi-exclude');
+    const optTerrExclude = document.getElementById('opt-terr-exclude');
+    const eqZone = document.getElementById('eqZone');
+    const stfiToggle = document.getElementById('stfiToggle');
+    const terrToggle = document.getElementById('terrorismToggle');
+
+    // Rule e, g, i: Remove Exclude Earthquake for BLUS & SFSP
+    if (selectedPolicyType === 'BLUS' || selectedPolicyType === 'SFSP') {
+        optEqExclude.style.display = 'none';
+        optEqExclude.disabled = true;
+        if (eqZone.value === "0") eqZone.value = "0.50"; 
+    } else {
+        optEqExclude.style.display = '';
+        optEqExclude.disabled = false;
+    }
+
+    // Rule f, h, j: Remove Exclude STFI for BLUS & SFSP
+    if (selectedPolicyType === 'BLUS' || selectedPolicyType === 'SFSP') {
+        optStfiExclude.style.display = 'none';
+        optStfiExclude.disabled = true;
+        if (stfiToggle.value === "0") stfiToggle.value = "0.37";
+    } else {
+        optStfiExclude.style.display = '';
+        optStfiExclude.disabled = false;
+    }
+
+    // Rule k: Remove Exclude Terrorism for SFSP
+    if (selectedPolicyType === 'SFSP') {
+        optTerrExclude.style.display = 'none';
+        optTerrExclude.disabled = true;
+        if (terrToggle.value === "0") terrToggle.value = "0.21";
+    } else {
+        optTerrExclude.style.display = '';
+        optTerrExclude.disabled = false;
+    }
+
     evaluateRowVisibility();
     runCalculation();
 }
@@ -3484,6 +2243,17 @@ document.getElementById('bsusEnterRateManuallyToggle').addEventListener('change'
     runCalculation();
 });
 document.getElementById('bsusManualRateValue').addEventListener('input', runCalculation);
+
+document.getElementById('bgrRateOption').addEventListener('change', runCalculation);
+document.getElementById('basicDiscountValue').addEventListener('input', runCalculation);
+document.getElementById('eqZone').addEventListener('change', runCalculation);
+document.getElementById('stfiToggle').addEventListener('change', runCalculation);
+document.getElementById('natcatDiscountToggle').addEventListener('change', runCalculation);
+document.getElementById('terrorismToggle').addEventListener('change', runCalculation);
+document.getElementById('floaterToggle').addEventListener('change', function() {
+    evaluateRowVisibility();
+    runCalculation();
+});
 
 document.addEventListener('change', function(e) {
     if (e.target.classList.contains('survey-toggle')) {
