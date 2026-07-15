@@ -281,6 +281,7 @@
                 <div class="form-group distinct-label" id="basicDiscountContainer">
                     <label for="basicDiscountValue" id="label-basicDiscountValue">4. Discount (-) or Loading (+) on Basic Premium (%)</label>
                     <input type="number" id="basicDiscountValue" placeholder="e.g. -10 for 10% discount, +5 for loading" value="0" step="0.01">
+                    <span id="basicDiscountHint" class="help-text hidden" style="margin-top: 6px;"></span>
                 </div>
 
                 <div id="eqCoverContainer" class="form-group id-commercial distinct-label hidden">
@@ -313,6 +314,7 @@
                         <option value="25">25% Discount</option>
                         <option value="50">50% Discount</option>
                     </select>
+                    <span id="natcatDiscountHint" class="help-text hidden" style="margin-top: 6px;"></span>
                 </div>
 
                 <div id="terrorismContainer" class="form-group id-commercial hidden distinct-label">
@@ -1119,6 +1121,9 @@ function adjustLayoutRules() {
     const labelConstruction = document.getElementById('label-construction');
     const labelBgrRate = document.getElementById('label-bgrRateOption');
     const labelDiscount = document.getElementById('label-basicDiscountValue');
+    
+    const basicDiscountHint = document.getElementById('basicDiscountHint');
+    const natcatDiscountHint = document.getElementById('natcatDiscountHint');
 
     if (selectedPolicyType === 'BGR') {
         hazPanel.classList.add('hidden');
@@ -1143,6 +1148,17 @@ function adjustLayoutRules() {
         } else {
             if (terrorismOptOutContainer) terrorismOptOutContainer.classList.add('hidden'); 
         }
+    }
+
+    if (selectedPolicyType === 'BLUS') {
+        if(basicDiscountHint) { basicDiscountHint.innerText = "(1-100%, 2-100%, 3-/100%, 4-100%)"; basicDiscountHint.classList.remove('hidden'); }
+        if(natcatDiscountHint) { natcatDiscountHint.innerText = "(1-50%, 2-25%, 3-15%, 4-0%)"; natcatDiscountHint.classList.remove('hidden'); }
+    } else if (selectedPolicyType === 'SFSP') {
+        if(basicDiscountHint) { basicDiscountHint.innerText = "(1-100%, 2-100%, 3-50%, 4-0%)"; basicDiscountHint.classList.remove('hidden'); }
+        if(natcatDiscountHint) { natcatDiscountHint.innerText = "(1-50%, 2-0%, 3-0%, 4-0%)"; natcatDiscountHint.classList.remove('hidden'); }
+    } else {
+        if(basicDiscountHint) basicDiscountHint.classList.add('hidden');
+        if(natcatDiscountHint) natcatDiscountHint.classList.add('hidden');
     }
 
     if (selectedPolicyType === 'BSUS') {
