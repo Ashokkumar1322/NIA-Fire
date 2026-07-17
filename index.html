@@ -71,7 +71,7 @@
 
 <div class="container">
     <header style="margin-bottom: 25px;">
-        <h1 style="font-size: 2.2rem; color: #0f172a; border-bottom: 2px solid var(--primary); padding-bottom: 10px;">NIA Fire Insc Premium Calc</h1>
+        <h1 style="font-size: 2.2rem; color: #0f172a; border-bottom: 2px solid var(--primary); padding-bottom: 10px;">NIA Fire Insurance Premium Calc</h1>
     </header>
 
     <div id="tierWarningBanner" class="warning-banner hidden"></div>
@@ -470,16 +470,28 @@ const cat3_items = [
     "Waste scrap piles of category II & III materials"
 ];
 
+// Configured standard 9 safety rules mapping exactly to criteria updates
 const safetySurveyQuestionsConfig = [
-    { desc: "Distance from nearest institutional Fire Brigade station is less than 10km", type: "yes_no", values: { "yes": -5.0, "no": 5.0 } },
-    { desc: "Presence of operational, ISI-certified Fire Hydrant / Extinguisher setup", type: "yes_no", values: { "yes": -10.0, "no": 10.0 } },
-    { desc: "Good industrial housekeeping standards and unblocked safety gangways maintained", type: "yes_no", values: { "yes": -2.5, "no": 5.0 } },
-    { desc: "Safety training and structured emergency mock drills conducted regularly for staff", type: "yes_no", values: { "yes": -2.0, "no": 2.0 } },
-    { desc: "Electrical installations checked periodically by a certified external inspector", type: "yes_no", values: { "yes": -3.0, "no": 4.0 } },
-    { desc: "24/7 Professional security guard patrolling and CCTV surveillance coverage active", type: "yes_no", values: { "yes": -2.0, "no": 2.0 } },
-    { desc: "Storage of all identified hazardous materials securely isolated out of primary workspace", type: "yes_no", values: { "yes": -5.0, "no": 10.0 } },
-    { desc: "History of zero reported claims or incidents in the last 3 consecutive policy terms", type: "yes_no", values: { "yes": -5.0, "no": 0.0 } },
-    { desc: "Surrounding peripheral exposure risk is evaluated low/predominantly non-industrial", type: "yes_no", values: { "yes": -3.0, "no": 3.0 } }
+    { desc: "Age of building above 30 yrs", type: "no_yes", values: { "NO": 0.0, "YES": 5.0 }, default: "NO" },
+    { desc: "Operational Fire hydrant / sprinkler/ water spray system / fire alarm / smoke detectors", type: "no_yes", values: { "NO": 0.0, "YES": -10.0 }, default: "NO" },
+    { desc: "Electrical installations - well maintained standard equipment and installations", type: "no_yes", values: { "NO": 0.0, "YES": -10.0 }, default: "YES" },
+    { desc: "Provision of storm water drainage system and buildings with plinth level at at least 1.5 ft above ground", type: "no_yes", values: { "NO": 0.0, "YES": -10.0 }, default: "NO" },
+    { desc: "High standard of security with no. of security guards for 24 x 7 and CCTVs", type: "no_yes", values: { "NO": 5.0, "YES": -10.0 }, default: "YES" },
+    { 
+        desc: "Past 3 - years claims ratio", 
+        type: "select", 
+        options: [
+            { text: "0 - 30", val: -30.0 },
+            { text: "30 - 70", val: -20.0 },
+            { text: "70 - 100", val: 0.0 },
+            { text: "100 - 200", val: 10.0 },
+            { text: "> 200", val: 50.0 }
+        ],
+        default: 2
+    },
+    { desc: "Basement in the building used for operations / storage / plant machinery installed therein", type: "no_yes", values: { "NO": 0.0, "YES": 5.0 }, default: "NO" },
+    { desc: "Insured premises located within 1 km distance of a water body like seashore, lake, rivers, canal etc", type: "no_yes", values: { "NO": 0.0, "YES": 5.0 }, default: "NO" },
+    { desc: "Risk located in thickly populated area with no access to fire brigade vehicle", type: "no_yes", values: { "NO": 0.0, "YES": 5.0 }, default: "NO" }
 ];
 
 function initializeSafetySurvey() {
@@ -488,18 +500,36 @@ function initializeSafetySurvey() {
     tbody.innerHTML = "";
     safetySurveyQuestionsConfig.forEach((q, index) => {
         const row = document.createElement('tr');
+        let selectHtml = '';
+        let initialVal = 0;
+        
+        if (q.type === 'no_yes') {
+            initialVal = q.values[q.default];
+            selectHtml = `
+                <select class="survey-toggle bsus-select-field" style="width:90px; padding:2px; margin:0;">
+                    <option value="NO" ${q.default === 'NO' ? 'selected' : ''}>NO</option>
+                    <option value="YES" ${q.default === 'YES' ? 'selected' : ''}>YES</option>
+                </select>
+            `;
+        } else if (q.type === 'select') {
+            initialVal = q.options[q.default].val;
+            selectHtml = `<select class="survey-toggle bsus-select-field" style="width:90px; padding:2px; margin:0;">`;
+            q.options.forEach((opt, idx) => {
+                selectHtml += `<option value="${idx}" ${q.default === idx ? 'selected' : ''}>${opt.text}</option>`;
+            });
+            selectHtml += `</select>`;
+        }
+        
+        const initialText = (initialVal >= 0 ? "+" : "") + initialVal.toFixed(2) + " %";
+        const initialColor = initialVal < 0 ? "var(--success)" : (initialVal > 0 ? "var(--danger)" : "#475569");
+
         row.innerHTML = `
             <td style="text-align: center;">${index + 1}</td>
             <td>${q.desc}</td>
-            <td style="text-align: center;">
-                <select class="survey-toggle bsus-select-field" style="width:85px; padding:2px; margin:0;">
-                    <option value="yes" selected>GOOD</option>
-                    <option value="no">BAD</option>
-                </select>
-            </td>
+            <td style="text-align: center;">${selectHtml}</td>
             <td class="text-right" style="padding-right: 15px;">
-                <input type="hidden" class="survey-rate-weight" value="${q.values.yes}">
-                <span class="survey-rate-weight-text" style="color: var(--success); font-weight: bold;">${q.values.yes >= 0 ? "+" : ""}${q.values.yes.toFixed(2)} %</span>
+                <input type="hidden" class="survey-rate-weight" value="${initialVal}">
+                <span class="survey-rate-weight-text" style="color: ${initialColor}; font-weight: bold;">${initialText}</span>
             </td>
         `;
         tbody.appendChild(row);
@@ -681,7 +711,7 @@ const bsusRateSchedule = [
   {"sec":"IV","code":"2144","cat":4,"desc":"Paper and Cardboard Mills (including Lamination)","rate":1.25},
   {"sec":"IV","code":"2145","cat":2,"desc":"Particle Board Manufacturing","rate":2.18},
   {"sec":"IV","code":"2146","cat":1,"desc":"Pencil Manufacturing","rate":1.49},
-  {"sec":"IV","code":"2147","cat":1,"desc":"Petroleum Coke Calcination","rate":0.93},
+  {"sec":"IV","code":"2147","cat":2,"desc":"Petroleum Coke Calcination","rate":0.93},
   {"sec":"IV","code":"2148","cat":3,"desc":"Plastic Goods Manufacturing(excluding Foam Plastics)/I. Using Plastic raw materials having calorific value upto 15000 btu/lb Polytetrafluoroethylene, polyvinylidene chloride/fluoride, Phenol/Urea-formaldehyde, Silicones","rate":1.94},
   {"sec":"IV","code":"2149","cat":2,"desc":"Plywood / Wood veneering Factories/ Laminating Factories","rate":2.87},
   {"sec":"IV","code":"2150","cat":2,"desc":"Polyester Film Manufacturing / BOPP Film Manufacturing","rate":0.8},
@@ -723,7 +753,7 @@ const bsusRateSchedule = [
   {"sec":"IV","code":"2187","cat":4,"desc":"Tea Factories","rate":1.07},
   {"sec":"IV","code":"2188","cat":1,"desc":"Telephone Exchanges","rate":1.64},
   {"sec":"IV","code":"2189","cat":3,"desc":"Textile Mills - Spinning Mills","rate":1.16},
-  {"sec":"IV","code":"2211","cat":1,"desc":"Textile Mills- Composite Mills","rate":1.62},
+  {"sec":"IV","code":"2211","cat":3,"desc":"Textile Mills- Composite Mills","rate":1.62},
   {"sec":"IV","code":"2190","cat":1,"desc":"Tile & Pottery works","rate":0.76},
   {"sec":"IV","code":"2191","cat":3,"desc":"Tiny sector Industries with values at risk not exceeding Rs 10 lakhs","rate":0.78},
   {"sec":"IV","code":"2192","cat":1,"desc":"Tissue Culture Premises (Excluding Crops)","rate":0.83},
@@ -783,7 +813,7 @@ const bsusRateSchedule = [
   {"sec":"VII","code":"4010","cat":1,"desc":"Tanks containing liquids flashing at 32 0C and below","rate":1.2},
   {"sec":"VII","code":"4011","cat":1,"desc":"Tanks (others)","rate":0.59},
   {"sec":"IV","code":"2006","cat":1,"desc":"Airport Terminal Buildings [ including all facilities like Cafes, Shops etc]","rate":0.29},
-  {"sec":"IV","code":"2025","cat":4,"desc":"Building  in  course  of  construction","rate":0.22},
+  {"sec":"IV","code":"2025","cat":4,"desc":"Building  in  course   of  construction","rate":0.22},
   {"sec":"IV","code":"2209","cat":2,"desc":"Contractors Plant and Machinery anywhere in India (at specified locations)","rate":0.7},
   {"sec":"IV","code":"2210","cat":2,"desc":"Electric Generation Stations- Others","rate":0.5},
   {"sec":"IV","code":"2212","cat":2,"desc":"Automobile Filter Manufacturing","rate":0.95},
@@ -1591,7 +1621,7 @@ function runCalculation() {
         const survey_prem_mod = Math.round(subtotal_prem * (dynamicFeaturesPctSum / 100));
         const survey_rate_mod = subtotal_rate * (dynamicFeaturesPctSum / 100);
 
-        document.getElementById('br_survey_factor_rate').innerText = (dynamicFeaturesPctSum >= 0 ? "+" : "") + dynamicFeaturesPctSum.toFixed(4) + " %";
+        document.getElementById('br_survey_factor_rate').innerText = (dynamicFeaturesPctSum >= 0 ? "+" : "") + dynamicFeaturesPctSum.toFixed(2) + " %";
         document.getElementById('br_survey_factor_prem').innerText = survey_prem_mod.toLocaleString('en-IN');
 
         const prem15 = Math.round(subtotal_prem + survey_prem_mod);
@@ -1770,9 +1800,15 @@ document.getElementById('floaterToggle').addEventListener('change', function() {
 document.addEventListener('change', function(e) {
     if (e.target.classList.contains('survey-toggle')) {
         const row = e.target.closest('tr');
-        const configItem = safetySurveyQuestionsConfig[Array.from(row.parentNode.querySelectorAll('tr')).indexOf(row)];
+        const rowIndex = Array.from(row.parentNode.querySelectorAll('tr')).indexOf(row);
+        const configItem = safetySurveyQuestionsConfig[rowIndex];
         if (configItem) {
-            let val = configItem.type === "yes_no" ? configItem.values[e.target.value] : parseFloat(e.target.value) || 0;
+            let val = 0;
+            if (configItem.type === "no_yes") {
+                val = configItem.values[e.target.value];
+            } else if (configItem.type === "select") {
+                val = configItem.options[parseInt(e.target.value)].val;
+            }
             row.querySelector('.survey-rate-weight').value = val;
             let display = row.querySelector('.survey-rate-weight-text');
             display.innerText = (val >= 0 ? "+" : "") + val.toFixed(2) + " %";
