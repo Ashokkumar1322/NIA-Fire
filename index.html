@@ -375,14 +375,14 @@
             <p style="margin: 0 0 6px 0;"><strong>CATEGORY-II</strong> Pyrotechnic materials, Flammable liquids having flash point above 32 C up to 65 C, Moderate Oxidising Agents and Oxygen, Materials which evolve combustible gases in contact with water, Waste of Category I materials.</p>
             <p style="margin: 0;"><strong>CATEGORY-III</strong> Explosives, Materials which are self ignitable, Flammable liquids having flash point up to 32 C, Strong Oxiding Agents, Combustible gases, Waste of category II & III materials.</p>
         </div>
-        
+
         <div class="search-flex-row" style="margin-bottom: 14px;">
             <div style="width: 250px;">
                 <select id="hazardousCategorySelect" style="width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 6px; font-weight: bold; color: var(--primary);">
                     <option value="">-- View All Categories --</option>
-                    <option value="cat1">Category I</option>
-                    <option value="cat2">Category II</option>
-                    <option value="cat3">Category III</option>
+                    <option value="cat1">Category I (537 Items)</option>
+                    <option value="cat2">Category II (293 Items)</option>
+                    <option value="cat3">Category III (205 Items)</option>
                 </select>
             </div>
             <div class="search-container" style="flex: 1;">
@@ -406,6 +406,47 @@
 </div>
 
 <script>
+let selectedPolicyType = 'BGR';
+
+function parseCommasToFloat(val) {
+    if (typeof val === 'number') return val;
+    let clean = val.toString().replace(/,/g, '').trim();
+    return parseFloat(clean) || 0;
+}
+
+function formatValueToIndianCommas(num, decimals = 0) {
+    if (num === null || num === undefined || isNaN(num)) return "0";
+    let fixedNum = num.toFixed(decimals);
+    let parts = fixedNum.split('.');
+    let integerPart = parts[0];
+    let decimalPart = parts.length > 1 ? '.' + parts[1] : '';
+    let lastThree = integerPart.substring(integerPart.length - 3);
+    let otherNumbers = integerPart.substring(0, integerPart.length - 3);
+    if (otherNumbers !== '') lastThree = ',' + lastThree;
+    return otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree + decimalPart;
+}
+
+function initializeCurrencyInputListeners() {
+    document.querySelectorAll('.si-input').forEach(input => {
+        input.type = "text"; 
+        let rawNum = parseFloat(input.value) || 0;
+        input.value = formatValueToIndianCommas(rawNum, 0);
+
+        input.addEventListener('input', function() {
+            let cursorPosition = this.selectionStart;
+            let originalLength = this.value.length;
+            let numericString = this.value.replace(/,/g, '');
+            if(numericString === "") { this.value = ""; calculateAggregateSumInsured(); return; }
+            let parsedNumber = parseFloat(numericString);
+            if(isNaN(parsedNumber)) { this.value = ""; calculateAggregateSumInsured(); return; }
+            this.value = formatValueToIndianCommas(parsedNumber, 0);
+            let lengthDifference = this.value.length - originalLength;
+            this.setSelectionRange(cursorPosition + lengthDifference, cursorPosition + lengthDifference);
+            calculateAggregateSumInsured();
+        });
+    });
+}
+
 const bsusRateSchedule = [
   {"sec": "III", "code": "1002", "cat": 1, "desc": "Places of worships", "rate": 0.14},
   {"sec": "III", "code": "1003", "cat": 1, "desc": "Libraries", "rate": 0.21},
@@ -488,7 +529,7 @@ const bsusRateSchedule = [
   {"sec": "IV", "code": "2050", "cat": 1, "desc": "Cinematography Film Editing, Laboratory and Sound recording rooms without Film Processing", "rate": 0.55},
   {"sec": "IV", "code": "2051", "cat": 2, "desc": "Cinema Theatres [For single screen]", "rate": 0.44},
   {"sec": "IV", "code": "2052", "cat": 1, "desc": "Circus, Touring Drama Troupes and Touring Cinema Theatres", "rate": 5.29},
-  {"sec": "IV", "code": "2053", "cat": 4, "desc": "Cloth Proessing units situated  outside  the compound  of Textile  mills  and cloth processing   units    which are  not  owned  by the  textile  mills but are  situated  within  the    textile  mills  complex/compound.", "rate": 1.32},
+  {"sec": "IV", "code": "2053", "cat": 4, "desc": "Cloth Proessing units situated  outside  the compound  of Textile  mills  and cloth processing   units   which are  not  owned  by the  textile  mills but are  situated  within  the   textile  mills   complex/compound.", "rate": 1.32},
   {"sec": "IV", "code": "2054", "cat": 1, "desc": "Coal/cake/Charcoal ball and briquettes Manufacturing", "rate": 1.49},
   {"sec": "IV", "code": "2055", "cat": 1, "desc": "Coal Processing Plants", "rate": 0.67},
   {"sec": "IV", "code": "2056", "cat": 1, "desc": "Coffee Curing, Roasting / Grinding", "rate": 0.57},
@@ -698,44 +739,297 @@ const bsusRateSchedule = [
   {"sec": "IV/V", "code": "4900", "cat": 2, "desc": "Silent risk", "rate": 0.29}
 ];
 
-function parseCommasToFloat(val) {
-    if (typeof val === 'number') return val;
-    let clean = val.toString().replace(/,/g, '').trim();
-    return parseFloat(clean) || 0;
-}
-
-function formatValueToIndianCommas(num, decimals = 0) {
-    if (num === null || num === undefined || isNaN(num)) return "0";
-    let fixedNum = num.toFixed(decimals);
-    let parts = fixedNum.split('.');
-    let integerPart = parts[0];
-    let decimalPart = parts.length > 1 ? '.' + parts[1] : '';
-    let lastThree = integerPart.substring(integerPart.length - 3);
-    let otherNumbers = integerPart.substring(0, integerPart.length - 3);
-    if (otherNumbers !== '') lastThree = ',' + lastThree;
-    return otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree + decimalPart;
-}
-
-function initializeCurrencyInputListeners() {
-    document.querySelectorAll('.si-input').forEach(input => {
-        input.type = "text"; 
-        let rawNum = parseFloat(input.value) || 0;
-        input.value = formatValueToIndianCommas(rawNum, 0);
-
-        input.addEventListener('input', function() {
-            let cursorPosition = this.selectionStart;
-            let originalLength = this.value.length;
-            let numericString = this.value.replace(/,/g, '');
-            if(numericString === "") { this.value = ""; calculateAggregateSumInsured(); return; }
-            let parsedNumber = parseFloat(numericString);
-            if(isNaN(parsedNumber)) { this.value = ""; calculateAggregateSumInsured(); return; }
-            this.value = formatValueToIndianCommas(parsedNumber, 0);
-            let lengthDifference = this.value.length - originalLength;
-            this.setSelectionRange(cursorPosition + lengthDifference, cursorPosition + lengthDifference);
-            calculateAggregateSumInsured();
-        });
-    });
-}
+const standardRates = [
+  {"sec":"III","code":"1002","cat":"1","ho":"","dec":"","desc":"Places of worships","blus":0.12,"sfsp":0.12},
+  {"sec":"III","code":"1003","cat":"1","ho":"","dec":"","desc":"Libraries","blus":0.21,"sfsp":0.21},
+  {"sec":"III","code":"1004","cat":"1","ho":"","dec":"","desc":"Museums","blus":0.23,"sfsp":0.23},
+  {"sec":"III","code":"1005","cat":"1","ho":"","dec":"","desc":"Schools/Colleges","blus":0.2,"sfsp":0.2},
+  {"sec":"III","code":"1006","cat":"1","ho":"","dec":"","desc":"Hospitals including X-ray and other Diagnostic clinics","blus":0.23,"sfsp":0.23},
+  {"sec":"III","code":"1007","cat":"1","ho":"","dec":"","desc":"Office premises / Meeting Rooms","blus":0.25,"sfsp":0.25},
+  {"sec":"III","code":"1008","cat":"1","ho":"","dec":"","desc":"Auditoriums / Planetarium","blus":0.28,"sfsp":0.28},
+  {"sec":"III","code":"1009","cat":"2","ho":"","dec":"","desc":"Mess Houses / Clubs","blus":0.21,"sfsp":0.21},
+  {"sec":"III","code":"1010","cat":"2","ho":"","dec":"","desc":"Marriage Halls","blus":0.18,"sfsp":0.18},
+  {"sec":"III","code":"1011","cat":"1","ho":"","dec":"","desc":"Showrooms and display centres where goods are kept for display and no sales are carried out","blus":0.28,"sfsp":0.28},
+  {"sec":"III","code":"1012","cat":"1","ho":"","dec":"","desc":"Educational and Research Institutes imparting training in various crafts","blus":0.24,"sfsp":0.24},
+  {"sec":"III","code":"1013","cat":"1","ho":"","dec":"","desc":"Lodging/Boarding Houses","blus":0.19,"sfsp":0.19},
+  {"sec":"III","code":"1014","cat":"2","ho":"","dec":"","desc":"Cycle Shed","blus":0.22,"sfsp":0.22},
+  {"sec":"III","code":"1015","cat":"1","ho":"","dec":"","desc":"Dish Antenna","blus":0.23,"sfsp":0.23},
+  {"sec":"III","code":"1016","cat":"1","ho":"","dec":"","desc":"Indoor stadiums, health Club, Gymnasium and Swimming Pool","blus":0.08,"sfsp":0.08},
+  {"sec":"III","code":"1017","cat":"1","ho":"","dec":"","desc":"Cafes, Restaurants, Hotels, Confectioner and Sweet meat sellers, Health Resorts","blus":0.25,"sfsp":0.25},
+  {"sec":"III","code":"1018","cat":"2","ho":"","dec":"","desc":"Laundries / Dry Cleaning","blus":0.51,"sfsp":0.51},
+  {"sec":"III","code":"1019","cat":"2","ho":"","dec":"","desc":"Battery Charging Service Stations","blus":0.96,"sfsp":0.96},
+  {"sec":"III","code":"1020","cat":"1","ho":"","dec":"","desc":"Amusement Parks","blus":0.78,"sfsp":0.78},
+  {"sec":"III","code":"1021","cat":"2","ho":"","dec":"","desc":"Hoarding, Neon signs","blus":0.99,"sfsp":0.99},
+  {"sec":"III","code":"1022","cat":"1","ho":"","dec":"","desc":"Sports Galleries, Outdoor Stadiums","blus":1.43,"sfsp":1.43},
+  {"sec":"III","code":"1023","cat":"2","ho":"","dec":"","desc":"Shops dealing in goods otherwise not provided for","blus":0.66,"sfsp":0.66},
+  {"sec":"III","code":"1024","cat":"2","ho":"","dec":"","desc":"Shops dealing in hazardous goods","blus":0.84,"sfsp":0.84},
+  {"sec":"III","code":"1025","cat":"3","ho":"","dec":"","desc":"Arms and Ammunition dealers","blus":0.98,"sfsp":0.98},
+  {"sec":"III","code":"1026","cat":"2","ho":"","dec":"","desc":"Motor Vehicle showroom including sales and service","blus":0.47,"sfsp":0.47},
+  {"sec":"III","code":"1027","cat":"2","ho":"","dec":"","desc":"Fuel Station - Petrol/Diesel Kiosks [without CNG]","blus":0.53,"sfsp":0.53},
+  {"sec":"III","code":"1028","cat":"2","ho":"","dec":"","desc":"Fuel Station - Petrol/Diesel Kiosks [with CNG]","blus":1.11,"sfsp":1.11},
+  {"sec":"III","code":"1029","cat":"1","ho":"","dec":"","desc":"Data Processing/Call Centres/Business Process Outsourcing Centres","blus":0.14,"sfsp":0.14},
+  {"sec":"IV","code":"2001","cat":"3","ho":"","dec":"","desc":"Abrasive Manufacturing","blus":0.69,"sfsp":0.69},
+  {"sec":"IV","code":"2002","cat":"2","ho":"","dec":"","desc":"Aerated Water Factories","blus":0.62,"sfsp":0.62},
+  {"sec":"IV","code":"2003","cat":"3","ho":"","dec":"","desc":"Aerial Ropeway including trolley stations","blus":0.8,"sfsp":0.8},
+  {"sec":"IV","code":"2004","cat":"4","ho":"","dec":"","desc":"Agarbatti Manufacturing","blus":1.65,"sfsp":1.65},
+  {"sec":"IV","code":"2005","cat":"1","ho":"","dec":"","desc":"Aircraft Hangers","blus":1.14,"sfsp":1.14},
+  {"sec":"IV","code":"2006","cat":"1","ho":"","dec":"","desc":"Airport Terminal Buildings [including all facilities like Cafes, Shops etc]","blus":0.29,"sfsp":0.29},
+  {"sec":"IV","code":"2007","cat":"2","ho":"","dec":"","desc":"Aluminium/Magnesium Powder Plants","blus":0.88,"sfsp":0.88},
+  {"sec":"IV","code":"2008","cat":"2","ho":"","dec":"","desc":"Aluminium, Zinc, Copper Factories","blus":0.6,"sfsp":0.6},
+  {"sec":"IV","code":"2009","cat":"2","ho":"","dec":"","desc":"Areca nut and/or Betel nut factories","blus":0.78,"sfsp":0.78},
+  {"sec":"IV","code":"2010","cat":"2","ho":"","dec":"","desc":"Asbestos Steam Packing and lagging manufacturing","blus":0.53,"sfsp":0.53},
+  {"sec":"IV","code":"2011","cat":"2","ho":"","dec":"","desc":"Atta and Cereal Grinding [Excluding Dal Mills]","blus":0.73,"sfsp":0.73},
+  {"sec":"IV","code":"2012","cat":"4","ho":"","dec":"","desc":"Audio/Video Cassette Manufacturing","blus":2.08,"sfsp":2.08},
+  {"sec":"IV","code":"2013","cat":"1","ho":"","dec":"","desc":"Automobile Manufacturing","blus":0.53,"sfsp":0.53},
+  {"sec":"IV","code":"2014","cat":"2","ho":"","dec":"","desc":"Bakeries","blus":0.7,"sfsp":0.7},
+  {"sec":"IV","code":"2015","cat":"3","ho":"","dec":"","desc":"Basket Weavers and Cane Furniture Makers","blus":2.66,"sfsp":2.66},
+  {"sec":"IV","code":"2016","cat":"3","ho":"","dec":"","desc":"Battery Manufacturing","blus":0.65,"sfsp":0.65},
+  {"sec":"IV","code":"2017","cat":"2","ho":"","dec":"","desc":"Beedi Factories","blus":0.98,"sfsp":0.98},
+  {"sec":"IV","code":"2018","cat":"2","ho":"","dec":"","desc":"Biscuit Factories","blus":0.68,"sfsp":0.68},
+  {"sec":"IV","code":"2019","cat":"4","ho":"","dec":"","desc":"Bituminised Paper and / or Hessian Cloth Manufacturing including Tar Felt Manufacturing","blus":1.37,"sfsp":1.37},
+  {"sec":"IV","code":"2020","cat":"3","ho":"","dec":"","desc":"Book Binders, Envelope and Paper Bag Manufacturing","blus":1.13,"sfsp":1.13},
+  {"sec":"IV","code":"2021","cat":"2","ho":"","dec":"","desc":"Breweries","blus":0.89,"sfsp":0.89},
+  {"sec":"IV","code":"2022","cat":"1","ho":"","dec":"","desc":"Brickworks {including refractories and fire bricks}","blus":0.34,"sfsp":0.34},
+  {"sec":"IV","code":"2023","cat":"1","ho":"","dec":"","desc":"Bridges - Concrete / Steel","blus":0.15,"sfsp":0.14},
+  {"sec":"IV","code":"2024","cat":"2","ho":"","dec":"","desc":"Bridges - Wooden","blus":0.75,"sfsp":0.75},
+  {"sec":"IV","code":"2025","cat":"1","ho":"","dec":"","desc":"Building in course of construction","blus":0.18,"sfsp":0.18},
+  {"sec":"IV","code":"2026","cat":"3","ho":"","dec":"","desc":"Cable Manufacturing","blus":0.93,"sfsp":0.93},
+  {"sec":"IV","code":"2027","cat":"2","ho":"","dec":"","desc":"Camphor Manufacturing","blus text":"1.14","blus":1.14,"sfsp":1.14},
+  {"sec":"IV","code":"2028","cat":"3","ho":"","dec":"","desc":"Candle Works","blus":1.35,"sfsp":1.35},
+  {"sec":"IV","code":"2029","cat":"2","ho":"","dec":"","desc":"Canning Factories","blus":0.74,"sfsp":0.74},
+  {"sec":"IV","code":"2030","cat":"2","ho":"","dec":"","desc":"Capsule Manufacturing","blus":0.66,"sfsp":0.66},
+  {"sec":"IV","code":"2031","cat":"3","ho":"","dec":"","desc":"Carbon paper / Typewriter Ribbon Manufacturing","blus":1.19,"sfsp":1.19},
+  {"sec":"IV","code":"2032","cat":"2","ho":"","dec":"","desc":"Cardamom Factories","blus":0.82,"sfsp":0.82},
+  {"sec":"IV","code":"2033","cat":"3","ho":"","dec":"","desc":"Cardboard Box Manufacturing","blus":1.42,"sfsp":1.42},
+  {"sec":"IV","code":"2034","cat":"3","ho":"","dec":"","desc":"Carpenters, Wood wool Manufacturing, Furniture Manufacturing and other wood worker shops [Excluding saw Mill]","blus":1.35,"sfsp":1.35},
+  {"sec":"IV","code":"2035","cat":"3","ho":"","dec":"","desc":"Carpet and Drugget Manufacturing [Cotton/jute/wool]","blus":1.78,"sfsp":1.78},
+  {"sec":"IV","code":"2036","cat":"3","ho":"","dec":"","desc":"Carpet and Drugget Manufacturing [Others]","blus":1.21,"sfsp":1.21},
+  {"sec":"IV","code":"2037","cat":"2","ho":"","dec":"","desc":"Cashew nut Factories","blus":0.82,"sfsp":0.82},
+  {"sec":"IV","code":"2038","cat":"2","ho":"","dec":"","desc":"Cattle feed Mill","blus":0.53,"sfsp":0.53},
+  {"sec":"IV","code":"2039","cat":"4","ho":"","dec":"","desc":"Celluloid Goods Manufacturing","blus":6.35,"sfsp":6.35},
+  {"sec":"IV","code":"2040","cat":"1","ho":"","dec":"","desc":"Cement / asbestos/concrete products Manufacturing","blus":0.39,"sfsp":0.39},
+  {"sec":"IV","code":"2041","cat":"2","ho":"","dec":"","desc":"Cement Factories","blus":0.5,"sfsp":0.5},
+  {"sec":"IV","code":"2042","cat":"2","ho":"","dec":"","desc":"Ceramic Factories and Crockery and Stoneware pipe Manufacturing/Clay Works","blus text":"0.78","blus":0.78,"sfsp":0.78},
+  {"sec":"IV","code":"2043","cat":"4","ho":"","dec":"","desc":"Chemical Manufacturing (Using materials with Flash Point below 32*C), Bulk Drug Manufacturing","blus text":"1.43","blus":1.43,"sfsp":1.43},
+  {"sec":"IV","code":"2044","cat":"3","ho":"","dec":"","desc":"Chemical Manufacturing (Others), Pharmaceuticals, Toiletry products","blus text":"0.99","blus":0.99,"sfsp":0.99},
+  {"sec":"IV","code":"2045","cat":"2","ho":"","dec":"","desc":"Cigar and Cigarette Manufacturing","blus":0.62,"sfsp":0.62},
+  {"sec":"IV","code":"2046","cat":"4","ho":"","dec":"","desc":"Cigarette Filter Manufacturing(Using Solvents with flash Point below 32*C)","blus":2.64,"sfsp":2.64},
+  {"sec":"IV","code":"2047","cat":"3","ho":"","dec":"","desc":"Cigarette Filter Manufacturing (Others)","blus":1.07,"sfsp":1.07},
+  {"sec":"IV","code":"2048","cat":"3","ho":"","dec":"","desc":"Cinema Film Production Studios","blus text":"2.54","blus":2.54,"sfsp":2.54},
+  {"sec":"IV","code":"2049","cat":"2","ho":"","dec":"","desc":"Cinematography Film Editing, Laboratory and Sound recording rooms where Film Processing is carried out","blus":0.53,"sfsp":0.53},
+  {"sec":"IV","code":"2050","cat":"2","ho":"","dec":"","desc":"Cinematography Film Editing, Laboratory and Sound recording rooms without Film Processing","blus text":"0.45","blus":0.45,"sfsp":0.45},
+  {"sec":"IV","code":"2051","cat":"1","ho":"","dec":"","desc":"Cinema Theatres [For single screen]","blus text":"0.36","blus":0.36,"sfsp":0.36},
+  {"sec":"IV","code":"2052","cat":"3","ho":"","dec":"","desc":"Circus, Touring Drama Troupes and Touring Cinema Theatres","blus text":"4.61","blus":4.61,"sfsp":4.61},
+  {"sec":"IV","code":"2053","cat":"3","ho":"","dec":"","desc":"Cloth Proessing units situated outside the compound of Textile mills and cloth processing units which are not owned by the textile mills but are situated within the textile mills complex/compound","blus text":"1.1","blus":1.1,"sfsp":1.1},
+  {"sec":"IV","code":"2054","cat":"3","ho":"","dec":"","desc":"Coal/cake/Charcoal ball and briquettes Manufacturing","blus text":"1.32","blus":1.32,"sfsp":1.32},
+  {"sec":"IV","code":"2055","cat":"2","ho":"","dec":"","desc":"Coal Processing Plants","blus text":"0.53","blus":0.53,"sfsp":0.53},
+  {"sec":"IV","code":"2056","cat":"2","ho":"","dec":"","desc":"Coffee Curing, Roasting / Grinding","blus text":"0.47","blus":0.47,"sfsp":0.47},
+  {"sec":"IV","code":"2057","cat":"3","ho":"","dec":"","desc":"Coir Factories","blus text":"1.99","blus":1.99,"sfsp":1.99},
+  {"sec":"IV","code":"2058","cat":"3","ho":"","dec":"","desc":"Collieries - Underground Machinery and pit head gear and Dragline Machine used in Collieries","blus":1.07,"sfsp":1.07},
+  {"sec":"IV","code":"2059","cat":"1","ho":"","dec":"","desc":"Condensed Milk Factories, Milk Pasteurising Plants and Dairies","blus":0.41,"sfsp":0.41},
+  {"sec":"IV","code":"2060","cat":"2","ho":"","dec":"","desc":"Confectionery Manufacturing Plants/Sugar Candy Manufacturing Plants/Sweet Meat Manufacturing Plants","blus text":"0.78","blus":0.78,"sfsp":0.78},
+  {"sec":"IV","code":"2061","cat":"1","ho":"","dec":"","desc":"Contractors Plant and Machinery - At one location only","blus text":"0.62","blus":0.62,"sfsp":0.62},
+  {"sec":"IV","code":"2062","cat":"3","ho":"","dec":"","desc":"Cork Products Manufacturing","blus text":"1.9","blus":1.9,"sfsp":1.9},
+  {"sec":"IV","code":"2063","cat":"3","ho":"H.O APPROVAL","dec":"","desc":"Cotton Gin and Press Houses","blus":1.79,"sfsp":1.79},
+  {"sec":"IV","code":"2064","cat":"3","ho":"H.O APPROVAL","dec":"","desc":"Cotton Seed cleaning / Delinting Factory","blus":1.99,"sfsp":1.99},
+  {"sec":"IV","code":"2065","cat":"2","ho":"","dec":"","desc":"Dehydration Factories","blus":0.6,"sfsp":0.6},
+  {"sec":"IV","code":"2066","cat":"3","ho":"","dec":"","desc":"Detergent Manufacturing with Sulphonation Plant","blus":1.14,"sfsp":1.14},
+  {"sec":"IV","code":"2067","cat":"2","ho":"","dec":"","desc":"Detergent Manufacturing (Others)","blus":0.88,"sfsp":0.88},
+  {"sec":"IV","code":"2068","cat":"2","ho":"","dec":"","desc":"Distilleries","blus":0.66,"sfsp":0.66},
+  {"sec":"IV","code":"2069","cat":"3","ho":"","dec":"","desc":"Duplicating.stencil paper Manufacturing","blus":1.29,"sfsp":1.29},
+  {"sec":"IV","code":"2070","cat":"1","ho":"H.O APPROVAL","dec":"DECLINED RISK","desc":"Electric Generation Stations - Hydro Power Stations","blus":0.45,"sfsp":0.45},
+  {"sec":"IV","code":"2071","cat":"2","ho":"","dec":"","desc":"Electric Lamp/T.V. Picture Tube Manufacturing","blus text":"0.84","blus":0.84,"sfsp":0.84},
+  {"sec":"IV","code":"2072","cat":"2","ho":"","dec":"","desc":"Electronic Goods Manufacturing/Assembly","blus":0.8,"sfsp":0.8},
+  {"sec":"IV","code":"2073","cat":"1","ho":"","dec":"","desc":"Electronic Software Parks/Electronic Software Development Units","blus":0.16,"sfsp":0.16},
+  {"sec":"IV","code":"2074","cat":"2","ho":"","dec":"","desc":"Enamel-ware factories","blus text":"0.8","blus":0.8,"sfsp":0.8},
+  {"sec":"IV","code":"2075","cat":"2","ho":"","dec":"","desc":"Engineering Workshop-Structural Steel Fabricators, Sheet Metal fabricators","blus":0.32,"sfsp":0.32},
+  {"sec":"IV","code":"2076","cat":"2","ho":"","dec":"","desc":"Engineering Workshop [Others], Motor Vehicle Garages","blus":0.53,"sfsp":0.53},
+  {"sec":"IV","code":"2077","cat":"3","ho":"","dec":"","desc":"Exhibitions, Fetes, Mandaps","blus text":"2.08","blus":2.08,"sfsp":2.08},
+  {"sec":"IV","code":"2078","cat":"3","ho":"H.O APPROVAL","dec":"","desc":"Explosives / Blasting Factories","blus":1.93,"sfsp":1.93},
+  {"sec":"IV","code":"2079","cat":"3","ho":"","dec":"","desc":"Fertiliser Manufacturing [other than those rateable under Petrochemical Tariff]","blus":1.07,"sfsp":1.07},
+  {"sec":"IV","code":"2080","cat":"4","ho":"","dec":"","desc":"Filter and wax paper Manufacturing","blus":1.9,"sfsp":1.9},
+  {"sec":"IV","code":"2081","cat":"3","ho":"H.O APPROVAL","dec":"","desc":"Fireworks Manufacturing","blus":2.13,"sfsp":2.13},
+  {"sec":"IV","code":"2082","cat":"3","ho":"","dec":"","desc":"Flax / Hemp Mills","blus":0.97,"sfsp":0.97},
+  {"sec":"IV","code":"2083","cat":"3","ho":"","dec":"","desc":"Flour Mills","blus":1.07,"sfsp":1.07},
+  {"sec":"IV","code":"2084","cat":"4","ho":"H.O APPROVAL","dec":"","desc":"Foamed Plastics Manufacturing and / or converting plants","blus":2.84,"sfsp":2.84},
+  {"sec":"IV","code":"2085","cat":"4","ho":"H.O APPROVAL","dec":"","desc":"Foam Rubber Manufacturing","blus":2.66,"sfsp":2.66},
+  {"sec":"IV","code":"2086","cat":"4","ho":"","dec":"","desc":"French Polish Manufacturing","blus":2.28,"sfsp":2.28},
+  {"sec":"IV","code":"2087","cat":"2","ho":"","dec":"","desc":"Fruit and vegetable drying/dehydrating factories","blus text":"0.77","blus":0.77,"sfsp":0.77},
+  {"sec":"IV","code":"2088","cat":"2","ho":"","dec":"","desc":"Fruit products and Condiment Factories (including fruit pulp making)","blus":0.6,"sfsp":0.6},
+  {"sec":"IV","code":"2089","cat":"3","ho":"","dec":"","desc":"Garment Makers, Topee, Hats and the like makers","blus text":"0.96","blus":0.96,"sfsp":0.96},
+  {"sec":"IV","code":"2090","cat":"2","ho":"","dec":"","desc":"Ghee Factories including vegetable Ghee mfg","blus":0.82,"sfsp":0.82},
+  {"sec":"IV","code":"2091","cat":"2","ho":"","dec":"","desc":"Glass Fibre Manufacturing","blus":0.74,"sfsp":0.74},
+  {"sec":"IV","code":"2092","cat":"3","ho":"","dec":"","desc":"Glass wool Manufacturing","blus":1.14,"sfsp":1.14},
+  {"sec":"IV","code":"2093","cat":"2","ho":"","dec":"","desc":"Glass Manufacturing/Automobile Glass Manufacturing","blus":0.89,"sfsp":0.89},
+  {"sec":"IV","code":"2094","cat":"2","ho":"","dec":"","desc":"Gold thread factories / Gilding factories","blus":0.6,"sfsp":0.6},
+  {"sec":"IV","code":"2095","cat":"2","ho":"","dec":"","desc":"Granite Factories using inflammable solvents","blus text":"0.53","blus":0.53,"sfsp":0.53},
+  {"sec":"IV","code":"2096","cat":"1","ho":"","dec":"","desc":"Granite Factories (Others)","blus":0.22,"sfsp":0.22},
+  {"sec":"IV","code":"2097","cat":"2","ho":"","dec":"","desc":"Graphite electrode Manufacturing","blus":0.91,"sfsp":0.91},
+  {"sec":"IV","code":"2098","cat":"3","ho":"","dec":"","desc":"Grain/seeds disintegrating/crushing/ Decorticating factories/ Dal mills","blus text":"0.84","blus":0.84,"sfsp":0.84},
+  {"sec":"IV","code":"2099","cat":"3","ho":"","dec":"","desc":"Grease / Wax Manufacturing","blus":1.38,"sfsp":1.38},
+  {"sec":"IV","code":"2100","cat":"2","ho":"","dec":"","desc":"Green Houses/ Algae/ Spirulina and the like","blus":0.89,"sfsp":0.89},
+  {"sec":"IV","code":"2101","cat":"2","ho":"","dec":"","desc":"Gum/Glue/Gelatine Manufacturing","blus text":"0.91","blus":0.91,"sfsp":0.91},
+  {"sec":"IV","code":"2102","cat":"2","ho":"","dec":"","desc":"Gypsum board manufacturer","blus text":"0.69","blus":0.69,"sfsp":0.69},
+  {"sec":"IV","code":"2103","cat":"3","ho":"","dec":"","desc":"Hoisery,lace, Embroidery/Thread factories","blus":1.07,"sfsp":1.07},
+  {"sec":"IV","code":"2104","cat":"2","ho":"","dec":"","desc":"Ice candy and Ice cream Manufacturing","blus":0.58,"sfsp":0.58},
+  {"sec":"IV","code":"2105","cat":"2","ho":"","dec":"","desc":"Ice factories","blus":0.49,"sfsp":0.49},
+  {"sec":"IV","code":"2106","cat":"3","ho":"","dec":"","desc":"Incandescent Gas mantle Manufacturing","blus":1.14,"sfsp":1.14},
+  {"sec":"IV","code":"2107","cat":"2","ho":"","dec":"","desc":"Industrial Diamonds Manufacturing","blus":0.47,"sfsp":0.47},
+  {"sec":"IV","code":"2108","cat":"3","ho":"","dec":"","desc":"Industrial Gas Manufacturing","blus text":"1.29","blus":1.29,"sfsp":1.29},
+  {"sec":"IV","code":"2109","cat":"2","ho":"","dec":"","desc":"Ink (excluding printing ink) Manufacturing","blus":0.89,"sfsp":0.89},
+  {"sec":"IV","code":"2110","cat":"2","ho":"","dec":"","desc":"Jaggery Manufacturing","blus":0.66,"sfsp":0.66},
+  {"sec":"IV","code":"2111","cat":"4","ho":"","dec":"","desc":"Jute Mills","blus":2.51,"sfsp":2.51},
+  {"sec":"IV","code":"2112","cat":"3","ho":"","dec":"","desc":"Katha Manufacturing","blus":1.32,"sfsp":1.32},
+  {"sec":"IV","code":"2113","cat":"2","ho":"","dec":"","desc":"Khandsari Sugar Manufacturing","blus text":"0.75","blus":0.75,"sfsp":0.75},
+  {"sec":"IV","code":"2114","cat":"2","ho":"","dec":"","desc":"Lac or Shellac Factories","blus":0.96,"sfsp":0.96},
+  {"sec":"IV","code":"2115","cat":"4","ho":"","dec":"","desc":"Leather Cloth Factories","blus":1.93,"sfsp":1.93},
+  {"sec":"IV","code":"2116","cat":"3","ho":"","dec":"","desc":"Leather Goods Manufacturing ( incl. boot/shoe)","blus text":"1.07","blus":1.07,"sfsp":1.07},
+  {"sec":"IV","code":"2117","cat":"2","ho":"","dec":"","desc":"Lime Kiln","blus":0.48,"sfsp":0.48},
+  {"sec":"IV","code":"2118","cat":"2","ho":"","dec":"","desc":"Lithographic presses","blus":0.85,"sfsp":0.85},
+  {"sec":"IV","code":"2119","cat":"2","ho":"","dec":"","desc":"Liquified Gas Bottling/ Recovery Plants","blus":0.65,"sfsp":0.65},
+  {"sec":"IV","code":"2120","cat":"2","ho":"","dec":"","desc":"Malt Extraction Plants","blus":0.66,"sfsp":0.66},
+  {"sec":"IV","code":"2121","cat":"1","ho":"","dec":"","desc":"Man-made Fibre Manufacturing (using Cellulose)","blus":0.35,"sfsp":0.35},
+  {"sec":"IV","code":"2122","cat":"2","ho":"","dec":"","desc":"Man-made Fibre Manufacturing Plant (Others)","blus text":"0.5","blus":0.5,"sfsp":0.5},
+  {"sec":"IV","code":"2123","cat":"2","ho":"","dec":"","desc":"Manure Blending works","blus":0.69,"sfsp":0.69},
+  {"sec":"IV","code":"2124","cat":"3","ho":"H.O APPROVAL","dec":"","desc":"Match Factories","blus text":"2.28","blus":2.28,"sfsp":2.28},
+  {"sec":"IV","code":"2125","cat":"4","ho":"","dec":"","desc":"Mattress and Pillow making","blus":2.84,"sfsp":2.84},
+  {"sec":"IV","code":"2126","cat":"2","ho":"","dec":"","desc":"Metallizing works ( involving metals only)","blus":0.41,"sfsp":0.41},
+  {"sec":"IV","code":"2127","cat":"2","ho":"","dec":"","desc":"Metallising Works (others)","blus":0.7,"sfsp":0.7},
+  {"sec":"IV","code":"2128","cat":"3","ho":"","dec":"","desc":"Metal/Tin printers","blus text":"1.45","blus":1.45,"sfsp":1.45},
+  {"sec":"IV","code":"2129","cat":"2","ho":"","dec":"","desc":"Mica Products Manufacturing","blus text":"0.73","blus":0.73,"sfsp":0.73},
+  {"sec":"IV","code":"2130","cat":"2","ho":"","dec":"","desc":"Mineral Oil blending and processing","blus":0.53,"sfsp":0.53},
+  {"sec":"IV","code":"2131","cat":"2","ho":"","dec":"","desc":"Mosaic Factories","blus text":"0.57","blus":0.57,"sfsp":0.57},
+  {"sec":"IV","code":"2132","cat":"1","ho":"","dec":"","desc":"Mushroom Growing Premises","blus text":"0.55","blus":0.55,"sfsp":0.55},
+  {"sec":"IV","code":"2133","cat":"4","ho":"H.O APPROVAL","dec":"","desc":"Nitro Cellulose Manufacturing- Industrial Grade","blus":9.27,"sfsp":9.27},
+  {"sec":"IV","code":"2134","cat":"4","ho":"","dec":"","desc":"Non-woven fabric Manufacturing","blus text":"1.75","blus":1.75,"sfsp":1.75},
+  {"sec":"IV","code":"2135","cat":"3","ho":"","dec":"","desc":"Oil Extraction","blus":1.35,"sfsp":1.35},
+  {"sec":"IV","code":"2136","cat":"3","ho":"","dec":"","desc":"Oil Distillation Plants (essential)","blus":1.17,"sfsp":1.17},
+  {"sec":"IV","code":"2137","cat":"3","ho":"","dec":"","desc":"Oil Mills refining ( Veg/Animal)","blus text":"0.97","blus":0.97,"sfsp":0.97},
+  {"sec":"IV","code":"2138","cat":"3","ho":"","dec":"","desc":"Oil Mills (Vegetable)","blus":0.9,"sfsp":0.9},
+  {"sec":"IV","code":"2139","cat":"3","ho":"","dec":"","desc":"Oil and Leather Cloth Factories","blus":1.32,"sfsp":1.32},
+  {"sec":"IV","code":"2140","cat":"2","ho":"","dec":"","desc":"Paint factories (Water based)","blus":0.8,"sfsp":0.8},
+  {"sec":"IV","code":"2141","cat":"3","ho":"","dec":"","desc":"Paint (others) & Varnish Factories","blus":1.78,"sfsp":1.78},
+  {"sec":"IV","code":"2142","cat":"4","ho":"","dec":"","desc":"Paints - Nitrocellulose based","blus":2.14,"sfsp":2.14},
+  {"sec":"IV","code":"2143","cat":"2","ho":"","dec":"","desc":"Pan Masala making","blus":0.74,"sfsp":0.74},
+  {"sec":"IV","code":"2144","cat":"3","ho":"","dec":"","desc":"Paper and Cardboard Mills (including Lamination)","blus":1.01,"sfsp":1.01},
+  {"sec":"IV","code":"2145","cat":"3","ho":"","dec":"","desc":"Particle Board Manufacturing","blus":1.78,"sfsp":1.78},
+  {"sec":"IV","code":"2146","cat":"3","ho":"","dec":"","desc":"Pencil Manufacturing","blus text":"1.2","blus":1.2,"sfsp":1.2},
+  {"sec":"IV","code":"2147","cat":"2","ho":"","dec":"","desc":"Petroleum Coke Calcination","blus text":"0.75","blus":0.75,"sfsp":0.75},
+  {"sec":"IV","code":"2148","cat":"4","ho":"","dec":"","desc":"Plastic Goods Manufacturing(excluding Foam Plastics)/I. Using Plastic raw materials having calorific value upto 15000 btu/lb Polytetrafluoroethylene, polyvinylidene chloride/fluoride, Phenol/Urea-formaldehyde, Silicones","blus":1.56,"sfsp":1.56},
+  {"sec":"IV","code":"2149","cat":"4","ho":"","dec":"","desc":"Plywood / Wood veneering Factories/ Laminating Factories","blus text":"2.33","blus":2.33,"sfsp":2.33},
+  {"sec":"IV","code":"2150","cat":"2","ho":"","dec":"","desc":"Polyester Film Manufacturing / BOPP Film Manufacturing","blus":0.65,"sfsp":0.65},
+  {"sec":"IV","code":"2151","cat":"1","ho":"","dec":"","desc":"Port Premises including jetties and equipment thereon And other port facilities","blus text":"0.29","blus":0.29,"sfsp":0.29},
+  {"sec":"IV","code":"2152","cat":"1","ho":"","dec":"","desc":"Poultry Farms (Excluding birds therein)","blus":0.47,"sfsp":0.47},
+  {"sec":"IV","code":"2153","cat":"4","ho":"","dec":"","desc":"Presses for coir fibres/waste/Grass/fodder/boosa/Jute","blus":4.77,"sfsp":4.77},
+  {"sec":"IV","code":"2154","cat":"3","ho":"","dec":"","desc":"Presses for coir yarn / cotton/senna leaves","blus text":"2.31","blus text":"2.31","blus":2.31,"sfsp":2.31},
+  {"sec":"IV","code":"2155","cat":"3","ho":"","dec":"","desc":"Presses for carpets, rugs and tobacco","blus":2.11,"sfsp":2.11},
+  {"sec":"IV","code":"2156","cat":"2","ho":"","dec":"","desc":"Presses for hides and skins","blus":1.1,"sfsp":1.1},
+  {"sec":"IV","code":"2157","cat":"3","ho":"","dec":"","desc":"Printing Ink Manufacturing / Roller composition factories","blus":1.51,"sfsp":1.51},
+  {"sec":"IV","code":"2158","cat":"2","ho":"","dec":"","desc":"Printing Press","blus text":"0.95","blus":0.95,"sfsp":0.95},
+  {"sec":"IV","code":"2159","cat":"1","ho":"","dec":"","desc":"Pulverising Plants(Metals and non-hazardous goods)","blus":0.39,"sfsp":0.39},
+  {"sec":"IV","code":"2160","cat":"2","ho":"","dec":"","desc":"Pulverizing Plants (Others)","blus":1.1,"sfsp":1.1},
+  {"sec":"IV","code":"2161","cat":"2","ho":"","dec":"","desc":"Rice Mills","blus":0.71,"sfsp":0.71},
+  {"sec":"IV","code":"2162","cat":"2","ho":"","dec":"","desc":"Rice Polishing Units","blus":0.82,"sfsp":0.82},
+  {"sec":"IV","code":"2163","cat":"2","ho":"","dec":"","desc":"Rope works (Plastic), Assembling of Plastic Goods such as Toys and the like","blus":0.92,"sfsp":0.92},
+  {"sec":"IV","code":"2164","cat":"2","ho":"","dec":"","desc":"Rope Works (others)","blus text":"0.55","blus":0.55,"sfsp":0.55},
+  {"sec":"IV","code":"2165","cat":"3","ho":"","dec":"","desc":"Rubber Factories","blus":1.51,"sfsp":1.51},
+  {"sec":"IV","code":"2166","cat":"4","ho":"","dec":"","desc":"Rubber Goods Mfg with Spreading","blus":1.89,"sfsp":1.89},
+  {"sec":"IV","code":"2167","cat":"2","ho":"","dec":"","desc":"Rubber Goods Manufacturing without spreading","blus":1.04,"sfsp":1.04},
+  {"sec":"IV","code":"2168","cat":"1","ho":"","dec":"","desc":"Salt crushing Factories and Refineries","blus":0.43,"sfsp":0.43},
+  {"sec":"IV","code":"2169","cat":"4","ho":"","dec":"","desc":"Saw Mills (including Timber Merchants premises where sawing is done)","blus":2.48,"sfsp":2.48},
+  {"sec":"IV","code":"2170","cat":"2","ho":"","dec":"","desc":"Sea Food / Meat Processing","blus":0.82,"sfsp":0.82},
+  {"sec":"IV","code":"2171","cat":"2","ho":"","dec":"","desc":"Silk Mills / Spun Silk Mills","blus":0.76,"sfsp":0.76},
+  {"sec":"IV","code":"2230","cat":"2","ho":"","dec":"","desc":"Shopping Malls (other than multiplexes)","blus text":"0.39","blus text":"0.39","blus text":"0.39","blus text":"0.39","blus":0.39,"sfsp":0.39},
+  {"sec":"IV","code":"2172","cat":"2","ho":"","dec":"","desc":"Snuff Manufacturing","blus":0.75,"sfsp":0.75},
+  {"sec":"IV","code":"2173","cat":"2","ho":"","dec":"","desc":"Soap Manufacturing","blus text":"0.88","blus":0.88,"sfsp":0.88},
+  {"sec":"IV","code":"2174","cat":"2","ho":"","dec":"","desc":"Sponge Iron Plants","blus":0.82,"sfsp":0.82},
+  {"sec":"IV","code":"2175","cat":"3","ho":"","dec":"","desc":"Spray Painting, Powder coating","blus":1.14,"sfsp":1.14},
+  {"sec":"IV","code":"2176","cat":"2","ho":"","dec":"","desc":"Stables (excluding animals)","blus text":"0.55","blus text":"0.55","blus":0.55,"sfsp":0.55},
+  {"sec":"IV","code":"2177","cat":"2","ho":"","dec":"","desc":"Starch Factories","blus":0.57,"sfsp":0.57},
+  {"sec":"IV","code":"2178","cat":"1","ho":"","dec":"","desc":"Stone quarries","blus":0.22,"sfsp":0.22},
+  {"sec":"IV","code":"2180","cat":"1","ho":"","dec":"","desc":"Sugar factories","blus":0.46,"sfsp":0.46},
+  {"sec":"IV","code":"2181","cat":"4","ho":"","dec":"","desc":"Surgical Cotton Manufacturing","blus":2.48,"sfsp":2.48},
+  {"sec":"IV","code":"2231","cat":"3","ho":"","dec":"DECLINED RISK","desc":"Disposable Diaper Manufacturing","blus":1.11,"sfsp":1.11},
+  {"sec":"IV","code":"2183","cat":"2","ho":"","dec":"","desc":"Tanneries","blus":0.43,"sfsp":0.43},
+  {"sec":"IV","code":"2184","cat":"2","ho":"","dec":"","desc":"Tapioca factories","blus text":"0.74","blus":0.74,"sfsp":0.74},
+  {"sec":"IV","code":"2185","cat":"3","ho":"","dec":"","desc":"Tarpaulin and canvas proofing factories","blus":1.85,"sfsp":1.85},
+  {"sec":"IV","code":"2186","cat":"2","ho":"","dec":"","desc":"Tea blending/packing factories","blus":0.67,"sfsp":0.67},
+  {"sec":"IV","code":"2187","cat":"2","ho":"","dec":"","desc":"Tea Factories","blus":0.86,"sfsp":0.86},
+  {"sec":"IV","code":"2188","cat":"3","ho":"","dec":"","desc":"Telephone Exchanges","blus text":"1.32","blus":1.32,"sfsp":1.32},
+  {"sec":"IV","code":"2189","cat":"3","ho":"","dec":"","desc":"Textile Mills - Spinning Mills","blus":0.93,"sfsp":0.93},
+  {"sec":"IV","code":"2211","cat":"3","ho":"","dec":"","desc":"Textile Mills- Composite Mills","blus text":"1.29","blus":1.29,"sfsp":1.29},
+  {"sec":"IV","code":"2190","cat":"2","ho":"","dec":"","desc":"Tile & Pottery works","blus":0.61,"sfsp":0.61},
+  {"sec":"IV","code":"2191","cat":"2","ho":"","dec":"","desc":"Tiny sector Industries with values at risk not exceeding Rs 10 lakhs","blus":0.62,"sfsp":0.62},
+  {"sec":"IV","code":"2192","cat":"2","ho":"","dec":"","desc":"Tissue Culture Premises (Excluding Crops)","blus text":"0.66","blus":0.66,"sfsp":0.66},
+  {"sec":"IV","code":"2193","cat":"2","ho":"","dec":"","desc":"Tobacco Curing / Redrying Factories","blus text":"0.92","blus text":"0.92","blus":0.92,"sfsp":0.92},
+  {"sec":"IV","code":"2194","cat":"2","ho":"","dec":"","desc":"Tobacco grinding/ crushing Manufacturing","blus text":"0.81","blus":0.81,"sfsp":0.81},
+  {"sec":"IV","code":"2195","cat":"4","ho":"","dec":"","desc":"Turpentine and rosin distilleries","blus":2.67,"sfsp":2.67},
+  {"sec":"IV","code":"2196","cat":"2","ho":"","dec":"","desc":"Tyres and Tubes Manufacturing","blus text":"0.66","blus text":"0.66","blus text":"0.66","blus text":"0.66","blus text":"0.66","blus":0.66,"sfsp":0.66},
+  {"sec":"IV","code":"2197","cat":"3","ho":"","dec":"","desc":"Tyre Retreading and Resoling factories","blus":1.4,"sfsp":1.4},
+  {"sec":"IV","code":"2198","cat":"2","ho":"","dec":"","desc":"Umbrella Assembly factories","blus":0.68,"sfsp":0.68},
+  {"sec":"IV","code":"2199","cat":"3","ho":"","dec":"","desc":"Velvet Cloth Manufacturing","blus":1.33,"sfsp":1.33},
+  {"sec":"IV","code":"2200","cat":"2","ho":"","dec":"","desc":"Vermicelli factories","blus":0.52,"sfsp":0.52},
+  {"sec":"IV","code":"2201","cat":"1","ho":"","dec":"","desc":"Weigh Bridges","blus":0.64,"sfsp":0.64},
+  {"sec":"IV","code":"2202","cat":"3","ho":"","dec":"","desc":"Weaving Mills","blus":0.83,"sfsp":0.83},
+  {"sec":"IV","code":"2203","cat":"4","ho":"","dec":"","desc":"Wheat Threshers","blus":3.67,"sfsp":3.67},
+  {"sec":"IV","code":"2204","cat":"2","ho":"","dec":"","desc":"Wood seasoning/treatment/ impregnation","blus text":"0.9","blus text":"0.9","blus text":"0.9","blus":0.9,"sfsp":0.9},
+  {"sec":"IV","code":"2205","cat":"2","ho":"","dec":"","desc":"Wool cleaning and pressing factories","blus text":"0.95","blus text":"0.95","blus":0.95,"sfsp":0.95},
+  {"sec":"IV","code":"2206","cat":"2","ho":"","dec":"","desc":"Woollen Mills/Fur garments & accessories","blus":1.05,"sfsp":1.05},
+  {"sec":"IV","code":"2207","cat":"2","ho":"","dec":"","desc":"Yarn Processing","blus":0.96,"sfsp":0.96},
+  {"sec":"IV","code":"2208","cat":"2","ho":"","dec":"","desc":"Zip fasteners Manufacturing","blus text":"1.04","blus":1.04,"sfsp":1.04},
+  {"sec":"IV","code":"2209","cat":"2","ho":"","dec":"","desc":"Contractors Plant and Machinery anywhere in India (at specified locations)","blus":0.7,"sfsp":0.7},
+  {"sec":"IV","code":"2210","cat":"2","ho":"","dec":"","desc":"Electric Generation Stations- Others","blus text":"0.5","blus":0.5,"sfsp":0.5},
+  {"sec":"IV","code":"2212","cat":"2","ho":"","dec":"","desc":"Automobile Filter Manufacturing","blus text":"0.95","blus":0.95,"sfsp":0.95},
+  {"sec":"IV","code":"2216","cat":"3","ho":"","dec":"","desc":"Plastic Goods Manufacturing (excluding Foam Plastics)/ II. Using Plastic raw materials having calorific value of above 15000 btu/lb polyethylene, Polypropylene, Prolystyrene, Polyalphamethylstyrene, Acrylonitrilebutadiene-styrene, Polybutylene.","blus":1.23,"sfsp":1.23},
+  {"sec":"IV","code":"2217","cat":"1","ho":"","dec":"","desc":"Electric Generation Stations- Thermal Power Stations","blus":0.31,"sfsp":0.31},
+  {"sec":"IV","code":"2218","cat":"2","ho":"","dec":"","desc":"Electric Generation Stations- Solar Power Stations","blus text":"0.5","blus":0.5,"sfsp":0.5},
+  {"sec":"IV","code":"2219","cat":"2","ho":"","dec":"","desc":"Electric Generation Stations- Windmill","blus text":"0.58","blus":0.58,"sfsp":0.58},
+  {"sec":"IV","code":"2221","cat":"2","ho":"","dec":"","desc":"Electric Generation Stations- Biomass Power Stations","blus text":"0.53","blus text":"0.53","blus":0.53,"sfsp":0.53},
+  {"sec":"IV","code":"2222","cat":"1","ho":"","dec":"","desc":"Engineering Workshop- Steel Plants","blus":0.35,"sfsp":0.35},
+  {"sec":"IV","code":"2224","cat":"2","ho":"","dec":"","desc":"Engineering Workshop-Pipe Extruding, Stamping, Pressing, Forging Mills, Metal smelting, Foundries, Galvanising works","blus text":"0.35","blus text":"0.35","blus":0.35,"sfsp":0.35},
+  {"sec":"IV","code":"2225","cat":"2","ho":"","dec":"","desc":"Engineering Workshop-Metal Extraction, Ore processing (other than Aluminium, Copper, Zinc), Plant processing Raw sand into silica","blus":0.63,"sfsp":0.63},
+  {"sec":"IV","code":"2227","cat":"2","ho":"","dec":"","desc":"Engineering Workshop- Clock/Watch Manufacturing","blus":1.3,"sfsp":1.3},
+  {"sec":"IV","code":"2229","cat":"1","ho":"","dec":"","desc":"Multiplex Theatre Complexes","blus text":"0.55","blus text":"0.55","blus":0.55,"sfsp":0.55},
+  {"sec":"V","code":"3001","cat":"2","ho":"","dec":"","desc":"Analytical / Quality Control Laboratories","blus text":"0.48","blus":0.48,"sfsp":0.48},
+  {"sec":"V","code":"3002","cat":"2","ho":"","dec":"","desc":"Boiler House","blus text":"0.32","blus":0.32,"sfsp":0.32},
+  {"sec":"V","code":"3003","cat":"1","ho":"","dec":"","desc":"Dams","blus":0.28,"sfsp":0.28},
+  {"sec":"V","code":"3004","cat":"2","ho":"","dec":"","desc":"Effluent /Sewage Treatment Plant","blus":0.55,"sfsp":0.55},
+  {"sec":"V","code":"3005","cat":"1","ho":"","dec":"","desc":"Electric Sub-Stations, Loco sheds","blus":0.21,"sfsp":0.21},
+  {"sec":"V","code":"3006","cat":"1","ho":"","dec":"","desc":"Electric Transmission / Distribution Lines","blus":0.14,"sfsp":0.14},
+  {"sec":"V","code":"3007","cat":"1","ho":"","dec":"","desc":"Pipe lines (carrying water only)","blus":0.35,"sfsp":0.35},
+  {"sec":"V","code":"3008","cat":"1","ho":"","dec":"","desc":"Pipe lines (others)","blus":0.35,"sfsp":0.35},
+  {"sec":"V","code":"3009","cat":"2","ho":"","dec":"","desc":"Pump House (Water)","blus":0.27,"sfsp":0.27},
+  {"sec":"V","code":"3010","cat":"2","ho":"","dec":"","desc":"Pump House (Others)","blus":1.11,"sfsp":1.11},
+  {"sec":"V","code":"3011","cat":"1","ho":"","dec":"","desc":"Railway tracks","blus text":"0.62","blus":0.62,"sfsp":0.62},
+  {"sec":"V","code":"3012","cat":"1","ho":"","dec":"","desc":"Roads","blus text":"0.43","blus":0.43,"sfsp":0.43},
+  {"sec":"V","code":"3013","cat":"1","ho":"","dec":"","desc":"Water Treatment Plants/ Water Tanks","blus":0.12,"sfsp":0.12},
+  {"sec":"V","code":"3014","cat":"2","ho":"","dec":"","desc":"Wireless Transmitting Stations","blus text":"0.5","blus":0.5,"sfsp":0.5},
+  {"sec":"V","code":"3015","cat":"2","ho":"","dec":"","desc":"Compressor Houses- Compressors handling air, Inert gas and CO2","blus":0.56,"sfsp":0.56},
+  {"sec":"V","code":"3016","cat":"2","ho":"","dec":"","desc":"Compressor Houses- Compressor (others)","blus":1.61,"sfsp":1.61},
+  {"sec":"V","code":"3017","cat":"2","ho":"","dec":"","desc":"Boundary Walls - Made up of Combustible Material","blus text":"1.2","blus":1.2,"sfsp":1.2},
+  {"sec":"V","code":"3018","cat":"1","ho":"","dec":"","desc":"Boundary Walls - Others","blus":0.55,"sfsp":0.55},
+  {"sec":"V","code":"3019","cat":"2","ho":"","dec":"","desc":"Electric Crematoriums","blus":0.48,"sfsp":0.48},
+  {"sec":"VI","code":"4001","cat":"2","ho":"","dec":"","desc":"Storage of Non-hazardous goods(Godowns & Silos) subject to warranty that hazardous goods of Category I, II, III , Coir waste, Coir fibre and Caddies are not stored therein.","blus":0.41,"sfsp":0.41},
+  {"sec":"VI","code":"4002","cat":"2","ho":"","dec":"","desc":"Storage of Category I hazardous Goods (Godowns & Silos) subject to warranty that goods listed in Category II, III, Coir waste, Coir fibre and Caddies are not stored therein.","blus text":"0.85","blus":0.85,"sfsp":0.85},
+  {"sec":"VI","code":"4003","cat":"3","ho":"","dec":"","desc":"Storage of hazardous Goods listed in Category II(Godowns & Silos) subject to warranty that goods listed in Category III, Coir waste, Coir fibre and Caddies are not stored therein.","blus text":"1.89","blus":1.89,"sfsp":1.89},
+  {"sec":"VI","code":"4004","cat":"3","ho":"","dec":"","desc":"Storage of hazardous Goods listed in Category III(Godowns & Silos) subject to warranty that Coir waste, Coir fibre and , Caddies are not stored therein.","blus":2.82,"sfsp":2.82},
+  {"sec":"VI","code":"4005","cat":"2","ho":"","dec":"","desc":"Transporter’s godowns (Godowns & Silos)& Godowns of clearing and forwarding agents.","blus":0.65,"sfsp":0.65},
+  {"sec":"VI","code":"4012","cat":"2","ho":"","dec":"","desc":"Storage of Non-hazardous goods(open) subject to warranty that hazardous goods of Category I, II, III , Coir waste, Coir fibre and Caddies are not stored therein.","blus":1.48,"sfsp":1.48},
+  {"sec":"VI","code":"4013","cat":"2","ho":"","dec":"","desc":"Storage of Category I hazardous Goods(open) subject to warranty that goods listed in Category II, III, Coir waste, Coir fibre and Caddies are not stored therein.","blus":1.63,"sfsp":1.63},
+  {"sec":"VI","code":"4014","cat":"3","ho":"","dec":"","desc":"Storage of hazardous Goods listed in Category II(open) subject to warranty that goods listed in Category III, Coir waste, Coir fibre and Caddies are not stored therein.","blus text":"4.06","blus":4.06,"sfsp":4.06},
+  {"sec":"VI","code":"4015","cat":"3","ho":"","dec":"","desc":"Storage of hazardous Goods listed in Category III (open) subject to warranty that Coir waste, Coir fibre and , Caddies are not stored therein.","blus text":"3.81","blus":3.81,"sfsp":3.81},
+  {"sec":"VI","code":"4016","cat":"2","ho":"","dec":"","desc":"Transporter’s godowns(open) & Godowns of clearing and forwarding agents.","blus":0.61,"sfsp":0.61},
+  {"sec":"VI","code":"4006","cat":"3","ho":"","dec":"","desc":"Storage of Coir Waste(Godowns & Silos) ,Coir Fibre, Caddies","blus":3.89,"sfsp":3.89},
+  {"sec":"VI","code":"4007","cat":"2","ho":"","dec":"","desc":"Cold Storage premises","blus":0.97,"sfsp":0.97},
+  {"sec":"VI","code":"4017","cat":"3","ho":"","dec":"","desc":"Storage of Coir Waste(open) ,Coir Fibre, Caddies","blus text":"9.02","blus":9.02,"sfsp":9.02},
+  {"sec":"VI","code":"4018","cat":"2","ho":"","dec":"","desc":"Bus Terminus","blus":2.38,"sfsp":2.38},
+  {"sec":"VI","code":"4019","cat":"2","ho":"","dec":"","desc":"Vehicles stored in open including Tractors","blus":2.11,"sfsp":2.11},
+  {"sec":"VI","code":"4008","cat":"2","ho":"","dec":"","desc":"Gas Holders/ Bullets/spheres and storages for liquified gases except for Nitrogen, Carbon dioxide and inert gases","blus text":"2.04","blus":2.04,"sfsp":2.04},
+  {"sec":"VI","code":"4009","cat":"2","ho":"","dec":"","desc":"Gas Holders/ Vessels for Nitrogen, Carbon dioxide and inert gases","blus":0.92,"sfsp":0.92},
+  {"sec":"VI","code":"4010","cat":"3","ho":"","dec":"","desc":"Tanks containing liquids flashing at 32 0C and below","blus":1.28,"sfsp":1.28},
+  {"sec":"VI","code":"4011","cat":"2","ho":"","dec":"","desc":"Tanks (others)","blus text":"0.61","blus text":"0.61","blus":0.61,"sfsp":0.61},
+  {"sec":"IV","code":"2215","cat":"3","ho":"","dec":"","desc":"Pilot Plants","blus":0.0,"sfsp":0.0}
+];
 
 function renderHazardousGoodsTable() {
     const tbody = document.getElementById('hazardousGoodsTableBody');
@@ -950,6 +1244,7 @@ function adjustLayoutRules() {
     Array.from(eqZone.options).forEach(opt => {
         if(opt.value === "0") opt.style.display = (selectedPolicyType === 'BLUS') ? 'none' : '';
     });
+    // Fallback if changing away from SFSP and "0" is selected (now the default handles to 0.05)
     if((selectedPolicyType === 'BLUS') && eqZone.value === "0") eqZone.value = "0.05";
 
     Array.from(stfiToggle.options).forEach(opt => {
@@ -1096,21 +1391,20 @@ function runCalculation() {
         }
         
         let category = 0; let section = "IV"; let targetRiskCodeStr = "";
-        
-        if (bsusIndexVal !== "" && typeof bsusRateSchedule !== 'undefined') {
+        if (bsusIndexVal !== "") {
             const record = bsusRateSchedule[parseInt(bsusIndexVal)];
             category = record.cat; section = record.sec.trim(); targetRiskCodeStr = record.code ? record.code.trim() : "";
         }
 
         let catModifierWeight = 0; let flexaModLabel = "0.00 %";
-        if (category == 1) { catModifierWeight = -0.25; flexaModLabel = "-25.00 %"; }
-        else if (category == 2) { catModifierWeight = -0.10; flexaModLabel = "-10.00 %"; }
-        else if (category == 3) { catModifierWeight = 0.25;  flexaModLabel = "+25.00 %"; }
-        else if (category == 4) { catModifierWeight = 1.60;  flexaModLabel = "+160.00 %"; }
+        if (category === 1) { catModifierWeight = -0.25; flexaModLabel = "-25.00 %"; }
+        else if (category === 2) { catModifierWeight = -0.10; flexaModLabel = "-10.00 %"; }
+        else if (category === 3) { catModifierWeight = 0.25;  flexaModLabel = "+25.00 %"; }
+        else if (category === 4) { catModifierWeight = 1.60;  flexaModLabel = "+160.00 %"; }
 
         let flexaRate = 0;
         if (isBsusManual) flexaRate = parseFloat(document.getElementById('bsusManualRateValue').value) || 0;
-        else if (bsusIndexVal !== "" && typeof bsusRateSchedule !== 'undefined') flexaRate = bsusRateSchedule[parseInt(bsusIndexVal)].rate;
+        else if (bsusIndexVal !== "") flexaRate = bsusRateSchedule[parseInt(bsusIndexVal)].rate;
         
         const prem1 = Math.round(M * flexaRate);
         document.getElementById('br_rate_1').innerText = flexaRate.toFixed(4);
@@ -1383,15 +1677,13 @@ document.getElementById('floaterToggle').addEventListener('change', function() {
 document.addEventListener('change', function(e) {
     if (e.target.classList.contains('survey-toggle')) {
         const row = e.target.closest('tr');
-        if (typeof safetySurveyQuestionsConfig !== 'undefined') {
-            const configItem = safetySurveyQuestionsConfig[Array.from(row.parentNode.querySelectorAll('tr')).indexOf(row)];
-            if (configItem) {
-                let val = configItem.type === "yes_no" ? configItem.values[e.target.value] : parseFloat(e.target.value) || 0;
-                row.querySelector('.survey-rate-weight').value = val;
-                let display = row.querySelector('.survey-rate-weight-text');
-                display.innerText = (val >= 0 ? "+" : "") + val.toFixed(2) + " %";
-                display.style.color = val < 0 ? "var(--success)" : (val > 0 ? "var(--danger)" : "#475569");
-            }
+        const configItem = safetySurveyQuestionsConfig[Array.from(row.parentNode.querySelectorAll('tr')).indexOf(row)];
+        if (configItem) {
+            let val = configItem.type === "yes_no" ? configItem.values[e.target.value] : parseFloat(e.target.value) || 0;
+            row.querySelector('.survey-rate-weight').value = val;
+            let display = row.querySelector('.survey-rate-weight-text');
+            display.innerText = (val >= 0 ? "+" : "") + val.toFixed(2) + " %";
+            display.style.color = val < 0 ? "var(--success)" : (val > 0 ? "var(--danger)" : "#475569");
         }
         runCalculation();
     }
@@ -1399,8 +1691,8 @@ document.addEventListener('change', function(e) {
 
 document.addEventListener('click', function(e) {
     if (!e.target.closest('.search-container')) {
-        if(document.getElementById('bsusAutocompleteList')) document.getElementById('bsusAutocompleteList').classList.add('hidden');
-        if(document.getElementById('autocompleteResultsList')) document.getElementById('autocompleteResultsList').classList.add('hidden');
+        document.getElementById('bsusAutocompleteList').classList.add('hidden');
+        document.getElementById('autocompleteResultsList').classList.add('hidden');
     }
 });
 
