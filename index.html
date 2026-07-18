@@ -184,6 +184,11 @@
                             <tr class="bsus-highlight-row"><td>NET TOTAL</td><td id="br_rate_3" class="text-right">0.0000</td><td id="br_prem_3" class="text-right">0</td></tr>
                             <tr><td class="bsus-row-heading">KUTCHA ADD 4 PER MILLE</td><td id="br_rate_4" class="text-right">0.0000</td><td id="br_prem_4" class="text-right">0</td></tr>
                             <tr class="bsus-highlight-row"><td>TOTAL</td><td id="br_rate_5" class="text-right">0.0000</td><td id="br_prem_5" class="text-right">0</td></tr>
+                            
+                            <!-- MOVED SURVEY ROW AND ADDED "A" TOTAL -->
+                            <tr><td class="bsus-row-heading">NET DISC/LOAD – Answer 9 Q’s under Good/Bad Features</td><td id="br_survey_factor_rate" class="text-right">0.00 %</td><td id="br_survey_factor_prem" class="text-right">0</td></tr>
+                            <tr class="bsus-highlight-row"><td>A NET ADJUSTED RATE</td><td id="br_rate_A" class="text-right">0.0000</td><td id="br_prem_A" class="text-right">0</td></tr>
+
                             <tr>
                                 <td class="bsus-row-heading">B ADJUSTED EQ RATE 
                                     <select id="bsus_eq_zone_select" class="bsus-select-field" style="padding: 2px 4px; font-size: 0.78rem; width: 90px; margin: 0; display: inline-block; margin-left: 10px;">
@@ -205,159 +210,8 @@
                                 </td>
                                 <td id="br_rate_14" class="text-right">0.0000</td><td id="br_prem_14" class="text-right">0</td>
                             </tr>
-                            <tr><td class="bsus-row-heading">NET DISC/LOAD – Answer 9 Q’s under Good/Bad Features</td><td id="br_survey_factor_rate" class="text-right">0.00 %</td><td id="br_survey_factor_prem" class="text-right">0</td></tr>
                             <tr class="bsus-final-row"><td>FINAL NET RATE</td><td id="br_rate_15" class="text-right">0.0000</td><td id="br_prem_15" class="text-right">0</td></tr>
                         </tbody>
-                    </table>
-
-                    <h3 style="color: #b45309; font-size: 0.95rem; border-bottom: 2px solid #f59e0b; padding-bottom: 4px; margin-top: 15px; margin-bottom: 8px;">Good / Bad Safety Feature Modifiers Survey</h3>
-                    <table class="bsus-table-layout" style="font-size: 0.75rem;">
-                        <thead>
-                            <tr style="background-color: #fef3c7;">
-                                <th style="width: 30px; text-align: center; background-color:#fef3c7;">Sl</th>
-                                <th style="background-color:#fef3c7;">SAFETY RISK FACTOR PARAMETERS</th>
-                                <th style="width: 100px; text-align: center; background-color:#fef3c7;">STATUS</th>
-                                <th style="width: 100px; text-align: right; background-color:#fef3c7; padding-right: 15px;">MODIFIER %</th>
-                            </tr>
-                        </thead>
-                        <tbody id="bsusDynamicFeaturesTbody"></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div id="standardCommercialControlsContainer">
-                <div class="form-group distinct-label" id="bgrRateContainer">
-                    <label for="bgrRateOption" id="label-bgrRateOption">3. BGR Basic Rate Option</label>
-                    <select id="bgrRateOption">
-                        <option value="0.06">Without terrorism @ 0.06 per mille (Incl of EQ, STFI)</option>
-                        <option value="0.11" selected>With terrorism @ 0.11 per mille (Incl of EQ, STFI)</option>
-                    </select>
-                </div>
-
-                <div class="form-group id-commercial distinct-label hidden" id="manualRateOptionContainer">
-                    <label for="enterRateManuallyToggle">2. Enter Rate Manually?</label>
-                    <select id="enterRateManuallyToggle">
-                        <option value="no" selected>No (Use Excel Occupancy Table)</option>
-                        <option value="yes">Yes (Manual Entry Overrides Table)</option>
-                    </select>
-                </div>
-
-                <div class="form-group hidden" id="manualRateInputContainer">
-                    <label for="manualRateValue">Custom Basic Rate (per mille)</label>
-                    <input type="number" id="manualRateValue" placeholder="e.g. 0.75" step="0.001" value="">
-                </div>
-
-                <div class="form-group id-commercial distinct-label hidden" id="occupancyContainer">
-                    <label for="occupancySearch">3. Occupancy / Risk Selection (Search by Code or Keyword)</label>
-                    <div class="search-flex-row">
-                        <div class="search-container">
-                            <input type="text" id="occupancySearch" placeholder="Type code or risk description (e.g. 2140, Paint factories)..." autocomplete="off" style="width: 100%;">
-                            <div id="autocompleteResultsList" class="autocomplete-results hidden"></div>
-                        </div>
-                        <button type="button" class="btn-clear" onclick="fireSearchClearAction('STANDARD')">CLEAR</button>
-                    </div>
-                    <input type="hidden" id="selectedOccupancyIndex" value="">
-                    
-                    <div id="metaBox" class="meta-container hidden" style="grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 14px;">
-                        <div class="meta-item"><span class="meta-label">RATE</span><span id="meta-rate" class="meta-value">-</span></div>
-                        <div class="meta-item"><span class="meta-label">RISK CODE</span><span id="meta-code" class="meta-value">-</span></div>
-                        <div class="meta-item"><span class="meta-label">SECTION</span><span id="meta-section" class="meta-value">-</span></div>
-                        <div class="meta-item"><span class="meta-label">CATEGORY</span><span id="meta-category" class="meta-value">-</span></div>
-                        <div class="meta-item"><span class="meta-label">H.O APPROVAL IF ANY</span><span id="meta-ho" class="meta-value" style="color: var(--danger); font-weight: bold;">-</span></div>
-                        <div class="meta-item"><span class="meta-label">DECLINED RISK IF ANY</span><span id="meta-declined" class="meta-value" style="color: var(--danger); font-weight: bold;">-</span></div>
-                    </div>
-                </div>
-
-                <div class="form-group id-commercial distinct-label hidden" id="floaterContainer">
-                    <label for="floaterToggle">4. Floater Policy Option</label>
-                    <select id="floaterToggle">
-                        <option value="no">No (Single Location Policy)</option>
-                        <option value="yes">Yes, Apply Floater Loading (+10% on Stock-Floating S.I. only)</option>
-                    </select>
-                </div>
-            </div>
-
-            <div id="standardCommercialControlsContainer2">
-                <div class="form-group distinct-label" id="basicDiscountContainer">
-                    <label for="basicDiscountValue" id="label-basicDiscountValue">4. Discount (-) or Loading (+) on Basic Premium (%)</label>
-                    <input type="number" id="basicDiscountValue" placeholder="e.g. -10 for 10% discount, +5 for loading" value="0" step="0.01">
-                    <span id="basicDiscountHint" class="help-text hidden" style="margin-top: 6px;"></span>
-                </div>
-
-                <div id="eqCoverContainer" class="form-group id-commercial distinct-label hidden">
-                    <label for="eqZone">7. Earthquake (EQ) Cover Zone</label>
-                    <select id="eqZone">
-                        <option value="0">NO EQ COVER NEEDED</option>
-                        <option value="0.50">Zone I @ 0.50 per mille</option>
-                        <option value="0.25">Zone II @ 0.25 per mille</option>
-                        <option value="0.10">Zone III @ 0.10 per mille</option>
-                        <option value="0.05" selected>Zone IV @ 0.05 per mille (Default)</option>
-                    </select>
-                </div>
-
-                <div id="stfiCoverContainer" class="form-group id-commercial hidden distinct-label">
-                    <label for="stfiToggle">8. STFI Cover Option</label>
-                    <select id="stfiToggle">
-                        <option value="0">NO STFI COVER NEEDED</option>
-                        <option value="0.22">SECTION III NON INDUSTRIAL @ 0.22 per mille</option>
-                        <option value="0.37" selected>SECTION IV, V, VII @ 0.37 per mille</option>
-                        <option value="0.52">SECTION VI NOT STORED IN OPEN @ 0.52 per mille</option>
-                        <option value="2.25">SECTION VI STORED IN OPEN @ 2.25 per mille</option>
-                    </select>
-                </div>
-
-                <div id="natcatDiscountContainer" class="form-group id-commercial hidden distinct-label">
-                    <label for="natcatDiscountToggle">9. Discount on NATCAT Premium (%)</label>
-                    <select id="natcatDiscountToggle">
-                        <option value="0" selected>0% (No Discount)</option>
-                        <option value="15">15% Discount</option>
-                        <option value="25">25% Discount</option>
-                        <option value="50">50% Discount</option>
-                    </select>
-                    <span id="natcatDiscountHint" class="help-text hidden" style="margin-top: 6px;"></span>
-                </div>
-
-                <div id="terrorismContainer" class="form-group id-commercial hidden distinct-label">
-                    <label for="terrorismToggle">10. Terrorism Cover Options</label>
-                    <select id="terrorismToggle">
-                        <option value="0">NO TERRORISM COVER NEEDED</option>
-                        <option value="0.13">NON INDUSTRIAL @ 0.13 per mille</option>
-                        <option value="0.21" selected>INDUSTRIAL @ 0.21 per mille</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-
-        <div>
-            <div id="premiumWorkingPanel" class="panel">
-                <h2>Premium Working Summary Ledger</h2>
-                <div id="visible-summary-container" style="background-color: #f8fafc; border: 1px solid var(--border); padding: 12px 10px; border-radius: 6px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; font-weight: bold; color: var(--primary);">
-                    <span>TOTAL SUM INSURED</span>
-                    <span id="visible-summary-si">0</span>
-                </div>
-                
-                <table id="premiumTable">
-                    <thead>
-                        <tr><th>Line Item Description</th><th>Rate / Basis</th><th class="text-right">Premium (₹)</th></tr>
-                    </thead>
-                    <tbody>
-                        <tr style="display: none;"><td style="font-weight: bold; color: var(--primary);">TOTAL SUM INSURED</td><td>-</td><td id="row-summary-si" class="text-right" style="font-weight: bold; color: var(--primary);">0</td></tr>
-                        <tr id="right_row_basic"><td id="lbl-basic-prem">BASIC PREMIUM</td><td id="rate-basic">0.00</td><td id="prem-basic" class="text-right">0</td></tr>
-                        <tr id="row-floater" class="hidden"><td>FLOATER LOADING</td><td id="rate-floater">10.00% on Stock-Floating S.I.</td><td id="prem-floater" class="text-right">0</td></tr>
-                        <tr id="row-kutcha" class="hidden"><td>LOADING FOR KUTCHA CONSTRUCTION</td><td id="rate-kutcha">4.00 per mille on S.I.</td><td id="prem-kutcha" class="text-right">0</td></tr>
-                        <tr class="subtotal-row" id="right_row_total_a"><td id="lbl-total-a">A TOTAL</td><td>-</td><td id="total-a" class="text-right">0</td></tr>
-                        <tr id="right_row_discount"><td>DISCOUNT / LOADING ON BASIC PREMIUM</td><td id="rate-discount">0.00%</td><td id="prem-discount" class="text-right">0</td></tr>
-                        <tr class="subtotal-row" id="right_row_total_b"><td>B TOTAL</td><td>-</td><td id="total-b" class="text-right">0</td></tr>
-                        <tr class="row-natcat hidden"><td>ADD EARTHQUAKE COVER</td><td id="rate-eq">0.00</td><td id="prem-eq" class="text-right">0</td></tr>
-                        <tr class="row-natcat hidden"><td>ADD STFI COVER</td><td id="rate-stfi">0.00</td><td id="prem-stfi" class="text-right">0</td></tr>
-                        <tr class="subtotal-row row-natcat hidden"><td>C TOTAL EQ & STFI PREMIUM</td><td>-</td><td id="total-c" class="text-right">0</td></tr>
-                        <tr class="row-natcat hidden"><td>DISCOUNT ON NATCAT</td><td id="rate-natcat-disc">0.00%</td><td id="prem-natcat-disc" class="text-right">0</td></tr>
-                        <tr class="subtotal-row row-natcat hidden"><td>D TOTAL</td><td>-</td><td id="total-d" class="text-right">0</td></tr>
-                        <tr id="row-terrorism-line" class="hidden"><td>TERRORISM COVER</td><td id="rate-terrorism">0.00</td><td id="prem-terrorism" class="text-right">0</td></tr>
-                        <tr class="subtotal-row"><td id="right_net_premium_label">E TOTAL (NET PREMIUM)</td><td>-</td><td id="total-e" class="text-right">0</td></tr>
-                        <tr><td>GST (18%)</td><td>18.00%</td><td id="prem-gst" class="text-right">0</td></tr>
-                        <tr class="final-row"><td>PREMIUM PAYABLE</td><td>-</td><td id="total-payable" class="text-right">0</td></tr>
-                    </tbody>
                 </table>
             </div>
 
@@ -379,9 +233,9 @@
         <div class="search-flex-row" style="margin-bottom: 14px;">
             <div style="width: 250px;">
                 <select id="hazardousCategorySelect" style="width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 6px; font-weight: bold; color: var(--primary);">
-                    <option value="cat1">Category I (Standard Items)</option>
-                    <option value="cat2">Category II (Standard Items)</option>
-                    <option value="cat3">Category III (Standard Items)</option>
+                    <option value="cat1">Category I </option>
+                    <option value="cat2">Category II </option>
+                    <option value="cat3">Category III </option>
                 </select>
             </div>
             <div class="search-container" style="flex: 1;">
@@ -1289,208 +1143,144 @@ function adjustLayoutRules() {
         if(labelBgrRate) labelBgrRate.innerHTML = "BGR Basic Rate Option";
         if(labelDiscount) labelDiscount.innerHTML = "6. Discount (-) or Loading (+) on Basic Premium (%)";
 
-        if (selectedPolicyType === 'BSUS') {
-            if (terrorismOptOutContainer) terrorismOptOutContainer.classList.remove('hidden');
-        } else {
-            if (terrorismOptOutContainer) terrorismOptOutContainer.classList.add('hidden'); 
-        }
-    }
-
-    if (selectedPolicyType === 'BLUS') {
-        if(basicDiscountHint) { basicDiscountHint.innerText = "(1-100%, 2-100%, 3-100%, 4-100%)"; basicDiscountHint.classList.remove('hidden'); }
-        if(natcatDiscountHint) { natcatDiscountHint.innerText = "(1-50%, 2-25%, 3-15%, 4-0%)"; natcatDiscountHint.classList.remove('hidden'); }
-    } else if (selectedPolicyType === 'SFSP') {
-        if(basicDiscountHint) { basicDiscountHint.innerText = "(1-100%, 2-100%, 3-50%, 4-0%)"; basicDiscountHint.classList.remove('hidden'); }
-        if(natcatDiscountHint) { natcatDiscountHint.innerText = "(1-50%, 2-0%, 3-0%, 4-0%)"; natcatDiscountHint.classList.remove('hidden'); }
-    } else {
-        if(basicDiscountHint) basicDiscountHint.classList.add('hidden');
-        if(natcatDiscountHint) natcatDiscountHint.classList.add('hidden');
-    }
-
-    if (selectedPolicyType === 'BSUS') {
-        stdControls1.classList.add('hidden');
-        stdControls2.classList.add('hidden');
-        bsusSection.classList.remove('hidden');
-        document.getElementById('right_row_basic').classList.add('hidden');
-        document.getElementById('right_row_total_a').classList.add('hidden');
-        document.getElementById('right_row_discount').classList.add('hidden');
-        document.getElementById('right_row_total_b').classList.add('hidden');
-        document.getElementById('right_net_premium_label').innerText = "FINAL BSUS NET PREMIUM";
-        natcatRows.forEach(row => row.classList.add('hidden'));
-        rowTerrorismLine.classList.add('hidden');
-    } else {
-        stdControls1.classList.remove('hidden');
-        stdControls2.classList.remove('hidden');
-        bsusSection.classList.add('hidden');
-        document.getElementById('right_row_basic').classList.remove('hidden');
-        document.getElementById('right_row_total_a').classList.remove('hidden');
-        document.getElementById('right_row_discount').classList.remove('hidden');
-        document.getElementById('right_row_total_b').classList.remove('hidden');
-        document.getElementById('right_net_premium_label').innerText = "E TOTAL (NET PREMIUM)";
-
-        if (selectedPolicyType === 'BGR') {
-            bgrRateContainer.classList.remove('hidden');
-            commercialElements.forEach(el => el.classList.add('hidden'));
-            natcatRows.forEach(row => row.classList.add('hidden'));
-            rowTerrorismLine.classList.add('hidden');
-        } else {
-            bgrRateContainer.classList.add('hidden');
-            commercialElements.forEach(el => el.classList.remove('hidden'));
-            rowTerrorismLine.classList.remove('hidden');
-            natcatRows.forEach(row => row.classList.remove('hidden'));
-        }
-    }
-
-    const eqZone = document.getElementById('eqZone');
-    const stfiToggle = document.getElementById('stfiToggle');
-    const terrToggle = document.getElementById('terrorismToggle');
-
-    Array.from(eqZone.options).forEach(opt => {
-        if(opt.value === "0") opt.style.display = (selectedPolicyType === 'BLUS') ? 'none' : '';
-    });
-    if((selectedPolicyType === 'BLUS') && eqZone.value === "0") eqZone.value = "0.05";
-
-    Array.from(stfiToggle.options).forEach(opt => {
-        if(opt.value === "0") opt.style.display = (selectedPolicyType === 'BLUS') ? 'none' : '';
-    });
-    if((selectedPolicyType === 'BLUS') && stfiToggle.value === "0") stfiToggle.value = "0.37";
-
-    Array.from(terrToggle.options).forEach(opt => {
-        if(opt.value === "0") opt.style.display = '';
-    });
-
-    evaluateRowVisibility();
-    runCalculation();
-}
-
-function evaluateRowVisibility() {
-    const constType = document.getElementById('construction').value;
-    const rowKutcha = document.getElementById('row-kutcha');
-    const kutchaHelp = document.getElementById('kutchaHelpText');
-    if (constType === 'kutcha') {
-        if (selectedPolicyType !== 'BSUS') rowKutcha.classList.remove('hidden');
-        kutchaHelp.classList.remove('hidden');
-    } else {
-        rowKutcha.classList.add('hidden');
-        kutchaHelp.classList.add('hidden');
-    }
-    const rowFloater = document.getElementById('row-floater');
-    const floaterVal = document.getElementById('floaterToggle').value;
-    if (selectedPolicyType !== 'BGR' && selectedPolicyType !== 'BSUS' && floaterVal === 'yes') {
-        rowFloater.classList.remove('hidden');
-    } else {
-        rowFloater.classList.add('hidden');
-    }
-    const enterRateManually = document.getElementById('enterRateManuallyToggle').value;
-    const manualRateInputContainer = document.getElementById('manualRateInputContainer');
-    if (enterRateManually === 'yes') {
-        manualRateInputContainer.classList.remove('hidden');
-    } else {
-        manualRateInputContainer.classList.add('hidden');
-    }
-    const bsusEnterRateManually = document.getElementById('bsusEnterRateManuallyToggle').value;
-    const bsusManualRateInputContainer = document.getElementById('bsusManualRateInputContainer');
-    if (bsusEnterRateManually === 'yes') {
-        bsusManualRateInputContainer.classList.remove('hidden');
-    } else {
-        bsusManualRateInputContainer.classList.add('hidden');
-    }
-}
-
-function fireSearchClearAction(type) {
-    if (type === 'BSUS') {
-        document.getElementById('bsusOccupancySearch').value = "";
-        document.getElementById('selectedBsusIndex').value = "";
-        document.getElementById('bsusMetaDisplay').classList.add('hidden');
-        document.getElementById('b-meta-code').innerText = "-";
-        document.getElementById('b-meta-sec').innerText = "-";
-        document.getElementById('b-meta-cat').innerText = "-";
-        document.getElementById('b-meta-rate').innerText = "-";
-    } else if (type === 'STANDARD') {
-        document.getElementById('occupancySearch').value = "";
-        document.getElementById('selectedOccupancyIndex').value = "";
-        document.getElementById('metaBox').classList.add('hidden');
-        document.getElementById('meta-rate').innerText = "-";
-        document.getElementById('meta-code').innerText = "-";
-        document.getElementById('meta-section').innerText = "-";
-        document.getElementById('meta-category').innerText = "-";
-        document.getElementById('meta-ho').innerText = "-";
-        document.getElementById('meta-declined').innerText = "-";
-    }
-    runCalculation();
-}
-
-function calculateAggregateSumInsured() {
-    const building = parseCommasToFloat(document.getElementById('siBuilding').value);
-    const machinery = parseCommasToFloat(document.getElementById('siPlantMachinery').value);
-    const stockRaw = parseCommasToFloat(document.getElementById('siStockRaw').value);
-    const stockProc = parseCommasToFloat(document.getElementById('siStockProcess').value);
-    const fff = parseCommasToFloat(document.getElementById('siFFF').value);
-    const finished = parseCommasToFloat(document.getElementById('siFinishedGoods').value);
-    const other = parseCommasToFloat(document.getElementById('siOtherContents').value);
-    const floating = parseCommasToFloat(document.getElementById('siStockFloating').value);
-    const totalSum = building + machinery + stockRaw + stockProc + fff + finished + other + floating;
-    document.getElementById('sumInsured').value = totalSum.toLocaleString('en-IN');
-    runCalculation();
-}
-
-function runCalculation() {
-    const rawSumValue = document.getElementById('sumInsured').value.toString().replace(/,/g, '');
-    const si = parseFloat(rawSumValue) || 0;
-    const floatingSi = parseCommasToFloat(document.getElementById('siStockFloating').value);
-    const M = si / 1000; 
-
-    const warningBanner = document.getElementById('tierWarningBanner');
-    warningBanner.classList.add('hidden');
-    warningBanner.innerText = "";
-
-    if (selectedPolicyType === 'BSUS') {
-        if (si > 50000000 && si <= 500000000) {
-            warningBanner.innerText = "T.S.I > 5 Cr Choose BLUS";
-            warningBanner.classList.remove('hidden');
-        } else if (si > 500000000) {
-            warningBanner.innerText = "T.S.I > 50 Cr Choose SFSP";
-            warningBanner.classList.remove('hidden');
-        }
-    } else if (selectedPolicyType === 'BLUS') {
-        if (si < 50000000) {
-            warningBanner.innerText = "T.S.I < 5 Cr Choose BSUS";
-            warningBanner.classList.remove('hidden');
-        } else if (si > 500000000) {
-            warningBanner.innerText = "T.S.I > 50 Cr Choose SFSP";
-            warningBanner.classList.remove('hidden');
-        }
-    } else if (selectedPolicyType === 'SFSP') {
-        if (si < 50000000) {
-            warningBanner.innerText = "T.S.I < 5 Cr Choose BSUS";
-            warningBanner.classList.remove('hidden');
-        } else if (si > 50000000 && si <= 500000000) {
-            warningBanner.innerText = "T.S.I >5 Cr & <=50 Cr Choose BLUS";
-            warningBanner.classList.remove('hidden');
-        }
-    }
-
-    const constructionDropdown = document.getElementById('construction');
-    if (selectedPolicyType === 'BSUS' && document.getElementById('bsus_floater_select').value === 'yes') {
-        constructionDropdown.value = 'pucca';
-        constructionDropdown.disabled = true;
-    } else {
-        constructionDropdown.disabled = false;
-    }
-    evaluateRowVisibility();
-
-    const formattedSiText = si.toLocaleString('en-IN');
-    document.getElementById('row-summary-si').innerText = formattedSiText;
-    if (document.getElementById('visible-summary-si')) document.getElementById('visible-summary-si').innerText = formattedSiText;
-
-    if (selectedPolicyType === 'BSUS') {
+       if (selectedPolicyType === 'BSUS') {
         const bsusIndexVal = document.getElementById('selectedBsusIndex').value;
         const isBsusManual = document.getElementById('bsusEnterRateManuallyToggle').value === 'yes';
         
         if (bsusIndexVal === "" && !isBsusManual) {
-            const clearIds = ['br_prem_1', 'br_prem_2', 'br_prem_3', 'br_prem_4', 'br_prem_5', 'br_prem_8', 'br_prem_9', 'br_prem_10', 'br_prem_11', 'br_prem_12', 'br_prem_13', 'br_prem_14', 'br_survey_factor_prem', 'br_prem_15', 'total-e', 'prem-gst', 'total-payable'];
+            const clearIds = ['br_prem_1', 'br_prem_2', 'br_prem_3', 'br_prem_4', 'br_prem_5', 'br_survey_factor_prem', 'br_prem_A', 'br_prem_8', 'br_prem_9', 'br_prem_10', 'br_prem_11', 'br_prem_12', 'br_prem_13', 'br_prem_14', 'br_prem_15', 'total-e', 'prem-gst', 'total-payable'];
             clearIds.forEach(id => { const node = document.getElementById(id); if (node) node.innerText = "0"; });
             return;
+        }
+        
+        let category = 0; let section = "IV"; let targetRiskCodeStr = "";
+        if (bsusIndexVal !== "") {
+            const record = bsusRateSchedule[parseInt(bsusIndexVal)];
+            category = record.cat; section = record.sec.trim(); targetRiskCodeStr = record.code ? record.code.trim() : "";
+        }
+
+        let catModifierWeight = 0; let flexaModLabel = "0.00 %";
+        if (category === 1) { catModifierWeight = -0.25; flexaModLabel = "-25.00 %"; }
+        else if (category === 2) { catModifierWeight = -0.10; flexaModLabel = "-10.00 %"; }
+        else if (category === 3) { catModifierWeight = 0.25;  flexaModLabel = "+25.00 %"; }
+        else if (category === 4) { catModifierWeight = 1.60;  flexaModLabel = "+160.00 %"; }
+
+        let flexaRate = 0;
+        if (isBsusManual) flexaRate = parseFloat(document.getElementById('bsusManualRateValue').value) || 0;
+        else if (bsusIndexVal !== "") flexaRate = bsusRateSchedule[parseInt(bsusIndexVal)].rate;
+        
+        const prem1 = Math.round(M * flexaRate);
+        document.getElementById('br_rate_1').innerText = flexaRate.toFixed(4);
+        document.getElementById('br_prem_1').innerText = prem1.toLocaleString('en-IN');
+
+        const prem2 = Math.round(prem1 * catModifierWeight);
+        document.getElementById('br_rate_2').innerText = flexaModLabel;
+        document.getElementById('br_prem_2').innerText = (prem2 >= 0 ? "+" : "") + prem2.toLocaleString('en-IN');
+
+        const prem3 = Math.round(prem1 + prem2);
+        const rate3 = M > 0 ? (prem3 / M) : 0;
+        document.getElementById('br_rate_3').innerText = rate3.toFixed(4);
+        document.getElementById('br_prem_3').innerText = prem3.toLocaleString('en-IN');
+
+        const isKutcha = document.getElementById('construction').value === 'kutcha';
+        const rate4 = isKutcha ? 4.0000 : 0.0000;
+        const prem4 = Math.round(M * rate4);
+        document.getElementById('br_rate_4').innerText = rate4.toFixed(4);
+        document.getElementById('br_prem_4').innerText = prem4.toLocaleString('en-IN');
+
+        const prem5 = Math.round(prem3 + prem4);
+        const rate5 = M > 0 ? (prem5 / M) : 0;
+        document.getElementById('br_rate_5').innerText = rate5.toFixed(4);
+        document.getElementById('br_prem_5').innerText = prem5.toLocaleString('en-IN');
+
+        // --- NEW LOGIC: SURVEY APPLIES ON TOTAL ---
+        let dynamicFeaturesPctSum = 0;
+        document.querySelectorAll('#bsusDynamicFeaturesTbody tr').forEach(row => {
+            dynamicFeaturesPctSum += parseFloat(row.querySelector('.survey-rate-weight').value) || 0;
+        });
+
+        const survey_prem_mod = Math.round(prem5 * (dynamicFeaturesPctSum / 100));
+        const survey_rate_mod = rate5 * (dynamicFeaturesPctSum / 100);
+
+        document.getElementById('br_survey_factor_rate').innerText = (dynamicFeaturesPctSum >= 0 ? "+" : "") + dynamicFeaturesPctSum.toFixed(2) + " %";
+        document.getElementById('br_survey_factor_prem').innerText = survey_prem_mod.toLocaleString('en-IN');
+
+        // NEW "A NET ADJUSTED RATE"
+        const premA = Math.round(prem5 + survey_prem_mod);
+        const rateA = rate5 + survey_rate_mod;
+        document.getElementById('br_rate_A').innerText = rateA.toFixed(4);
+        document.getElementById('br_prem_A').innerText = premA.toLocaleString('en-IN');
+
+        const chosenZone = document.getElementById('bsus_eq_zone_select').value;
+        let baseUnadjustedEq = 0.05;
+        if (section === "III") {
+            if (chosenZone === "ZONE_I") baseUnadjustedEq = 0.25;
+            else if (chosenZone === "ZONE_II") baseUnadjustedEq = 0.15;
+            else if (chosenZone === "ZONE_III") baseUnadjustedEq = 0.10;
+        } else {
+            if (chosenZone === "ZONE_I") baseUnadjustedEq = 0.50;
+            else if (chosenZone === "ZONE_II") baseUnadjustedEq = 0.25;
+            else if (chosenZone === "ZONE_III") baseUnadjustedEq = 0.10;
+        }
+        
+        const adjustedEqRate = baseUnadjustedEq * (1 + catModifierWeight);
+        const prem8 = Math.round(M * adjustedEqRate);
+        document.getElementById('br_rate_8').innerText = adjustedEqRate.toFixed(4);
+        document.getElementById('br_prem_8').innerText = prem8.toLocaleString('en-IN');
+
+        let baseUnadjustedStfi = 0.25;
+        let numericCodeInt = parseInt(targetRiskCodeStr);
+        if (numericCodeInt >= 4012 && numericCodeInt <= 4019) baseUnadjustedStfi = 1.50;
+        else if (section === "III") baseUnadjustedStfi = 0.15;
+        else if (section === "VI") baseUnadjustedStfi = 0.35;
+        
+        const adjustedStfiRate = baseUnadjustedStfi * (1 + catModifierWeight);
+        const prem9 = Math.round(M * adjustedStfiRate);
+        document.getElementById('br_rate_9').innerText = adjustedStfiRate.toFixed(4);
+        document.getElementById('br_prem_9').innerText = prem9.toLocaleString('en-IN');
+
+        const isTerrorismOptedOut = document.getElementById('terrorismOptOutToggle').value === 'yes';
+        const terrorismRateValue = isTerrorismOptedOut ? 0.0000 : ((section === "III") ? 0.13 : 0.21);
+        const prem10 = Math.round(M * terrorismRateValue);
+        document.getElementById('br_rate_10').innerText = terrorismRateValue.toFixed(4);
+        document.getElementById('br_prem_10').innerText = prem10.toLocaleString('en-IN');
+
+        // TOTAL A + B + C + D uses premA instead of prem5
+        const prem11 = Math.round(premA + prem8 + prem9 + prem10);
+        const rate11 = M > 0 ? (prem11 / M) : 0;
+        document.getElementById('br_rate_11').innerText = rate11.toFixed(4);
+        document.getElementById('br_prem_11').innerText = prem11.toLocaleString('en-IN');
+
+        let discMax10PctVal = parseFloat(document.getElementById('bsus_discount_pct_input').value) || 0;
+        if (discMax10PctVal > 10) { discMax10PctVal = 10; document.getElementById('bsus_discount_pct_input').value = 10; }
+        if (discMax10PctVal < 0) { discMax10PctVal = 0; document.getElementById('bsus_discount_pct_input').value = 0; }
+        
+        const prem12 = Math.round(-1 * (prem11 * (discMax10PctVal / 100)));
+        document.getElementById('br_prem_12').innerText = prem12.toLocaleString('en-IN');
+
+        const prem13 = Math.round(prem11 + prem12);
+        const rate13 = M > 0 ? (prem13 / M) : 0;
+        document.getElementById('br_rate_13').innerText = rate13.toFixed(4);
+        document.getElementById('br_prem_13').innerText = prem13.toLocaleString('en-IN');
+
+        const isFloaterActiveBSUS = document.getElementById('bsus_floater_select').value === 'yes';
+        const prem14 = isFloaterActiveBSUS ? Math.round(((floatingSi / 1000) * rateA) * 0.10) : 0;
+        const rate14 = M > 0 ? (prem14 / M) : 0;
+        document.getElementById('br_rate_14').innerText = rate14.toFixed(4);
+        document.getElementById('br_prem_14').innerText = prem14.toLocaleString('en-IN');
+
+        // FINAL NET RATE
+        const prem15 = Math.round(prem13 + prem14);
+        const rate15 = rate13 + rate14;
+        document.getElementById('br_rate_15').innerText = rate15.toFixed(4);
+        document.getElementById('br_prem_15').innerText = prem15.toLocaleString('en-IN');
+
+        document.getElementById('total-e').innerText = prem15.toLocaleString('en-IN');
+        let gst = Math.round(prem15 * 0.18);
+        document.getElementById('prem-gst').innerText = gst.toLocaleString('en-IN');
+        document.getElementById('total-payable').innerText = Math.round(prem15 + gst).toLocaleString('en-IN');
+        return;
+    
         }
         
         let category = 0; let section = "IV"; let targetRiskCodeStr = "";
