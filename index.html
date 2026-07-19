@@ -129,7 +129,6 @@
             </div>
 
             <div class="form-group distinct-label" id="terrorismOptOutContainer">
-                <!-- Changed to 3 -->
                 <label for="terrorismOptOutToggle">3. Opting out of Terrorism Cover (Flexi) ?</label>
                 <select id="terrorismOptOutToggle">
                     <option value="no" selected>NO</option>
@@ -137,7 +136,94 @@
                 </select>
             </div>
 
-            <!-- Skipped BSUS Section for brevity, going down to Commercial Controls -->
+            <div id="bsusRevampedSection" class="hidden">
+                <div class="bsus-worksheet-panel">
+                    <div class="form-group" id="bsusManualRateOptionContainer" style="margin-bottom: 14px;">
+                        <label for="bsusEnterRateManuallyToggle" style="font-weight: 600; font-size: 0.9rem; color: #0f172a;">Enter Flexa Rate Manually?</label>
+                        <select id="bsusEnterRateManuallyToggle" class="bsus-select-field" style="width: 100%;">
+                            <option value="no" selected>No (Use Table Selection above)</option>
+                            <option value="yes">Yes (Manual Entry Overrides Table)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group hidden" id="bsusManualRateInputContainer" style="margin-bottom: 14px;">
+                        <label for="bsusManualRateValue" style="font-weight: 600; font-size: 0.9rem; color: #0f172a;">Custom Flexa Rate (per mille)</label>
+                        <input type="number" id="bsusManualRateValue" placeholder="e.g. 0.5000" step="0.0001" style="width: 100%; border: 1px solid var(--border); padding: 8px 10px; border-radius: 6px; box-sizing: border-box;">
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 14px;">
+                        <label style="font-weight: 700; color: #0369a1; font-size: 0.95rem;">Select BSUS Occupancy / Risk Schedule Index</label>
+                        <div class="search-flex-row">
+                            <div class="search-container" style="flex: 1;">
+                                <input type="text" id="bsusOccupancySearch" placeholder="Search by description or risk code (e.g. 1002, Libraries)..." autocomplete="off" style="border: 2px solid var(--primary); width: 100%;">
+                                <div id="bsusAutocompleteList" class="autocomplete-results hidden"></div>
+                            </div>
+                            <button type="button" class="btn-clear" onclick="fireSearchClearAction('BSUS')">CLEAR</button>
+                        </div>
+                        <input type="hidden" id="selectedBsusIndex" value="">
+                    </div>
+
+                    <div id="bsusMetaDisplay" class="meta-container hidden" style="margin-bottom: 14px; background-color: #f0f9ff; border-color: #bae6fd;">
+                        <div class="meta-item"><span class="meta-label">Selected Risk Code</span><span id="b-meta-code" class="meta-value" style="color: var(--primary);">-</span></div>
+                        <div class="meta-item"><span class="meta-label">Tariff Schedule Section</span><span id="b-meta-sec" class="meta-value">-</span></div>
+                        <div class="meta-item"><span class="meta-label">Assigned Category</span><span id="b-meta-cat" class="meta-value" style="color: var(--accent); font-size: 1rem;">-</span></div>
+                        <div class="meta-item"><span class="meta-label">Base Flexa Coefficient</span><span id="b-meta-rate" class="meta-value">-</span></div>
+                    </div>
+
+                    <table class="bsus-table-layout">
+                        <thead>
+                            <tr>
+                                <th>LINE ITEM DESCRIPTION</th>
+                                <th style="width: 150px; text-align: right;">RATE</th>
+                                <th style="width: 140px; text-align: right;">PREMIUM (₹)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td class="bsus-row-heading">FLEXA RATE</td><td id="br_rate_1" class="text-right">0.0000</td><td id="br_prem_1" class="text-right">0</td></tr>
+                            <tr><td class="bsus-row-heading">ADJUSTED FLEXA RATE DISC/LOAD</td><td id="br_rate_2" class="text-right">0.00 %</td><td id="br_prem_2" class="text-right">0</td></tr>
+                            <tr class="bsus-highlight-row"><td>NET TOTAL</td><td id="br_rate_3" class="text-right">0.0000</td><td id="br_prem_3" class="text-right">0</td></tr>
+                            <tr><td class="bsus-row-heading">KUTCHA ADD 4 PER MILLE</td><td id="br_rate_4" class="text-right">0.0000</td><td id="br_prem_4" class="text-right">0</td></tr>
+                            <tr class="bsus-highlight-row"><td>TOTAL</td><td id="br_rate_5" class="text-right">0.0000</td><td id="br_prem_5" class="text-right">0</td></tr>
+                            <tr><td class="bsus-row-heading">NET DISC/LOAD – Answer 9 Q’s under Good/Bad Features</td><td id="br_survey_factor_rate" class="text-right">0.00 %</td><td id="br_survey_factor_prem" class="text-right">0</td></tr>
+                            <tr class="bsus-highlight-row" style="background-color: #fef9c3;"><td>A NET ADJUSTED RATE</td><td id="br_rate_6" class="text-right">0.0000</td><td id="br_prem_6" class="text-right">0</td></tr>
+                            <tr>
+                                <td class="bsus-row-heading">B ADJUSTED EQ RATE 
+                                    <select id="bsus_eq_zone_select" class="bsus-select-field" style="padding: 2px 4px; font-size: 0.78rem; width: 90px; margin: 0; display: inline-block; margin-left: 10px;">
+                                        <option value="ZONE_I">Zone I</option><option value="ZONE_II">Zone II</option><option value="ZONE_III">Zone III</option><option value="ZONE_IV" selected>Zone IV</option>
+                                    </select>
+                                </td>
+                                <td id="br_rate_8" class="text-right">0.0000</td><td id="br_prem_8" class="text-right">0</td>
+                            </tr>
+                            <tr><td class="bsus-row-heading">C ADJUSTED STFI RATE</td><td id="br_rate_9" class="text-right">0.0000</td><td id="br_prem_9" class="text-right">0</td></tr>
+                            <tr><td class="bsus-row-heading">D TERRORISM</td><td id="br_rate_10" class="text-right">0.0000</td><td id="br_prem_10" class="text-right">0</td></tr>
+                            <tr class="bsus-highlight-row" style="background-color: #f1f5f9;"><td>TOTAL A + B + C + D</td><td id="br_rate_11" class="text-right">0.0000</td><td id="br_prem_11" class="text-right">0</td></tr>
+                            <tr><td class="bsus-row-heading">DISCRETIONARY DISCOUNT Max 10%</td><td style="text-align: right;"><input type="number" id="bsus_discount_pct_input" class="bsus-input-field" min="0" max="10" step="0.01" value="0" style="padding: 2px; height: 24px;"> %</td><td id="br_prem_12" class="text-right">0</td></tr>
+                            <tr class="bsus-highlight-row" style="background-color: #e0f2fe;"><td>NET AMOUNT</td><td id="br_rate_13" class="text-right">0.0000</td><td id="br_prem_13" class="text-right">0</td></tr>
+                            <tr>
+                                <td class="bsus-row-heading">FLOATER EXTRA 10%
+                                    <select id="bsus_floater_select" class="bsus-select-field" style="padding: 2px; font-size: 0.75rem; width: 75px; display: inline-block; margin-left: 10px;">
+                                        <option value="no" selected>NO</option><option value="yes">YES</option>
+                                    </select>
+                                </td>
+                                <td id="br_rate_14" class="text-right">0.0000</td><td id="br_prem_14" class="text-right">0</td>
+                            </tr>
+                            <tr class="bsus-final-row"><td>FINAL NET RATE</td><td id="br_rate_15" class="text-right">0.0000</td><td id="br_prem_15" class="text-right">0</td></tr>
+                        </tbody>
+                    </table>
+
+                    <table class="bsus-table-layout" style="font-size: 0.75rem; margin-top: 15px;">
+                        <thead>
+                            <tr style="background-color: #fef3c7;">
+                                <th style="width: 30px; text-align: center; background-color:#fef3c7;">Sl</th>
+                                <th style="background-color:#fef3c7;">GOOD / BAD FEATURES</th>
+                                <th style="width: 100px; text-align: center; background-color:#fef3c7;">STATUS</th>
+                                <th style="width: 100px; text-align: right; background-color:#fef3c7; padding-right: 15px;">MODIFIER %</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bsusDynamicFeaturesTbody"></tbody>
+                    </table>
+                </div>
+            </div>
 
             <div id="standardCommercialControlsContainer">
                 <div class="form-group distinct-label" id="bgrRateContainer">
@@ -149,7 +235,6 @@
                 </div>
 
                 <div class="form-group id-commercial distinct-label hidden" id="manualRateOptionContainer">
-                    <!-- Changed to 3 -->
                     <label for="enterRateManuallyToggle">3. Enter Rate Manually?</label>
                     <select id="enterRateManuallyToggle">
                         <option value="no" selected>No (Use Excel Occupancy Table)</option>
@@ -163,7 +248,6 @@
                 </div>
 
                 <div class="form-group id-commercial distinct-label hidden" id="occupancyContainer">
-                    <!-- Changed to 4 -->
                     <label for="occupancySearch">4. Occupancy / Risk Selection (Search by Code or Keyword)</label>
                     <div class="search-flex-row">
                         <div class="search-container">
@@ -174,11 +258,17 @@
                     </div>
                     <input type="hidden" id="selectedOccupancyIndex" value="">
                     
-                    <!-- Meta box omitted for brevity -->
+                    <div id="metaBox" class="meta-container hidden" style="grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 14px;">
+                        <div class="meta-item"><span class="meta-label">RATE</span><span id="meta-rate" class="meta-value">-</span></div>
+                        <div class="meta-item"><span class="meta-label">RISK CODE</span><span id="meta-code" class="meta-value">-</span></div>
+                        <div class="meta-item"><span class="meta-label">SECTION</span><span id="meta-section" class="meta-value">-</span></div>
+                        <div class="meta-item"><span class="meta-label">CATEGORY</span><span id="meta-category" class="meta-value">-</span></div>
+                        <div class="meta-item"><span class="meta-label">H.O APPROVAL IF ANY</span><span id="meta-ho" class="meta-value" style="color: var(--danger); font-weight: bold;">-</span></div>
+                        <div class="meta-item"><span class="meta-label">DECLINED RISK IF ANY</span><span id="meta-declined" class="meta-value" style="color: var(--danger); font-weight: bold;">-</span></div>
+                    </div>
                 </div>
 
                 <div class="form-group id-commercial distinct-label hidden" id="floaterContainer">
-                    <!-- Changed to 5 -->
                     <label for="floaterToggle">5. Floater Policy Option</label>
                     <select id="floaterToggle">
                         <option value="no">No (Single Location Policy)</option>
@@ -1169,10 +1259,7 @@ function adjustLayoutRules() {
     } else {
         hazPanel.classList.remove('hidden');
         floatingInput.disabled = false;
-        
-        // CHANGED: Keeps construction at 2. for non-BGR policies
-        if(labelConstruction) labelConstruction.innerHTML = "2. Construction Type"; 
-        
+        if(labelConstruction) labelConstruction.innerHTML = "2. Construction Type";
         if(labelBgrRate) labelBgrRate.innerHTML = "BGR Basic Rate Option";
         if(labelDiscount) labelDiscount.innerHTML = "6. Discount (-) or Loading (+) on Basic Premium (%)";
 
