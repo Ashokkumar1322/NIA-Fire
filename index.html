@@ -184,6 +184,8 @@
                             <tr class="bsus-highlight-row"><td>NET TOTAL</td><td id="br_rate_3" class="text-right">0.0000</td><td id="br_prem_3" class="text-right">0</td></tr>
                             <tr><td class="bsus-row-heading">KUTCHA ADD 4 PER MILLE</td><td id="br_rate_4" class="text-right">0.0000</td><td id="br_prem_4" class="text-right">0</td></tr>
                             <tr class="bsus-highlight-row"><td>TOTAL</td><td id="br_rate_5" class="text-right">0.0000</td><td id="br_prem_5" class="text-right">0</td></tr>
+                            <tr><td class="bsus-row-heading">NET DISC/LOAD – Answer 9 Q’s under Good/Bad Features</td><td id="br_survey_factor_rate" class="text-right">0.00 %</td><td id="br_survey_factor_prem" class="text-right">0</td></tr>
+                            <tr class="bsus-highlight-row" style="background-color: #fef9c3;"><td>A NET ADJUSTED RATE</td><td id="br_rate_6" class="text-right">0.0000</td><td id="br_prem_6" class="text-right">0</td></tr>
                             <tr>
                                 <td class="bsus-row-heading">B ADJUSTED EQ RATE 
                                     <select id="bsus_eq_zone_select" class="bsus-select-field" style="padding: 2px 4px; font-size: 0.78rem; width: 90px; margin: 0; display: inline-block; margin-left: 10px;">
@@ -205,17 +207,15 @@
                                 </td>
                                 <td id="br_rate_14" class="text-right">0.0000</td><td id="br_prem_14" class="text-right">0</td>
                             </tr>
-                            <tr><td class="bsus-row-heading">NET DISC/LOAD – Answer 9 Q’s under Good/Bad Features</td><td id="br_survey_factor_rate" class="text-right">0.00 %</td><td id="br_survey_factor_prem" class="text-right">0</td></tr>
                             <tr class="bsus-final-row"><td>FINAL NET RATE</td><td id="br_rate_15" class="text-right">0.0000</td><td id="br_prem_15" class="text-right">0</td></tr>
                         </tbody>
                     </table>
 
-                    <h3 style="color: #b45309; font-size: 0.95rem; border-bottom: 2px solid #f59e0b; padding-bottom: 4px; margin-top: 15px; margin-bottom: 8px;">Good / Bad Safety Feature Modifiers Survey</h3>
-                    <table class="bsus-table-layout" style="font-size: 0.75rem;">
+                    <table class="bsus-table-layout" style="font-size: 0.75rem; margin-top: 15px;">
                         <thead>
                             <tr style="background-color: #fef3c7;">
                                 <th style="width: 30px; text-align: center; background-color:#fef3c7;">Sl</th>
-                                <th style="background-color:#fef3c7;">SAFETY RISK FACTOR PARAMETERS</th>
+                                <th style="background-color:#fef3c7;">GOOD / BAD FEATURES</th>
                                 <th style="width: 100px; text-align: center; background-color:#fef3c7;">STATUS</th>
                                 <th style="width: 100px; text-align: right; background-color:#fef3c7; padding-right: 15px;">MODIFIER %</th>
                             </tr>
@@ -376,15 +376,15 @@
             <p style="margin: 0;"><strong>CATEGORY-III</strong> Explosives, Materials which are self ignitable, Flammable liquids having flash point up to 32 C, Strong Oxiding Agents, Combustible gases, Waste of category II & III materials.</p>
         </div>
 
-        <div class="search-flex-row" style="margin-bottom: 14px;">
-            <div style="width: 250px;">
+        <div class="search-flex-row" style="margin-bottom: 14px; flex-wrap: wrap;">
+            <div style="flex: 1 1 250px; min-width: 200px; max-width: 100%;">
                 <select id="hazardousCategorySelect" style="width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 6px; font-weight: bold; color: var(--primary);">
-                    <option value="cat1">Category I (Standard Items)</option>
-                    <option value="cat2">Category II (Standard Items)</option>
-                    <option value="cat3">Category III (Standard Items)</option>
+                    <option value="cat1">Category I</option>
+                    <option value="cat2">Category II</option>
+                    <option value="cat3">Category III</option>
                 </select>
             </div>
-            <div class="search-container" style="flex: 1;">
+            <div class="search-container" style="flex: 2 1 300px; min-width: 200px;">
                 <input type="text" id="hazardousGoodsSearchInput" placeholder="Type to search within selected category (e.g. Amber, Paint)..." style="width: 100%; padding: 10px 12px 10px 35px; border: 1px solid var(--border); border-radius: 6px; box-sizing: border-box; font-size: 0.9rem;">
             </div>
         </div>
@@ -1488,7 +1488,7 @@ function runCalculation() {
         const isBsusManual = document.getElementById('bsusEnterRateManuallyToggle').value === 'yes';
         
         if (bsusIndexVal === "" && !isBsusManual) {
-            const clearIds = ['br_prem_1', 'br_prem_2', 'br_prem_3', 'br_prem_4', 'br_prem_5', 'br_prem_8', 'br_prem_9', 'br_prem_10', 'br_prem_11', 'br_prem_12', 'br_prem_13', 'br_prem_14', 'br_survey_factor_prem', 'br_prem_15', 'total-e', 'prem-gst', 'total-payable'];
+            const clearIds = ['br_prem_1', 'br_prem_2', 'br_prem_3', 'br_prem_4', 'br_prem_5', 'br_prem_6', 'br_prem_8', 'br_prem_9', 'br_prem_10', 'br_prem_11', 'br_prem_12', 'br_prem_13', 'br_prem_14', 'br_survey_factor_prem', 'br_prem_15', 'total-e', 'prem-gst', 'total-payable'];
             clearIds.forEach(id => { const node = document.getElementById(id); if (node) node.innerText = "0"; });
             return;
         }
@@ -1533,6 +1533,23 @@ function runCalculation() {
         document.getElementById('br_rate_5').innerText = rate5.toFixed(4);
         document.getElementById('br_prem_5').innerText = prem5.toLocaleString('en-IN');
 
+        // NEW LOGIC: Calculate survey modifier directly on TOTAL (prem5)
+        let dynamicFeaturesPctSum = 0;
+        document.querySelectorAll('#bsusDynamicFeaturesTbody tr').forEach(row => {
+            dynamicFeaturesPctSum += parseFloat(row.querySelector('.survey-rate-weight').value) || 0;
+        });
+
+        const survey_prem_mod = Math.round(prem5 * (dynamicFeaturesPctSum / 100));
+        const survey_rate_mod = rate5 * (dynamicFeaturesPctSum / 100);
+
+        document.getElementById('br_survey_factor_rate').innerText = (dynamicFeaturesPctSum >= 0 ? "+" : "") + dynamicFeaturesPctSum.toFixed(2) + " %";
+        document.getElementById('br_survey_factor_prem').innerText = survey_prem_mod.toLocaleString('en-IN');
+
+        const prem6 = Math.round(prem5 + survey_prem_mod);
+        const rate6 = rate5 + survey_rate_mod;
+        document.getElementById('br_rate_6').innerText = rate6.toFixed(4);
+        document.getElementById('br_prem_6').innerText = prem6.toLocaleString('en-IN');
+
         const chosenZone = document.getElementById('bsus_eq_zone_select').value;
         let baseUnadjustedEq = 0.05;
         if (section === "III") {
@@ -1567,7 +1584,7 @@ function runCalculation() {
         document.getElementById('br_rate_10').innerText = terrorismRateValue.toFixed(4);
         document.getElementById('br_prem_10').innerText = prem10.toLocaleString('en-IN');
 
-        const prem11 = Math.round(prem5 + prem8 + prem9 + prem10);
+        const prem11 = Math.round(prem6 + prem8 + prem9 + prem10); // Now adding prem6 (A Net Adjusted)
         const rate11 = M > 0 ? (prem11 / M) : 0;
         document.getElementById('br_rate_11').innerText = rate11.toFixed(4);
         document.getElementById('br_prem_11').innerText = prem11.toLocaleString('en-IN');
@@ -1590,22 +1607,9 @@ function runCalculation() {
         document.getElementById('br_rate_14').innerText = rate14.toFixed(4);
         document.getElementById('br_prem_14').innerText = prem14.toLocaleString('en-IN');
 
-        const subtotal_prem = Math.round(prem13 + prem14);
-        const subtotal_rate = rate13 + rate14;
+        const prem15 = Math.round(prem13 + prem14); // Final Net Rate calculation
+        const rate15 = rate13 + rate14;
 
-        let dynamicFeaturesPctSum = 0;
-        document.querySelectorAll('#bsusDynamicFeaturesTbody tr').forEach(row => {
-            dynamicFeaturesPctSum += parseFloat(row.querySelector('.survey-rate-weight').value) || 0;
-        });
-
-        const survey_prem_mod = Math.round(subtotal_prem * (dynamicFeaturesPctSum / 100));
-        const survey_rate_mod = subtotal_rate * (dynamicFeaturesPctSum / 100);
-
-        document.getElementById('br_survey_factor_rate').innerText = (dynamicFeaturesPctSum >= 0 ? "+" : "") + dynamicFeaturesPctSum.toFixed(2) + " %";
-        document.getElementById('br_survey_factor_prem').innerText = survey_prem_mod.toLocaleString('en-IN');
-
-        const prem15 = Math.round(subtotal_prem + survey_prem_mod);
-        const rate15 = subtotal_rate + survey_rate_mod;
         document.getElementById('br_rate_15').innerText = rate15.toFixed(4);
         document.getElementById('br_prem_15').innerText = prem15.toLocaleString('en-IN');
 
