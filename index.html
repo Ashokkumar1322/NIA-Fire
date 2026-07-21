@@ -136,7 +136,34 @@
                 </select>
             </div>
 
-            <div id="bsusMetaDisplay" class="meta-container hidden" style="margin-bottom: 14px; background-color: #f0f9ff; border-color: #bae6fd;">
+            <div id="bsusRevampedSection" class="hidden">
+                <div class="bsus-worksheet-panel">
+                    <div class="form-group" id="bsusManualRateOptionContainer" style="margin-bottom: 14px;">
+                        <label for="bsusEnterRateManuallyToggle" style="font-weight: 600; font-size: 0.9rem; color: #0f172a;">Enter Flexa Rate Manually?</label>
+                        <select id="bsusEnterRateManuallyToggle" class="bsus-select-field" style="width: 100%;">
+                            <option value="no" selected>No (Use Table Selection below)</option>
+                            <option value="yes">Yes (Manual Entry Overrides Table)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group hidden" id="bsusManualRateInputContainer" style="margin-bottom: 14px;">
+                        <label for="bsusManualRateValue" style="font-weight: 600; font-size: 0.9rem; color: #0f172a;">Custom Flexa Rate (per mille)</label>
+                        <input type="number" id="bsusManualRateValue" placeholder="e.g. 0.5000" step="0.0001" style="width: 100%; border: 1px solid var(--border); padding: 8px 10px; border-radius: 6px; box-sizing: border-box;">
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 14px;">
+                        <label style="font-weight: 700; color: #0369a1; font-size: 0.95rem;">Select BSUS Occupancy / Risk Schedule Index</label>
+                        <div class="search-flex-row">
+                            <div class="search-container" style="flex: 1;">
+                                <input type="text" id="bsusOccupancySearch" placeholder="Search by description or risk code (e.g. 1002, Libraries)..." autocomplete="off" style="border: 2px solid var(--primary); width: 100%;">
+                                <div id="bsusAutocompleteList" class="autocomplete-results hidden"></div>
+                            </div>
+                            <button type="button" class="btn-clear" onclick="fireSearchClearAction('BSUS')">CLEAR</button>
+                        </div>
+                        <input type="hidden" id="selectedBsusIndex" value="">
+                    </div>
+
+                    <div id="bsusMetaDisplay" class="meta-container hidden" style="margin-bottom: 14px; background-color: #f0f9ff; border-color: #bae6fd;">
                         <div class="meta-item"><span class="meta-label">Selected Risk Code</span><span id="b-meta-code" class="meta-value" style="color: var(--primary);">-</span></div>
                         <div class="meta-item"><span class="meta-label">Tariff Schedule Section</span><span id="b-meta-sec" class="meta-value">-</span></div>
                         <div class="meta-item"><span class="meta-label">Assigned Category</span><span id="b-meta-cat" class="meta-value" style="color: var(--accent); font-size: 1rem;">-</span></div>
@@ -1560,10 +1587,10 @@ function runCalculation() {
         document.getElementById('br_rate_15').innerText = rate15.toFixed(4);
         document.getElementById('br_prem_15').innerText = prem15.toLocaleString('en-IN');
 
-        document.getElementById('total-e').innerText = Math.round(prem15).toLocaleString('en-IN', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+        document.getElementById('total-e').innerText = Math.round(prem15).toLocaleString('en-IN');
         let gst = Math.round(prem15 * 0.18);
-        document.getElementById('prem-gst').innerText = Math.round(gst).toLocaleString('en-IN', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
-        document.getElementById('total-payable').innerText = Math.round(prem15 + gst).toLocaleString('en-IN', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+        document.getElementById('prem-gst').innerText = Math.round(gst).toLocaleString('en-IN');
+        document.getElementById('total-payable').innerText = Math.round(prem15 + gst).toLocaleString('en-IN');
         return;
     }
 
