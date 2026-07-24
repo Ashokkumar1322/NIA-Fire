@@ -1302,14 +1302,15 @@ function adjustLayoutRules() {
         document.getElementById('right_row_total_a').classList.remove('hidden');
         document.getElementById('right_row_discount').classList.remove('hidden');
         document.getElementById('right_row_total_b').classList.remove('hidden');
-        document.getElementById('right_net_premium_label').innerText = "E TOTAL (NET PREMIUM)";
 
         if (selectedPolicyType === 'BGR') {
+            document.getElementById('right_net_premium_label').innerText = "TOTAL (NET PREMIUM)";
             bgrRateContainer.classList.remove('hidden');
             commercialElements.forEach(el => el.classList.add('hidden'));
             natcatRows.forEach(row => row.classList.add('hidden'));
             rowTerrorismLine.classList.add('hidden');
         } else {
+            document.getElementById('right_net_premium_label').innerText = "E TOTAL (NET PREMIUM)";
             bgrRateContainer.classList.add('hidden');
             commercialElements.forEach(el => el.classList.remove('hidden'));
             rowTerrorismLine.classList.remove('hidden');
@@ -1691,12 +1692,12 @@ function runCalculation() {
         document.getElementById('prem-terrorism').innerText = terrorismPrem.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
 
-    let totalE = totalD + terrorismPrem;
-    document.getElementById('total-e').innerText = totalE.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    let totalE = Math.round(totalD + terrorismPrem);
+    document.getElementById('total-e').innerText = totalE.toLocaleString('en-IN');
 
-    let gst = totalE * 0.18;
-    document.getElementById('prem-gst').innerText = gst.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    document.getElementById('total-payable').innerText = (totalE + gst).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    let gst = Math.round(totalE * 0.18);
+    document.getElementById('prem-gst').innerText = gst.toLocaleString('en-IN');
+    document.getElementById('total-payable').innerText = (totalE + gst).toLocaleString('en-IN');
 }
 
 function exportToExcel() {
