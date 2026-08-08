@@ -1510,6 +1510,38 @@ function runCalculation() {
         document.getElementById('br_rate_5').innerText = rate5.toFixed(4);
         document.getElementById('br_prem_5').innerText = prem5.toLocaleString('en-IN');
 
+        // --- NEW CATEGORY-BASED CLAIMS RATIO LOGIC START ---
+        const tbody = document.getElementById('bsusDynamicFeaturesTbody');
+        if (tbody && tbody.children.length > 5) {
+            const claimsRow = tbody.children[5]; // 6th row is "Past 3 - years claims ratio"
+            const claimsSelect = claimsRow.querySelector('select');
+            if (claimsSelect) {
+                const selectedOptionIndex = parseInt(claimsSelect.value); // 0 to 4
+                let claimsMod = 0;
+                
+                // Modifier logic based on Assigned Category
+                const claimsMatrix = {
+                    1: [-20, -20, 0, 10, 50],
+                    2: [-20, -20, 0, 10, 50],
+                    3: [-30, -20, 0, 10, 50],
+                    4: [-55, -20, 0, 10, 50]
+                };
+                
+                if (category >= 1 && category <= 4) {
+                    claimsMod = claimsMatrix[category][selectedOptionIndex];
+                } else {
+                    const defaultVals = [-30, -20, 0, 10, 50]; // fallback
+                    claimsMod = defaultVals[selectedOptionIndex];
+                }
+                
+                claimsRow.querySelector('.survey-rate-weight').value = claimsMod;
+                const display = claimsRow.querySelector('.survey-rate-weight-text');
+                display.innerText = (claimsMod >= 0 ? "+" : "") + claimsMod.toFixed(2) + " %";
+                display.style.color = claimsMod < 0 ? "var(--success)" : (claimsMod > 0 ? "var(--danger)" : "#475569");
+            }
+        }
+        // --- NEW CATEGORY-BASED CLAIMS RATIO LOGIC END ---
+
         // NEW LOGIC: Calculate survey modifier directly on TOTAL (prem5)
         let dynamicFeaturesPctSum = 0;
         document.querySelectorAll('#bsusDynamicFeaturesTbody tr').forEach(row => {
