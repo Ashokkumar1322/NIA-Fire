@@ -1284,6 +1284,10 @@ function adjustLayoutRules() {
     }
 
     if (selectedPolicyType === 'BSUS') {
+        // This hides the Excel button only for BSUS
+        const excelBtn = document.querySelector('.btn-excel');
+        if (excelBtn) excelBtn.classList.add('hidden');
+        
         stdControls1.classList.add('hidden');
         stdControls2.classList.add('hidden');
         bsusSection.classList.remove('hidden');
@@ -1295,6 +1299,10 @@ function adjustLayoutRules() {
         natcatRows.forEach(row => row.classList.add('hidden'));
         rowTerrorismLine.classList.add('hidden');
     } else {
+        // This ensures the Excel button comes back for all other policies
+        const excelBtn = document.querySelector('.btn-excel');
+        if (excelBtn) excelBtn.classList.remove('hidden');
+        
         stdControls1.classList.remove('hidden');
         stdControls2.classList.remove('hidden');
         bsusSection.classList.add('hidden');
