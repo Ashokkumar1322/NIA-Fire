@@ -1556,6 +1556,22 @@ function runCalculation() {
             dynamicFeaturesPctSum += parseFloat(row.querySelector('.survey-rate-weight').value) || 0;
         });
 
+        // Apply maximum discount caps based on Risk Category
+        if (dynamicFeaturesPctSum < 0) {
+            let maxDiscount = 0;
+            if (category === 1 || category === 2) {
+                maxDiscount = -50;
+            } else if (category === 3) {
+                maxDiscount = -70;
+            } else if (category === 4) {
+                maxDiscount = -95;
+            }
+            
+            if (maxDiscount !== 0 && dynamicFeaturesPctSum < maxDiscount) {
+                dynamicFeaturesPctSum = maxDiscount;
+            }
+        }
+
         const survey_prem_mod = Math.round(prem5 * (dynamicFeaturesPctSum / 100));
         const survey_rate_mod = rate5 * (dynamicFeaturesPctSum / 100);
 
