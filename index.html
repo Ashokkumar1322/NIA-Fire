@@ -1661,7 +1661,7 @@ function runCalculation() {
         document.getElementById('br_prem_13').innerText = prem13.toLocaleString('en-IN');
 
         const isFloaterActiveBSUS = document.getElementById('bsus_floater_select').value === 'yes';
-        const prem14 = isFloaterActiveBSUS ? Math.round(((floatingSi / 1000) * rate5) * 0.10) : 0;
+        const prem14 = (isFloaterActiveBSUS && floatingSi > 0) ? Math.round(prem13 * 0.10) : 0;
         const rate14 = M > 0 ? (prem14 / M) : 0;
         document.getElementById('br_rate_14').innerText = rate14.toFixed(4);
         document.getElementById('br_prem_14').innerText = prem14.toLocaleString('en-IN');
@@ -1706,31 +1706,13 @@ function runCalculation() {
     document.getElementById('rate-basic').innerText = basicRateText;
     document.getElementById('prem-basic').innerText = basicPrem.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-    let floaterPrem = 0;
-    if (selectedPolicyType !== 'BGR' && document.getElementById('floaterToggle').value === 'yes') {
-        let activeRate = 0;
-        if (document.getElementById('enterRateManuallyToggle').value === 'yes') {
-            activeRate = parseFloat(document.getElementById('manualRateValue').value) || 0;
-        } else {
-            const occIndex = document.getElementById('selectedOccupancyIndex').value;
-            if (occIndex !== "") {
-                const record = standardRates[occIndex];
-                activeRate = selectedPolicyType === 'BLUS' ? record.blus : record.sfsp;
-            }
-        }
-        floaterPrem = ((floatingSi / 1000) * activeRate) * 0.10;
-        document.getElementById('prem-floater').innerText = floaterPrem.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    } else {
-        document.getElementById('prem-floater').innerText = "0.00";
-    }
-
     let kutchaPrem = 0;
     if (document.getElementById('construction').value === 'kutcha') {
         kutchaPrem = M * 4;
         document.getElementById('prem-kutcha').innerText = kutchaPrem.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
 
-    let totalA = basicPrem + floaterPrem + kutchaPrem;
+    let totalA = basicPrem + kutchaPrem;
     document.getElementById('total-a').innerText = totalA.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
     let discPct = parseFloat(document.getElementById('basicDiscountValue').value) || 0;
@@ -1774,12 +1756,19 @@ function runCalculation() {
         document.getElementById('prem-terrorism').innerText = terrorismPrem.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
 
-    let totalE = Math.round(totalD + terrorismPrem);
-    document.getElementById('total-e').innerText = totalE.toLocaleString('en-IN');
+    let netPremBeforeFloater = totalD + terrorismPrem;
+    let floaterPrem = 0;
+    if (selectedPolicyType !== 'BGR' && document.getElementById('floaterToggle').value === 'yes' && floatingSi > 0) {
+        floaterPrem = netPremBeforeFloater * 0.10;
+        document.getElementById('rate-floater').innerText = "10.00% on Net Premium";
+        document.getElementById('prem-floater').innerText = floaterPrem.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    } else {
+        document.getElementById('rate-floater').innerText = "10.00% on Net Premium";
+        document.getElementById('prem-floater').innerText = "0.00";
+    }
 
-    let gst = Math.round(totalE * 0.18);
-    document.getElementById('prem-gst').innerText = gst.toLocaleString('en-IN');
-    document.getElementById('total-payable').innerText = (totalE + gst).toLocaleString('en-IN');
+    let totalE = Math.round(netPremBeforeFloater + floaterPrem);
+    document.getElementById('total-e').innerText = totalE.toLocaleString('en-IN');
 }
 
 function exportToExcel() {
