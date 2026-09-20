@@ -1345,7 +1345,7 @@ function adjustLayoutRules() {
     });
 
     evaluateRowVisibility();
-    runCalculation();
+    calculateAggregateSumInsured();
 }
 
 function evaluateRowVisibility() {
@@ -1405,7 +1405,33 @@ function fireSearchClearAction(type) {
     runCalculation();
 }
 
+function checkFloatingStockRestriction() {
+    const otherHeads = [
+        'siBuilding', 'siPlantMachinery', 'siStockRaw', 
+        'siStockProcess', 'siFFF', 'siFinishedGoods', 'siOtherContents'
+    ];
+    const floatingVal = parseCommasToFloat(document.getElementById('siStockFloating').value);
+
+    if (selectedPolicyType !== 'BGR' && floatingVal > 0) {
+        otherHeads.forEach(id => {
+            const input = document.getElementById(id);
+            if (input) {
+                input.value = "0";
+                input.disabled = true;
+            }
+        });
+    } else {
+        otherHeads.forEach(id => {
+            const input = document.getElementById(id);
+            if (input) {
+                input.disabled = false;
+            }
+        });
+    }
+}
+
 function calculateAggregateSumInsured() {
+    checkFloatingStockRestriction();
     const building = parseCommasToFloat(document.getElementById('siBuilding').value);
     const machinery = parseCommasToFloat(document.getElementById('siPlantMachinery').value);
     const stockRaw = parseCommasToFloat(document.getElementById('siStockRaw').value);
