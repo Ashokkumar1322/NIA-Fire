@@ -1769,6 +1769,10 @@ function runCalculation() {
 
     let totalE = Math.round(netPremBeforeFloater + floaterPrem);
     document.getElementById('total-e').innerText = totalE.toLocaleString('en-IN');
+
+    let gst = Math.round(totalE * 0.18);
+    document.getElementById('prem-gst').innerText = gst.toLocaleString('en-IN');
+    document.getElementById('total-payable').innerText = (totalE + gst).toLocaleString('en-IN');
 }
 
 function exportToExcel() {
