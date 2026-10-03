@@ -158,7 +158,7 @@
                                 <input type="text" id="bsusOccupancySearch" placeholder="Search by description or risk code (e.g. 1002, Libraries)..." autocomplete="off" style="border: 2px solid var(--primary); width: 100%;">
                                 <div id="bsusAutocompleteList" class="autocomplete-results hidden"></div>
                             </div>
-                            <button type="button" class="btn-clear" onclick="fireSearchClearAction('BSUS')">CLEAR</button>
+                            <button type="button" class="btn-clear" onclick="fireSearchClearAction('BSUS')">CLEAR ALL</button>
                         </div>
                         <input type="hidden" id="selectedBsusIndex" value="">
                     </div>
@@ -256,7 +256,8 @@
                             <input type="text" id="occupancySearch" placeholder="Type code or risk description (e.g. 2140, Paint factories)..." autocomplete="off" style="width: 100%;">
                             <div id="autocompleteResultsList" class="autocomplete-results hidden"></div>
                         </div>
-                        <button type="button" class="btn-clear" onclick="fireSearchClearAction('STANDARD')">CLEAR</button>
+                        <button type="button" class="btn-clear" onclick="fireSearchClearAction('STANDARD')">CLEAR ALL</button>
+
                     </div>
                     <input type="hidden" id="selectedOccupancyIndex" value="">
                     
@@ -1391,6 +1392,7 @@ function evaluateRowVisibility() {
 }
 
 function fireSearchClearAction(type) {
+    // 1. Reset risk occupancy search inputs & meta displays
     if (type === 'BSUS') {
         document.getElementById('bsusOccupancySearch').value = "";
         document.getElementById('selectedBsusIndex').value = "";
@@ -1410,7 +1412,49 @@ function fireSearchClearAction(type) {
         document.getElementById('meta-ho').innerText = "-";
         document.getElementById('meta-declined').innerText = "-";
     }
-    runCalculation();
+
+    // 2. Reset all Asset Value Breakup fields
+    const assetIds = ['siBuilding', 'siPlantMachinery', 'siStockRaw', 'siStockProcess', 'siFFF', 'siFinishedGoods', 'siOtherContents', 'siStockFloating'];
+    assetIds.forEach(id => {
+        const input = document.getElementById(id);
+        if (input) input.value = "0";
+    });
+
+    // 3. Reset construction & terrorism opt-out toggles
+    if (document.getElementById('construction')) document.getElementById('construction').value = "pucca";
+    if (document.getElementById('terrorismOptOutToggle')) document.getElementById('terrorismOptOutToggle').value = "no";
+
+    // 4. Reset manual rate entry options
+    if (document.getElementById('enterRateManuallyToggle')) document.getElementById('enterRateManuallyToggle').value = "no";
+    if (document.getElementById('manualRateValue')) document.getElementById('manualRateValue').value = "";
+    if (document.getElementById('bsusEnterRateManuallyToggle')) document.getElementById('bsusEnterRateManuallyToggle').value = "no";
+    if (document.getElementById('bsusManualRateValue')) document.getElementById('bsusManualRateValue').value = "";
+
+    // 5. Reset BSUS calculator options
+    if (document.getElementById('bsus_eq_zone_select')) document.getElementById('bsus_eq_zone_select').value = "ZONE_IV";
+    if (document.getElementById('bsus_discount_pct_input')) document.getElementById('bsus_discount_pct_input').value = "0";
+    if (document.getElementById('bsus_floater_select')) document.getElementById('bsus_floater_select').value = "no";
+
+    // 6. Reset Standard/Commercial calculator options
+    if (document.getElementById('bgrRateOption')) document.getElementById('bgrRateOption').value = "0.11";
+    if (document.getElementById('basicDiscountValue')) document.getElementById('basicDiscountValue').value = "0";
+    if (document.getElementById('eqZone')) document.getElementById('eqZone').value = "0.05";
+    if (document.getElementById('stfiToggle')) document.getElementById('stfiToggle').value = "0.37";
+    if (document.getElementById('natcatDiscountToggle')) document.getElementById('natcatDiscountToggle').value = "0";
+    if (document.getElementById('terrorismToggle')) document.getElementById('terrorismToggle').value = "0.21";
+    if (document.getElementById('floaterToggle')) document.getElementById('floaterToggle').value = "no";
+
+    // 7. Reset Safety Survey questions
+    if (typeof initializeSafetySurvey === 'function') initializeSafetySurvey();
+
+    // 8. Reset Quotation Details
+    if (document.getElementById('custName')) document.getElementById('custName').value = "";
+    if (document.getElementById('busOffice')) document.getElementById('busOffice').value = "";
+    if (document.getElementById('busContact')) document.getElementById('busContact').value = "";
+
+    // 9. Update UI layout rules & recalculate aggregate S.I.
+    evaluateRowVisibility();
+    calculateAggregateSumInsured();
 }
 
 function checkFloatingStockRestriction() {
@@ -1789,10 +1833,10 @@ function exportToPDF() {
     const busContact = document.getElementById('busContact').value.trim() || '-------------------';
     
     let policyNameStr = "";
-    if (selectedPolicyType === 'BGR') policyNameStr = "BHARAT GRIHA RAKSHA (BGR)";
-    else if (selectedPolicyType === 'BSUS') policyNameStr = "BHARAT SOOKSHMA UDYAM SURAKSHA (BSUS)";
-    else if (selectedPolicyType === 'BLUS') policyNameStr = "BHARAT LAGHU UDYAM SURAKSHA (BLUS)";
-    else if (selectedPolicyType === 'SFSP') policyNameStr = "STANDARD FIRE AND SPECIAL PERILS (SFSP)";
+    if (selectedPolicyType === 'BGR') policyNameStr = "BHARAT GRIHA RAKSHA (BGR) POLICY";
+    else if (selectedPolicyType === 'BSUS') policyNameStr = "BHARAT SOOKSHMA UDYAM SURAKSHA (BSUS) POLICY";
+    else if (selectedPolicyType === 'BLUS') policyNameStr = "BHARAT LAGHU UDYAM SURAKSHA (BLUS) POLICY";
+    else if (selectedPolicyType === 'SFSP') policyNameStr = "STANDARD FIRE AND SPECIAL PERILS (SFSP) POLICY";
 
     let occupancyStr = "";
     if (selectedPolicyType === 'BGR') {
