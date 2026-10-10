@@ -1967,7 +1967,8 @@ function exportToPDF() {
     if (selectedPolicyType === 'BGR') {
         coversIncluded.push("Earthquake (EQ) Cover");
         coversIncluded.push("STFI Cover");
-        if (document.getElementById('bgrRateOption').value === "0.11") {
+        const bgrType = document.getElementById('bgrActiveType') ? document.getElementById('bgrActiveType').value : 'with_terr';
+        if (bgrType === "with_terr") {
             coversIncluded.push("Terrorism Cover");
         }
     } else if (selectedPolicyType === 'BSUS') {
@@ -1998,10 +1999,14 @@ function exportToPDF() {
     pdfContainer.style.backgroundColor = "#ffffff";
     pdfContainer.style.fontSize = "12px";
     pdfContainer.style.lineHeight = "1.5";
-    
-    // Force a fixed desktop width for html2canvas so mobile doesn't crush the layout
     pdfContainer.style.width = "800px";
     pdfContainer.style.boxSizing = "border-box";
+
+    // Position at (0,0) so html2canvas computes layout, but z-index pushes it behind the page so it remains invisible to the user
+    pdfContainer.style.position = "fixed";
+    pdfContainer.style.left = "0";
+    pdfContainer.style.top = "0";
+    pdfContainer.style.zIndex = "-9999";
 
     pdfContainer.innerHTML = `
         <div style="text-align: center; border-bottom: 2px solid #0284c7; padding-bottom: 12px; margin-bottom: 20px;">
@@ -2088,15 +2093,18 @@ function exportToPDF() {
         </div>
     `;
 
+    document.body.appendChild(pdfContainer);
+
     html2pdf().set({
         margin: 10,
         filename: `NIA_Premium_Quotation_${selectedPolicyType}.pdf`,
         image: { type: 'jpeg', quality: 0.98 },
-        // Use windowWidth to force html2canvas to render at the desktop width we set above
         html2canvas: { scale: 2, useCORS: true, scrollY: 0, scrollX: 0, windowWidth: 800 },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
         pagebreak: { mode: ['avoid-all', 'css'] }
-    }).from(pdfContainer).save();
+    }).from(pdfContainer).save().then(() => {
+        document.body.removeChild(pdfContainer);
+    });
 }
 document.getElementById('bsusOccupancySearch').addEventListener('input', function() { filterBsusAutocomplete(this.value); });
 document.getElementById('occupancySearch').addEventListener('input', function() { handleAutocompleteSearch(this.value); });
