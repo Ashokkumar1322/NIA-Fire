@@ -287,7 +287,7 @@
         <button type="button" id="btnDiscountType" onclick="setDiscountType('discount')" style="flex: 1; padding: 8px; font-weight: bold; border: 2px solid var(--primary); border-radius: 6px; background-color: var(--primary); color: white; cursor: pointer;">Discount (-)</button>
         <button type="button" id="btnLoadingType" onclick="setDiscountType('loading')" style="flex: 1; padding: 8px; font-weight: bold; border: 2px solid var(--border); border-radius: 6px; background-color: #f1f5f9; color: #475569; cursor: pointer;">Loading (+)</button>
     </div>
-    <input type="number" id="basicDiscountValue" placeholder="e.g. 10 for 10%" value="0" min="0" step="0.01">
+    <input type="number" id="basicDiscountValue" placeholder="Enter percentage e.g. 10" value="0" step="0.01">
     <input type="hidden" id="basicDiscountType" value="discount">
     <span id="basicDiscountHint" class="help-text hidden" style="margin-top: 6px;"></span>
 </div>
@@ -1797,7 +1797,7 @@ function runCalculation() {
 document.getElementById('total-a').innerText = totalA.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
 let rawDiscountValue = Math.abs(parseFloat(document.getElementById('basicDiscountValue').value) || 0);
-let discountType = document.getElementById('basicDiscountType').value;
+let discountType = document.getElementById('basicDiscountType') ? document.getElementById('basicDiscountType').value : 'discount';
 let discPct = (discountType === 'discount') ? -rawDiscountValue : rawDiscountValue;
 
 let discountPrem = basicPrem * (discPct / 100);
