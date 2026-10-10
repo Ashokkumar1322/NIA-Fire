@@ -1249,6 +1249,13 @@ function selectPolicy(type, cardElement) {
     cardElement.classList.add('active');
     adjustLayoutRules();
 }
+function selectPolicy(type, cardElement) {
+    selectedPolicyType = type;
+    document.querySelectorAll('.policy-card').forEach(card => card.classList.remove('active'));
+    cardElement.classList.add('active');
+    adjustLayoutRules();
+}
+
 function setDiscountType(type) {
     const typeInput = document.getElementById('basicDiscountType');
     if (!typeInput) return;
@@ -1273,6 +1280,9 @@ function setDiscountType(type) {
     }
     runCalculation();
 }
+
+function adjustLayoutRules() {
+    const stdControls1 = document.getElementById('standardCommercialControlsContainer');
 function adjustLayoutRules() {
     const stdControls1 = document.getElementById('standardCommercialControlsContainer');
     const stdControls2 = document.getElementById('standardCommercialControlsContainer2');
@@ -1308,7 +1318,7 @@ function adjustLayoutRules() {
         floatingInput.disabled = false;
         if(labelConstruction) labelConstruction.innerHTML = "2. Construction Type";
         if(labelBgrRate) labelBgrRate.innerHTML = "BGR Basic Rate Option";
-        if(labelDiscount) labelDiscount.innerHTML = "6. Basic Premium Adjustment (%)";f
+        if(labelDiscount) labelDiscount.innerHTML = "6. Basic Premium Adjustment (%)";
 
         if (selectedPolicyType === 'BSUS') {
             if (terrorismOptOutContainer) terrorismOptOutContainer.classList.remove('hidden');
@@ -1796,10 +1806,10 @@ function runCalculation() {
     let totalA = basicPrem + kutchaPrem;
     document.getElementById('total-a').innerText = totalA.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-    let rawVal = parseFloat(document.getElementById('basicDiscountValue').value) || 0;
-    let absVal = Math.abs(rawVal); // Always ignore if user typed - or +
+    let rawValStr = (document.getElementById('basicDiscountValue').value || "").toString().replace(/[-+eE]/g, '');
+    let rawVal = Math.abs(parseFloat(rawValStr) || 0);
     let discountType = document.getElementById('basicDiscountType') ? document.getElementById('basicDiscountType').value : 'discount';
-    let discPct = (discountType === 'discount') ? -absVal : absVal;
+    let discPct = (discountType === 'discount') ? -rawVal : rawVal;
 
     let discountPrem = basicPrem * (discPct / 100);
     document.getElementById('rate-discount').innerText = (discPct >= 0 ? "+" : "") + discPct.toFixed(2) + "%";
