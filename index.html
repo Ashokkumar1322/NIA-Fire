@@ -229,11 +229,16 @@
 
             <div id="standardCommercialControlsContainer">
                 <div class="form-group distinct-label" id="bgrRateContainer">
-                    <label for="bgrRateOption" id="label-bgrRateOption">3. BGR Basic Rate Option</label>
-                    <select id="bgrRateOption">
-                        <option value="0.06">Without terrorism @ 0.06 per mille (Incl of EQ, STFI)</option>
-                        <option value="0.11" selected>With terrorism @ 0.11 per mille (Incl of EQ, STFI)</option>
-                    </select>
+                    <label id="label-bgrRateOption">3. BGR Basic Rate Option</label>
+                    <div style="display: flex; gap: 8px; margin-bottom: 8px; flex-wrap: wrap;">
+                        <button type="button" id="btnBgrNoTerr" onclick="setBgrRateType('no_terr')" style="flex: 1; min-width: 150px; padding: 8px; font-weight: bold; border: 2px solid var(--border); border-radius: 6px; background-color: #f1f5f9; color: #475569; cursor: pointer; font-size: 0.8rem;">Without terrorism (Incl of EQ, STFI)</button>
+                        <button type="button" id="btnBgrWithTerr" onclick="setBgrRateType('with_terr')" style="flex: 1; min-width: 150px; padding: 8px; font-weight: bold; border: 2px solid var(--primary); border-radius: 6px; background-color: var(--primary); color: white; cursor: pointer; font-size: 0.8rem;">With terrorism (Incl of EQ, STFI)</button>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <span style="font-weight: 600; font-size: 0.85rem;">Rate (per mille):</span>
+                        <input type="number" id="bgrRateOption" value="0.11" step="0.01" style="width: 120px;" oninput="validateBgrRate()">
+                    </div>
+                    <input type="hidden" id="bgrActiveType" value="with_terr">
                 </div>
 
                 <div class="form-group id-commercial distinct-label hidden" id="manualRateOptionContainer">
@@ -1283,8 +1288,47 @@ function setDiscountType(type) {
     runCalculation();
 }
 
+function setBgrRateType(type) {
+    document.getElementById('bgrActiveType').value = type;
+    const btnNoTerr = document.getElementById('btnBgrNoTerr');
+    const btnWithTerr = document.getElementById('btnBgrWithTerr');
+    const rateInput = document.getElementById('bgrRateOption');
+
+    if (type === 'no_terr') {
+        btnNoTerr.style.backgroundColor = 'var(--primary)';
+        btnNoTerr.style.color = 'white';
+        btnNoTerr.style.borderColor = 'var(--primary)';
+        btnWithTerr.style.backgroundColor = '#f1f5f9';
+        btnWithTerr.style.color = '#475569';
+        btnWithTerr.style.borderColor = 'var(--border)';
+        
+        let currentRate = parseFloat(rateInput.value) || 0;
+        if (currentRate < 0.06) rateInput.value = 0.06;
+    } else {
+        btnWithTerr.style.backgroundColor = 'var(--primary)';
+        btnWithTerr.style.color = 'white';
+        btnWithTerr.style.borderColor = 'var(--primary)';
+        btnNoTerr.style.backgroundColor = '#f1f5f9';
+        btnNoTerr.style.color = '#475569';
+        btnNoTerr.style.borderColor = 'var(--border)';
+        
+        let currentRate = parseFloat(rateInput.value) || 0;
+        if (currentRate < 0.11) rateInput.value = 0.11;
+    }
+    runCalculation();
+}
+
+function validateBgrRate() {
+    const type = document.getElementById('bgrActiveType').value;
+    const rateInput = document.getElementById('bgrRateOption');
+    let currentRate = parseFloat(rateInput.value);
+    if (isNaN(currentRate)) return;
+    runCalculation();
+}
+
 function adjustLayoutRules() {
-    const stdControls1 = document.getElementById('standardCommercialControlsContainer');    const stdControls2 = document.getElementById('standardCommercialControlsContainer2');
+    const stdControls1 = document.getElementById('standardCommercialControlsContainer');
+    const stdControls2 = document.getElementById('standardCommercialControlsContainer2');
     const bsusSection = document.getElementById('bsusRevampedSection');
     const commercialElements = document.querySelectorAll('.id-commercial');
     const bgrRateContainer = document.getElementById('bgrRateContainer');
@@ -1771,9 +1815,16 @@ function runCalculation() {
 
     let basicPrem = 0; let basicRateText = "0.00";
     if (selectedPolicyType === 'BGR') {
-        const perMilleRate = parseFloat(document.getElementById('bgrRateOption').value);
-        basicPrem = M * perMilleRate;
-        basicRateText = perMilleRate.toFixed(2) + " per mille";
+        let typedRate = parseFloat(document.getElementById('bgrRateOption').value) || 0;
+        let activeType = document.getElementById('bgrActiveType') ? document.getElementById('bgrActiveType').value : 'with_terr';
+        
+        // Enforce minimums for calculation even if input is lower
+        let finalRate = typedRate;
+        if (activeType === 'no_terr' && typedRate < 0.06) finalRate = 0.06;
+        if (activeType === 'with_terr' && typedRate < 0.11) finalRate = 0.11;
+
+        basicPrem = M * finalRate;
+        basicRateText = finalRate.toFixed(3) + " per mille";
     } else {
         if (document.getElementById('enterRateManuallyToggle').value === 'yes') {
             const manualRate = parseFloat(document.getElementById('manualRateValue').value) || 0;
@@ -1947,6 +1998,10 @@ function exportToPDF() {
     pdfContainer.style.backgroundColor = "#ffffff";
     pdfContainer.style.fontSize = "12px";
     pdfContainer.style.lineHeight = "1.5";
+    
+    // Force a fixed desktop width for html2canvas so mobile doesn't crush the layout
+    pdfContainer.style.width = "800px";
+    pdfContainer.style.boxSizing = "border-box";
 
     pdfContainer.innerHTML = `
         <div style="text-align: center; border-bottom: 2px solid #0284c7; padding-bottom: 12px; margin-bottom: 20px;">
@@ -2037,7 +2092,8 @@ function exportToPDF() {
         margin: 10,
         filename: `NIA_Premium_Quotation_${selectedPolicyType}.pdf`,
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true, scrollY: 0, scrollX: 0 },
+        // Use windowWidth to force html2canvas to render at the desktop width we set above
+        html2canvas: { scale: 2, useCORS: true, scrollY: 0, scrollX: 0, windowWidth: 800 },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
         pagebreak: { mode: ['avoid-all', 'css'] }
     }).from(pdfContainer).save();
