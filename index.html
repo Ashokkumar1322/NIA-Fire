@@ -1302,7 +1302,8 @@ function setBgrRateType(type) {
         btnWithTerr.style.color = '#475569';
         btnWithTerr.style.borderColor = 'var(--border)';
         
-        rateInput.value = "0.06";
+        let currentRate = parseFloat(rateInput.value) || 0;
+        if (currentRate < 0.06) rateInput.value = 0.06;
     } else {
         btnWithTerr.style.backgroundColor = 'var(--primary)';
         btnWithTerr.style.color = 'white';
@@ -1311,7 +1312,8 @@ function setBgrRateType(type) {
         btnNoTerr.style.color = '#475569';
         btnNoTerr.style.borderColor = 'var(--border)';
         
-        rateInput.value = "0.11";
+        let currentRate = parseFloat(rateInput.value) || 0;
+        if (currentRate < 0.11) rateInput.value = 0.11;
     }
     runCalculation();
 }
@@ -1990,18 +1992,6 @@ function exportToPDF() {
     const gstPrem = document.getElementById('prem-gst').innerText;
     const totalPayable = document.getElementById('total-payable').innerText;
 
-    new 2
-===
-
-const wrapper = document.createElement('div');
-    wrapper.style.position = "absolute";
-    wrapper.style.left = "0";
-    wrapper.style.top = "0";
-    wrapper.style.width = "800px";
-    wrapper.style.overflow = "hidden";
-    wrapper.style.height = "0px";
-    wrapper.style.opacity = "0";
-
     const pdfContainer = document.createElement('div');
     pdfContainer.style.padding = "30px 40px";
     pdfContainer.style.fontFamily = "'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
@@ -2011,6 +2001,12 @@ const wrapper = document.createElement('div');
     pdfContainer.style.lineHeight = "1.5";
     pdfContainer.style.width = "800px";
     pdfContainer.style.boxSizing = "border-box";
+
+    // Position at (0,0) so html2canvas computes layout, but z-index pushes it behind the page so it remains invisible to the user
+    pdfContainer.style.position = "fixed";
+    pdfContainer.style.left = "0";
+    pdfContainer.style.top = "0";
+    pdfContainer.style.zIndex = "-9999";
 
     pdfContainer.innerHTML = `
         <div style="text-align: center; border-bottom: 2px solid #0284c7; padding-bottom: 12px; margin-bottom: 20px;">
@@ -2097,18 +2093,17 @@ const wrapper = document.createElement('div');
         </div>
     `;
 
-    wrapper.appendChild(pdfContainer);
-    document.body.appendChild(wrapper);
+    document.body.appendChild(pdfContainer);
 
     html2pdf().set({
         margin: 10,
         filename: `NIA_Premium_Quotation_${selectedPolicyType}.pdf`,
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true, windowWidth: 800 },
+        html2canvas: { scale: 2, useCORS: true, scrollY: 0, scrollX: 0, windowWidth: 800 },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
         pagebreak: { mode: ['avoid-all', 'css'] }
     }).from(pdfContainer).save().then(() => {
-        document.body.removeChild(wrapper);
+        document.body.removeChild(pdfContainer);
     });
 }
 document.getElementById('bsusOccupancySearch').addEventListener('input', function() { filterBsusAutocomplete(this.value); });
