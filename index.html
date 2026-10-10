@@ -282,10 +282,15 @@
 
             <div id="standardCommercialControlsContainer2">
                 <div class="form-group distinct-label" id="basicDiscountContainer">
-                    <label for="basicDiscountValue" id="label-basicDiscountValue">4. Discount (-) or Loading (+) on Basic Premium (%)</label>
-                    <input type="number" id="basicDiscountValue" placeholder="e.g. -10 for 10% discount, +5 for loading" value="0" step="0.01">
-                    <span id="basicDiscountHint" class="help-text hidden" style="margin-top: 6px;"></span>
-                </div>
+    <label id="label-basicDiscountValue">4. Basic Premium Adjustment (%)</label>
+    <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+        <button type="button" id="btnDiscountType" onclick="setDiscountType('discount')" style="flex: 1; padding: 8px; font-weight: bold; border: 2px solid var(--primary); border-radius: 6px; background-color: var(--primary); color: white; cursor: pointer;">Discount (-)</button>
+        <button type="button" id="btnLoadingType" onclick="setDiscountType('loading')" style="flex: 1; padding: 8px; font-weight: bold; border: 2px solid var(--border); border-radius: 6px; background-color: #f1f5f9; color: #475569; cursor: pointer;">Loading (+)</button>
+    </div>
+    <input type="number" id="basicDiscountValue" placeholder="e.g. 10 for 10%" value="0" min="0" step="0.01">
+    <input type="hidden" id="basicDiscountType" value="discount">
+    <span id="basicDiscountHint" class="help-text hidden" style="margin-top: 6px;"></span>
+</div>
 
                 <div id="eqCoverContainer" class="form-group id-commercial distinct-label hidden">
                     <label for="eqZone">7. Earthquake (EQ) Cover Zone</label>
@@ -1242,6 +1247,30 @@ function selectPolicy(type, cardElement) {
     selectedPolicyType = type;
     document.querySelectorAll('.policy-card').forEach(card => card.classList.remove('active'));
     cardElement.classList.add('active');
+function setDiscountType(type) {
+    document.getElementById('basicDiscountType').value = type;
+    const btnDiscount = document.getElementById('btnDiscountType');
+    const btnLoading = document.getElementById('btnLoadingType');
+
+    if (type === 'discount') {
+        btnDiscount.style.backgroundColor = 'var(--primary)';
+        btnDiscount.style.color = 'white';
+        btnDiscount.style.borderColor = 'var(--primary)';
+
+        btnLoading.style.backgroundColor = '#f1f5f9';
+        btnLoading.style.color = '#475569';
+        btnLoading.style.borderColor = 'var(--border)';
+    } else {
+        btnLoading.style.backgroundColor = 'var(--primary)';
+        btnLoading.style.color = 'white';
+        btnLoading.style.borderColor = 'var(--primary)';
+
+        btnDiscount.style.backgroundColor = '#f1f5f9';
+        btnDiscount.style.color = '#475569';
+        btnDiscount.style.borderColor = 'var(--border)';
+    }
+    runCalculation();
+}
     adjustLayoutRules();
 }
 
@@ -1265,23 +1294,22 @@ function adjustLayoutRules() {
     const natcatDiscountHint = document.getElementById('natcatDiscountHint');
 
     if (selectedPolicyType === 'BGR') {
-        hazPanel.classList.add('hidden');
-        floatingInput.disabled = true;
-        if(floatingInput.value !== "0" && floatingInput.value !== "") {
-            floatingInput.value = "0";
-            calculateAggregateSumInsured();
-        }
-        if (terrorismOptOutContainer) terrorismOptOutContainer.classList.add('hidden');
-        if(labelConstruction) labelConstruction.innerHTML = "2. Construction Type";
-        if(labelBgrRate) labelBgrRate.innerHTML = "3. BGR Basic Rate Option";
-        if(labelDiscount) labelDiscount.innerHTML = "4. Discount (-) or Loading (+) on Basic Premium (%)";
-    } else {
-        hazPanel.classList.remove('hidden');
-        floatingInput.disabled = false;
-        if(labelConstruction) labelConstruction.innerHTML = "2. Construction Type";
-        if(labelBgrRate) labelBgrRate.innerHTML = "BGR Basic Rate Option";
-        if(labelDiscount) labelDiscount.innerHTML = "6. Discount (-) or Loading (+) on Basic Premium (%)";
-
+    hazPanel.classList.add('hidden');
+    floatingInput.disabled = true;
+    if(floatingInput.value !== "0" && floatingInput.value !== "") {
+        floatingInput.value = "0";
+        calculateAggregateSumInsured();
+    }
+    if (terrorismOptOutContainer) terrorismOptOutContainer.classList.add('hidden');
+    if(labelConstruction) labelConstruction.innerHTML = "2. Construction Type";
+    if(labelBgrRate) labelBgrRate.innerHTML = "3. BGR Basic Rate Option";
+    if(labelDiscount) labelDiscount.innerHTML = "4. Discount or Loading on Basic Premium (%)";
+} else {
+    hazPanel.classList.remove('hidden');
+    floatingInput.disabled = false;
+    if(labelConstruction) labelConstruction.innerHTML = "2. Construction Type";
+    if(labelBgrRate) labelBgrRate.innerHTML = "BGR Basic Rate Option";
+    if(labelDiscount) labelDiscount.innerHTML = "6. Discount or Loading on Basic Premium (%)";
         if (selectedPolicyType === 'BSUS') {
             if (terrorismOptOutContainer) terrorismOptOutContainer.classList.remove('hidden');
         } else {
@@ -1436,9 +1464,10 @@ function fireSearchClearAction(type) {
     if (document.getElementById('bsus_floater_select')) document.getElementById('bsus_floater_select').value = "no";
 
     // 6. Reset Standard/Commercial calculator options
-    if (document.getElementById('bgrRateOption')) document.getElementById('bgrRateOption').value = "0.11";
-    if (document.getElementById('basicDiscountValue')) document.getElementById('basicDiscountValue').value = "0";
-    if (document.getElementById('eqZone')) document.getElementById('eqZone').value = "0.05";
+if (document.getElementById('bgrRateOption')) document.getElementById('bgrRateOption').value = "0.11";
+if (document.getElementById('basicDiscountValue')) document.getElementById('basicDiscountValue').value = "0";
+if (typeof setDiscountType === 'function') setDiscountType('discount');
+if (document.getElementById('eqZone')) document.getElementById('eqZone').value = "0.05";
     if (document.getElementById('stfiToggle')) document.getElementById('stfiToggle').value = "0.37";
     if (document.getElementById('natcatDiscountToggle')) document.getElementById('natcatDiscountToggle').value = "0";
     if (document.getElementById('terrorismToggle')) document.getElementById('terrorismToggle').value = "0.21";
@@ -1765,14 +1794,17 @@ function runCalculation() {
     }
 
     let totalA = basicPrem + kutchaPrem;
-    document.getElementById('total-a').innerText = totalA.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+document.getElementById('total-a').innerText = totalA.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-    let discPct = parseFloat(document.getElementById('basicDiscountValue').value) || 0;
-    let discountPrem = basicPrem * (discPct / 100);
-    document.getElementById('rate-discount').innerText = discPct.toFixed(2) + "%";
-    document.getElementById('prem-discount').innerText = (discountPrem >= 0 ? "+" : "") + discountPrem.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+let rawDiscountValue = Math.abs(parseFloat(document.getElementById('basicDiscountValue').value) || 0);
+let discountType = document.getElementById('basicDiscountType').value;
+let discPct = (discountType === 'discount') ? -rawDiscountValue : rawDiscountValue;
 
-    let totalB = totalA + discountPrem; 
+let discountPrem = basicPrem * (discPct / 100);
+document.getElementById('rate-discount').innerText = (discPct >= 0 ? "+" : "") + discPct.toFixed(2) + "%";
+document.getElementById('prem-discount').innerText = (discountPrem >= 0 ? "+" : "") + discountPrem.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+let totalB = totalA + discountPrem;
     document.getElementById('total-b').innerText = totalB.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
     let eqPrem = 0; let stfiPrem = 0; let totalC = 0; let totalD = totalB;
