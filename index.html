@@ -1814,14 +1814,6 @@ function runCalculation() {
     document.getElementById('rate-discount').innerText = (discPct >= 0 ? "+" : "") + discPct.toFixed(2) + "%";
     document.getElementById('prem-discount').innerText = (discountPrem >= 0 ? "+" : "") + discountPrem.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-    let totalB = totalA + discountPrem;
-    document.getElementById('total-a').innerText = totalA.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-
-    let discPct = parseFloat(document.getElementById('basicDiscountValue').value) || 0;
-    let discountPrem = basicPrem * (discPct / 100);
-    document.getElementById('rate-discount').innerText = discPct.toFixed(2) + "%";
-    document.getElementById('prem-discount').innerText = (discountPrem >= 0 ? "+" : "") + discountPrem.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-
     let totalB = totalA + discountPrem; 
     document.getElementById('total-b').innerText = totalB.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
