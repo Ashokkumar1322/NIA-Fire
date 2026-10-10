@@ -282,8 +282,13 @@
 
             <div id="standardCommercialControlsContainer2">
                 <div class="form-group distinct-label" id="basicDiscountContainer">
-                    <label for="basicDiscountValue" id="label-basicDiscountValue">4. Discount (-) or Loading (+) on Basic Premium (%)</label>
-                    <input type="number" id="basicDiscountValue" placeholder="e.g. -10 for 10% discount, +5 for loading" value="0" step="0.01">
+                    <label id="label-basicDiscountValue">4. Basic Premium Adjustment (%)</label>
+                    <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                        <button type="button" id="btnDiscountType" onclick="setDiscountType('discount')" style="flex: 1; padding: 8px; font-weight: bold; border: 2px solid var(--primary); border-radius: 6px; background-color: var(--primary); color: white; cursor: pointer;">Discount (-)</button>
+                        <button type="button" id="btnLoadingType" onclick="setDiscountType('loading')" style="flex: 1; padding: 8px; font-weight: bold; border: 2px solid var(--border); border-radius: 6px; background-color: #f1f5f9; color: #475569; cursor: pointer;">Loading (+)</button>
+                    </div>
+                    <input type="number" id="basicDiscountValue" placeholder="Enter percentage e.g. 10" value="0" step="0.01">
+                    <input type="hidden" id="basicDiscountType" value="discount">
                     <span id="basicDiscountHint" class="help-text hidden" style="margin-top: 6px;"></span>
                 </div>
 
@@ -1245,9 +1250,41 @@ function selectPolicy(type, cardElement) {
     adjustLayoutRules();
 }
 
+function setDiscountType(type) {
+    const typeInput = document.getElementById('basicDiscountType');
+    if (!typeInput) return;
+    typeInput.value = type;
+    const btnDiscount = document.getElementById('btnDiscountType');
+    const btnLoading = document.getElementById('btnLoadingType');
+
+    if (type === 'discount') {
+        if (btnDiscount) {
+            btnDiscount.style.backgroundColor = 'var(--primary)';
+            btnDiscount.style.color = 'white';
+            btnDiscount.style.borderColor = 'var(--primary)';
+        }
+        if (btnLoading) {
+            btnLoading.style.backgroundColor = '#f1f5f9';
+            btnLoading.style.color = '#475569';
+            btnLoading.style.borderColor = 'var(--border)';
+        }
+    } else {
+        if (btnLoading) {
+            btnLoading.style.backgroundColor = 'var(--primary)';
+            btnLoading.style.color = 'white';
+            btnLoading.style.borderColor = 'var(--primary)';
+        }
+        if (btnDiscount) {
+            btnDiscount.style.backgroundColor = '#f1f5f9';
+            btnDiscount.style.color = '#475569';
+            btnDiscount.style.borderColor = 'var(--border)';
+        }
+    }
+    runCalculation();
+}
+
 function adjustLayoutRules() {
-    const stdControls1 = document.getElementById('standardCommercialControlsContainer');
-    const stdControls2 = document.getElementById('standardCommercialControlsContainer2');
+    const stdControls1 = document.getElementById('standardCommercialControlsContainer');    const stdControls2 = document.getElementById('standardCommercialControlsContainer2');
     const bsusSection = document.getElementById('bsusRevampedSection');
     const commercialElements = document.querySelectorAll('.id-commercial');
     const bgrRateContainer = document.getElementById('bgrRateContainer');
@@ -1274,13 +1311,13 @@ function adjustLayoutRules() {
         if (terrorismOptOutContainer) terrorismOptOutContainer.classList.add('hidden');
         if(labelConstruction) labelConstruction.innerHTML = "2. Construction Type";
         if(labelBgrRate) labelBgrRate.innerHTML = "3. BGR Basic Rate Option";
-        if(labelDiscount) labelDiscount.innerHTML = "4. Discount (-) or Loading (+) on Basic Premium (%)";
+        if(labelDiscount) labelDiscount.innerHTML = "4. Basic Premium Adjustment (%)";
     } else {
         hazPanel.classList.remove('hidden');
         floatingInput.disabled = false;
         if(labelConstruction) labelConstruction.innerHTML = "2. Construction Type";
         if(labelBgrRate) labelBgrRate.innerHTML = "BGR Basic Rate Option";
-        if(labelDiscount) labelDiscount.innerHTML = "6. Discount (-) or Loading (+) on Basic Premium (%)";
+        if(labelDiscount) labelDiscount.innerHTML = "6. Basic Premium Adjustment (%)";
 
         if (selectedPolicyType === 'BSUS') {
             if (terrorismOptOutContainer) terrorismOptOutContainer.classList.remove('hidden');
@@ -1438,6 +1475,7 @@ function fireSearchClearAction(type) {
     // 6. Reset Standard/Commercial calculator options
     if (document.getElementById('bgrRateOption')) document.getElementById('bgrRateOption').value = "0.11";
     if (document.getElementById('basicDiscountValue')) document.getElementById('basicDiscountValue').value = "0";
+    if (typeof setDiscountType === 'function') setDiscountType('discount');
     if (document.getElementById('eqZone')) document.getElementById('eqZone').value = "0.05";
     if (document.getElementById('stfiToggle')) document.getElementById('stfiToggle').value = "0.37";
     if (document.getElementById('natcatDiscountToggle')) document.getElementById('natcatDiscountToggle').value = "0";
@@ -1765,6 +1803,18 @@ function runCalculation() {
     }
 
     let totalA = basicPrem + kutchaPrem;
+    document.getElementById('total-a').innerText = totalA.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+    let rawValStr = (document.getElementById('basicDiscountValue').value || "").toString().replace(/[-+eE]/g, '');
+    let rawVal = Math.abs(parseFloat(rawValStr) || 0);
+    let discountType = document.getElementById('basicDiscountType') ? document.getElementById('basicDiscountType').value : 'discount';
+    let discPct = (discountType === 'discount') ? -rawVal : rawVal;
+
+    let discountPrem = basicPrem * (discPct / 100);
+    document.getElementById('rate-discount').innerText = (discPct >= 0 ? "+" : "") + discPct.toFixed(2) + "%";
+    document.getElementById('prem-discount').innerText = (discountPrem >= 0 ? "+" : "") + discountPrem.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+    let totalB = totalA + discountPrem;
     document.getElementById('total-a').innerText = totalA.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
     let discPct = parseFloat(document.getElementById('basicDiscountValue').value) || 0;
