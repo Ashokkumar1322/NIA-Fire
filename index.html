@@ -1919,7 +1919,6 @@ function runCalculation() {
     document.getElementById('prem-gst').innerText = gst.toLocaleString('en-IN');
     document.getElementById('total-payable').innerText = (totalE + gst).toLocaleString('en-IN');
 }
-
 function exportToPDF() {
     const custName = document.getElementById('custName').value.trim() || '-------------------';
     const busOffice = document.getElementById('busOffice').value.trim() || '-------------------';
@@ -1999,14 +1998,13 @@ function exportToPDF() {
     pdfContainer.style.backgroundColor = "#ffffff";
     pdfContainer.style.fontSize = "12px";
     pdfContainer.style.lineHeight = "1.5";
-    pdfContainer.style.width = "800px";
+    pdfContainer.style.width = "750px";
     pdfContainer.style.boxSizing = "border-box";
 
-    // Position at (0,0) so html2canvas computes layout, but z-index pushes it behind the page so it remains invisible to the user
-    pdfContainer.style.position = "fixed";
-    pdfContainer.style.left = "0";
+    // Position container off-screen so html2canvas renders it completely without negative z-index issues
+    pdfContainer.style.position = "absolute";
+    pdfContainer.style.left = "-9999px";
     pdfContainer.style.top = "0";
-    pdfContainer.style.zIndex = "-9999";
 
     pdfContainer.innerHTML = `
         <div style="text-align: center; border-bottom: 2px solid #0284c7; padding-bottom: 12px; margin-bottom: 20px;">
@@ -2095,16 +2093,19 @@ function exportToPDF() {
 
     document.body.appendChild(pdfContainer);
 
-    html2pdf().set({
-        margin: 10,
-        filename: `NIA_Premium_Quotation_${selectedPolicyType}.pdf`,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true, scrollY: 0, scrollX: 0, windowWidth: 800 },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-        pagebreak: { mode: ['avoid-all', 'css'] }
-    }).from(pdfContainer).save().then(() => {
-        document.body.removeChild(pdfContainer);
-    });
+    // 100ms delay to allow browser layout calculations before capturing canvas
+    setTimeout(() => {
+        html2pdf().set({
+            margin: 10,
+            filename: `NIA_Premium_Quotation_${selectedPolicyType}.pdf`,
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2, useCORS: true, scrollY: 0, scrollX: 0, windowWidth: 750 },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+            pagebreak: { mode: ['avoid-all', 'css'] }
+        }).from(pdfContainer).save().then(() => {
+            document.body.removeChild(pdfContainer);
+        });
+    }, 100);
 }
 document.getElementById('bsusOccupancySearch').addEventListener('input', function() { filterBsusAutocomplete(this.value); });
 document.getElementById('occupancySearch').addEventListener('input', function() { handleAutocompleteSearch(this.value); });
