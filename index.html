@@ -2096,6 +2096,17 @@ function exportToPDF() {
         </div>
     `;
 
+    // Make container visible in the foreground so html2canvas renders all contents properly
+    pdfContainer.id = "temp-pdf-export-container";
+    pdfContainer.style.position = "fixed";
+    pdfContainer.style.top = "0";
+    pdfContainer.style.left = "0";
+    pdfContainer.style.width = "100%";
+    pdfContainer.style.height = "100%";
+    pdfContainer.style.backgroundColor = "#ffffff";
+    pdfContainer.style.zIndex = "99999";
+    pdfContainer.style.overflow = "auto";
+
     document.body.appendChild(pdfContainer);
 
     const opt = {
