@@ -280,9 +280,9 @@
                         <button type="button" id="btnBgrWithTerr" onclick="setBgrRateType('with_terr')" style="flex: 1; min-width: 150px; padding: 8px; font-weight: bold; border: 2px solid var(--primary); border-radius: 6px; background-color: var(--primary); color: white; cursor: pointer; font-size: 0.8rem;">With terrorism (Incl of EQ, STFI)</button>
                     </div>
                     <div style="display: flex; align-items: center; gap: 10px;">
-                        <span style="font-weight: 600; font-size: 0.85rem;">Rate (per mille):</span>
-                        <input type="number" id="bgrRateOption" value="0.11" step="0.01" style="width: 120px;" oninput="validateBgrRate()">
-                    </div>
+    <span style="font-weight: 600; font-size: 0.85rem;">Rate (per mille):</span>
+    <input type="number" id="bgrRateOption" value="0.11" placeholder="0.11" step="0.01" style="width: 120px;" oninput="validateBgrRate()">
+</div>
                     <input type="hidden" id="bgrActiveType" value="with_terr">
                 </div>
 
@@ -1332,7 +1332,6 @@ function setDiscountType(type) {
     }
     runCalculation();
 }
-
 function setBgrRateType(type) {
     document.getElementById('bgrActiveType').value = type;
     const btnNoTerr = document.getElementById('btnBgrNoTerr');
@@ -1347,8 +1346,8 @@ function setBgrRateType(type) {
         btnWithTerr.style.color = '#475569';
         btnWithTerr.style.borderColor = 'var(--border)';
         
-        let currentRate = parseFloat(rateInput.value) || 0;
-        if (currentRate < 0.06) rateInput.value = 0.06;
+        rateInput.placeholder = "0.06";
+        rateInput.value = "0.06";
     } else {
         btnWithTerr.style.backgroundColor = 'var(--primary)';
         btnWithTerr.style.color = 'white';
@@ -1357,12 +1356,11 @@ function setBgrRateType(type) {
         btnNoTerr.style.color = '#475569';
         btnNoTerr.style.borderColor = 'var(--border)';
         
-        let currentRate = parseFloat(rateInput.value) || 0;
-        if (currentRate < 0.11) rateInput.value = 0.11;
+        rateInput.placeholder = "0.11";
+        rateInput.value = "0.11";
     }
     runCalculation();
 }
-
 function validateBgrRate() {
     const type = document.getElementById('bgrActiveType').value;
     const rateInput = document.getElementById('bgrRateOption');
@@ -1967,6 +1965,7 @@ function runCalculation() {
 function exportToPDF() {
     window.print();
 }
+document.getElementById('bsusOccupancySearch').addEventListener('input', function() { filterBsusAutocomplete(this.value); });
 document.getElementById('occupancySearch').addEventListener('input', function() { handleAutocompleteSearch(this.value); });
 document.getElementById('hazardousGoodsSearchInput').addEventListener('input', renderHazardousGoodsTable);
 document.getElementById('hazardousCategorySelect').addEventListener('change', renderHazardousGoodsTable);
