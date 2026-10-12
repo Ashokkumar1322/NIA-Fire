@@ -442,8 +442,7 @@
         </div>
     </div>
 
-    <div id="pdfRenderWrapper" style="position: absolute; left: -9999px; top: 0; width: 700px; background: #ffffff; padding: 20px; font-family: system-ui, -apple-system, sans-serif; box-sizing: border-box;"></div>
-
+    
     <div class="panel" id="hazardousMaterialsPanel" style="margin-top: 30px;">
         <h2 style="font-size: 1.2rem; color: #0f172a; border-bottom: 2px solid var(--accent); padding-bottom: 8px; margin-bottom: 12px;">Storage Risk outside compound of Indus/Mfg risks- List of Hazardous Materials and Goods and Categorisation</h2>
         <div style="font-size: 0.78rem; color: #475569; line-height: 1.5; background-color: #f1f5f9; padding: 12px; border-radius: 6px; margin-bottom: 16px; border-left: 4px solid var(--accent);">
@@ -2032,9 +2031,19 @@ function exportToPDF() {
     const gstVal = document.getElementById('prem-gst').innerText || '0';
     const totalPayableVal = document.getElementById('total-payable').innerText || '0';
 
-    const pdfTarget = document.getElementById('pdfRenderWrapper');
-    pdfTarget.innerHTML = `
-        <div style="width: 660px; margin: 0 auto; background: #ffffff; color: #1e293b; box-sizing: border-box;">
+    // Create container dynamically in active DOM flow to prevent blank rendering
+    const pdfContainer = document.createElement('div');
+    pdfContainer.style.position = 'fixed';
+    pdfContainer.style.left = '0';
+    pdfContainer.style.top = '0';
+    pdfContainer.style.zIndex = '-9999';
+    pdfContainer.style.width = '650px';
+    pdfContainer.style.background = '#ffffff';
+    pdfContainer.style.padding = '20px';
+    pdfContainer.style.fontFamily = "system-ui, -apple-system, sans-serif";
+
+    pdfContainer.innerHTML = `
+        <div style="width: 100%; background: #ffffff; color: #1e293b; box-sizing: border-box;">
             <div style="text-align: center; border-bottom: 2px solid #0284c7; padding-bottom: 8px; margin-bottom: 10px;">
                 <h2 style="margin: 0; color: #0284c7; font-size: 1.25rem; font-weight: 800; letter-spacing: 0.5px;">THE NEW INDIA ASSURANCE CO. LTD.</h2>
                 <h3 style="margin: 3px 0 0 0; color: #0f172a; font-size: 0.95rem; font-weight: 700;">PREMIUM QUOTATION</h3>
@@ -2106,8 +2115,10 @@ function exportToPDF() {
         </div>
     `;
 
+    document.body.appendChild(pdfContainer);
+
     const opt = {
-        margin:       0.25,
+        margin:       [0.3, 0.3, 0.3, 0.3],
         filename:     `NIA_Premium_Quotation_${selectedPolicyType}.pdf`,
         image:        { type: 'jpeg', quality: 0.98 },
         html2canvas:  { scale: 2, useCORS: true, logging: false },
@@ -2115,10 +2126,12 @@ function exportToPDF() {
         pagebreak:    { mode: 'avoid-all' }
     };
 
-    html2pdf().set(opt).from(pdfTarget).save().then(() => {
-        pdfTarget.innerHTML = '';
-    }).catch(err => {
-        pdfTarget.innerHTML = '';
+    html2pdf().set(opt).from(pdfContainer).save().then(() => {
+        document.body.removeChild(pdfContainer);
+    }).catch(() => {
+        if (pdfContainer.parentNode) {
+            document.body.removeChild(pdfContainer);
+        }
     });
 }
 document.getElementById('bsusOccupancySearch').addEventListener('input', function() { filterBsusAutocomplete(this.value); });
