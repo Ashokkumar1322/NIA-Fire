@@ -1963,7 +1963,106 @@ function runCalculation() {
     document.getElementById('total-payable').innerText = (totalE + gst).toLocaleString('en-IN');
 }
 function exportToPDF() {
-    window.print();
+    // Create a quotation-only print window; the calculator and its calculations stay untouched.
+    const byId = (id) => document.getElementById(id);
+    const value = (id, fallback = '') => {
+        const el = byId(id);
+        return el ? String(el.value ?? el.innerText ?? '').trim() || fallback : fallback;
+    };
+    const text = (id, fallback = '') => {
+        const el = byId(id);
+        return el ? String(el.innerText ?? el.value ?? '').trim() || fallback : fallback;
+    };
+    const escapeHtml = (s) => String(s ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+    const rupees = (s) => {
+        const cleaned = String(s ?? '').replace(/[^0-9.-]/g, '');
+        const n = Number(cleaned);
+        return Number.isFinite(n) ? n.toLocaleString('en-IN', { maximumFractionDigits: 2 }) : (s || '0');
+    };
+    const policyNames = {
+        BGR: 'Bharat Griha Raksha',
+        BSUS: 'Bharat Sookshma Udyam Suraksha',
+        BLUS: 'Bharat Laghu Udyam Suraksha',
+        SFSP: 'Standard Fire and Special Perils Policy'
+    };
+    const policy = policyNames[typeof selectedPolicyType !== 'undefined' ? selectedPolicyType : 'BGR'] || 'Fire Insurance Policy';
+    let occupancy = '';
+    if (typeof selectedPolicyType !== 'undefined' && selectedPolicyType === 'BSUS') {
+        occupancy = value('bsusOccupancySearch', 'Not specified');
+        const category = text('b-meta-cat');
+        if (category && category !== '-') occupancy += ' — Category: ' + category;
+    } else if (typeof selectedPolicyType !== 'undefined' && selectedPolicyType !== 'BGR') {
+        occupancy = value('occupancySearch', 'Not specified');
+        const category = text('meta-category');
+        if (category && category !== '-') occupancy += ' — Category: ' + category;
+    } else {
+        occupancy = 'Residential property';
+    }
+
+    const covers = [];
+    if (typeof selectedPolicyType !== 'undefined' && selectedPolicyType === 'BSUS') {
+        if (Number(String(text('br_prem_8', '0')).replace(/,/g, '')) > 0) covers.push('Earthquake');
+        if (Number(String(text('br_prem_9', '0')).replace(/,/g, '')) > 0) covers.push('STFI');
+        if (Number(String(text('br_prem_10', '0')).replace(/,/g, '')) > 0) covers.push('Terrorism');
+        if (value('bsus_floater_select') === 'yes') covers.push('Floater cover');
+    } else if (typeof selectedPolicyType !== 'undefined' && selectedPolicyType === 'BGR') {
+        covers.push('Earthquake', 'STFI');
+        if (value('bgrActiveType', 'with_terr') === 'with_terr') covers.push('Terrorism');
+    } else {
+        if (value('eqZone', '0') !== '0') covers.push('Earthquake');
+        if (value('stfiToggle', '0') !== '0') covers.push('STFI');
+        if (value('terrorismToggle', '0') !== '0') covers.push('Terrorism');
+        if (value('floaterToggle', 'no') === 'yes') covers.push('Floater cover');
+    }
+    if (typeof selectedPolicyType !== 'undefined' && selectedPolicyType === 'BGR' && value('terrorismOptOutToggle', 'no') === 'yes') {
+        const i = covers.indexOf('Terrorism'); if (i >= 0) covers.splice(i, 1);
+    }
+
+    const assets = [
+        ['a) Building', 'siBuilding'],
+        ['b) Plant & Machinery', 'siPlantMachinery'],
+        ['c) Stock / Raw Materials', 'siStockRaw'],
+        ['d) Stock in Process', 'siStockProcess'],
+        ['e) Furniture, Fixtures & Fittings', 'siFFF'],
+        ['f) Finished Goods', 'siFinishedGoods'],
+        ['g) Other Contents', 'siOtherContents'],
+        ['h) Stock — Floating', 'siStockFloating']
+    ];
+    const assetRows = assets.map(([label, id]) => {
+        const amount = value(id, '0');
+        return `<tr><td>${escapeHtml(label)}</td><td class="amount">${escapeHtml(rupees(amount))}</td></tr>`;
+    }).join('');
+    const customer = value('custName', 'Customer');
+    const office = value('busOffice', '');
+    const contact = value('busContact', '');
+    const netPremium = text('total-e', '0');
+    const gst = text('prem-gst', '0');
+    const payable = text('total-payable', '0');
+    const coverText = covers.length ? covers.join(', ') : 'As selected in the calculator';
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) {
+        alert('Your browser blocked the quotation window. Please allow pop-ups for this site and click Download as PDF again.');
+        return;
+    }
+    const today = new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' });
+    printWindow.document.open();
+    printWindow.document.write(`<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Fire Premium Quotation</title>
+<style>
+@page{size:A4 portrait;margin:9mm}*{box-sizing:border-box}html,body{margin:0;padding:0;background:#fff;color:#1f2937;font-family:Arial,Helvetica,sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}.sheet{width:100%;max-width:190mm;margin:0 auto;font-size:10pt;line-height:1.28}.company{text-align:center;color:#075da8;font-size:17pt;font-weight:700;letter-spacing:.15px;margin:0 0 2px}.subtitle{text-align:center;font-size:13pt;font-weight:700;margin:0 0 9px;color:#111827}.topline{display:flex;justify-content:space-between;gap:12px;border-bottom:2px solid #075da8;padding-bottom:6px;margin-bottom:8px}.office{font-size:9pt;line-height:1.35}.date{white-space:nowrap;font-size:9pt}.section{margin:7px 0}.label{font-weight:700;color:#075da8}.intro{margin:7px 0}.details{width:100%;border-collapse:collapse;margin:7px 0}.details td{border:1px solid #cbd5e1;padding:5px 7px;vertical-align:top}.details td:first-child{width:28%;font-weight:700;background:#f1f6fb}.table-title{font-weight:700;color:#075da8;margin:8px 0 4px}.assets{width:100%;border-collapse:collapse;font-size:9.5pt}.assets th{background:#075da8;color:white;text-align:left;padding:5px 7px;border:1px solid #075da8}.assets td{border:1px solid #cbd5e1;padding:4px 7px}.assets .amount{text-align:right;white-space:nowrap;width:34%}.assets tr:nth-child(even) td{background:#f8fafc}.premium{width:58%;margin:7px 0 0 auto;border-collapse:collapse;font-size:10pt}.premium td{padding:4px 7px;border:1px solid #cbd5e1}.premium td:last-child{text-align:right;white-space:nowrap}.premium .grand td{background:#e8f2fb;font-weight:700;color:#073b69;border-top:2px solid #075da8}.closing{margin-top:9px}.signature{margin-top:8px;font-weight:700}.small{font-size:8.5pt;color:#475569;margin-top:7px}@media screen{body{padding:10px;background:#e5e7eb}.sheet{background:white;padding:9mm;box-shadow:0 1px 8px #0002}}@media print{body{padding:0}.sheet{max-width:none;padding:0}.no-print{display:none}}
+</style></head><body><main class="sheet">
+<div class="company">The New India Assurance Co. Ltd.</div><div class="subtitle">PREMIUM QUOTATION</div>
+<div class="topline"><div class="office"><b>BUSINESS OFFICE:</b> ${escapeHtml(office || 'Not specified')}<br><b>BUSINESS OFFICE CONTACT:</b> ${escapeHtml(contact || 'Not specified')}</div><div class="date"><b>Date:</b> ${escapeHtml(today)}</div></div>
+<div class="section"><span class="label">To:</span> ${escapeHtml(customer)}</div>
+<p class="intro">Dear Sir / Madam,<br>Thank you for giving us the opportunity to quote for your fire insurance requirements. We are pleased to submit our premium quotation based on the details provided.</p>
+<table class="details"><tr><td>OCCUPANCY</td><td>${escapeHtml(occupancy)}</td></tr><tr><td>RISK COVERAGE</td><td>${escapeHtml(policy)}</td></tr><tr><td>ADD-ON / ADDITIONAL COVERS</td><td>${escapeHtml(coverText)}</td></tr></table>
+<div class="table-title">PROPOSED PROPERTY / SUBJECT MATTER AND SUM INSURED (₹)</div>
+<table class="assets"><thead><tr><th>Property / Subject Matter</th><th class="amount">Proposed Sum Insured (₹)</th></tr></thead><tbody>${assetRows}</tbody></table>
+<table class="premium"><tr><td>Net Premium (₹)</td><td>${escapeHtml(netPremium)}</td></tr><tr><td>GST (18%) (₹)</td><td>${escapeHtml(gst)}</td></tr><tr class="grand"><td>PREMIUM PAYABLE (₹)</td><td>${escapeHtml(payable)}</td></tr></table>
+<p class="closing">We look forward to your confirmation and assure you of our best services. The above quotation is based on the information currently provided and is subject to the applicable policy terms, conditions, warranties and exclusions.</p>
+<div>Thanking you,</div><div class="signature">Sincerely,<br>Authorized Signatory<br>The New India Assurance Co. Ltd.</div>
+<div class="small">This is a premium quotation and not an insurance policy or confirmation of cover.</div>
+</main><script>window.onload=function(){setTimeout(function(){window.focus();window.print();},350)};<\/script></body></html>`);
+    printWindow.document.close();
 }
 document.getElementById('bsusOccupancySearch').addEventListener('input', function() { filterBsusAutocomplete(this.value); });
 document.getElementById('occupancySearch').addEventListener('input', function() { handleAutocompleteSearch(this.value); });
