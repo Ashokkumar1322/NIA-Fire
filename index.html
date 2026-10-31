@@ -363,10 +363,13 @@
                     <label for="eqZone">7. Earthquake (EQ) Cover Zone</label>
                     <select id="eqZone">
                         <option value="0">NO EQ COVER NEEDED</option>
-                        <option value="0.50">Zone I @ 0.50 per mille</option>
-                        <option value="0.25">Zone II @ 0.25 per mille</option>
+                        <option value="0.50">Zone I @ 0.50 per mille (Industrial)</option>
+                        <option value="0.25">Zone I @ 0.25 per mille (Non-Indus)</option>
+                        <option value="0.25">Zone II @ 0.25 per mille (Industrial)</option>
+                        <option value="0.15">Zone II @ 0.15 per mille (Non-Indus)</option>
                         <option value="0.10">Zone III @ 0.10 per mille</option>
                         <option value="0.05" selected>Zone IV @ 0.05 per mille (Default)</option>
+                        <option value="0.225">Cellular Network @ 0.225 per mille</option>
                     </select>
                 </div>
 
@@ -1959,7 +1962,7 @@ function runCalculation() {
     if (selectedPolicyType !== 'BGR') {
         const eqRate = parseFloat(document.getElementById('eqZone').value) || 0;
         eqPrem = M * eqRate;
-        document.getElementById('rate-eq').innerText = eqRate > 0 ? eqRate.toFixed(2) + " per mille" : "0.00";
+        document.getElementById('rate-eq').innerText = eqRate > 0 ? String(Number(eqRate.toFixed(3))) + " per mille" : "0.00";
         document.getElementById('prem-eq').innerText = eqPrem.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
         let stfiRate = parseFloat(document.getElementById('stfiToggle').value) || 0;
